@@ -1,0 +1,16 @@
+namespace CascVel.Module.Evaluations.Management.Domain.Enums.Runs;
+
+/// <summary>
+/// Represents the agreement status for a run.
+/// </summary>
+public enum RunAgreementStatus
+{
+    /// <summary>
+    /// Indicates agreement with the run.
+    /// </summary>
+    Agree,
+    /// <summary>
+    /// Indicates disagreement with the run.
+    /// </summary>
+    Disagree,
+}
