@@ -14,7 +14,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace CascVel.Module.Evaluations.Management.Infrastructure.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20250811140825_InitialCreate")]
+    [Migration("20250811141839_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -22,6 +22,7 @@ namespace CascVel.Module.Evaluations.Management.Infrastructure.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
+                .HasDefaultSchema("evaluations")
                 .HasAnnotation("ProductVersion", "9.0.8")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
@@ -64,7 +65,7 @@ namespace CascVel.Module.Evaluations.Management.Infrastructure.Migrations
 
                     b.HasIndex("ConditionType");
 
-                    b.ToTable("automatic_parameters", (string)null);
+                    b.ToTable("automatic_parameters", "evaluations");
                 });
 
             modelBuilder.Entity("CascVel.Module.Evaluations.Management.Domain.Entities.EvaluationCriteria.Criteria.BaseCriterion", b =>
@@ -105,7 +106,7 @@ namespace CascVel.Module.Evaluations.Management.Infrastructure.Migrations
 
                     b.HasIndex("criterion_type");
 
-                    b.ToTable("criteria", (string)null);
+                    b.ToTable("criteria", "evaluations");
 
                     b.HasDiscriminator<string>("criterion_type").HasValue("BaseCriterion");
 
@@ -196,7 +197,7 @@ namespace CascVel.Module.Evaluations.Management.Infrastructure.Migrations
 
                     b.HasIndex("Status");
 
-                    b.ToTable("evaluation_forms", (string)null);
+                    b.ToTable("evaluation_forms", "evaluations");
                 });
 
             modelBuilder.Entity("CascVel.Module.Evaluations.Management.Domain.Entities.Runs.Run", b =>
@@ -290,7 +291,7 @@ namespace CascVel.Module.Evaluations.Management.Infrastructure.Migrations
 
                     b.HasIndex("RunFor");
 
-                    b.ToTable("runs", (string)null);
+                    b.ToTable("runs", "evaluations");
                 });
 
             modelBuilder.Entity("CascVel.Module.Evaluations.Management.Domain.Entities.Runs.RunCriterionResult", b =>
@@ -333,7 +334,7 @@ namespace CascVel.Module.Evaluations.Management.Infrastructure.Migrations
 
                     b.HasIndex("RunId");
 
-                    b.ToTable("run_criterion_results", (string)null);
+                    b.ToTable("run_criterion_results", "evaluations");
                 });
 
             modelBuilder.Entity("criterion_children", b =>
@@ -348,7 +349,7 @@ namespace CascVel.Module.Evaluations.Management.Infrastructure.Migrations
 
                     b.HasIndex("child_id");
 
-                    b.ToTable("criterion_children", (string)null);
+                    b.ToTable("criterion_children", "evaluations");
                 });
 
             modelBuilder.Entity("CascVel.Module.Evaluations.Management.Domain.Entities.EvaluationCriteria.Criteria.AutomaticCriterion", b =>
@@ -367,7 +368,7 @@ namespace CascVel.Module.Evaluations.Management.Infrastructure.Migrations
 
                     b.HasIndex("AutomaticParameterId");
 
-                    b.ToTable("criteria", (string)null);
+                    b.ToTable("criteria", "evaluations");
 
                     b.HasDiscriminator().HasValue("automatic");
                 });
@@ -382,7 +383,7 @@ namespace CascVel.Module.Evaluations.Management.Infrastructure.Migrations
                         .HasColumnType("jsonb")
                         .HasColumnName("options");
 
-                    b.ToTable("criteria", (string)null);
+                    b.ToTable("criteria", "evaluations");
 
                     b.HasDiscriminator().HasValue("default");
                 });
@@ -391,7 +392,7 @@ namespace CascVel.Module.Evaluations.Management.Infrastructure.Migrations
                 {
                     b.HasBaseType("CascVel.Module.Evaluations.Management.Domain.Entities.EvaluationCriteria.Criteria.BaseCriterion");
 
-                    b.ToTable("criteria", (string)null);
+                    b.ToTable("criteria", "evaluations");
 
                     b.HasDiscriminator().HasValue("group");
                 });

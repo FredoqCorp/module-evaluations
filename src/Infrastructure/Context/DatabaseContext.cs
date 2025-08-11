@@ -55,6 +55,9 @@ public class DatabaseContext : DbContext
     /// <inheritdoc />
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        // Use dedicated schema for this module
+        modelBuilder.HasDefaultSchema("evaluations");
+
         // Apply entity configurations from this assembly
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(DatabaseContext).Assembly);
 

@@ -6,4 +6,6 @@ root = false
 dotnet_diagnostic.MA0048.severity = none
 # Method is too long (generated Up/Down)
 dotnet_diagnostic.MA0051.severity = none
+
+dotnet_diagnostic.IDE0161.severity = none
 # Keep other rules as-is
