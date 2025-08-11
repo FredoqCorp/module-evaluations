@@ -1,4 +1,5 @@
-﻿using System.Text.Json;
+﻿using System;
+using System.Text.Json;
 using CascVel.Module.Evaluations.Management.Domain.Entities.Filters;
 using CascVel.Module.Evaluations.Management.Domain.Entities.Runs;
 using CascVel.Module.Evaluations.Management.Domain.Enums.Runs;
@@ -28,6 +29,8 @@ public class RunRepository : BaseRepository, IRunRepository
     /// <inheritdoc />
     public async Task<Run> CreateAsync(Run entity, CancellationToken ct = default)
     {
+        Logger.LogInformation("Creating run {@Run}", entity);
+
         await using var context = await ContextFactory.CreateDbContextAsync(ct);
 
         await context.Database.BeginTransactionAsync(ct);
@@ -37,13 +40,16 @@ public class RunRepository : BaseRepository, IRunRepository
             context.Runs.Add(entity);
             await context.SaveChangesAsync(ct);
         }
-        catch
+        catch (Exception ex)
         {
             await context.Database.RollbackTransactionAsync(ct);
+            Logger.LogError(ex, "Failed to create run {RunId}", entity.Id);
             throw;
         }
 
         await context.Database.CommitTransactionAsync(ct);
+
+        Logger.LogInformation("Run {RunId} created", entity.Id);
 
         return await GetAsync(entity.Id, ct: ct);
     }
@@ -51,6 +57,8 @@ public class RunRepository : BaseRepository, IRunRepository
     /// <inheritdoc />
     public async Task DeleteAsync(long entityId, CancellationToken ct = default)
     {
+        Logger.LogInformation("Deleting run {RunId}", entityId);
+
         await using var context = await ContextFactory.CreateDbContextAsync(ct);
 
         await context.Database.BeginTransactionAsync(ct);
@@ -60,18 +68,23 @@ public class RunRepository : BaseRepository, IRunRepository
             context.Runs.Remove(await GetAsync(entityId, ct: ct));
             await context.SaveChangesAsync(ct);
         }
-        catch
+        catch (Exception ex)
         {
             await context.Database.RollbackTransactionAsync(ct);
+            Logger.LogError(ex, "Failed to delete run {RunId}", entityId);
             throw;
         }
 
         await context.Database.CommitTransactionAsync(ct);
+
+        Logger.LogInformation("Run {RunId} deleted", entityId);
     }
 
     /// <inheritdoc />
     public async Task<Run> GetAsync(long entityId, bool isFullInclude = true, CancellationToken ct = default)
     {
+        Logger.LogDebug("Retrieving run {RunId} with full include {IsFullInclude}", entityId, isFullInclude);
+
         await using var context = await ContextFactory.CreateDbContextAsync(ct);
 
         return (isFullInclude
@@ -82,6 +95,8 @@ public class RunRepository : BaseRepository, IRunRepository
     /// <inheritdoc />
     public async Task<IEnumerable<Run>> GetListAsync(RunFilter filter, CancellationToken ct = default)
     {
+        Logger.LogDebug("Retrieving run list with filter {@Filter}", filter);
+
         await using var context = await ContextFactory.CreateDbContextAsync(ct);
 
         var query = context.Runs.GetRunFormQuery();
@@ -116,13 +131,18 @@ public class RunRepository : BaseRepository, IRunRepository
             query = query.Where(r => r.Context != null && EF.Functions.JsonContains(r.Context!, jsonstring));
         }
 
+        var runs = await query.ToListAsync(cancellationToken: ct);
 
-        return await query.ToListAsync(cancellationToken: ct);
+        Logger.LogDebug("Retrieved {Count} runs", runs.Count);
+
+        return runs;
     }
 
     /// <inheritdoc />
     public async Task<Run> UpdateAsync(Run entity, CancellationToken ct = default)
     {
+        Logger.LogInformation("Updating run {RunId}", entity.Id);
+
         await using var context = await ContextFactory.CreateDbContextAsync(ct);
 
         await context.Database.BeginTransactionAsync(ct);
@@ -163,13 +183,16 @@ public class RunRepository : BaseRepository, IRunRepository
             }
 
         }
-        catch
+        catch (Exception ex)
         {
             await context.Database.RollbackTransactionAsync(ct);
+            Logger.LogError(ex, "Failed to update run {RunId}", entity.Id);
             throw;
         }
 
         await context.Database.CommitTransactionAsync(ct);
+
+        Logger.LogInformation("Run {RunId} updated", entity.Id);
 
         return await GetAsync(entity.Id, ct: ct);
     }
@@ -177,6 +200,8 @@ public class RunRepository : BaseRepository, IRunRepository
     /// <inheritdoc />
     public async Task Publish(long id, string userLogin, CancellationToken ct = default)
     {
+        Logger.LogInformation("Publishing run {RunId} by {User}", id, userLogin);
+
         await using var context = await ContextFactory.CreateDbContextAsync(ct);
 
         await context.Runs
@@ -186,11 +211,14 @@ public class RunRepository : BaseRepository, IRunRepository
                     .SetProperty(r => r.PublishedAt, DateTime.UtcNow)
                    , ct);
 
+        Logger.LogInformation("Run {RunId} published", id);
     }
 
     /// <inheritdoc />
     public async Task SetRunViewedState(long id, CancellationToken ct = default)
     {
+        Logger.LogInformation("Marking run {RunId} as viewed", id);
+
         await using var context = await ContextFactory.CreateDbContextAsync(ct);
 
         await context.Runs
@@ -204,6 +232,8 @@ public class RunRepository : BaseRepository, IRunRepository
     /// </summary>
     public async Task SetApproveState(long id, RunAgreementStatus status, CancellationToken ct = default)
     {
+        Logger.LogInformation("Setting approve state for run {RunId} to {Status}", id, status);
+
         await using var context = await ContextFactory.CreateDbContextAsync(ct);
 
         await context.Runs

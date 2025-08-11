@@ -1,4 +1,5 @@
-﻿using CascVel.Module.Evaluations.Management.Domain.Entities.AutomaticParameters;
+﻿using System;
+using CascVel.Module.Evaluations.Management.Domain.Entities.AutomaticParameters;
 using CascVel.Module.Evaluations.Management.Domain.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -26,6 +27,8 @@ public class AutomaticParameterRepository : BaseRepository, IAutomaticParameterR
     /// <inheritdoc />
     public async Task<AutomaticParameter> CreateAsync(AutomaticParameter entity, CancellationToken ct = default)
     {
+        Logger.LogInformation("Creating automatic parameter {@Parameter}", entity);
+
         await using var context = await ContextFactory.CreateDbContextAsync(ct);
         await context.Database.BeginTransactionAsync(ct);
 
@@ -34,13 +37,16 @@ public class AutomaticParameterRepository : BaseRepository, IAutomaticParameterR
             context.AutomaticParameters.Add(entity);
             await context.SaveChangesAsync(ct);
         }
-        catch
+        catch (Exception ex)
         {
             await context.Database.RollbackTransactionAsync(ct);
+            Logger.LogError(ex, "Failed to create automatic parameter {ParameterId}", entity.Id);
             throw;
         }
 
         await context.Database.CommitTransactionAsync(ct);
+
+        Logger.LogInformation("Automatic parameter {ParameterId} created", entity.Id);
 
         return await GetAsync(entity.Id, ct: ct);
     }
@@ -51,6 +57,8 @@ public class AutomaticParameterRepository : BaseRepository, IAutomaticParameterR
     /// <inheritdoc />
     public async Task<AutomaticParameter> GetAsync(long entityId, bool isFullInclude = true, CancellationToken ct = default)
     {
+        Logger.LogDebug("Retrieving automatic parameter {ParameterId} with full include {IsFullInclude}", entityId, isFullInclude);
+
         await using var context = await ContextFactory.CreateDbContextAsync(ct);
 
         return (isFullInclude
@@ -61,14 +69,22 @@ public class AutomaticParameterRepository : BaseRepository, IAutomaticParameterR
     /// <inheritdoc />
     public async Task<IEnumerable<AutomaticParameter>> GetListAsync(CancellationToken ct = default)
     {
+        Logger.LogDebug("Retrieving automatic parameters list");
+
         await using var context = await ContextFactory.CreateDbContextAsync(ct);
 
-        return await context.AutomaticParameters.ToListAsync(ct);
+        var parameters = await context.AutomaticParameters.ToListAsync(ct);
+
+        Logger.LogDebug("Retrieved {Count} automatic parameters", parameters.Count);
+
+        return parameters;
     }
 
     /// <inheritdoc />
     public async Task<AutomaticParameter> UpdateAsync(AutomaticParameter entity, CancellationToken ct = default)
     {
+        Logger.LogInformation("Updating automatic parameter {ParameterId}", entity.Id);
+
         await using var context = await ContextFactory.CreateDbContextAsync(ct);
 
         await context.Database.BeginTransactionAsync(ct);
@@ -79,13 +95,16 @@ public class AutomaticParameterRepository : BaseRepository, IAutomaticParameterR
 
             await context.SaveChangesAsync(ct);
         }
-        catch
+        catch (Exception ex)
         {
             await context.Database.RollbackTransactionAsync(ct);
+            Logger.LogError(ex, "Failed to update automatic parameter {ParameterId}", entity.Id);
             throw;
         }
 
         await context.Database.CommitTransactionAsync(ct);
+
+        Logger.LogInformation("Automatic parameter {ParameterId} updated", entity.Id);
 
         return await GetAsync(entity.Id, ct: ct);
     }
