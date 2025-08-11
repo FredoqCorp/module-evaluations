@@ -42,7 +42,7 @@ public class EvaluationFormRepository : BaseRepository, IEvaluationFormRepositor
         {
             await context.Database.RollbackTransactionAsync(ct);
             Logger.LogError(ex, "Failed to create evaluation form with code {Code}", entity.Code);
-            throw new InvalidDataException($"Cannot update a form with code: '{entity.Code}'", ex);
+            throw new InvalidDataException($"Cannot create a form with code: '{entity.Code}'", ex);
         }
 
         await context.Database.CommitTransactionAsync(ct);
