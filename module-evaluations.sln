@@ -18,6 +18,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "files", "files", "{9F5E6384
 		Directory.Packages.props = Directory.Packages.props
 		Directory.Build.props = Directory.Build.props
 		.editorconfig = .editorconfig
+		.gitignore = .gitignore
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domain", "src\Domain\Domain.csproj", "{66FB6425-D9A0-477E-8EBA-5DFE2F246A50}"
