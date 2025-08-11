@@ -1,4 +1,5 @@
-﻿using CascVel.Module.Evaluations.Management.Domain.Entities.Form;
+﻿using System;
+using CascVel.Module.Evaluations.Management.Domain.Entities.Form;
 using CascVel.Module.Evaluations.Management.Domain.Enums.Forms;
 using CascVel.Module.Evaluations.Management.Domain.Interfaces;
 using Microsoft.EntityFrameworkCore;
@@ -27,6 +28,8 @@ public class EvaluationFormRepository : BaseRepository, IEvaluationFormRepositor
     /// <inheritdoc />
     public async Task<EvaluationForm> CreateAsync(EvaluationForm entity, CancellationToken ct = default)
     {
+        Logger.LogInformation("Creating evaluation form with code {Code}", entity.Code);
+
         await using var context = await ContextFactory.CreateDbContextAsync(ct);
         await context.Database.BeginTransactionAsync(ct);
 
@@ -35,13 +38,16 @@ public class EvaluationFormRepository : BaseRepository, IEvaluationFormRepositor
             context.Forms.Add(entity);
             await context.SaveChangesAsync(ct);
         }
-        catch
+        catch (Exception ex)
         {
             await context.Database.RollbackTransactionAsync(ct);
-            throw new InvalidDataException($"Cannot update a form with code: '{entity.Code}'");
+            Logger.LogError(ex, "Failed to create evaluation form with code {Code}", entity.Code);
+            throw new InvalidDataException($"Cannot update a form with code: '{entity.Code}'", ex);
         }
 
         await context.Database.CommitTransactionAsync(ct);
+
+        Logger.LogInformation("Evaluation form {FormId} created", entity.Id);
 
         return await GetAsync(entity.Id, ct: ct);
     }
@@ -52,6 +58,8 @@ public class EvaluationFormRepository : BaseRepository, IEvaluationFormRepositor
     /// <inheritdoc />
     public async Task<EvaluationForm> GetAsync(long entityId, bool isFullInclude = true, CancellationToken ct = default)
     {
+        Logger.LogDebug("Retrieving evaluation form {FormId} with full include {IsFullInclude}", entityId, isFullInclude);
+
         await using var context = await ContextFactory.CreateDbContextAsync(ct);
 
         return (isFullInclude
@@ -62,6 +70,8 @@ public class EvaluationFormRepository : BaseRepository, IEvaluationFormRepositor
     /// <inheritdoc />
     public async Task<EvaluationForm?> GetByCode(string code, CancellationToken ct = default)
     {
+        Logger.LogDebug("Retrieving evaluation form by code {Code}", code);
+
         await using var context = await ContextFactory.CreateDbContextAsync(ct);
 
         return await context.Forms.SingleOrDefaultAsync(f => f.Code == code, ct);
@@ -70,15 +80,21 @@ public class EvaluationFormRepository : BaseRepository, IEvaluationFormRepositor
     /// <inheritdoc />
     public async Task<IEnumerable<EvaluationForm>> GetListAsync(CancellationToken ct = default)
     {
-        Logger.LogDebug("Geting full evaluation forms list");
+        Logger.LogDebug("Retrieving full evaluation forms list");
         await using var context = await ContextFactory.CreateDbContextAsync(ct);
 
-        return await context.Forms.GetFullFormQuery().ToListAsync(ct);
+        var forms = await context.Forms.GetFullFormQuery().ToListAsync(ct);
+
+        Logger.LogDebug("Retrieved {Count} evaluation forms", forms.Count);
+
+        return forms;
     }
 
     /// <inheritdoc />
     public async Task<EvaluationForm> UpdateAsync(EvaluationForm entity, CancellationToken ct = default)
     {
+        Logger.LogInformation("Updating evaluation form {FormId}", entity.Id);
+
         await using var context = await ContextFactory.CreateDbContextAsync(ct);
         await context.Database.BeginTransactionAsync(ct);
 
@@ -107,13 +123,16 @@ public class EvaluationFormRepository : BaseRepository, IEvaluationFormRepositor
 
             await context.SaveChangesAsync(ct);
         }
-        catch
+        catch (Exception ex)
         {
             await context.Database.RollbackTransactionAsync(ct);
-            throw new InvalidDataException($"Cannot update a form with code: '{entity.Code}'");
+            Logger.LogError(ex, "Failed to update evaluation form {FormId}", entity.Id);
+            throw new InvalidDataException($"Cannot update a form with code: '{entity.Code}'", ex);
         }
 
         await context.Database.CommitTransactionAsync(ct);
+
+        Logger.LogInformation("Evaluation form {FormId} updated", entity.Id);
 
         return await GetAsync(entity.Id, ct: ct);
     }
@@ -121,6 +140,8 @@ public class EvaluationFormRepository : BaseRepository, IEvaluationFormRepositor
     /// <inheritdoc />
     public async Task SetStatusAsync(long id, EvaluationFormStatus status, string user, CancellationToken ct = default)
     {
+        Logger.LogInformation("Setting status for evaluation form {FormId} to {Status} by {User}", id, status, user);
+
         await using var context = await ContextFactory.CreateDbContextAsync(ct);
 
         await context.Forms
@@ -130,5 +151,7 @@ public class EvaluationFormRepository : BaseRepository, IEvaluationFormRepositor
                     .SetProperty(f => f.StatusChangedBy, user)
                     .SetProperty(f => f.StatusChangedAt, DateTime.UtcNow)
                   , ct);
+
+        Logger.LogInformation("Status for evaluation form {FormId} set to {Status}", id, status);
     }
 }
