@@ -1,11 +1,51 @@
+# root marker
 root = true
 
-[*]
-charset = utf-8
-end_of_line = lf
-insert_final_newline = true
-indent_style = space
-indent_size = 2
-
+############################################################
+#                     Code-style (C#)                      #
+############################################################
 [*.cs]
-dotnet_analyzer_diagnostic.severity = warning
+
+# System using-directives first
+dotnet_sort_system_directives_first = true
+
+# var usage
+csharp_style_var_for_built_in_types = false:warning   # int x, string s …
+csharp_style_var_for_complex_types = true:suggestion  # var customer = …
+csharp_style_var_when_type_is_apparent = true:suggestion
+
+# File-scoped namespace
+csharp_style_namespace_declarations = file_scoped:error
+
+# brackets
+csharp_prefer_braces = true:warning
+
+# Expression-bodied members
+csharp_style_expression_bodied_methods = when_on_single_line:suggestion
+
+# core
+indent_style = space
+indent_size  = 4
+trim_trailing_whitespace = true
+insert_final_newline = true
+charset = utf-8
+
+######## NetAnalyzers (CA/IDE)
+dotnet_diagnostic.CA1305.severity = warning # Specify IFormatProvider
+dotnet_diagnostic.CA2000.severity = error   # Dispose objects before losing scope
+
+
+dotnet_diagnostic.CA1707.severity = none    # Identifiers should not contain underscores
+dotnet_diagnostic.CA2211.severity = none    # Non-constant fields should not be visible
+
+######## Meziantou
+dotnet_diagnostic.MA0048.severity = error   # Use ConfigureAwait
+
+######## Roslynator
+dotnet_diagnostic.RCS1090.severity = warning # Add or remove 'nameof'
+
+######## SecurityCodeScan
+dotnet_diagnostic.SCS0001.severity = error   # Potential SQL/NoSQL injection
+
+######## Other
+dotnet_diagnostic.MA0004.severity = none
