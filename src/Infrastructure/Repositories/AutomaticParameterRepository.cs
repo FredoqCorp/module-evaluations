@@ -1,5 +1,4 @@
-﻿using System;
-using CascVel.Module.Evaluations.Management.Domain.Entities.AutomaticParameters;
+﻿using CascVel.Module.Evaluations.Management.Domain.Entities.AutomaticParameters;
 using CascVel.Module.Evaluations.Management.Domain.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -78,13 +77,8 @@ internal sealed class AutomaticParameterRepository : BaseRepository, IAutomaticP
 
         await using var context = await ContextFactory.CreateDbContextAsync(ct);
 
-        // Entity has only init-only properties; assume caller provides a new instance with desired state.
-        // Attach and mark as modified to persist all scalar changes in one roundtrip (no prior SELECT).
         context.AutomaticParameters.Attach(entity);
         context.Entry(entity).State = EntityState.Modified; // Key (Id) is not updated.
-
-        // NOTE: Without a concurrency token we cannot detect a missing row here.
-        // For stronger guarantees add a concurrency column and rely on DbUpdateConcurrencyException.
 
         await context.SaveChangesAsync(ct);
         Logger.LogInformation("Automatic parameter updated: Id={Id}", entity.Id);

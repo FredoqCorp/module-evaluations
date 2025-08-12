@@ -31,16 +31,10 @@ internal sealed class EvaluationFormRepository : BaseRepository, IEvaluationForm
         Logger.LogDebug("Creating evaluation form: Code={Code} Title={Title} Status={Status}", entity.Code, entity.Title, entity.Status);
 
         await using var context = await ContextFactory.CreateDbContextAsync(ct);
-        try
-        {
-            await context.Forms.AddAsync(entity, ct);
-            await context.SaveChangesAsync(ct);
-        }
-        catch (Exception ex)
-        {
-            Logger.LogError(ex, "Failed to create evaluation form with code {Code}", entity.Code);
-            throw new InvalidDataException($"Cannot create a form with code: '{entity.Code}'", ex);
-        }
+
+        await context.Forms.AddAsync(entity, ct);
+
+        await context.SaveChangesAsync(ct);
 
         Logger.LogInformation("Evaluation form created: Id={Id} Code={Code} Status={Status}", entity.Id, entity.Code, entity.Status);
         return entity.Id;
