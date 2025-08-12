@@ -13,7 +13,7 @@ namespace CascVel.Module.Evaluations.Management.Infrastructure.Repositories;
 /// <summary>
 /// Repository for managing Run entities and related operations.
 /// </summary>
-public class RunRepository : BaseRepository, IRunRepository
+internal sealed class RunRepository : BaseRepository, IRunRepository
 {
     private ILogger<RunRepository> Logger { get; }
     /// <summary>
@@ -23,59 +23,32 @@ public class RunRepository : BaseRepository, IRunRepository
     /// <param name="logger">The logger instance.</param>
     public RunRepository(IDbContextFactory<DatabaseContext> contextFactory, ILogger<RunRepository> logger) : base(contextFactory)
     {
-        Logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        Logger = logger;
     }
 
     /// <inheritdoc />
-    public async Task<Run> CreateAsync(Run entity, CancellationToken ct = default)
+    public async Task<long> CreateAsync(Run entity, CancellationToken ct = default)
     {
-        Logger.LogInformation("Creating run {@Run}", entity);
+        Logger.LogDebug("Creating run: RunFor={RunFor} FormId={FormId} Score={Score}", entity.RunFor, entity.EvaluationFormId, entity.ScoreResult);
 
         await using var context = await ContextFactory.CreateDbContextAsync(ct);
+        await context.Runs.AddAsync(entity, ct);
+        await context.SaveChangesAsync(ct);
 
-        await context.Database.BeginTransactionAsync(ct);
-
-        try
-        {
-            context.Runs.Add(entity);
-            await context.SaveChangesAsync(ct);
-        }
-        catch (Exception ex)
-        {
-            await context.Database.RollbackTransactionAsync(ct);
-            Logger.LogError(ex, "Failed to create run {RunId}", entity.Id);
-            throw;
-        }
-
-        await context.Database.CommitTransactionAsync(ct);
-
-        Logger.LogInformation("Run {RunId} created", entity.Id);
-
-        return await GetAsync(entity.Id, ct: ct);
+        Logger.LogInformation("Run created: Id={Id} RunFor={RunFor} FormId={FormId}", entity.Id, entity.RunFor, entity.EvaluationFormId);
+        return entity.Id;
     }
 
     /// <inheritdoc />
     public async Task DeleteAsync(long entityId, CancellationToken ct = default)
     {
-        Logger.LogInformation("Deleting run {RunId}", entityId);
+        Logger.LogInformation("Deleting run: Id={Id}", entityId);
 
         await using var context = await ContextFactory.CreateDbContextAsync(ct);
-
-        await context.Database.BeginTransactionAsync(ct);
-
-        try
-        {
-            context.Runs.Remove(await GetAsync(entityId, ct: ct));
-            await context.SaveChangesAsync(ct);
-        }
-        catch (Exception ex)
-        {
-            await context.Database.RollbackTransactionAsync(ct);
-            Logger.LogError(ex, "Failed to delete run {RunId}", entityId);
-            throw;
-        }
-
-        await context.Database.CommitTransactionAsync(ct);
+        var run = await context.Runs.SingleOrDefaultAsync(r => r.Id == entityId, ct)
+                  ?? throw new KeyNotFoundException($"Run by id: {entityId} not found.");
+        context.Runs.Remove(run);
+        await context.SaveChangesAsync(ct);
 
         Logger.LogInformation("Run {RunId} deleted", entityId);
     }
@@ -83,23 +56,26 @@ public class RunRepository : BaseRepository, IRunRepository
     /// <inheritdoc />
     public async Task<Run> GetAsync(long entityId, bool isFullInclude = true, CancellationToken ct = default)
     {
-        Logger.LogDebug("Retrieving run {RunId} with full include {IsFullInclude}", entityId, isFullInclude);
+        Logger.LogDebug("Retrieving run: Id={Id} IncludeFull={IncludeFull}", entityId, isFullInclude);
 
         await using var context = await ContextFactory.CreateDbContextAsync(ct);
 
-        return (isFullInclude
-            ? await context.Runs.GetRunFormQuery().SingleOrDefaultAsync(p => p.Id == entityId, ct)
-            : await context.Runs.SingleOrDefaultAsync(p => p.Id == entityId, ct)) ?? throw new KeyNotFoundException($"Run by id: {entityId} not found.");
+        var query = context.Runs.AsNoTracking();
+        if (isFullInclude)
+        {
+            query = query.GetRunFormQuery();
+        }
+        return await query.SingleOrDefaultAsync(p => p.Id == entityId, ct) ?? throw new KeyNotFoundException($"Run by id: {entityId} not found.");
     }
 
     /// <inheritdoc />
     public async Task<IEnumerable<Run>> GetListAsync(RunFilter filter, CancellationToken ct = default)
     {
-        Logger.LogDebug("Retrieving run list with filter {@Filter}", filter);
+        Logger.LogDebug("Retrieving run list with filter: RunFor={RunFor} PublishedOnly={Published} NotViewedOnly={NotViewed}", filter.RunFor, filter.OnlyPublished, filter.OnlyNotViewed);
 
         await using var context = await ContextFactory.CreateDbContextAsync(ct);
 
-        var query = context.Runs.GetRunFormQuery();
+        var query = context.Runs.GetRunFormQuery().AsNoTracking();
         if (filter.RunFor is not null)
         {
             query = query.Where(r => r.RunFor == filter.RunFor);
@@ -139,68 +115,66 @@ public class RunRepository : BaseRepository, IRunRepository
     }
 
     /// <inheritdoc />
-    public async Task<Run> UpdateAsync(Run entity, CancellationToken ct = default)
+    public async Task UpdateAsync(Run entity, CancellationToken ct = default)
     {
-        Logger.LogInformation("Updating run {RunId}", entity.Id);
+        Logger.LogDebug("Updating run: Id={Id} RunFor={RunFor} FormId={FormId}", entity.Id, entity.RunFor, entity.EvaluationFormId);
 
         await using var context = await ContextFactory.CreateDbContextAsync(ct);
-
-        await context.Database.BeginTransactionAsync(ct);
-
+        await using var transaction = await context.Database.BeginTransactionAsync(ct);
         try
         {
+            // Replace criterion results (bulk delete existing)
             await context.Results
                 .Where(c => EF.Property<long>(c, "RunId") == entity.Id)
                 .ExecuteDeleteAsync(ct);
 
-            context.Runs.Update(entity);
+            // Attach detached entity and mark Modified
+            context.Runs.Attach(entity);
+            var entry = context.Entry(entity);
+            entry.State = EntityState.Modified;
 
-            var entityEntry = context.Entry(entity);
-
-            entityEntry.Property(s => s.CreatedBy).IsModified = false;
-            entityEntry.Property(s => s.CreatedAt).IsModified = false;
-            entityEntry.Property(s => s.Context).IsModified = false;
-            entityEntry.Property(s => s.EvaluationFormId).IsModified = false;
-            entityEntry.Property(s => s.PublishedAt).IsModified = false;
-            entityEntry.Property(s => s.PublishedBy).IsModified = false;
-            entityEntry.Property(s => s.RunFor).IsModified = false;
-            entityEntry.Property(s => s.FirstSavedAt).IsModified = false;
-            entityEntry.Property(s => s.FirstSavedBy).IsModified = false;
-
+            // Preserve immutable / system-managed fields
+            entry.Property(s => s.CreatedBy).IsModified = false;
+            entry.Property(s => s.CreatedAt).IsModified = false;
+            entry.Property(s => s.Context).IsModified = false;
+            entry.Property(s => s.EvaluationFormId).IsModified = false;
+            entry.Property(s => s.PublishedAt).IsModified = false;
+            entry.Property(s => s.PublishedBy).IsModified = false;
+            entry.Property(s => s.RunFor).IsModified = false;
+            entry.Property(s => s.FirstSavedAt).IsModified = false;
+            entry.Property(s => s.FirstSavedBy).IsModified = false;
 
             await context.SaveChangesAsync(ct);
 
-            var run = await context.Runs.SingleOrDefaultAsync(r => r.Id == entity.Id && r.FirstSavedAt == null, ct);
-
-            if (run != null && run.FirstSavedAt == null)
+            // FirstSavedAt/FirstSavedBy initialization if first save scenario
+            bool needsFirstSave = await context.Runs
+                .Where(r => r.Id == entity.Id && r.FirstSavedAt == null)
+                .AnyAsync(ct);
+            if (needsFirstSave)
             {
                 await context.Runs
-                        .Where(r => r.Id == entity.Id && r.FirstSavedAt == null)
-                        .ExecuteUpdateAsync(setters => setters
-                            .SetProperty(r => r.FirstSavedBy, r => r.LastSavedBy)
-                            .SetProperty(r => r.FirstSavedAt, r => r.LastSavedAt)
-                          , ct);
+                    .Where(r => r.Id == entity.Id && r.FirstSavedAt == null)
+                    .ExecuteUpdateAsync(setters => setters
+                        .SetProperty(r => r.FirstSavedBy, r => r.LastSavedBy)
+                        .SetProperty(r => r.FirstSavedAt, r => r.LastSavedAt)
+                      , ct);
             }
 
+            await transaction.CommitAsync(ct);
+            Logger.LogInformation("Run updated: Id={Id}", entity.Id);
         }
         catch (Exception ex)
         {
-            await context.Database.RollbackTransactionAsync(ct);
+            await transaction.RollbackAsync(ct);
             Logger.LogError(ex, "Failed to update run {RunId}", entity.Id);
             throw;
         }
-
-        await context.Database.CommitTransactionAsync(ct);
-
-        Logger.LogInformation("Run {RunId} updated", entity.Id);
-
-        return await GetAsync(entity.Id, ct: ct);
     }
 
     /// <inheritdoc />
     public async Task Publish(long id, string userLogin, CancellationToken ct = default)
     {
-        Logger.LogInformation("Publishing run {RunId} by {User}", id, userLogin);
+        Logger.LogInformation("Publishing run: Id={Id} User={User}", id, userLogin);
 
         await using var context = await ContextFactory.CreateDbContextAsync(ct);
 
@@ -211,13 +185,13 @@ public class RunRepository : BaseRepository, IRunRepository
                     .SetProperty(r => r.PublishedAt, DateTime.UtcNow)
                    , ct);
 
-        Logger.LogInformation("Run {RunId} published", id);
+        Logger.LogInformation("Run published: Id={Id}", id);
     }
 
     /// <inheritdoc />
     public async Task SetRunViewedState(long id, CancellationToken ct = default)
     {
-        Logger.LogInformation("Marking run {RunId} as viewed", id);
+        Logger.LogInformation("Marking run as viewed: Id={Id}", id);
 
         await using var context = await ContextFactory.CreateDbContextAsync(ct);
 
@@ -232,7 +206,7 @@ public class RunRepository : BaseRepository, IRunRepository
     /// </summary>
     public async Task SetApproveState(long id, RunAgreementStatus status, CancellationToken ct = default)
     {
-        Logger.LogInformation("Setting approve state for run {RunId} to {Status}", id, status);
+        Logger.LogInformation("Setting approve state for run: Id={Id} Status={Status}", id, status);
 
         await using var context = await ContextFactory.CreateDbContextAsync(ct);
 

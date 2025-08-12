@@ -10,8 +10,8 @@ public interface IRepository<T>
     /// </summary>
     /// <param name="entity">The entity to create.</param>
     /// <param name="ct">A cancellation token.</param>
-    /// <returns>The created entity.</returns>
-    Task<T> CreateAsync(T entity, CancellationToken ct = default);
+    /// <returns>The identifier of the created entity.</returns>
+    Task<long> CreateAsync(T entity, CancellationToken ct = default);
 
     /// <summary>
     /// Asynchronously retrieves an entity by its identifier.
@@ -27,8 +27,7 @@ public interface IRepository<T>
     /// </summary>
     /// <param name="entity">The entity to update.</param>
     /// <param name="ct">A cancellation token.</param>
-    /// <returns>The updated entity.</returns>
-    Task<T> UpdateAsync(T entity, CancellationToken ct = default);
+    Task UpdateAsync(T entity, CancellationToken ct = default);
 
     /// <summary>
     /// Asynchronously deletes an entity by its identifier.

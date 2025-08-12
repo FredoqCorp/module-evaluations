@@ -10,7 +10,7 @@ namespace CascVel.Module.Evaluations.Management.Infrastructure.Repositories;
 /// <summary>
 /// Repository for managing <see cref="AutomaticParameter"/> entities.
 /// </summary>
-public class AutomaticParameterRepository : BaseRepository, IAutomaticParameterRepository
+internal sealed class AutomaticParameterRepository : BaseRepository, IAutomaticParameterRepository
 {
     private ILogger<AutomaticParameterRepository> Logger { get; }
 
@@ -21,34 +21,20 @@ public class AutomaticParameterRepository : BaseRepository, IAutomaticParameterR
     /// <param name="logger">The logger instance.</param>
     public AutomaticParameterRepository(IDbContextFactory<DatabaseContext> contextFactory, ILogger<AutomaticParameterRepository> logger) : base(contextFactory)
     {
-        Logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        Logger = logger;
     }
 
     /// <inheritdoc />
-    public async Task<AutomaticParameter> CreateAsync(AutomaticParameter entity, CancellationToken ct = default)
+    public async Task<long> CreateAsync(AutomaticParameter entity, CancellationToken ct = default)
     {
-        Logger.LogInformation("Creating automatic parameter {@Parameter}", entity);
+        Logger.LogDebug("Creating automatic parameter: Caption={Caption} ConditionType={ConditionType} ServiceCode={ServiceCode}", entity.Caption, entity.ConditionType, entity.ServiceCode.Value);
 
         await using var context = await ContextFactory.CreateDbContextAsync(ct);
-        await context.Database.BeginTransactionAsync(ct);
+        await context.AutomaticParameters.AddAsync(entity, ct);
+        await context.SaveChangesAsync(ct);
 
-        try
-        {
-            context.AutomaticParameters.Add(entity);
-            await context.SaveChangesAsync(ct);
-        }
-        catch (Exception ex)
-        {
-            await context.Database.RollbackTransactionAsync(ct);
-            Logger.LogError(ex, "Failed to create automatic parameter {ParameterId}", entity.Id);
-            throw;
-        }
-
-        await context.Database.CommitTransactionAsync(ct);
-
-        Logger.LogInformation("Automatic parameter {ParameterId} created", entity.Id);
-
-        return await GetAsync(entity.Id, ct: ct);
+        Logger.LogInformation("Automatic parameter created: Id={Id} Caption={Caption} ConditionType={ConditionType} ServiceCode={ServiceCode}", entity.Id, entity.Caption, entity.ConditionType, entity.ServiceCode.Value);
+        return entity.Id;
     }
 
     /// <inheritdoc />
@@ -57,13 +43,18 @@ public class AutomaticParameterRepository : BaseRepository, IAutomaticParameterR
     /// <inheritdoc />
     public async Task<AutomaticParameter> GetAsync(long entityId, bool isFullInclude = true, CancellationToken ct = default)
     {
-        Logger.LogDebug("Retrieving automatic parameter {ParameterId} with full include {IsFullInclude}", entityId, isFullInclude);
+        Logger.LogDebug("Retrieving automatic parameter: Id={Id} IncludeFull={IncludeFull}", entityId, isFullInclude);
 
         await using var context = await ContextFactory.CreateDbContextAsync(ct);
 
-        return (isFullInclude
-            ? await context.AutomaticParameters.GetAutoPrmQuery().SingleOrDefaultAsync(p => p.Id == entityId, ct)
-            : await context.AutomaticParameters.SingleOrDefaultAsync(p => p.Id == entityId, ct)) ?? throw new KeyNotFoundException($"Evaluation form by id: {entityId} not found.");
+        var query = context.AutomaticParameters.AsNoTracking();
+        if (isFullInclude)
+        {
+            query = query.GetAutoPrmQuery();
+        }
+
+        return await query.SingleOrDefaultAsync(p => p.Id == entityId, ct)
+               ?? throw new KeyNotFoundException($"Automatic parameter by id: {entityId} not found.");
     }
 
     /// <inheritdoc />
@@ -73,7 +64,7 @@ public class AutomaticParameterRepository : BaseRepository, IAutomaticParameterR
 
         await using var context = await ContextFactory.CreateDbContextAsync(ct);
 
-        var parameters = await context.AutomaticParameters.ToListAsync(ct);
+        var parameters = await context.AutomaticParameters.AsNoTracking().ToListAsync(ct);
 
         Logger.LogDebug("Retrieved {Count} automatic parameters", parameters.Count);
 
@@ -81,32 +72,22 @@ public class AutomaticParameterRepository : BaseRepository, IAutomaticParameterR
     }
 
     /// <inheritdoc />
-    public async Task<AutomaticParameter> UpdateAsync(AutomaticParameter entity, CancellationToken ct = default)
+    public async Task UpdateAsync(AutomaticParameter entity, CancellationToken ct = default)
     {
-        Logger.LogInformation("Updating automatic parameter {ParameterId}", entity.Id);
+        Logger.LogDebug("Updating automatic parameter: Id={Id} Caption={Caption} ConditionType={ConditionType}", entity.Id, entity.Caption, entity.ConditionType);
 
         await using var context = await ContextFactory.CreateDbContextAsync(ct);
 
-        await context.Database.BeginTransactionAsync(ct);
+        // Entity has only init-only properties; assume caller provides a new instance with desired state.
+        // Attach and mark as modified to persist all scalar changes in one roundtrip (no prior SELECT).
+        context.AutomaticParameters.Attach(entity);
+        context.Entry(entity).State = EntityState.Modified; // Key (Id) is not updated.
 
-        try
-        {
-            context.AutomaticParameters.Update(entity);
+        // NOTE: Without a concurrency token we cannot detect a missing row here.
+        // For stronger guarantees add a concurrency column and rely on DbUpdateConcurrencyException.
 
-            await context.SaveChangesAsync(ct);
-        }
-        catch (Exception ex)
-        {
-            await context.Database.RollbackTransactionAsync(ct);
-            Logger.LogError(ex, "Failed to update automatic parameter {ParameterId}", entity.Id);
-            throw;
-        }
-
-        await context.Database.CommitTransactionAsync(ct);
-
-        Logger.LogInformation("Automatic parameter {ParameterId} updated", entity.Id);
-
-        return await GetAsync(entity.Id, ct: ct);
+        await context.SaveChangesAsync(ct);
+        Logger.LogInformation("Automatic parameter updated: Id={Id}", entity.Id);
     }
 }
 

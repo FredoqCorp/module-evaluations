@@ -66,9 +66,9 @@ public class DatabaseContext : DbContext
 
     /// <inheritdoc />
     protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
-     {
-         // Default precision for decimals across the model
-         configurationBuilder.Properties<decimal>().HavePrecision(10, 2);
-         base.ConfigureConventions(configurationBuilder);
-     }
+    {
+        // Default precision for decimals across the model
+        configurationBuilder.Properties<decimal>().HavePrecision(10, 2);
+        base.ConfigureConventions(configurationBuilder);
+    }
 }

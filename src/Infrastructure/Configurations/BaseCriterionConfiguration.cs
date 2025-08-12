@@ -16,9 +16,9 @@ internal sealed class BaseCriterionConfiguration : IEntityTypeConfiguration<Base
         builder.Property(x => x.Weight).HasColumnName("weight");
         builder.Property(x => x.Order).HasColumnName("order_index");
 
-    // Shadow FK to EvaluationForm
-    builder.Property<long>("EvaluationFormId").HasColumnName("evaluation_form_id");
-    builder.HasIndex("EvaluationFormId");
+        // Shadow FK to EvaluationForm
+        builder.Property<long>("EvaluationFormId").HasColumnName("evaluation_form_id");
+        builder.HasIndex("EvaluationFormId");
 
         builder.HasDiscriminator<string>("criterion_type")
                .HasValue<DefaultCriterion>("default")
