@@ -2,7 +2,7 @@
 using CascVel.Module.Evaluations.Management.Domain.Entities.Runs;
 using CascVel.Module.Evaluations.Management.Domain.Enums.Runs;
 
-namespace CascVel.Module.Evaluations.Management.Domain.Interfaces;
+namespace CascVel.Module.Evaluations.Management.Application.Interfaces;
 
 /// <summary>
 /// Repository interface for managing Run entities.

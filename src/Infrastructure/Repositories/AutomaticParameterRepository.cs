@@ -1,8 +1,8 @@
 ﻿using CascVel.Module.Evaluations.Management.Domain.Entities.AutomaticParameters;
-using CascVel.Module.Evaluations.Management.Domain.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using CascVel.Module.Evaluations.Management.Infrastructure.Context;
+using CascVel.Module.Evaluations.Management.Application.Interfaces;
 
 namespace CascVel.Module.Evaluations.Management.Infrastructure.Repositories;
 

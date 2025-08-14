@@ -1,12 +1,11 @@
-﻿using System;
-using System.Text.Json;
+﻿using System.Text.Json;
 using CascVel.Module.Evaluations.Management.Domain.Entities.Filters;
 using CascVel.Module.Evaluations.Management.Domain.Entities.Runs;
 using CascVel.Module.Evaluations.Management.Domain.Enums.Runs;
-using CascVel.Module.Evaluations.Management.Domain.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using CascVel.Module.Evaluations.Management.Infrastructure.Context;
+using CascVel.Module.Evaluations.Management.Application.Interfaces;
 
 namespace CascVel.Module.Evaluations.Management.Infrastructure.Repositories;
 

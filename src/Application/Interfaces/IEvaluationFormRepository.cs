@@ -1,7 +1,7 @@
 ﻿using CascVel.Module.Evaluations.Management.Domain.Entities.Form;
 using CascVel.Module.Evaluations.Management.Domain.Enums.Forms;
 
-namespace CascVel.Module.Evaluations.Management.Domain.Interfaces;
+namespace CascVel.Module.Evaluations.Management.Application.Interfaces;
 
 /// <summary>
 /// Repository interface for managing <see cref="EvaluationForm"/> entities.
@@ -32,4 +32,13 @@ public interface IEvaluationFormRepository : IRepository<EvaluationForm>
     /// <param name="ct">A cancellation token.</param>
     /// <returns>A task representing the asynchronous operation.</returns>
     Task SetStatusAsync(long id, EvaluationFormStatus status, string user, CancellationToken ct = default);
+
+    /// <summary>
+    /// Asynchronously updates an existing automatic parameter in the repository.
+    /// </summary>
+    /// <param name="entity">The evaluation form to update.</param>
+    /// <param name="ct">A cancellation token.</param>
+    Task UpdateAsync(EvaluationForm entity, CancellationToken ct = default);
+
+
 }
