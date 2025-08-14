@@ -8,13 +8,13 @@ internal sealed class CriterionConfiguration : IEntityTypeConfiguration<Criterio
 {
     public void Configure(EntityTypeBuilder<Criterion> builder)
     {
-        builder.ToTable("criteria");
-        builder.HasKey(x => x.Id);
-        builder.Property(x => x.Id).ValueGeneratedOnAdd();
+       builder.ToTable("criteria");
+       builder.HasKey(x => x.Id);
+       builder.Property(x => x.Id).HasColumnName("id").ValueGeneratedOnAdd();
 
-              ConfigureText(builder);
-              ConfigureOptions(builder);
-              ConfigureAutomation(builder);
+       ConfigureText(builder);
+       ConfigureOptions(builder);
+       ConfigureAutomation(builder);
     }
 
        private static void ConfigureText(EntityTypeBuilder<Criterion> builder)
@@ -69,10 +69,13 @@ internal sealed class CriterionConfiguration : IEntityTypeConfiguration<Criterio
 
        private static void ConfigureAutomation(EntityTypeBuilder<Criterion> builder)
        {
-              builder.OwnsOne(x => x.Automation, auto =>
+                   builder.OwnsOne(x => x.Automation, auto =>
               {
                     // Map to a separate table to avoid optional-owned-with-nested-dependents table sharing issues
                     auto.ToTable("criterion_automation");
+                          // Use snake_case PK/FK to match naming style
+                          auto.WithOwner().HasForeignKey("criterion_id");
+                          auto.HasKey("criterion_id");
 
                      auto.OwnsOne(a => a.Source, s =>
                      {

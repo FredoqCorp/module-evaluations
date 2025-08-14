@@ -10,7 +10,7 @@ internal sealed class EvaluationFormConfiguration : IEntityTypeConfiguration<Eva
     {
         builder.ToTable("evaluation_forms");
         builder.HasKey(x => x.Id);
-        builder.Property(x => x.Id).ValueGeneratedOnAdd();
+        builder.Property(x => x.Id).HasColumnName("id").ValueGeneratedOnAdd();
 
         ConfigureMeta(builder);
         ConfigureLifecycle(builder);
@@ -101,6 +101,9 @@ internal sealed class EvaluationFormConfiguration : IEntityTypeConfiguration<Eva
                 groups.Property<long>("id").ValueGeneratedOnAdd();
                 groups.HasKey("id");
 
+                // Avoid duplicating domain 'Id' into a separate column
+                groups.Ignore(g => g.Id);
+
                 groups.Property(g => g.Title).HasColumnName("title").HasColumnType("text").IsRequired();
                 groups.OwnsOne(g => g.Order, o =>
                 {
@@ -120,7 +123,8 @@ internal sealed class EvaluationFormConfiguration : IEntityTypeConfiguration<Eva
                     crit.Property<long>("id").ValueGeneratedOnAdd();
                     crit.HasKey("id");
 
-                    crit.Property<long>("criterion_id").HasColumnName("criterion_id");
+                    // Use explicit FK columns with snake_case; don't duplicate nav key as separate property
+                    crit.Property<long>("criterion_id").HasColumnName("criterion_id").IsRequired();
                     crit.HasOne(c => c.Criterion)
                         .WithMany()
                         .HasForeignKey("criterion_id")

@@ -10,12 +10,10 @@ internal sealed class FormRunConfiguration : IEntityTypeConfiguration<FormRun>
     {
         builder.ToTable("form_runs");
         builder.HasKey(x => x.Id);
-        builder.Property(x => x.Id).ValueGeneratedOnAdd();
+        builder.Property(x => x.Id).HasColumnName("id").ValueGeneratedOnAdd();
 
         ConfigureMeta(builder);
         ConfigureState(builder);
-
-    // Indexes on nested complex property paths are added via migrations if needed.
     }
 
     private static void ConfigureMeta(EntityTypeBuilder<FormRun> builder)
