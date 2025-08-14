@@ -11,10 +11,6 @@ namespace CascVel.Module.Evaluations.Management.Infrastructure.Context;
 public class DatabaseContext : DbContext
 {
     /// <summary>
-    /// Evaluation forms
-    /// </summary>
-    public DbSet<EvaluationForm> EvaluationForms { get; set; }
-    /// <summary>
     /// Criteria
     /// </summary>
     public DbSet<Criterion> Criteria { get; set; }

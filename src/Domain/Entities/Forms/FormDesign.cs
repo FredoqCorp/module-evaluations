@@ -15,5 +15,10 @@ public sealed class FormDesign
     /// <summary>
     /// Ordered groups of criteria.
     /// </summary>
-    public required IReadOnlyList<FormGroup> Groups { get; init; }
+    public required IReadOnlyList<FormGroup> Groups { get; init; } = [];
+
+    /// <summary>
+    /// Criteria without groups
+    /// </summary>
+    public required IReadOnlyList<GroupCriterionRef> Criteria { get; init; }
 }

@@ -1,4 +1,3 @@
-using CascVel.Module.Evaluations.Management.Domain.Entities.Criteria;
 using CascVel.Module.Evaluations.Management.Domain.Entities.Forms.ValueObjects;
 
 namespace CascVel.Module.Evaluations.Management.Domain.Entities.Forms;
@@ -32,4 +31,9 @@ public sealed class FormGroup
     /// Criteria references inside the group, ordered.
     /// </summary>
     public required IReadOnlyList<GroupCriterionRef> Criteria { get; init; }
+
+    /// <summary>
+    /// Nested groups inside this group
+    /// </summary>
+    public IReadOnlyList<FormGroup> Groups { get; init; } = Array.Empty<FormGroup>();
 }
