@@ -1,5 +1,6 @@
-using CascVel.Module.Evaluations.Management.Domain.Entities.Forms;
 using CascVel.Module.Evaluations.Management.Domain.Entities.Criteria;
+using CascVel.Module.Evaluations.Management.Domain.Entities.Forms;
+using CascVel.Module.Evaluations.Management.Domain.Entities.Runs;
 using Microsoft.EntityFrameworkCore;
 
 namespace CascVel.Module.Evaluations.Management.Infrastructure.Context;
@@ -17,6 +18,11 @@ public class DatabaseContext : DbContext
     /// Criteria
     /// </summary>
     public DbSet<Criterion> Criteria { get; set; }
+
+    /// <summary>
+    /// Form evaluation runs
+    /// </summary>
+    public DbSet<FormRun> FormRuns { get; set; }
 
     /// <summary>
     /// Initializes the context with options.
