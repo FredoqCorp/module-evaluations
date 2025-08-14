@@ -12,16 +12,18 @@ namespace CascVel.Module.Evaluations.Management.Infrastructure.Repositories;
 /// <summary>
 /// Repository for managing Run entities and related operations.
 /// </summary>
-internal sealed class RunRepository : BaseRepository, IRunRepository
+internal sealed class RunRepository : IRunRepository
 {
+    public IDbContextFactory<DatabaseContext> ContextFactory { get; }
     private ILogger<RunRepository> Logger { get; }
     /// <summary>
     /// Initializes a new instance of the <see cref="RunRepository"/> class.
     /// </summary>
     /// <param name="contextFactory">The database context factory.</param>
     /// <param name="logger">The logger instance.</param>
-    public RunRepository(IDbContextFactory<DatabaseContext> contextFactory, ILogger<RunRepository> logger) : base(contextFactory)
+    public RunRepository(IDbContextFactory<DatabaseContext> contextFactory, ILogger<RunRepository> logger)
     {
+        ContextFactory = contextFactory;
         Logger = logger;
     }
 
