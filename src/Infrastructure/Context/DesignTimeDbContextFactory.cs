@@ -23,7 +23,11 @@ public sealed class DesignTimeDbContextFactory : IDesignTimeDbContextFactory<Dat
             ?? "Host=localhost;Port=5432;Database=module_evaluations;Username=postgres;Password=postgres";
 
         DbContextOptionsBuilder<DatabaseContext> optionsBuilder = new DbContextOptionsBuilder<DatabaseContext>()
-            .UseNpgsql(connectionString);
+            .UseNpgsql(connectionString, npgsql =>
+            {
+                // Ensure EF migrations history is stored in the same module schema
+                npgsql.MigrationsHistoryTable("__EFMigrationsHistory", "evaluations");
+            });
 
         return new DatabaseContext(optionsBuilder.Options);
     }
