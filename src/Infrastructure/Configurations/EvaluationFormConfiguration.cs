@@ -47,7 +47,7 @@ internal sealed class EvaluationFormConfiguration : IEntityTypeConfiguration<Eva
 
     private static void ConfigureLifecycle(EntityTypeBuilder<EvaluationForm> builder)
     {
-        builder.ComplexProperty(x => x.Lifecycle, lc =>
+        builder.OwnsOne(x => x.Lifecycle, lc =>
         {
             lc.Property(l => l.Status)
               .HasColumnName("status")
@@ -55,29 +55,31 @@ internal sealed class EvaluationFormConfiguration : IEntityTypeConfiguration<Eva
               .HasMaxLength(32)
               .IsRequired();
 
-            lc.ComplexProperty(l => l.Validity, p =>
+            lc.OwnsOne(l => l.Validity, p =>
             {
                 p.Property(v => v.Start).HasColumnName("valid_from");
                 p.Property(v => v.End).HasColumnName("valid_until");
             });
 
-            lc.ComplexProperty(l => l.Audit, a =>
+            lc.OwnsOne(l => l.Audit, a =>
             {
-                a.ComplexProperty(t => t.Created, s =>
+                a.OwnsOne(t => t.Created, s =>
                 {
                     s.Property(x => x.UserId).HasColumnName("created_by").HasMaxLength(100).IsRequired();
                     s.Property(x => x.At).HasColumnName("created_at").IsRequired();
                 });
-                a.ComplexProperty(t => t.Updated, s =>
+                a.OwnsOne(t => t.Updated, s =>
                 {
                     s.Property(x => x.UserId).HasColumnName("updated_by").HasMaxLength(100);
                     s.Property(x => x.At).HasColumnName("updated_at");
                 });
-                a.ComplexProperty(t => t.StateChanged, s =>
+                a.Navigation(t => t.Updated).IsRequired(false);
+                a.OwnsOne(t => t.StateChanged, s =>
                 {
                     s.Property(x => x.UserId).HasColumnName("state_changed_by").HasMaxLength(100);
                     s.Property(x => x.At).HasColumnName("state_changed_at");
                 });
+                a.Navigation(t => t.StateChanged).IsRequired(false);
             });
         });
     }
@@ -100,10 +102,16 @@ internal sealed class EvaluationFormConfiguration : IEntityTypeConfiguration<Eva
                 groups.HasKey("id");
 
                 groups.Property(g => g.Title).HasColumnName("title").HasColumnType("text").IsRequired();
-                groups.Property(g => g.Order.Value).HasColumnName("order_index").IsRequired();
-                groups.Property(g => g.Weight!.Percent).HasColumnName("weight");
+                groups.OwnsOne(g => g.Order, o =>
+                {
+                    o.Property(p => p.Value).HasColumnName("order_index").IsRequired();
+                });
+                groups.OwnsOne(g => g.Weight, w =>
+                {
+                    w.Property(p => p.Percent).HasColumnName("weight");
+                });
 
-                groups.HasIndex("form_id", "order_index").IsUnique();
+                // Order uniqueness enforced at the application layer.
 
                 groups.OwnsMany(g => g.Criteria, crit =>
                 {
@@ -117,10 +125,16 @@ internal sealed class EvaluationFormConfiguration : IEntityTypeConfiguration<Eva
                         .WithMany()
                         .HasForeignKey("criterion_id")
                         .OnDelete(DeleteBehavior.Restrict);
-                    crit.Property(c => c.Order.Value).HasColumnName("order_index").IsRequired();
-                    crit.Property(c => c.Weight!.Percent).HasColumnName("weight");
+                    crit.OwnsOne(c => c.Order, o =>
+                    {
+                        o.Property(p => p.Value).HasColumnName("order_index").IsRequired();
+                    });
+                    crit.OwnsOne(c => c.Weight, w =>
+                    {
+                        w.Property(p => p.Percent).HasColumnName("weight");
+                    });
 
-                    crit.HasIndex("group_id", "order_index").IsUnique();
+                    // Order uniqueness enforced at the application layer.
                 });
             });
         });
@@ -128,6 +142,6 @@ internal sealed class EvaluationFormConfiguration : IEntityTypeConfiguration<Eva
 
     private static void ConfigureIndexes(EntityTypeBuilder<EvaluationForm> builder)
     {
-        builder.HasIndex("Meta_Code_Value").HasDatabaseName("ix_evaluation_forms_code").IsUnique();
+    // Index is created via migration due to EF Core limitation for nested complex property paths.
     }
 }

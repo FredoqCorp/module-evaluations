@@ -15,8 +15,7 @@ internal sealed class FormRunConfiguration : IEntityTypeConfiguration<FormRun>
         ConfigureMeta(builder);
         ConfigureState(builder);
 
-        builder.HasIndex("Meta_RunFor").HasDatabaseName("ix_form_runs_run_for");
-        builder.HasIndex("Meta_Form_FormId").HasDatabaseName("ix_form_runs_form");
+    // Indexes on nested complex property paths are added via migrations if needed.
     }
 
     private static void ConfigureMeta(EntityTypeBuilder<FormRun> builder)
@@ -91,6 +90,8 @@ internal sealed class FormRunConfiguration : IEntityTypeConfiguration<FormRun>
             {
                 crit.ToTable("run_criteria");
                 crit.WithOwner().HasForeignKey("run_id");
+                // Declare the shadow FK property with explicit type so it can be used in indexes
+                crit.Property<long>("run_id");
                 crit.Property<long>("id").ValueGeneratedOnAdd();
                 crit.HasKey("id");
 
@@ -108,7 +109,10 @@ internal sealed class FormRunConfiguration : IEntityTypeConfiguration<FormRun>
                     });
                 });
 
-                crit.HasIndex("run_id", "criterion_id").HasDatabaseName("ix_run_criteria_unique").IsUnique();
+                // Composite unique index (run_id, CriterionId) to prevent duplicates per run
+                crit.HasIndex("run_id", nameof(RunCriterionScore.CriterionId))
+                    .HasDatabaseName("ix_run_criteria_unique")
+                    .IsUnique();
             });
         });
     }

@@ -61,25 +61,37 @@ internal sealed class CriterionConfiguration : IEntityTypeConfiguration<Criterio
                      options.Property(o => o.Threshold)
                                .HasColumnName("threshold");
 
-                     options.HasIndex("criterion_id", "score").HasDatabaseName("ix_criterion_options_score");
+                           // Index on the owner FK and on Score (avoid string-based composite including value object's member)
+                           options.HasIndex("criterion_id").HasDatabaseName("ix_criterion_options_fk");
+                           options.HasIndex(o => o.Score).HasDatabaseName("ix_criterion_options_score");
               });
        }
 
        private static void ConfigureAutomation(EntityTypeBuilder<Criterion> builder)
        {
-              builder.ComplexProperty(x => x.Automation, auto =>
+              builder.OwnsOne(x => x.Automation, auto =>
               {
-                     auto.ComplexProperty(a => a.Source)
-                            .Property(s => s.ParameterKey)
-                            .HasColumnName("auto_source_key")
-                            .HasColumnType("text");
+                    // Map to a separate table to avoid optional-owned-with-nested-dependents table sharing issues
+                    auto.ToTable("criterion_automation");
 
-                     auto.ComplexProperty(a => a.Rule)
-                            .ComplexProperty(r => r.ThresholdPolicy)
-                            .Property(tp => tp.Goal)
-                            .HasColumnName("auto_goal")
-                            .HasConversion<string>()
-                            .HasMaxLength(16);
+                     auto.OwnsOne(a => a.Source, s =>
+                     {
+                            s.Property(p => p.ParameterKey)
+                             .HasColumnName("auto_source_key")
+                             .HasColumnType("text");
+                     });
+
+                     auto.OwnsOne(a => a.Rule, r =>
+                     {
+                            r.OwnsOne(t => t.ThresholdPolicy, tp =>
+                            {
+                                   tp.Property(p => p.Goal)
+                                     .HasColumnName("auto_goal")
+                                     .HasConversion<string>()
+                                     .HasMaxLength(16);
+                            });
+                     });
               });
+              builder.Navigation(x => x.Automation).IsRequired(false);
        }
 }
