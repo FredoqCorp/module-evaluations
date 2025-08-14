@@ -54,3 +54,4 @@ TestResult.xml
 nunit-*.xml
 .github/copilot-instructions.md
 .idea/
+ai-docs/

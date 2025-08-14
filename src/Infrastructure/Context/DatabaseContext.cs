@@ -1,4 +1,3 @@
-using CascVel.Module.Evaluations.Management.Domain.Entities.Runs;
 using CascVel.Module.Evaluations.Management.Domain.Entities.Forms;
 using CascVel.Module.Evaluations.Management.Domain.Entities.Criteria;
 using Microsoft.EntityFrameworkCore;
@@ -10,15 +9,6 @@ namespace CascVel.Module.Evaluations.Management.Infrastructure.Context;
 /// </summary>
 public class DatabaseContext : DbContext
 {
-    // Runs
-    /// <summary>
-    /// Completed runs
-    /// </summary>
-    public DbSet<Run> Runs { get; set; }
-    /// <summary>
-    /// Per-criterion results
-    /// </summary>
-    public DbSet<RunCriterionResult> Results { get; set; }
     /// <summary>
     /// Evaluation forms
     /// </summary>
