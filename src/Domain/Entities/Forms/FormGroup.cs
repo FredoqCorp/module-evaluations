@@ -28,9 +28,9 @@ public sealed class FormGroup
     public Weight? Weight { get; init; }
 
     /// <summary>
-    /// Criteria references inside the group, ordered.
+    /// Criteria inside the group, ordered.
     /// </summary>
-    public required IReadOnlyList<GroupCriterionRef> Criteria { get; init; }
+    public required IReadOnlyList<FormCriterion> Criteria { get; init; }
 
     /// <summary>
     /// Nested groups inside this group

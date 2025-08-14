@@ -18,7 +18,7 @@ public sealed class FormDesign
     public required IReadOnlyList<FormGroup> Groups { get; init; } = [];
 
     /// <summary>
-    /// Criteria without groups
+    /// Criteria placed directly in the form, outside of groups.
     /// </summary>
-    public required IReadOnlyList<GroupCriterionRef> Criteria { get; init; }
+    public required IReadOnlyList<FormCriterion> Criteria { get; init; } = [];
 }
