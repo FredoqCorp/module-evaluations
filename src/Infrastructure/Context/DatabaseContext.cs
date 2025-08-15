@@ -21,6 +21,11 @@ public class DatabaseContext : DbContext
     public DbSet<FormRun> FormRuns { get; set; }
 
     /// <summary>
+    /// Evaluation forms
+    /// </summary>
+    public DbSet<EvaluationForm> EvaluationForms { get; set; }
+
+    /// <summary>
     /// Initializes the context with options.
     /// </summary>
     public DatabaseContext(DbContextOptions options) : base(options)
