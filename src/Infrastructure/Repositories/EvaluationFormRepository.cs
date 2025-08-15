@@ -39,9 +39,7 @@ internal sealed class EvaluationFormRepository : IEvaluationFormRepository
     public async Task<EvaluationForm> GetAsync(long entityId, bool isFullInclude = true, CancellationToken ct = default)
     {
         await using var db = await _contextFactory.CreateDbContextAsync(ct);
-        var q = isFullInclude
-            ? db.EvaluationForms.WithDesignGraph()
-            : db.EvaluationForms.AsNoTracking();
+        var q = db.EvaluationForms.AsNoTracking().AsSplitQuery();
         return await q.SingleOrDefaultAsync(f => f.Id == entityId, ct)
                ?? throw new KeyNotFoundException($"EvaluationForm by id {entityId} not found");
     }
