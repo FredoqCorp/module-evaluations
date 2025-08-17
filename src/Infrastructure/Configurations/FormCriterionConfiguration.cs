@@ -10,7 +10,6 @@ internal sealed class FormCriterionConfiguration : IEntityTypeConfiguration<Form
     {
         builder.ToTable("form_criteria", tbl =>
         {
-            // Ensure domain constraints at DB level for Postgres 16
             tbl.HasCheckConstraint("ck_form_criteria_order_non_negative", "order_index >= 0");
             tbl.HasCheckConstraint("ck_form_criteria_weight_percent_range", "weight_percent IS NULL OR (weight_percent >= 0 AND weight_percent <= 100)");
         });
@@ -31,10 +30,10 @@ internal sealed class FormCriterionConfiguration : IEntityTypeConfiguration<Form
     private static void ConfigureCriterionRef(EntityTypeBuilder<FormCriterion> builder)
     {
         builder.HasOne(x => x.Criterion)
-               .WithMany()
-               .HasForeignKey("criterion_id")
-               .OnDelete(DeleteBehavior.Restrict)
-               .IsRequired();
+           .WithMany()
+           .HasForeignKey("criterion_id")
+           .OnDelete(DeleteBehavior.Restrict)
+           .IsRequired();
 
         builder.Property<long>("criterion_id").HasColumnName("criterion_id");
     }
