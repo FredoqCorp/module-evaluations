@@ -21,7 +21,6 @@ internal sealed class FormCriterionConfiguration : IEntityTypeConfiguration<Form
         ConfigureWeight(builder);
 
         builder.HasIndex("criterion_id").HasDatabaseName("ix_form_criteria_fk_criterion");
-        //builder.HasIndex("order_index").HasDatabaseName("ix_form_criteria_order");
     }
 
     private static void ConfigureCriterionRef(EntityTypeBuilder<FormCriterion> builder)

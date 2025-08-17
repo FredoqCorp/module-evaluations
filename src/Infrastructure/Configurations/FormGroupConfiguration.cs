@@ -62,6 +62,5 @@ internal sealed class FormGroupConfiguration : IEntityTypeConfiguration<FormGrou
         // Indexes
         builder.HasIndex("form_id").HasDatabaseName("ix_form_groups_fk_form");
         builder.HasIndex("parent_id").HasDatabaseName("ix_form_groups_parent");
-        //builder.HasIndex("order_index").HasDatabaseName("ix_form_groups_order");
     }
 }

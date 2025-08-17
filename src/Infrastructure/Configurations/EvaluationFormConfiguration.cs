@@ -13,7 +13,6 @@ internal sealed class EvaluationFormConfiguration : IEntityTypeConfiguration<Eva
     {
         builder.ToTable("evaluation_forms", tbl =>
         {
-            // Period integrity: forbid orphaned "valid_to" without "valid_from" and ensure range order
             tbl.HasCheckConstraint(
                 name: "ck_eval_forms_validity_presence",
                 sql: "(valid_from IS NULL AND valid_to IS NULL) OR (valid_from IS NOT NULL)"
@@ -37,13 +36,6 @@ internal sealed class EvaluationFormConfiguration : IEntityTypeConfiguration<Eva
         ConfigureMeta(builder);
         ConfigureLifecycle(builder);
         ConfigureRelations(builder);
-
-        // Useful indexes
-        //builder.HasIndex("Lifecycle.Status").HasDatabaseName("ix_evalform_status");
-
-        //builder.HasIndex(e => e.Meta.Code.Value)
-        //       .HasDatabaseName("ux_evaluation_forms_code")
-        //       .IsUnique();
     }
 
     private static void ConfigureMeta(EntityTypeBuilder<EvaluationForm> builder)
@@ -62,20 +54,18 @@ internal sealed class EvaluationFormConfiguration : IEntityTypeConfiguration<Eva
                 .HasColumnName("description")
                 .HasColumnType("text");
 
-            // Tags: store as Postgres text[]; map IReadOnlyList<string> with conversion and comparer
             var tagsComparer = new ValueComparer<IReadOnlyList<string>>(
                 (a, b) => ReferenceEquals(a, b) || (a != null && b != null && a.SequenceEqual(b, StringComparer.OrdinalIgnoreCase)),
                 v => v != null ? v.Aggregate(0, (acc, s) => HashCode.Combine(acc, StringComparer.OrdinalIgnoreCase.GetHashCode(s ?? string.Empty))) : 0,
-                v => (IReadOnlyList<string>) (v == null ? Array.Empty<string>() : v.ToArray()))
+                v => v == null ? Array.Empty<string>() : v.ToArray())
             ;
 
             meta.Property(m => m.Tags)
                 .HasColumnName("tags")
                 .HasColumnType("text[]")
-                .HasConversion(v => v.ToArray(), v => (IReadOnlyList<string>)Array.AsReadOnly(v))
+                .HasConversion(v => v.ToArray(), v => Array.AsReadOnly(v))
                 .Metadata.SetValueComparer(tagsComparer);
 
-            // Keep non-null (empty array by default)
             meta.Property(m => m.Tags).HasDefaultValueSql("'{}'::text[]").IsRequired();
 
             meta.ComplexProperty(m => m.Code, code =>

@@ -107,7 +107,6 @@ internal sealed class FormRunConfiguration : IEntityTypeConfiguration<FormRun>
                     });
                 });
 
-                // Composite unique index (run_id, CriterionId) to prevent duplicates per run
                 crit.HasIndex("run_id", nameof(RunCriterionScore.CriterionId))
                     .HasDatabaseName("ix_run_criteria_unique")
                     .IsUnique();

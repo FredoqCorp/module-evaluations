@@ -37,7 +37,6 @@ internal sealed class CriterionConfiguration : IEntityTypeConfiguration<Criterio
 
        private static void ConfigureOptions(EntityTypeBuilder<Criterion> builder)
        {
-              // Options owned collection in separate table
               builder.OwnsMany(x => x.Options, options =>
               {
                      options.ToTable("criterion_options");
@@ -61,9 +60,8 @@ internal sealed class CriterionConfiguration : IEntityTypeConfiguration<Criterio
                      options.Property(o => o.Threshold)
                                .HasColumnName("threshold");
 
-                           // Index on the owner FK and on Score (avoid string-based composite including value object's member)
-                           options.HasIndex("criterion_id").HasDatabaseName("ix_criterion_options_fk");
-                           options.HasIndex(o => o.Score).HasDatabaseName("ix_criterion_options_score");
+                     options.HasIndex("criterion_id").HasDatabaseName("ix_criterion_options_fk");
+                     options.HasIndex(o => o.Score).HasDatabaseName("ix_criterion_options_score");
               });
        }
 
@@ -71,9 +69,7 @@ internal sealed class CriterionConfiguration : IEntityTypeConfiguration<Criterio
        {
                    builder.OwnsOne(x => x.Automation, auto =>
               {
-                    // Map to a separate table to avoid optional-owned-with-nested-dependents table sharing issues
                     auto.ToTable("criterion_automation");
-                          // Use snake_case PK/FK to match naming style
                           auto.WithOwner().HasForeignKey("criterion_id");
                           auto.HasKey("criterion_id");
 
