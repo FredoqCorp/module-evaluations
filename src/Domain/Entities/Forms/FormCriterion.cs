@@ -9,6 +9,11 @@ namespace CascVel.Module.Evaluations.Management.Domain.Entities.Forms;
 public sealed class FormCriterion
 {
     /// <summary>
+    /// Unique identifier of the form criterion.
+    /// </summary>
+    public required long Id { get; init; }
+
+    /// <summary>
     /// Domain criterion.
     /// </summary>
     public required Criterion Criterion { get; init; }

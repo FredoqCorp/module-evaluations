@@ -48,7 +48,7 @@ public class DatabaseContext : DbContext
     protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
     {
         configurationBuilder.Properties<decimal>().HavePrecision(10, 2);
-        // Keep defaults for other types; JSON handled via Npgsql
+
         base.ConfigureConventions(configurationBuilder);
     }
 }
