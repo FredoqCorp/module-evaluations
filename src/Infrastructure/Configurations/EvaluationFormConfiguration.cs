@@ -33,6 +33,7 @@ internal sealed class EvaluationFormConfiguration : IEntityTypeConfiguration<Eva
         ConfigureMeta(builder);
         ConfigureLifecycle(builder);
         ConfigureDesign(builder);
+    ConfigureRelations(builder);
 
         // Useful indexes
         builder.HasIndex(e => e.Lifecycle.Status)
@@ -123,6 +124,20 @@ internal sealed class EvaluationFormConfiguration : IEntityTypeConfiguration<Eva
                   .IsRequired();
 
         });
+    }
+
+    private static void ConfigureRelations(EntityTypeBuilder<EvaluationForm> builder)
+    {
+
+     builder.HasMany<FormGroup>()
+         .WithOne()
+         .HasForeignKey("form_id")
+         .OnDelete(DeleteBehavior.Cascade);
+
+     builder.HasMany<FormCriterion>()
+         .WithOne()
+         .HasForeignKey("form_id")
+         .OnDelete(DeleteBehavior.Cascade);
     }
 
     private static void MapStamp(ComplexPropertyBuilder<Stamp> stamp, string prefix, bool required)
