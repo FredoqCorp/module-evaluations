@@ -155,8 +155,6 @@ namespace CascVel.Module.Evaluations.Management.Infrastructure.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     title = table.Column<string>(type: "text", nullable: false),
                     weight = table.Column<short>(type: "smallint", nullable: true),
-                    EvaluationFormId = table.Column<long>(type: "bigint", nullable: true),
-                    FormGroupId = table.Column<long>(type: "bigint", nullable: true),
                     form_id = table.Column<long>(type: "bigint", nullable: false),
                     parent_id = table.Column<long>(type: "bigint", nullable: true),
                     order_index = table.Column<int>(type: "integer", nullable: false)
@@ -167,24 +165,12 @@ namespace CascVel.Module.Evaluations.Management.Infrastructure.Migrations
                     table.CheckConstraint("CK_form_group_weight", "weight IS NULL OR weight BETWEEN 0 AND 10000");
                     table.CheckConstraint("ck_form_groups_order_non_negative", "order_index >= 0");
                     table.ForeignKey(
-                        name: "FK_form_groups_evaluation_forms_EvaluationFormId",
-                        column: x => x.EvaluationFormId,
-                        principalSchema: "evaluations",
-                        principalTable: "evaluation_forms",
-                        principalColumn: "id");
-                    table.ForeignKey(
                         name: "FK_form_groups_evaluation_forms_form_id",
                         column: x => x.form_id,
                         principalSchema: "evaluations",
                         principalTable: "evaluation_forms",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_form_groups_form_groups_FormGroupId",
-                        column: x => x.FormGroupId,
-                        principalSchema: "evaluations",
-                        principalTable: "form_groups",
-                        principalColumn: "id");
                     table.ForeignKey(
                         name: "FK_form_groups_form_groups_parent_id",
                         column: x => x.parent_id,
@@ -230,7 +216,6 @@ namespace CascVel.Module.Evaluations.Management.Infrastructure.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     criterion_id = table.Column<long>(type: "bigint", nullable: false),
                     weight = table.Column<short>(type: "smallint", nullable: true),
-                    EvaluationFormId = table.Column<long>(type: "bigint", nullable: true),
                     form_id = table.Column<long>(type: "bigint", nullable: true),
                     group_id = table.Column<long>(type: "bigint", nullable: true),
                     order_index = table.Column<int>(type: "integer", nullable: false)
@@ -239,7 +224,6 @@ namespace CascVel.Module.Evaluations.Management.Infrastructure.Migrations
                 {
                     table.PrimaryKey("PK_form_criteria", x => x.id);
                     table.CheckConstraint("ck_form_criteria_order_non_negative", "order_index >= 0");
-                    table.CheckConstraint("ck_form_criteria_weight_percent_range", "weight_percent IS NULL OR (weight_percent >= 0 AND weight_percent <= 100)");
                     table.CheckConstraint("CK_formcrit_weight", "weight IS NULL OR weight BETWEEN 0 AND 10000");
                     table.ForeignKey(
                         name: "FK_form_criteria_criteria_criterion_id",
@@ -248,12 +232,6 @@ namespace CascVel.Module.Evaluations.Management.Infrastructure.Migrations
                         principalTable: "criteria",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_form_criteria_evaluation_forms_EvaluationFormId",
-                        column: x => x.EvaluationFormId,
-                        principalSchema: "evaluations",
-                        principalTable: "evaluation_forms",
-                        principalColumn: "id");
                     table.ForeignKey(
                         name: "FK_form_criteria_evaluation_forms_form_id",
                         column: x => x.form_id,
@@ -283,12 +261,6 @@ namespace CascVel.Module.Evaluations.Management.Infrastructure.Migrations
                 column: "score");
 
             migrationBuilder.CreateIndex(
-                name: "IX_form_criteria_EvaluationFormId",
-                schema: "evaluations",
-                table: "form_criteria",
-                column: "EvaluationFormId");
-
-            migrationBuilder.CreateIndex(
                 name: "ix_form_criteria_fk_criterion",
                 schema: "evaluations",
                 table: "form_criteria",
@@ -307,22 +279,10 @@ namespace CascVel.Module.Evaluations.Management.Infrastructure.Migrations
                 column: "group_id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_form_groups_EvaluationFormId",
-                schema: "evaluations",
-                table: "form_groups",
-                column: "EvaluationFormId");
-
-            migrationBuilder.CreateIndex(
                 name: "ix_form_groups_fk_form",
                 schema: "evaluations",
                 table: "form_groups",
                 column: "form_id");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_form_groups_FormGroupId",
-                schema: "evaluations",
-                table: "form_groups",
-                column: "FormGroupId");
 
             migrationBuilder.CreateIndex(
                 name: "ix_form_groups_parent",

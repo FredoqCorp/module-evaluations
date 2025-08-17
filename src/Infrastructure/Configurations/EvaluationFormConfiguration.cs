@@ -141,13 +141,12 @@ internal sealed class EvaluationFormConfiguration : IEntityTypeConfiguration<Eva
 
     private static void ConfigureRelations(EntityTypeBuilder<EvaluationForm> builder)
     {
-
-        builder.HasMany<FormGroup>()
+        builder.HasMany(x => x.Groups)
             .WithOne()
             .HasForeignKey("form_id")
             .OnDelete(DeleteBehavior.Cascade);
 
-        builder.HasMany<FormCriterion>()
+        builder.HasMany(x => x.Criteria)
             .WithOne()
             .HasForeignKey("form_id")
             .OnDelete(DeleteBehavior.Cascade);

@@ -16,7 +16,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace CascVel.Module.Evaluations.Management.Infrastructure.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20250817201416_InitialCreate")]
+    [Migration("20250817204145_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -140,9 +140,6 @@ namespace CascVel.Module.Evaluations.Management.Infrastructure.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
-                    b.Property<long?>("EvaluationFormId")
-                        .HasColumnType("bigint");
-
                     b.Property<short?>("Weight")
                         .HasColumnType("smallint")
                         .HasColumnName("weight");
@@ -168,8 +165,6 @@ namespace CascVel.Module.Evaluations.Management.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("EvaluationFormId");
-
                     b.HasIndex("criterion_id")
                         .HasDatabaseName("ix_form_criteria_fk_criterion");
 
@@ -182,8 +177,6 @@ namespace CascVel.Module.Evaluations.Management.Infrastructure.Migrations
                             t.HasCheckConstraint("CK_formcrit_weight", "weight IS NULL OR weight BETWEEN 0 AND 10000");
 
                             t.HasCheckConstraint("ck_form_criteria_order_non_negative", "order_index >= 0");
-
-                            t.HasCheckConstraint("ck_form_criteria_weight_percent_range", "weight_percent IS NULL OR (weight_percent >= 0 AND weight_percent <= 100)");
                         });
                 });
 
@@ -195,12 +188,6 @@ namespace CascVel.Module.Evaluations.Management.Infrastructure.Migrations
                         .HasColumnName("id");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
-
-                    b.Property<long?>("EvaluationFormId")
-                        .HasColumnType("bigint");
-
-                    b.Property<long?>("FormGroupId")
-                        .HasColumnType("bigint");
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -229,10 +216,6 @@ namespace CascVel.Module.Evaluations.Management.Infrastructure.Migrations
                         });
 
                     b.HasKey("Id");
-
-                    b.HasIndex("EvaluationFormId");
-
-                    b.HasIndex("FormGroupId");
 
                     b.HasIndex("form_id")
                         .HasDatabaseName("ix_form_groups_fk_form");
@@ -555,10 +538,6 @@ namespace CascVel.Module.Evaluations.Management.Infrastructure.Migrations
 
             modelBuilder.Entity("CascVel.Module.Evaluations.Management.Domain.Entities.Forms.FormCriterion", b =>
                 {
-                    b.HasOne("CascVel.Module.Evaluations.Management.Domain.Entities.Forms.EvaluationForm", null)
-                        .WithMany("Criteria")
-                        .HasForeignKey("EvaluationFormId");
-
                     b.HasOne("CascVel.Module.Evaluations.Management.Domain.Entities.Criteria.Criterion", "Criterion")
                         .WithMany()
                         .HasForeignKey("criterion_id")
@@ -566,7 +545,7 @@ namespace CascVel.Module.Evaluations.Management.Infrastructure.Migrations
                         .IsRequired();
 
                     b.HasOne("CascVel.Module.Evaluations.Management.Domain.Entities.Forms.EvaluationForm", null)
-                        .WithMany()
+                        .WithMany("Criteria")
                         .HasForeignKey("form_id")
                         .OnDelete(DeleteBehavior.Cascade);
 
@@ -582,20 +561,12 @@ namespace CascVel.Module.Evaluations.Management.Infrastructure.Migrations
                 {
                     b.HasOne("CascVel.Module.Evaluations.Management.Domain.Entities.Forms.EvaluationForm", null)
                         .WithMany("Groups")
-                        .HasForeignKey("EvaluationFormId");
-
-                    b.HasOne("CascVel.Module.Evaluations.Management.Domain.Entities.Forms.FormGroup", null)
-                        .WithMany("Groups")
-                        .HasForeignKey("FormGroupId");
-
-                    b.HasOne("CascVel.Module.Evaluations.Management.Domain.Entities.Forms.EvaluationForm", null)
-                        .WithMany()
                         .HasForeignKey("form_id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("CascVel.Module.Evaluations.Management.Domain.Entities.Forms.FormGroup", null)
-                        .WithMany()
+                        .WithMany("Groups")
                         .HasForeignKey("parent_id")
                         .OnDelete(DeleteBehavior.Cascade);
                 });

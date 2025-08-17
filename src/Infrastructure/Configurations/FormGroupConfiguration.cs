@@ -49,7 +49,7 @@ internal sealed class FormGroupConfiguration : IEntityTypeConfiguration<FormGrou
         // Self-nesting: parent_id optional
         builder.Property<long?>("parent_id").HasColumnName("parent_id");
         builder.HasOne<FormGroup>()
-               .WithMany()
+               .WithMany(x => x.Groups)
                .HasForeignKey("parent_id")
                .OnDelete(DeleteBehavior.Cascade);
 

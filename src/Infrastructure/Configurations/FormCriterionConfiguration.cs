@@ -9,11 +9,7 @@ internal sealed class FormCriterionConfiguration : IEntityTypeConfiguration<Form
 {
     public void Configure(EntityTypeBuilder<FormCriterion> builder)
     {
-        builder.ToTable("form_criteria", tbl =>
-        {
-            tbl.HasCheckConstraint("ck_form_criteria_order_non_negative", "order_index >= 0");
-            tbl.HasCheckConstraint("ck_form_criteria_weight_percent_range", "weight_percent IS NULL OR (weight_percent >= 0 AND weight_percent <= 100)");
-        });
+        builder.ToTable("form_criteria", tbl => tbl.HasCheckConstraint("ck_form_criteria_order_non_negative", "order_index >= 0"));
 
         builder.HasKey(x => x.Id);
         builder.Property(x => x.Id)
