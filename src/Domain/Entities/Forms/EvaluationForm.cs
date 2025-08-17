@@ -1,4 +1,4 @@
-using CascVel.Module.Evaluations.Management.Domain.Entities.Forms.ValueObjects;
+using CascVel.Module.Evaluations.Management.Domain.Entities.Forms.Calculation;
 
 namespace CascVel.Module.Evaluations.Management.Domain.Entities.Forms;
 
@@ -23,8 +23,18 @@ public sealed class EvaluationForm
     /// </summary>
     public required FormLifecycle Lifecycle { get; init; }
 
-    /// <summary>
-    /// Design: selected calculation rule and groups/criteria.
+        /// <summary>
+    /// Selected calculation rule
     /// </summary>
-    public required FormDesign Design { get; init; }
+    public FormCalculationKind Calculation { get; init; } = FormCalculationKind.ArithmeticMean;
+
+    /// <summary>
+    /// Ordered groups of criteria.
+    /// </summary>
+    public required IReadOnlyList<FormGroup> Groups { get; init; } = [];
+
+    /// <summary>
+    /// Criteria outside of any group
+    /// </summary>
+    public required IReadOnlyList<FormCriterion> Criteria { get; init; } = [];
 }

@@ -3,7 +3,7 @@ namespace CascVel.Module.Evaluations.Management.Domain.Entities.Forms;
 /// <summary>
 /// Actor/time stamp.
 /// </summary>
-public sealed class Stamp
+public sealed record Stamp
 {
     /// <summary>
     /// User identifier.

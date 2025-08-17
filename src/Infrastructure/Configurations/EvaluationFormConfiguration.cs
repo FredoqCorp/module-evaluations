@@ -30,23 +30,25 @@ internal sealed class EvaluationFormConfiguration : IEntityTypeConfiguration<Eva
                .HasColumnName("id")
                .ValueGeneratedOnAdd();
 
+        builder.Property(x => x.Calculation)
+                  .HasColumnName("calculation_kind")
+                  .IsRequired();
+
         ConfigureMeta(builder);
         ConfigureLifecycle(builder);
-        ConfigureDesign(builder);
-    ConfigureRelations(builder);
+        ConfigureRelations(builder);
 
         // Useful indexes
-        builder.HasIndex(e => e.Lifecycle.Status)
-               .HasDatabaseName("ix_evaluation_forms_status");
+        //builder.HasIndex("Lifecycle.Status").HasDatabaseName("ix_evalform_status");
 
-        builder.HasIndex(e => e.Meta.Code.Value)
-               .HasDatabaseName("ux_evaluation_forms_code")
-               .IsUnique();
+        //builder.HasIndex(e => e.Meta.Code.Value)
+        //       .HasDatabaseName("ux_evaluation_forms_code")
+        //       .IsUnique();
     }
 
     private static void ConfigureMeta(EntityTypeBuilder<EvaluationForm> builder)
     {
-    builder.ComplexProperty(x => x.Meta, meta =>
+        builder.ComplexProperty(x => x.Meta, meta =>
         {
             meta.ComplexProperty(m => m.Name, name =>
             {
@@ -88,15 +90,13 @@ internal sealed class EvaluationFormConfiguration : IEntityTypeConfiguration<Eva
 
     private static void ConfigureLifecycle(EntityTypeBuilder<EvaluationForm> builder)
     {
-        builder.ComplexProperty(x => x.Lifecycle, lc =>
+        builder.OwnsOne(x => x.Lifecycle, lc =>
         {
             lc.Property(l => l.Status)
               .HasColumnName("status")
-              .HasConversion<string>()
-              .HasMaxLength(16)
               .IsRequired();
 
-            lc.ComplexProperty(l => l.Validity, period =>
+            lc.OwnsOne(l => l.Validity, period =>
             {
                 period.Property(p => p.Start)
                       .HasColumnName("valid_from");
@@ -104,55 +104,66 @@ internal sealed class EvaluationFormConfiguration : IEntityTypeConfiguration<Eva
                       .HasColumnName("valid_to");
             });
 
-            lc.ComplexProperty(l => l.Audit, audit =>
+            lc.OwnsOne(l => l.Audit, audit =>
             {
-                audit.ComplexProperty(a => a.Created, s => MapStamp(s, "created", required: true));
-                audit.ComplexProperty(a => a.Updated, s => MapStamp(s, "updated", required: false));
-                audit.ComplexProperty(a => a.StateChanged, s => MapStamp(s, "state_changed", required: false));
+
+                audit.OwnsOne(a => a.Created, s =>
+                {
+                    MapStampOwned(s, "created");
+                    s.ToTable("evaluation_forms");
+                });
+                audit.Navigation(a => a.Created).IsRequired();
+
+                audit.OwnsOne(a => a.Updated, s =>
+                {
+                    MapStampOwned(s, "updated");
+                    s.ToTable("evaluation_forms");
+                });
+                audit.Navigation(a => a.Updated).IsRequired(false);
+
+                audit.OwnsOne(a => a.StateChanged, s =>
+                {
+                    MapStampOwned(s, "state_changed");
+                    s.ToTable("evaluation_forms");
+                });
+                audit.Navigation(a => a.StateChanged).IsRequired(false);
+
+                audit.ToTable(t =>
+                {
+                    t.HasCheckConstraint("CK_evalform_updated_all_or_none",
+                        "(updated_by IS NULL) = (updated_at IS NULL)");
+                    t.HasCheckConstraint("CK_evalform_statechg_all_or_none",
+                        "(state_changed_by IS NULL) = (state_changed_at IS NULL)");
+                });
             });
-        });
-    }
-
-    private static void ConfigureDesign(EntityTypeBuilder<EvaluationForm> builder)
-    {
-        builder.ComplexProperty(x => x.Design, design =>
-        {
-            design.Property(d => d.Calculation)
-                  .HasColumnName("calculation_kind")
-                  .HasConversion<string>()
-                  .HasMaxLength(32)
-                  .IsRequired();
-
         });
     }
 
     private static void ConfigureRelations(EntityTypeBuilder<EvaluationForm> builder)
     {
 
-     builder.HasMany<FormGroup>()
-         .WithOne()
-         .HasForeignKey("form_id")
-         .OnDelete(DeleteBehavior.Cascade);
+        builder.HasMany<FormGroup>()
+            .WithOne()
+            .HasForeignKey("form_id")
+            .OnDelete(DeleteBehavior.Cascade);
 
-     builder.HasMany<FormCriterion>()
-         .WithOne()
-         .HasForeignKey("form_id")
-         .OnDelete(DeleteBehavior.Cascade);
+        builder.HasMany<FormCriterion>()
+            .WithOne()
+            .HasForeignKey("form_id")
+            .OnDelete(DeleteBehavior.Cascade);
     }
 
-    private static void MapStamp(ComplexPropertyBuilder<Stamp> stamp, string prefix, bool required)
+    private static void MapStampOwned<TParent>(
+        OwnedNavigationBuilder<TParent, Stamp> s, string prefix)
+        where TParent : class
     {
-        var user = stamp.Property(s => s.UserId)
-             .HasColumnName($"{prefix}_by")
-             .HasMaxLength(100);
+        s.Property(x => x.UserId)
+         .HasColumnName($"{prefix}_by")
+         .HasMaxLength(100)
+         .IsRequired(true);
 
-        var at = stamp.Property(s => s.At)
-             .HasColumnName($"{prefix}_at");
-
-        if (required)
-        {
-            user.IsRequired();
-            at.IsRequired();
-        }
+        s.Property(x => x.At)
+         .HasColumnName($"{prefix}_at")
+         .IsRequired(true);
     }
 }

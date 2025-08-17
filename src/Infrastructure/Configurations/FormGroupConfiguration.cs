@@ -1,4 +1,5 @@
 using CascVel.Module.Evaluations.Management.Domain.Entities.Forms;
+using CascVel.Module.Evaluations.Management.Domain.Entities.Forms.ValueObjects;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -11,7 +12,6 @@ internal sealed class FormGroupConfiguration : IEntityTypeConfiguration<FormGrou
         builder.ToTable("form_groups", t =>
         {
             t.HasCheckConstraint("ck_form_groups_order_non_negative", "order_index >= 0");
-            t.HasCheckConstraint("ck_form_groups_weight_percent_range", "weight_percent IS NULL OR (weight_percent >= 0 AND weight_percent <= 100)");
         });
 
         builder.HasKey(x => x.Id);
@@ -37,13 +37,14 @@ internal sealed class FormGroupConfiguration : IEntityTypeConfiguration<FormGrou
         });
 
         // Weight
-        builder.ComplexProperty(x => x.Weight, weight =>
-        {
-            weight.Property(w => w.Percent)
-                  .HasColumnName("weight_percent")
-                  .HasColumnType("numeric(5,2)");
-        });
-        builder.Navigation(x => x.Weight).IsRequired(false);
+        builder.Property(x => x.Weight)
+                .HasConversion(v => v == null ? (ushort?)null : v.Bps(),
+                           v => v == null ? null : new Weight(v.Value / 100m))
+                .HasColumnName("weight")
+                .HasColumnType("smallint")
+                .IsRequired(false);
+
+        builder.ToTable(t => t.HasCheckConstraint("CK_form_group_weight", "weight IS NULL OR weight BETWEEN 0 AND 10000"));
 
         // Self-nesting: parent_id optional
         builder.Property<long?>("parent_id").HasColumnName("parent_id");
@@ -61,6 +62,6 @@ internal sealed class FormGroupConfiguration : IEntityTypeConfiguration<FormGrou
         // Indexes
         builder.HasIndex("form_id").HasDatabaseName("ix_form_groups_fk_form");
         builder.HasIndex("parent_id").HasDatabaseName("ix_form_groups_parent");
-        builder.HasIndex("order_index").HasDatabaseName("ix_form_groups_order");
+        //builder.HasIndex("order_index").HasDatabaseName("ix_form_groups_order");
     }
 }

@@ -89,9 +89,7 @@ internal sealed class CriterionConfiguration : IEntityTypeConfiguration<Criterio
                             r.OwnsOne(t => t.ThresholdPolicy, tp =>
                             {
                                    tp.Property(p => p.Goal)
-                                     .HasColumnName("auto_goal")
-                                     .HasConversion<string>()
-                                     .HasMaxLength(16);
+                                     .HasColumnName("auto_goal");
                             });
                      });
               });
