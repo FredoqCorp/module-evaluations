@@ -1,4 +1,4 @@
-﻿namespace CascVel.Module.Evaluations.Management.Application.Interfaces;
+namespace CascVel.Module.Evaluations.Management.Application.Interfaces;
 
 /// <summary>
 /// Defines generic repository operations for entities of type <typeparamref name="T"/>.

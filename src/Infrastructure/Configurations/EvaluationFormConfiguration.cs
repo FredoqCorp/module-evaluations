@@ -2,8 +2,8 @@ using System;
 using System.Linq;
 using CascVel.Module.Evaluations.Management.Domain.Entities.Forms;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace CascVel.Module.Evaluations.Management.Infrastructure.Configurations;
 

@@ -73,9 +73,9 @@ internal sealed class FormRunConfiguration : IEntityTypeConfiguration<FormRun>
         state.OwnsOne(s => s.Context, ctx =>
         {
             ctx.Property(c => c.Items)
-               .HasColumnName("context")
-               .HasColumnType("jsonb")
-               .IsRequired();
+                .HasColumnName("context")
+                .HasColumnType("jsonb")
+                .IsRequired();
         });
     }
 
