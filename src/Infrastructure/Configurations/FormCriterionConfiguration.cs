@@ -49,7 +49,7 @@ internal sealed class FormCriterionConfiguration : IEntityTypeConfiguration<Form
     {
         builder.Property(x => x.Weight)
                 .HasConversion(v => v == null ? (ushort?)null : v.Bps(),
-                           v => v == null ? null : new Weight(v.Value / 100m))
+                           v => v == null ? null : new Weight(v.Value))
                 .HasColumnName("weight")
                 .HasColumnType("smallint")
                 .IsRequired(false);
