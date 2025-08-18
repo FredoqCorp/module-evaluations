@@ -1,6 +1,9 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Npgsql;
+using CascVel.Module.Evaluations.Management.Domain.Entities.Forms;
+using CascVel.Module.Evaluations.Management.Domain.Entities.Forms.Calculation;
+using CascVel.Module.Evaluations.Management.Domain.Entities.Criteria;
 
 namespace CascVel.Module.Evaluations.Management.Infrastructure.Context;
 
@@ -23,9 +26,12 @@ public static class DbContextOptionsExtensions
             {
                 npgsql.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery);
                 npgsql.EnableRetryOnFailure();
+                npgsql.MigrationsHistoryTable("__EFMigrationsHistory", schema: "evaluations");
+                npgsql.MapEnum<FormStatus>("form_status", "evaluations");
+                npgsql.MapEnum<OptimizationGoal>("optimization_goal", "evaluations");
+                npgsql.MapEnum<FormCalculationKind>("form_calculation_kind", "evaluations");
             });
 
-            // Read-heavy default; override per query when needed
             options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
         });
 
