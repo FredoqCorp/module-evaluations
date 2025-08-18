@@ -30,10 +30,10 @@ public sealed class FormGroup
     /// <summary>
     /// Criteria inside the group, ordered.
     /// </summary>
-    public required IReadOnlyList<FormCriterion> Criteria { get; init; } = [];
+    public required IReadOnlyList<FormCriterion> Criteria { get; init; }
 
     /// <summary>
     /// Nested groups inside this group
     /// </summary>
-    public IReadOnlyList<FormGroup> Groups { get; init; } = [];
+    public required IReadOnlyList<FormGroup> Groups { get; init; }
 }

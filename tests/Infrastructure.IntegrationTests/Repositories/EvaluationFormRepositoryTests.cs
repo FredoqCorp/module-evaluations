@@ -2,6 +2,7 @@ using CascVel.Module.Evaluations.Management.Application.Interfaces;
 using CascVel.Module.Evaluations.Management.Domain.Entities.Forms;
 using CascVel.Module.Evaluations.Management.Domain.Entities.Forms.Calculation;
 using CascVel.Module.Evaluations.Management.Domain.Entities.Forms.ValueObjects;
+using CascVel.Module.Evaluations.Management.Domain.Entities.Criteria;
 using CascVel.Module.Evaluations.Management.Infrastructure.Context;
 using CascVel.Module.Evaluations.Management.Infrastructure.Repositories;
 using Infrastructure.IntegrationTests.Fixtures;
@@ -40,7 +41,6 @@ public sealed class EvaluationFormRepositoryTests
         var factory = scope.ServiceProvider.GetRequiredService<IDbContextFactory<DatabaseContext>>();
         var logger = scope.ServiceProvider.GetRequiredService<ILogger<EvaluationFormRepository>>();
         IEvaluationFormRepository repo = new EvaluationFormRepository(factory, logger);
-
         var now = DateTime.UtcNow;
         var form = new EvaluationForm
         {
@@ -64,10 +64,92 @@ public sealed class EvaluationFormRepositoryTests
             Groups = [],
             Criteria = [],
         };
-
         long id = await repo.CreateAsync(form);
         var loaded = await repo.GetAsync(id, isFullInclude: true);
-
         Assert.True(string.Equals(loaded.Meta.Code.Value, form.Meta.Code.Value, StringComparison.Ordinal), "Loaded form code is different which is a failure");
+    }
+
+    /// <summary>
+    /// Verifies that groups and criteria added to a form are persisted and returned when loading the full graph
+    /// </summary>
+    [Fact(DisplayName = "Create form with groups and criteria then get returns full graph" )]
+    public async Task Create_form_with_groups_and_criteria_then_get_returns_full_graph()
+    {
+        await _fx.ResetAsync();
+        await using var scope = _fx.Services.CreateAsyncScope();
+        var factory = scope.ServiceProvider.GetRequiredService<IDbContextFactory<DatabaseContext>>();
+        var logger = scope.ServiceProvider.GetRequiredService<ILogger<EvaluationFormRepository>>();
+        var repo = new EvaluationFormRepository(factory, logger);
+        DateTime now = DateTime.UtcNow;
+        string titleTop = $"Критерий ∑ {Guid.NewGuid():N}";
+        string titleGrouped = $"Критерий ◎ {Guid.NewGuid():N}";
+        string titleGroup = $"Группа Ω {Guid.NewGuid():N}";
+        Criterion topCriterion = MakeCriterion(titleTop, "описание ✿");
+        Criterion groupedCriterion = MakeCriterion(titleGrouped, "описание ⊕");
+        EvaluationForm form = MakeForm(now, titleGroup, topCriterion, groupedCriterion);
+        long id = await repo.CreateAsync(form);
+        var loaded = await repo.GetAsync(id, isFullInclude: true);
+        bool hasTop = loaded.Criteria.Any(c => string.Equals(c.Criterion.Text.Title.Value, titleTop, StringComparison.Ordinal));
+        bool hasGroup = loaded.Groups.Any(g => string.Equals(g.Title, titleGroup, StringComparison.Ordinal) && g.Criteria.Any(fc => string.Equals(fc.Criterion.Text.Title.Value, titleGrouped, StringComparison.Ordinal)));
+        Assert.True(hasTop && hasGroup, "Form graph does not contain expected group and criteria which is a failure");
+    }
+
+    /// <summary>
+    /// Builds a domain Criterion with minimal required data for persistence.
+    /// </summary>
+    private static Criterion MakeCriterion(string title, string description)
+    {
+        return new Criterion
+        {
+            Text = new CriterionText
+            {
+                Title = new CriterionTitle { Value = title },
+                Description = new CriterionDescription { Value = description },
+            },
+            Options = Array.Empty<Option>(),
+            Automation = null,
+        };
+    }
+
+    /// <summary>
+    /// Builds an EvaluationForm with one top-level criterion and one group with a criterion.
+    /// </summary>
+    private static EvaluationForm MakeForm(DateTime now, string groupTitle, Criterion top, Criterion inside)
+    {
+        return new EvaluationForm
+        {
+            Meta = new FormMeta
+            {
+                Name = new FormName { Value = "Форма с группами Ψ" },
+                Description = "Проверка структуры ⚑",
+                Tags = ["grp", "crit"],
+                Code = new FormCode { Value = Guid.NewGuid().ToString("N") },
+            },
+            Lifecycle = new FormLifecycle
+            {
+                Status = FormStatus.Draft,
+                Validity = new Period { Start = now, End = null },
+                Audit = new AuditTrail { Created = new Stamp { UserId = "u-ζ", At = now } },
+            },
+            Calculation = FormCalculationKind.WeightedMean,
+            Criteria =
+            [
+                new FormCriterion { Id = 0, Criterion = top, Order = new OrderIndex { Value = 0 }, Weight = null },
+            ],
+            Groups =
+            [
+                new FormGroup
+                {
+                    Title = groupTitle,
+                    Order = new OrderIndex { Value = 0 },
+                    Weight = null,
+                    Criteria =
+                    [
+                        new FormCriterion { Id = 0, Criterion = inside, Order = new OrderIndex { Value = 0 }, Weight = null },
+                    ],
+                    Groups = [],
+                },
+            ],
+        };
     }
 }
