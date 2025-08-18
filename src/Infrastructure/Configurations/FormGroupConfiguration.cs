@@ -7,60 +7,59 @@ namespace CascVel.Module.Evaluations.Management.Infrastructure.Configurations;
 
 internal sealed class FormGroupConfiguration : IEntityTypeConfiguration<FormGroup>
 {
-    public void Configure(EntityTypeBuilder<FormGroup> builder)
-    {
-        builder.ToTable("form_groups", t =>
-        {
-            t.HasCheckConstraint("ck_form_groups_order_non_negative", "order_index >= 0");
-        });
+       public void Configure(EntityTypeBuilder<FormGroup> builder)
+       {
+              builder.ToTable("form_groups", t => t.HasCheckConstraint("ck_form_groups_order_non_negative", "order_index >= 0"));
 
-        builder.HasKey(x => x.Id);
-        builder.Property(x => x.Id)
-               .HasColumnName("id")
-               .ValueGeneratedOnAdd();
+              builder.HasKey(x => x.Id);
+              builder.Property(x => x.Id)
+                     .HasColumnName("id")
+                     .ValueGeneratedOnAdd();
 
-        builder.Property<long>("form_id").HasColumnName("form_id");
+              // Title
+              builder.Property(x => x.Title)
+                     .HasColumnName("title")
+                     .HasColumnType("text")
+                     .IsRequired();
 
-        // Title
-        builder.Property(x => x.Title)
-               .HasColumnName("title")
-               .HasColumnType("text")
-               .IsRequired();
+              // Order
+              builder.ComplexProperty(x => x.Order, order =>
+              {
+                     order.Property(o => o.Value)
+                    .HasColumnName("order_index")
+                    .HasColumnType("integer")
+                    .IsRequired();
+              });
 
-        // Order
-        builder.ComplexProperty(x => x.Order, order =>
-        {
-            order.Property(o => o.Value)
-                 .HasColumnName("order_index")
-                 .HasColumnType("integer")
-                 .IsRequired();
-        });
+              // Weight
+              builder.Property(x => x.Weight)
+                      .HasConversion(v => v == null ? (ushort?)null : v.Bps(),
+                                 v => v == null ? null : new Weight(v.Value))
+                      .HasColumnName("weight")
+                      .HasColumnType("smallint")
+                      .IsRequired(false);
 
-        // Weight
-        builder.Property(x => x.Weight)
-                .HasConversion(v => v == null ? (ushort?)null : v.Bps(),
-                           v => v == null ? null : new Weight(v.Value))
-                .HasColumnName("weight")
-                .HasColumnType("smallint")
-                .IsRequired(false);
+              builder.ToTable(t => t.HasCheckConstraint("CK_form_group_weight", "weight IS NULL OR weight BETWEEN 0 AND 10000"));
 
-        builder.ToTable(t => t.HasCheckConstraint("CK_form_group_weight", "weight IS NULL OR weight BETWEEN 0 AND 10000"));
+              builder.Property(x => x.FormId).HasColumnName("form_id").IsRequired();
+              builder.Property(x => x.ParentId).HasColumnName("parent_id");
 
-        // Self-nesting: parent_id optional
-        builder.Property<long?>("parent_id").HasColumnName("parent_id");
-        builder.HasOne<FormGroup>()
-               .WithMany(x => x.Groups)
-               .HasForeignKey("parent_id")
+              builder.Navigation(x => x.Groups).UsePropertyAccessMode(PropertyAccessMode.Field);
+              builder.Navigation(x => x.Criteria).UsePropertyAccessMode(PropertyAccessMode.Field);
+
+              builder.HasOne(x => x.Form)
+               .WithMany(f => f.Groups)
+               .HasForeignKey(x => x.FormId)
                .OnDelete(DeleteBehavior.Cascade);
 
-        // Criteria inside this group: link via group_id
-        builder.HasMany(x => x.Criteria)
+              builder.HasOne(x => x.Parent)
+               .WithMany(x => x.Groups)
+               .HasForeignKey(x => x.ParentId)
+               .OnDelete(DeleteBehavior.Cascade);
+
+              builder.HasMany(x => x.Criteria)
                .WithOne()
                .HasForeignKey("group_id")
                .OnDelete(DeleteBehavior.Cascade);
-
-        // Indexes
-        builder.HasIndex("form_id").HasDatabaseName("ix_form_groups_fk_form");
-        builder.HasIndex("parent_id").HasDatabaseName("ix_form_groups_parent");
-    }
+       }
 }

@@ -8,22 +8,27 @@ namespace CascVel.Module.Evaluations.Management.Infrastructure.Context;
 /// <summary>
 /// EF Core database context for Evaluations module.
 /// </summary>
-public class DatabaseContext : DbContext
+public sealed class DatabaseContext : DbContext
 {
     /// <summary>
     /// Criteria
     /// </summary>
-    public DbSet<Criterion> Criteria { get; set; }
+    internal DbSet<Criterion> Criteria { get; set; }
 
     /// <summary>
     /// Form evaluation runs
     /// </summary>
-    public DbSet<FormRun> FormRuns { get; set; }
+    internal DbSet<FormRun> FormRuns { get; set; }
 
     /// <summary>
     /// Evaluation forms
     /// </summary>
-    public DbSet<EvaluationForm> EvaluationForms { get; set; }
+    internal DbSet<EvaluationForm> EvaluationForms { get; set; }
+
+    /// <summary>
+    /// Evaluation form groups
+    /// </summary>
+    internal DbSet<FormGroup> FormGroups { get; set; }
 
     /// <summary>
     /// Initializes the context with options.

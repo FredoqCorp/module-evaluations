@@ -54,8 +54,37 @@ internal sealed class EvaluationFormRepository : IEvaluationFormRepository
     public async Task<EvaluationForm> GetAsync(long entityId, bool isFullInclude = true, CancellationToken ct = default)
     {
         await using var db = await _contextFactory.CreateDbContextAsync(ct);
-        var q = isFullInclude ? db.EvaluationForms.WithGraph() : db.EvaluationForms.AsNoTracking();
-        return await q.SingleOrDefaultAsync(f => f.Id == entityId, ct)
-               ?? throw new KeyNotFoundException($"EvaluationForm by id {entityId} not found");
+        var query = db.EvaluationForms.AsNoTracking();
+
+
+        if (isFullInclude)
+        {
+            var form = await query.Include(f => f.Criteria).ThenInclude(c => c.Criterion).SingleOrDefaultAsync(f => f.Id == entityId, ct) ?? throw new KeyNotFoundException($"EvaluationForm by id {entityId} not found");
+            var groups = await db.FormGroups.Where(g => g.FormId == entityId).Include(g => g.Criteria).ThenInclude(c => c.Criterion).AsSplitQuery().AsNoTracking().ToListAsync(ct);
+            var roots = groups.Where(g => g.ParentId == null).ToList();
+            var map = groups.Where(g => g.ParentId != null).GroupBy(g => g.ParentId!.Value).ToDictionary(g => g.Key, g => g.ToList());
+            if (roots.Count > 0)
+            {
+                form.AddGroups(roots);
+                foreach (var r in roots)
+                {
+                    Link(r);
+                }
+            }
+            return form;
+            void Link(FormGroup node)
+            {
+                if (!map.TryGetValue(node.Id, out var kids))
+                {
+                    return;
+                }
+                node.AddChilds(kids);
+                foreach (var k in kids)
+                {
+                    Link(k);
+                }
+            }
+        }
+        return await query.SingleOrDefaultAsync(f => f.Id == entityId, ct) ?? throw new KeyNotFoundException($"EvaluationForm by id {entityId} not found");
     }
 }

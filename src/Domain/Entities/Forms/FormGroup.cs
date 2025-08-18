@@ -7,6 +7,10 @@ namespace CascVel.Module.Evaluations.Management.Domain.Entities.Forms;
 /// </summary>
 public sealed class FormGroup
 {
+    private readonly List<FormCriterion> _criteria = [];
+    private readonly List<FormGroup> _groups = [];
+
+
     /// <summary>
     /// Technical identifier within the aggregate.
     /// </summary>
@@ -30,10 +34,69 @@ public sealed class FormGroup
     /// <summary>
     /// Criteria inside the group, ordered.
     /// </summary>
-    public required IReadOnlyList<FormCriterion> Criteria { get; init; }
+    public IReadOnlyList<FormCriterion> Criteria => _criteria;
 
     /// <summary>
     /// Nested groups inside this group
     /// </summary>
-    public required IReadOnlyList<FormGroup> Groups { get; init; }
+    public IReadOnlyList<FormGroup> Groups => _groups;
+
+    /// <summary>
+    /// The form to which this group belongs.
+    /// </summary>
+    public EvaluationForm Form { get; private set; } = null!;
+
+    /// <summary>
+    /// The identifier of the form to which this group belongs.
+    /// </summary>
+    public long FormId { get; private set; }
+
+    /// <summary>
+    /// The parent group of this group, if any.
+    /// </summary>
+    public FormGroup? Parent { get; private set; }
+
+    /// <summary>
+    /// The identifier of the parent group, if any.
+    /// </summary>
+    public long? ParentId { get; private set; }
+
+    /// <summary>
+    /// Adds a child group to this group and attaches it to the form if already set.
+    /// </summary>
+    /// <param name="child">The child group to add.</param>
+    public void AddChilds(IEnumerable<FormGroup> child)
+    {
+        ArgumentNullException.ThrowIfNull(child);
+        foreach (var c in child)
+        {
+            c.Parent = this;
+            if (Form is not null)
+            {
+                c.AttachToForm(Form);
+            }
+
+            _groups.Add(c);
+        }
+    }
+
+    /// <summary>
+    /// Adds criteria to this group.
+    /// </summary>
+    /// <param name="criteria">The criteria to add to the group.</param>
+    public void AddCriteria(IEnumerable<FormCriterion> criteria)
+    {
+        ArgumentNullException.ThrowIfNull(criteria);
+        _criteria.AddRange(criteria);
+    }
+
+    internal void AttachToForm(EvaluationForm form)
+    {
+        ArgumentNullException.ThrowIfNull(form);
+        Form = form;
+        foreach (var g in _groups)
+        {
+            g.AttachToForm(form);
+        }
+    }
 }

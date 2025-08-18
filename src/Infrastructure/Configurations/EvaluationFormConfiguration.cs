@@ -132,14 +132,17 @@ internal sealed class EvaluationFormConfiguration : IEntityTypeConfiguration<Eva
     private static void ConfigureRelations(EntityTypeBuilder<EvaluationForm> builder)
     {
         builder.HasMany(x => x.Groups)
-            .WithOne()
-            .HasForeignKey("form_id")
+            .WithOne(g => g.Form)
+            .HasForeignKey(g => g.FormId)
             .OnDelete(DeleteBehavior.Cascade);
 
         builder.HasMany(x => x.Criteria)
             .WithOne()
             .HasForeignKey("form_id")
             .OnDelete(DeleteBehavior.Cascade);
+
+        builder.Navigation(x => x.Groups).UsePropertyAccessMode(PropertyAccessMode.Field);
+        builder.Navigation(x => x.Criteria).UsePropertyAccessMode(PropertyAccessMode.Field);
     }
 
     private static void MapStampOwned<TParent>(

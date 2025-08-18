@@ -57,3 +57,4 @@ nunit-*.xml
 ai-docs/
 src/Infrastructure/.DS_Store
 .DS_Store
+src/.DS_Store

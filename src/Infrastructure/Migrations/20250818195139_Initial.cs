@@ -11,7 +11,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace CascVel.Module.Evaluations.Management.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class Initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -279,13 +279,13 @@ namespace CascVel.Module.Evaluations.Management.Infrastructure.Migrations
                 column: "group_id");
 
             migrationBuilder.CreateIndex(
-                name: "ix_form_groups_fk_form",
+                name: "IX_form_groups_form_id",
                 schema: "evaluations",
                 table: "form_groups",
                 column: "form_id");
 
             migrationBuilder.CreateIndex(
-                name: "ix_form_groups_parent",
+                name: "IX_form_groups_parent_id",
                 schema: "evaluations",
                 table: "form_groups",
                 column: "parent_id");

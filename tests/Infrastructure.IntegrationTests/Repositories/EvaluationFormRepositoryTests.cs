@@ -61,8 +61,6 @@ public sealed class EvaluationFormRepositoryTests
                 },
             },
             Calculation = FormCalculationKind.WeightedMean,
-            Groups = [],
-            Criteria = [],
         };
         long id = await repo.CreateAsync(form);
         var loaded = await repo.GetAsync(id, isFullInclude: true);
@@ -127,8 +125,6 @@ public sealed class EvaluationFormRepositoryTests
                 Audit = new AuditTrail { Created = new Stamp { UserId = "usr-λ", At = start } },
             },
             Calculation = FormCalculationKind.ArithmeticMean,
-            Groups = [],
-            Criteria = [],
         };
         long id = await repo.CreateAsync(form);
         var loaded = await repo.GetAsync(id, isFullInclude: true);
@@ -216,7 +212,7 @@ public sealed class EvaluationFormRepositoryTests
     /// </summary>
     private static EvaluationForm BuildWeightedForm(DateTime now, string groupTitle, Criterion top, Criterion inside)
     {
-        return new EvaluationForm
+        var form = new EvaluationForm
         {
             Meta = new FormMeta
             {
@@ -232,25 +228,21 @@ public sealed class EvaluationFormRepositoryTests
                 Audit = new AuditTrail { Created = new Stamp { UserId = "u-κ", At = now } },
             },
             Calculation = FormCalculationKind.WeightedMean,
-            Criteria =
-            [
-                new FormCriterion { Id = 0, Criterion = top, Order = new OrderIndex { Value = 2 }, Weight = new Weight(1200) },
-            ],
-            Groups =
-            [
-                new FormGroup
-                {
-                    Title = groupTitle,
-                    Order = new OrderIndex { Value = 1 },
-                    Weight = new Weight(2500),
-                    Criteria =
-                    [
-                        new FormCriterion { Id = 0, Criterion = inside, Order = new OrderIndex { Value = 3 }, Weight = new Weight(7500) },
-                    ],
-                    Groups = [],
-                },
-            ],
         };
+
+        var group = new FormGroup
+        {
+            Title = groupTitle,
+            Order = new OrderIndex { Value = 1 },
+            Weight = new Weight(2500),
+        };
+        group.AddCriteria([ new FormCriterion { Id = 0, Criterion = inside, Order = new OrderIndex { Value = 3 }, Weight = new Weight(7500) } ]);
+
+        form.AddGroups([ group ]);
+
+        form.AddCriteria([new FormCriterion { Id = 0, Criterion = top, Order = new OrderIndex { Value = 2 }, Weight = new Weight(1200) } ]);
+
+        return form;
     }
 
     /// <summary>
@@ -258,7 +250,7 @@ public sealed class EvaluationFormRepositoryTests
     /// </summary>
     private static EvaluationForm BuildNestedForm(DateTime now, string rootTitle, string childTitle, Criterion inside)
     {
-        return new EvaluationForm
+        var form =  new EvaluationForm
         {
             Meta = new FormMeta
             {
@@ -274,29 +266,29 @@ public sealed class EvaluationFormRepositoryTests
                 Audit = new AuditTrail { Created = new Stamp { UserId = "u-ν", At = now } },
             },
             Calculation = FormCalculationKind.ArithmeticMean,
-            Criteria = [],
-            Groups =
-            [
-                new FormGroup
-                {
-                    Title = rootTitle,
-                    Order = new OrderIndex { Value = 0 },
-                    Weight = null,
-                    Criteria = [],
-                    Groups =
-                    [
-                        new FormGroup
-                        {
-                            Title = childTitle,
-                            Order = new OrderIndex { Value = 0 },
-                            Weight = null,
-                            Criteria = [ new FormCriterion { Id = 0, Criterion = inside, Order = new OrderIndex { Value = 0 }, Weight = null } ],
-                            Groups = [],
-                        },
-                    ],
-                },
-            ],
         };
+
+        var rootGroup = new FormGroup
+        {
+            Title = rootTitle,
+            Order = new OrderIndex { Value = 0 },
+            Weight = null,
+        };
+
+        var childGroup = new FormGroup
+        {
+            Title = childTitle,
+            Order = new OrderIndex { Value = 0 },
+            Weight = null,
+        };
+
+        childGroup.AddCriteria([ new FormCriterion { Id = 0, Criterion = inside, Order = new OrderIndex { Value = 0 }, Weight = null } ]);
+
+        rootGroup.AddChilds([ childGroup ]);
+
+        form.AddGroups([ rootGroup ]);
+
+        return form;
     }
 
     /// <summary>
@@ -311,7 +303,7 @@ public sealed class EvaluationFormRepositoryTests
                 Title = new CriterionTitle { Value = title },
                 Description = new CriterionDescription { Value = description },
             },
-            Options = Array.Empty<Option>(),
+            Options = [],
             Automation = null,
         };
     }
@@ -321,7 +313,7 @@ public sealed class EvaluationFormRepositoryTests
     /// </summary>
     private static EvaluationForm MakeForm(DateTime now, string groupTitle, Criterion top, Criterion inside)
     {
-        return new EvaluationForm
+        var form = new EvaluationForm
         {
             Meta = new FormMeta
             {
@@ -337,24 +329,23 @@ public sealed class EvaluationFormRepositoryTests
                 Audit = new AuditTrail { Created = new Stamp { UserId = "u-ζ", At = now } },
             },
             Calculation = FormCalculationKind.WeightedMean,
-            Criteria =
-            [
-                new FormCriterion { Id = 0, Criterion = top, Order = new OrderIndex { Value = 0 }, Weight = null },
-            ],
-            Groups =
-            [
-                new FormGroup
-                {
-                    Title = groupTitle,
-                    Order = new OrderIndex { Value = 0 },
-                    Weight = null,
-                    Criteria =
-                    [
-                        new FormCriterion { Id = 0, Criterion = inside, Order = new OrderIndex { Value = 0 }, Weight = null },
-                    ],
-                    Groups = [],
-                },
-            ],
         };
+
+        var criterion = new FormCriterion { Id = 0, Criterion = top, Order = new OrderIndex { Value = 0 }, Weight = null };
+        form.AddCriteria([ criterion ]);
+
+        var group = new FormGroup
+        {
+            Title = groupTitle,
+            Order = new OrderIndex { Value = 0 },
+            Weight = null,
+        };
+
+        var groupCriterion = new FormCriterion { Id = 0, Criterion = inside, Order = new OrderIndex { Value = 0 }, Weight = null };
+        group.AddCriteria([ groupCriterion ]);
+
+        form.AddGroups([ group ]);
+
+        return form;
     }
 }
