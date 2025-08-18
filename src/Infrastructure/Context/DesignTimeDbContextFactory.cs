@@ -1,4 +1,6 @@
-using System;
+using CascVel.Module.Evaluations.Management.Domain.Entities.Criteria;
+using CascVel.Module.Evaluations.Management.Domain.Entities.Forms;
+using CascVel.Module.Evaluations.Management.Domain.Entities.Forms.Calculation;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 
@@ -23,7 +25,14 @@ public sealed class DesignTimeDbContextFactory : IDesignTimeDbContextFactory<Dat
             ?? "Host=localhost;Port=5432;Database=module_evaluations;Username=postgres;Password=postgres";
 
         DbContextOptionsBuilder<DatabaseContext> optionsBuilder = new DbContextOptionsBuilder<DatabaseContext>()
-            .UseNpgsql(connectionString);
+            .UseNpgsql(connectionString, npgsql =>
+            {
+                // Ensure EF migrations history is stored in the same module schema
+                npgsql.MigrationsHistoryTable("__EFMigrationsHistory", "evaluations");
+                npgsql.MapEnum<FormStatus>("form_status", "evaluations");
+                npgsql.MapEnum<OptimizationGoal>("optimization_goal", "evaluations");
+                npgsql.MapEnum<FormCalculationKind>("form_calculation_kind", "evaluations");
+            });
 
         return new DatabaseContext(optionsBuilder.Options);
     }
