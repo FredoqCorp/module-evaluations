@@ -14,7 +14,12 @@ internal static class EvaluationFormRepositoryQueries
     public static IQueryable<EvaluationForm> WithGraph(this IQueryable<EvaluationForm> query)
         => query
             .AsNoTracking()
-            .Include(f => f.Groups)
             .Include(f => f.Criteria)
+                .ThenInclude(fc => fc.Criterion)
+            .Include(f => f.Groups)
+                .ThenInclude(g => g.Criteria)
+                    .ThenInclude(fc => fc.Criterion)
+            .Include(f => f.Groups)
+                .ThenInclude(g => g.Groups)
             .AsSplitQuery();
 }
