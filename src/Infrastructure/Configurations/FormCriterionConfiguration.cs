@@ -9,12 +9,13 @@ internal sealed class FormCriterionConfiguration : IEntityTypeConfiguration<Form
 {
     public void Configure(EntityTypeBuilder<FormCriterion> builder)
     {
-        builder.ToTable("form_criteria", tbl => tbl.HasCheckConstraint("ck_form_criteria_order_non_negative", "order_index >= 0"));
+        builder.ToTable("form_criteria",
+            tbl => tbl.HasCheckConstraint("ck_form_criteria_order_non_negative", "order_index >= 0"));
 
         builder.HasKey(x => x.Id);
         builder.Property(x => x.Id)
-               .HasColumnName("id")
-               .ValueGeneratedOnAdd();
+            .HasColumnName("id")
+            .ValueGeneratedOnAdd();
 
         ConfigureCriterionRef(builder);
         ConfigureOrder(builder);
@@ -26,10 +27,10 @@ internal sealed class FormCriterionConfiguration : IEntityTypeConfiguration<Form
     private static void ConfigureCriterionRef(EntityTypeBuilder<FormCriterion> builder)
     {
         builder.HasOne(x => x.Criterion)
-           .WithMany()
-           .HasForeignKey("criterion_id")
-           .OnDelete(DeleteBehavior.Restrict)
-           .IsRequired();
+            .WithMany()
+            .HasForeignKey("criterion_id")
+            .OnDelete(DeleteBehavior.Restrict)
+            .IsRequired();
 
         builder.Property<long>("criterion_id").HasColumnName("criterion_id");
     }
@@ -39,20 +40,20 @@ internal sealed class FormCriterionConfiguration : IEntityTypeConfiguration<Form
         builder.ComplexProperty(x => x.Order, order =>
         {
             order.Property(o => o.Value)
-                 .HasColumnName("order_index")
-                 .HasColumnType("integer")
-                 .IsRequired();
+                .HasColumnName("order_index")
+                .HasColumnType("integer")
+                .IsRequired();
         });
     }
 
     private static void ConfigureWeight(EntityTypeBuilder<FormCriterion> builder)
     {
         builder.Property(x => x.Weight)
-                .HasConversion(v => v == null ? (ushort?)null : v.Bps(),
-                           v => v == null ? null : new Weight(v.Value))
-                .HasColumnName("weight")
-                .HasColumnType("smallint")
-                .IsRequired(false);
+            .HasConversion(v => v == null ? (ushort?)null : v.Bps(),
+                v => v == null ? null : new Weight(v.Value))
+            .HasColumnName("weight")
+            .HasColumnType("smallint")
+            .IsRequired(false);
 
         builder.ToTable(t => t.HasCheckConstraint(
             "CK_formcrit_weight",

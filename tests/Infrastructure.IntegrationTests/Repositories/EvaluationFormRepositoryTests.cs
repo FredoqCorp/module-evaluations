@@ -1,8 +1,8 @@
 using CascVel.Module.Evaluations.Management.Application.Interfaces;
+using CascVel.Module.Evaluations.Management.Domain.Entities.Criteria;
 using CascVel.Module.Evaluations.Management.Domain.Entities.Forms;
 using CascVel.Module.Evaluations.Management.Domain.Entities.Forms.Calculation;
 using CascVel.Module.Evaluations.Management.Domain.Entities.Forms.ValueObjects;
-using CascVel.Module.Evaluations.Management.Domain.Entities.Criteria;
 using CascVel.Module.Evaluations.Management.Infrastructure.Context;
 using CascVel.Module.Evaluations.Management.Infrastructure.Repositories;
 using Infrastructure.IntegrationTests.Fixtures;
@@ -33,7 +33,7 @@ public sealed class EvaluationFormRepositoryTests
     /// Verifies that creating and retrieving an evaluation form returns the same aggregate instance.
     /// Usage: This test creates a form, saves it, and asserts that the loaded form has the same code.
     /// </summary>
-    [Fact(DisplayName = "Create and get evaluation form returns the same aggregate" )]
+    [Fact(DisplayName = "Create and get evaluation form returns the same aggregate")]
     public async Task Create_and_get_evaluation_form_returns_the_same_aggregate()
     {
         await _fx.ResetAsync();
@@ -64,13 +64,14 @@ public sealed class EvaluationFormRepositoryTests
         };
         long id = await repo.CreateAsync(form);
         var loaded = await repo.GetAsync(id, isFullInclude: true);
-        Assert.True(string.Equals(loaded.Meta.Code.Value, form.Meta.Code.Value, StringComparison.Ordinal), "Loaded form code is different which is a failure");
+        Assert.True(string.Equals(loaded.Meta.Code.Value, form.Meta.Code.Value, StringComparison.Ordinal),
+            "Loaded form code is different which is a failure");
     }
 
     /// <summary>
     /// Verifies that groups and criteria added to a form are persisted and returned when loading the full graph
     /// </summary>
-    [Fact(DisplayName = "Create form with groups and criteria then get returns full graph" )]
+    [Fact(DisplayName = "Create form with groups and criteria then get returns full graph")]
     public async Task Create_form_with_groups_and_criteria_then_get_returns_full_graph()
     {
         await _fx.ResetAsync();
@@ -87,8 +88,11 @@ public sealed class EvaluationFormRepositoryTests
         EvaluationForm form = MakeForm(now, titleGroup, topCriterion, groupedCriterion);
         long id = await repo.CreateAsync(form);
         var loaded = await repo.GetAsync(id, isFullInclude: true);
-        bool hasTop = loaded.Criteria.Any(c => string.Equals(c.Criterion.Text.Title.Value, titleTop, StringComparison.Ordinal));
-        bool hasGroup = loaded.Groups.Any(g => string.Equals(g.Title, titleGroup, StringComparison.Ordinal) && g.Criteria.Any(fc => string.Equals(fc.Criterion.Text.Title.Value, titleGrouped, StringComparison.Ordinal)));
+        bool hasTop = loaded.Criteria.Any(c =>
+            string.Equals(c.Criterion.Text.Title.Value, titleTop, StringComparison.Ordinal));
+        bool hasGroup = loaded.Groups.Any(g =>
+            string.Equals(g.Title, titleGroup, StringComparison.Ordinal) && g.Criteria.Any(fc =>
+                string.Equals(fc.Criterion.Text.Title.Value, titleGrouped, StringComparison.Ordinal)));
         Assert.True(hasTop && hasGroup, "Form graph does not contain expected group and criteria which is a failure");
     }
 
@@ -100,8 +104,10 @@ public sealed class EvaluationFormRepositoryTests
     {
         await _fx.ResetAsync();
         await using var scope = _fx.Services.CreateAsyncScope();
-        IDbContextFactory<DatabaseContext> factory = scope.ServiceProvider.GetRequiredService<IDbContextFactory<DatabaseContext>>();
-        ILogger<EvaluationFormRepository> logger = scope.ServiceProvider.GetRequiredService<ILogger<EvaluationFormRepository>>();
+        IDbContextFactory<DatabaseContext> factory =
+            scope.ServiceProvider.GetRequiredService<IDbContextFactory<DatabaseContext>>();
+        ILogger<EvaluationFormRepository> logger =
+            scope.ServiceProvider.GetRequiredService<ILogger<EvaluationFormRepository>>();
         var repo = new EvaluationFormRepository(factory, logger);
         DateTime start = DateTime.UtcNow.AddMinutes(-5);
         DateTime? end = start.AddDays(3);
@@ -130,17 +136,19 @@ public sealed class EvaluationFormRepositoryTests
         var loaded = await repo.GetAsync(id, isFullInclude: true);
         var validity = loaded.Lifecycle.Validity!;
         bool ok = string.Equals(loaded.Meta.Name.Value, name, StringComparison.Ordinal)
-                      && string.Equals(loaded.Meta.Description, desc, StringComparison.Ordinal)
-                      && string.Equals(loaded.Meta.Code.Value, code, StringComparison.Ordinal)
-                      && loaded.Meta.Tags.Count == tags.Count && loaded.Meta.Tags.Zip(tags, (a, b) => string.Equals(a, b, StringComparison.Ordinal)).All(x => x)
-                      && loaded.Lifecycle.Status == FormStatus.Draft
-                      && loaded.Lifecycle.Validity != null
-              && Math.Abs((validity.Start - start).TotalSeconds) < 1
-              && validity.End.HasValue && end.HasValue && Math.Abs((validity.End.Value - end.Value).TotalSeconds) < 1
-                      && string.Equals(loaded.Lifecycle.Audit.Created.UserId, "usr-λ", StringComparison.Ordinal)
-                      && loaded.Lifecycle.Audit.Updated == null
-                      && loaded.Lifecycle.Audit.StateChanged == null
-                      && loaded.Calculation == FormCalculationKind.ArithmeticMean;
+                  && string.Equals(loaded.Meta.Description, desc, StringComparison.Ordinal)
+                  && string.Equals(loaded.Meta.Code.Value, code, StringComparison.Ordinal)
+                  && loaded.Meta.Tags.Count == tags.Count && loaded.Meta.Tags
+                      .Zip(tags, (a, b) => string.Equals(a, b, StringComparison.Ordinal)).All(x => x)
+                  && loaded.Lifecycle.Status == FormStatus.Draft
+                  && loaded.Lifecycle.Validity != null
+                  && Math.Abs((validity.Start - start).TotalSeconds) < 1
+                  && validity.End.HasValue && end.HasValue &&
+                  Math.Abs((validity.End.Value - end.Value).TotalSeconds) < 1
+                  && string.Equals(loaded.Lifecycle.Audit.Created.UserId, "usr-λ", StringComparison.Ordinal)
+                  && loaded.Lifecycle.Audit.Updated == null
+                  && loaded.Lifecycle.Audit.StateChanged == null
+                  && loaded.Calculation == FormCalculationKind.ArithmeticMean;
         Assert.True(ok, "Form meta lifecycle and calculation integrity is broken which is a failure");
     }
 
@@ -152,8 +160,10 @@ public sealed class EvaluationFormRepositoryTests
     {
         await _fx.ResetAsync();
         await using var scope = _fx.Services.CreateAsyncScope();
-        IDbContextFactory<DatabaseContext> factory = scope.ServiceProvider.GetRequiredService<IDbContextFactory<DatabaseContext>>();
-        ILogger<EvaluationFormRepository> logger = scope.ServiceProvider.GetRequiredService<ILogger<EvaluationFormRepository>>();
+        IDbContextFactory<DatabaseContext> factory =
+            scope.ServiceProvider.GetRequiredService<IDbContextFactory<DatabaseContext>>();
+        ILogger<EvaluationFormRepository> logger =
+            scope.ServiceProvider.GetRequiredService<ILogger<EvaluationFormRepository>>();
         var repo = new EvaluationFormRepository(factory, logger);
         DateTime now = DateTime.UtcNow;
         string gTitle = $"Группа ♜ {Guid.NewGuid():N}";
@@ -165,8 +175,10 @@ public sealed class EvaluationFormRepositoryTests
         long id = await repo.CreateAsync(form);
         var loaded = await repo.GetAsync(id, isFullInclude: true);
         var grp = loaded.Groups.Single(x => string.Equals(x.Title, gTitle, StringComparison.Ordinal));
-        var gcrit = grp.Criteria.Single(x => string.Equals(x.Criterion.Text.Title.Value, ct2, StringComparison.Ordinal));
-        var tcrit = loaded.Criteria.Single(x => string.Equals(x.Criterion.Text.Title.Value, ct1, StringComparison.Ordinal));
+        var gcrit = grp.Criteria.Single(x =>
+            string.Equals(x.Criterion.Text.Title.Value, ct2, StringComparison.Ordinal));
+        var tcrit = loaded.Criteria.Single(x =>
+            string.Equals(x.Criterion.Text.Title.Value, ct1, StringComparison.Ordinal));
         bool ok = grp.Id > 0
                   && gcrit.Id > 0
                   && tcrit.Id > 0
@@ -183,13 +195,15 @@ public sealed class EvaluationFormRepositoryTests
     /// <summary>
     /// Verifies that a form with nested groups is persisted and the full hierarchy is returned when loading the graph
     /// </summary>
-    [Fact(DisplayName = "Create form with nested groups then get returns full nested graph" )]
+    [Fact(DisplayName = "Create form with nested groups then get returns full nested graph")]
     public async Task Create_form_with_nested_groups_then_get_returns_full_nested_graph()
     {
         await _fx.ResetAsync();
         await using var scope = _fx.Services.CreateAsyncScope();
-        IDbContextFactory<DatabaseContext> factory = scope.ServiceProvider.GetRequiredService<IDbContextFactory<DatabaseContext>>();
-        ILogger<EvaluationFormRepository> logger = scope.ServiceProvider.GetRequiredService<ILogger<EvaluationFormRepository>>();
+        IDbContextFactory<DatabaseContext> factory =
+            scope.ServiceProvider.GetRequiredService<IDbContextFactory<DatabaseContext>>();
+        ILogger<EvaluationFormRepository> logger =
+            scope.ServiceProvider.GetRequiredService<ILogger<EvaluationFormRepository>>();
         var repo = new EvaluationFormRepository(factory, logger);
         DateTime now = DateTime.UtcNow;
         string root = $"Группа α {Guid.NewGuid():N}";
@@ -236,11 +250,17 @@ public sealed class EvaluationFormRepositoryTests
             Order = new OrderIndex { Value = 1 },
             Weight = new Weight(2500),
         };
-        group.AddCriteria([ new FormCriterion { Id = 0, Criterion = inside, Order = new OrderIndex { Value = 3 }, Weight = new Weight(7500) } ]);
+        group.AddCriteria([
+            new FormCriterion
+                { Id = 0, Criterion = inside, Order = new OrderIndex { Value = 3 }, Weight = new Weight(7500) }
+        ]);
 
-        form.AddGroups([ group ]);
+        form.AddGroups([group]);
 
-        form.AddCriteria([new FormCriterion { Id = 0, Criterion = top, Order = new OrderIndex { Value = 2 }, Weight = new Weight(1200) } ]);
+        form.AddCriteria([
+            new FormCriterion
+                { Id = 0, Criterion = top, Order = new OrderIndex { Value = 2 }, Weight = new Weight(1200) }
+        ]);
 
         return form;
     }
@@ -250,7 +270,7 @@ public sealed class EvaluationFormRepositoryTests
     /// </summary>
     private static EvaluationForm BuildNestedForm(DateTime now, string rootTitle, string childTitle, Criterion inside)
     {
-        var form =  new EvaluationForm
+        var form = new EvaluationForm
         {
             Meta = new FormMeta
             {
@@ -282,11 +302,13 @@ public sealed class EvaluationFormRepositoryTests
             Weight = null,
         };
 
-        childGroup.AddCriteria([ new FormCriterion { Id = 0, Criterion = inside, Order = new OrderIndex { Value = 0 }, Weight = null } ]);
+        childGroup.AddCriteria([
+            new FormCriterion { Id = 0, Criterion = inside, Order = new OrderIndex { Value = 0 }, Weight = null }
+        ]);
 
-        rootGroup.AddChilds([ childGroup ]);
+        rootGroup.AddChilds([childGroup]);
 
-        form.AddGroups([ rootGroup ]);
+        form.AddGroups([rootGroup]);
 
         return form;
     }
@@ -332,7 +354,7 @@ public sealed class EvaluationFormRepositoryTests
         };
 
         var criterion = new FormCriterion { Id = 0, Criterion = top, Order = new OrderIndex { Value = 0 }, Weight = null };
-        form.AddCriteria([ criterion ]);
+        form.AddCriteria([criterion]);
 
         var group = new FormGroup
         {
@@ -342,9 +364,9 @@ public sealed class EvaluationFormRepositoryTests
         };
 
         var groupCriterion = new FormCriterion { Id = 0, Criterion = inside, Order = new OrderIndex { Value = 0 }, Weight = null };
-        group.AddCriteria([ groupCriterion ]);
+        group.AddCriteria([groupCriterion]);
 
-        form.AddGroups([ group ]);
+        form.AddGroups([group]);
 
         return form;
     }

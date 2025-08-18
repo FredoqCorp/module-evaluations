@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using CascVel.Module.Evaluations.Management.Domain.Entities.Criteria;
 using CascVel.Module.Evaluations.Management.Domain.Entities.Forms;
