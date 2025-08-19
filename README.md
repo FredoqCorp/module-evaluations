@@ -1,16 +1,4 @@
-# module-evaluations
+## About the Module
 
-Backend for "Evaluations" module. ASP.NET Core 9.
+Evaluation Forms is a component of the **casc-vel** product. It lets supervisors create evaluation forms with criteria to assess operator performance. Supervisors define and group criteria and configure scoring rules to compute the final score. After an evaluation is completed, a supervisor can publish the result for the operator to review. Operators can review the result and, if needed, dispute the evaluation.
 
-## Quick Start
-```bash
-dotnet build
-dotnet test
-dotnet run --project src/Host
-```
-
-## Structure
-
-* `src/Host` — ASP.NET Core API
-* `tests/Host.Tests` — test project
-* `docs/` — documentation and diagrams

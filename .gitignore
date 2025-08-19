@@ -54,6 +54,6 @@ TestResult.xml
 nunit-*.xml
 .idea/
 ai-docs/
-src/Infrastructure/.DS_Store
+src/management/Infrastructure/.DS_Store
 .DS_Store
-src/.DS_Store
+src/management/.DS_Store

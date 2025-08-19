@@ -24,8 +24,8 @@
     <PackageReference Include="Npgsql" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="../../src/Infrastructure/Infrastructure.csproj" />
-    <ProjectReference Include="../../src/Application/Application.csproj" />
-    <ProjectReference Include="../../src/Domain/Domain.csproj" />
+    <ProjectReference Include="../../../src/management/Infrastructure/Infrastructure.csproj" />
+    <ProjectReference Include="../../../src/management/Application/Application.csproj" />
+    <ProjectReference Include="../../../src/management/Domain/Domain.csproj" />
   </ItemGroup>
 </Project>
