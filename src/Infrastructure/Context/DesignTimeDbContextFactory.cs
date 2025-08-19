@@ -3,6 +3,7 @@ using CascVel.Module.Evaluations.Management.Domain.Entities.Forms;
 using CascVel.Module.Evaluations.Management.Domain.Entities.Forms.Calculation;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
+using Npgsql;
 
 namespace CascVel.Module.Evaluations.Management.Infrastructure.Context;
 
@@ -24,8 +25,15 @@ public sealed class DesignTimeDbContextFactory : IDesignTimeDbContextFactory<Dat
             ?? Environment.GetEnvironmentVariable("EVALUATIONS_DB_CONNECTION")
             ?? "Host=localhost;Port=5432;Database=module_evaluations;Username=postgres;Password=postgres";
 
+        var dataSourceBuilder = new NpgsqlDataSourceBuilder(connectionString);
+        dataSourceBuilder.EnableDynamicJson();
+        dataSourceBuilder.MapEnum<FormStatus>("evaluations.form_status");
+        dataSourceBuilder.MapEnum<OptimizationGoal>("evaluations.optimization_goal");
+        dataSourceBuilder.MapEnum<FormCalculationKind>("evaluations.form_calculation_kind");
+        var dataSource = dataSourceBuilder.Build();
+
         DbContextOptionsBuilder<DatabaseContext> optionsBuilder = new DbContextOptionsBuilder<DatabaseContext>()
-            .UseNpgsql(connectionString, npgsql =>
+            .UseNpgsql(dataSource, npgsql =>
             {
                 // Ensure EF migrations history is stored in the same module schema
                 npgsql.MigrationsHistoryTable("__EFMigrationsHistory", "evaluations");

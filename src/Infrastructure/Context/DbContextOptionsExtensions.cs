@@ -20,9 +20,17 @@ public static class DbContextOptionsExtensions
         string connectionString,
         Action<NpgsqlDataSourceBuilder>? dataSourceConfigure = null)
     {
+        var dataSourceBuilder = new NpgsqlDataSourceBuilder(connectionString);
+        dataSourceBuilder.EnableDynamicJson();
+        dataSourceBuilder.MapEnum<FormStatus>("evaluations.form_status");
+        dataSourceBuilder.MapEnum<OptimizationGoal>("evaluations.optimization_goal");
+        dataSourceBuilder.MapEnum<FormCalculationKind>("evaluations.form_calculation_kind");
+        dataSourceConfigure?.Invoke(dataSourceBuilder);
+        var dataSource = dataSourceBuilder.Build();
+
         services.AddDbContextFactory<DatabaseContext>(options =>
         {
-            options.UseNpgsql(connectionString, npgsql =>
+            options.UseNpgsql(dataSource, npgsql =>
             {
                 npgsql.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery);
                 npgsql.EnableRetryOnFailure();
@@ -31,7 +39,6 @@ public static class DbContextOptionsExtensions
                 npgsql.MapEnum<OptimizationGoal>("optimization_goal", "evaluations");
                 npgsql.MapEnum<FormCalculationKind>("form_calculation_kind", "evaluations");
             });
-
             options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
         });
 

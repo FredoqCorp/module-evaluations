@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
-namespace CascVel.Module.Evaluations.Management.Infrastructure.IntegrationTests.Repositories;
+namespace CascVel.Module.Evaluations.Management.Infrastructure.IntegrationTests.Repositories.EvaluationForms;
 
 /// <summary>
 /// Integration tests for EvaluationFormRepository using real PostgreSQL via Testcontainers and EF Core migrations.
@@ -243,7 +243,6 @@ public sealed class EvaluationFormRepositoryTests
             },
             Calculation = FormCalculationKind.WeightedMean,
         };
-
         var group = new FormGroup
         {
             Title = groupTitle,
@@ -254,14 +253,11 @@ public sealed class EvaluationFormRepositoryTests
             new FormCriterion
                 { Id = 0, Criterion = inside, Order = new OrderIndex { Value = 3 }, Weight = new Weight(7500) }
         ]);
-
         form.AddGroups([group]);
-
         form.AddCriteria([
             new FormCriterion
                 { Id = 0, Criterion = top, Order = new OrderIndex { Value = 2 }, Weight = new Weight(1200) }
         ]);
-
         return form;
     }
 
@@ -287,29 +283,23 @@ public sealed class EvaluationFormRepositoryTests
             },
             Calculation = FormCalculationKind.ArithmeticMean,
         };
-
         var rootGroup = new FormGroup
         {
             Title = rootTitle,
             Order = new OrderIndex { Value = 0 },
             Weight = null,
         };
-
         var childGroup = new FormGroup
         {
             Title = childTitle,
             Order = new OrderIndex { Value = 0 },
             Weight = null,
         };
-
         childGroup.AddCriteria([
             new FormCriterion { Id = 0, Criterion = inside, Order = new OrderIndex { Value = 0 }, Weight = null }
         ]);
-
         rootGroup.AddChilds([childGroup]);
-
         form.AddGroups([rootGroup]);
-
         return form;
     }
 
@@ -352,22 +342,17 @@ public sealed class EvaluationFormRepositoryTests
             },
             Calculation = FormCalculationKind.WeightedMean,
         };
-
         var criterion = new FormCriterion { Id = 0, Criterion = top, Order = new OrderIndex { Value = 0 }, Weight = null };
         form.AddCriteria([criterion]);
-
         var group = new FormGroup
         {
             Title = groupTitle,
             Order = new OrderIndex { Value = 0 },
             Weight = null,
         };
-
         var groupCriterion = new FormCriterion { Id = 0, Criterion = inside, Order = new OrderIndex { Value = 0 }, Weight = null };
         group.AddCriteria([groupCriterion]);
-
         form.AddGroups([group]);
-
         return form;
     }
 }

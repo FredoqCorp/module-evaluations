@@ -1,5 +1,3 @@
-using System;
-using System.Linq;
 using CascVel.Module.Evaluations.Management.Domain.Entities.Forms;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
