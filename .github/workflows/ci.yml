@@ -66,8 +66,8 @@ jobs:
             **/TestResults/**/coverage.info
           if-no-files-found: ignore
 
-      - name: Restore dotnet tools (ReportGenerator)
-        run: dotnet tool restore
+      - name: Install ReportGenerator (local tool)
+        run: dotnet tool install --tool-path ./.tools dotnet-reportgenerator-globaltool
 
       - name: Build coverage report (Markdown + HTML)
         run: |
