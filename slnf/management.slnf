@@ -1,0 +1,15 @@
+{
+  "solution": {
+    "path": "../module-evaluations.slnx",
+    "projects": [
+      "src/management/Domain/Domain.csproj",
+      "src/management/Application/Application.csproj",
+      "src/management/Infrastructure/Infrastructure.csproj",
+      "src/management/Host/Host.csproj",
+
+      "tests/management/Domain.UnitTests/Domain.UnitTests.csproj",
+      "tests/management/Host.Tests/Host.Tests.csproj",
+      "tests/management/Infrastructure.IntegrationTests/Infrastructure.IntegrationTests.csproj"
+    ]
+  }
+}

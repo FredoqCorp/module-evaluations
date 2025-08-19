@@ -10,12 +10,13 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  build-test:
-    name: Build, Lint, Test
+  build-test-management:
+    name: Build, Lint, Test (management)
     runs-on: ubuntu-latest
     env:
       DOTNET_CLI_TELEMETRY_OPTOUT: '1'
       DOTNET_NOLOGO: 'true'
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -29,23 +30,24 @@ jobs:
             **/*.csproj
             Directory.Packages.props
 
-      - name: Restore
-        run: dotnet restore
+      - name: Restore (management.slnf)
+        run: dotnet restore slnf/management.slnf
 
-      - name: Lint (dotnet format)
+      - name: Lint (dotnet format only management)
         run: |
           dotnet format \
             --verify-no-changes \
             --verbosity minimal \
-            --exclude src/Infrastructure/Migrations \
+            --include src/management tests/management \
+            --exclude src/management/Infrastructure/Migrations \
             --exclude "**/*ModelSnapshot.cs"
 
-      - name: Build
-        run: dotnet build -c Release --no-restore
+      - name: Build (Release)
+        run: dotnet build slnf/management.slnf -c Release --no-restore
 
       - name: Test with coverage
         run: |
-          dotnet test -c Release \
+          dotnet test slnf/management.slnf -c Release \
             --no-build \
             --logger "trx;LogFileName=test-results.trx" \
             --results-directory ./TestResults \
@@ -60,22 +62,21 @@ jobs:
           path: |
             **/TestResults/**/*.trx
             **/TestResults/**/coverage.cobertura.xml
-            **/TestResults/**/coverage.info
             **/TestResults/**/coverage.json
+            **/TestResults/**/coverage.info
           if-no-files-found: ignore
 
-      - name: Install ReportGenerator
-        run: dotnet tool install -g dotnet-reportgenerator-globaltool
+      - name: Restore dotnet tools (ReportGenerator)
+        run: dotnet tool restore
 
       - name: Build coverage report (Markdown + HTML)
         run: |
-          reportgenerator \
+          dotnet tool run reportgenerator \
             -reports:"**/TestResults/**/coverage.cobertura.xml" \
             -targetdir:"coveragereport" \
             -reporttypes:"MarkdownSummaryGithub;HtmlInline_AzurePipelines"
-          # добавим суммарный md в Job Summary
           cat coveragereport/SummaryGithub.md >> "$GITHUB_STEP_SUMMARY"
-      
+
       - name: Upload HTML coverage (artifact)
         uses: actions/upload-artifact@v4
         with:

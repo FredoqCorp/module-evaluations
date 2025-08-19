@@ -1,0 +1,23 @@
+﻿<Solution>
+  <Folder Name="/deployments/">
+    <File Path=".github\workflows\ci.yml" />
+  </Folder>
+  <Folder Name="/files/">
+    <File Path="Directory.Packages.props" />
+    <File Path="Directory.Build.props" />
+    <File Path=".editorconfig" />
+    <File Path=".gitignore" />
+  </Folder>
+  <Folder Name="/src/" />
+  <Folder Name="/src/management/">
+    <Project Path="src\management\Application\Application.csproj" Type="Classic C#" />
+    <Project Path="src\management\Domain\Domain.csproj" Type="Classic C#" />
+    <Project Path="src\management\Host\Host.csproj" Type="Classic C#" />
+    <Project Path="src\management\Infrastructure\Infrastructure.csproj" Type="Classic C#" />
+  </Folder>
+  <Folder Name="/tests/" />
+  <Folder Name="/tests/management/">
+    <Project Path="tests\management\Host.Tests\Host.Tests.csproj" Type="Classic C#" />
+    <Project Path="tests\management\Infrastructure.IntegrationTests\Infrastructure.IntegrationTests.csproj" Type="Classic C#" />
+  </Folder>
+</Solution>
