@@ -52,7 +52,6 @@ CodeCoverage/
 *.VisualState.xml
 TestResult.xml
 nunit-*.xml
-.github/copilot-instructions.md
 .idea/
 ai-docs/
 src/Infrastructure/.DS_Store
