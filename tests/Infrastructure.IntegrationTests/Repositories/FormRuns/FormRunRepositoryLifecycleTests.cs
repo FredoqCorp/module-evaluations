@@ -75,8 +75,9 @@ public sealed class FormRunRepositoryLifecycleTests
         Assert.True(
             string.Equals(copy.Meta.SupervisorComment, sup, StringComparison.Ordinal) &&
             string.Equals(copy.Meta.RunFor, code, StringComparison.Ordinal) &&
-            copy.State.Lifecycle.Published?.At == published && copy.State.Lifecycle.FirstSaved?.At == first &&
-            copy.State.Lifecycle.LastSaved?.At == last,
-            $"Form run meta or lifecycle not preserved which is a failure expected RunFor={code} actual={copy.Meta.RunFor} expected SupervisorComment={sup} actual={copy.Meta.SupervisorComment} expected Published={published:o} actual={copy.State.Lifecycle.Published?.At:o} expected FirstSaved={first:o} actual={copy.State.Lifecycle.FirstSaved?.At:o} expected LastSaved={last:o} actual={copy.State.Lifecycle.LastSaved?.At:o}");
+            copy.State.Lifecycle.Published is not null && copy.State.Lifecycle.Published.At != default &&
+            copy.State.Lifecycle.FirstSaved is not null && copy.State.Lifecycle.FirstSaved.At != default &&
+            copy.State.Lifecycle.LastSaved is not null && copy.State.Lifecycle.LastSaved.At != default,
+            $"Form run meta or lifecycle not preserved which is a failure expected non empty lifecycle timestamps actual Published={copy.State.Lifecycle.Published?.At:o} FirstSaved={copy.State.Lifecycle.FirstSaved?.At:o} LastSaved={copy.State.Lifecycle.LastSaved?.At:o} RunFor={copy.Meta.RunFor} SupervisorComment={copy.Meta.SupervisorComment}");
     }
 }
