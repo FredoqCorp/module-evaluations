@@ -76,6 +76,7 @@ public sealed class FormRunRepositoryLifecycleTests
             string.Equals(copy.Meta.SupervisorComment, sup, StringComparison.Ordinal) &&
             string.Equals(copy.Meta.RunFor, code, StringComparison.Ordinal) &&
             copy.State.Lifecycle.Published?.At == published && copy.State.Lifecycle.FirstSaved?.At == first &&
-            copy.State.Lifecycle.LastSaved?.At == last, "Form run meta or lifecycle not preserved which is a failure");
+            copy.State.Lifecycle.LastSaved?.At == last,
+            $"Form run meta or lifecycle not preserved which is a failure expected RunFor={code} actual={copy.Meta.RunFor} expected SupervisorComment={sup} actual={copy.Meta.SupervisorComment} expected Published={published:o} actual={copy.State.Lifecycle.Published?.At:o} expected FirstSaved={first:o} actual={copy.State.Lifecycle.FirstSaved?.At:o} expected LastSaved={last:o} actual={copy.State.Lifecycle.LastSaved?.At:o}");
     }
 }
