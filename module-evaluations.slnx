@@ -17,6 +17,7 @@
   </Folder>
   <Folder Name="/tests/" />
   <Folder Name="/tests/management/">
+    <Project Path="tests\management\Domain.UnitTests\Domain.UnitTests.csproj" Type="Classic C#" />
     <Project Path="tests\management\Host.Tests\Host.Tests.csproj" Type="Classic C#" />
     <Project Path="tests\management\Infrastructure.IntegrationTests\Infrastructure.IntegrationTests.csproj" Type="Classic C#" />
   </Folder>

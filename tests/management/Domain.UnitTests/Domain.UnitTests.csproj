@@ -13,6 +13,6 @@
     <PackageReference Include="Shouldly" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="../../src/Domain/Domain.csproj" />
+    <ProjectReference Include="../../../src/management/Domain/Domain.csproj" />
   </ItemGroup>
 </Project>
