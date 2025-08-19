@@ -2,6 +2,7 @@ using System.Data.Common;
 using CascVel.Module.Evaluations.Management.Infrastructure.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Npgsql;
 using Respawn;
 using Respawn.Graph;
@@ -50,7 +51,7 @@ public sealed class PostgresFixture : IAsyncLifetime
         _connectionString = _container.GetConnectionString();
 
         var sc = new ServiceCollection();
-        sc.AddLogging();
+        sc.AddLogging(b => b.SetMinimumLevel(LogLevel.None));
         sc.AddEvaluationsDbContext(_connectionString);
         Services = sc.BuildServiceProvider();
 
