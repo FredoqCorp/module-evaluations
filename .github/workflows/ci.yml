@@ -71,7 +71,7 @@ jobs:
 
       - name: Build coverage report (Markdown + HTML)
         run: |
-          dotnet tool run reportgenerator \
+          ./.tools/reportgenerator \
             -reports:"**/TestResults/**/coverage.cobertura.xml" \
             -targetdir:"coveragereport" \
             -reporttypes:"MarkdownSummaryGithub;HtmlInline_AzurePipelines"
