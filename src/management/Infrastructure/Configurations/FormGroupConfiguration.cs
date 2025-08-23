@@ -1,9 +1,9 @@
-using CascVel.Module.Evaluations.Management.Domain.Entities.Forms;
-using CascVel.Module.Evaluations.Management.Domain.Entities.Forms.ValueObjects;
+using CascVel.Modules.Evaluations.Management.Domain.Entities.Forms;
+using CascVel.Modules.Evaluations.Management.Domain.Entities.Forms.ValueObjects;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace CascVel.Module.Evaluations.Management.Infrastructure.Configurations;
+namespace CascVel.Modules.Evaluations.Management.Infrastructure.Configurations;
 
 internal sealed class FormGroupConfiguration : IEntityTypeConfiguration<FormGroup>
 {

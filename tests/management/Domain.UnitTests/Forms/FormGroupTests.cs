@@ -1,9 +1,9 @@
-namespace CascVel.Module.Evaluations.Management.Domain.UnitTests.Forms;
-
 using System.Security.Cryptography;
-using CascVel.Module.Evaluations.Management.Domain.Entities.Forms;
-using CascVel.Module.Evaluations.Management.Domain.Entities.Forms.ValueObjects;
+using CascVel.Modules.Evaluations.Management.Domain.Entities.Forms;
+using CascVel.Modules.Evaluations.Management.Domain.Entities.Forms.ValueObjects;
 using Shouldly;
+
+namespace CascVel.Modules.Evaluations.Management.Domain.UnitTests.Forms;
 
 /// <summary>
 /// Tests for FormGroup methods AddChilds, AddCriteria and form attachment behavior

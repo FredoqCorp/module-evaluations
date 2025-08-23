@@ -1,10 +1,10 @@
-using CascVel.Module.Evaluations.Management.Application.Interfaces;
-using CascVel.Module.Evaluations.Management.Domain.Entities.Forms;
-using CascVel.Module.Evaluations.Management.Infrastructure.Context;
+using CascVel.Modules.Evaluations.Management.Application.Interfaces;
+using CascVel.Modules.Evaluations.Management.Domain.Entities.Forms;
+using CascVel.Modules.Evaluations.Management.Infrastructure.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
-namespace CascVel.Module.Evaluations.Management.Infrastructure.Repositories;
+namespace CascVel.Modules.Evaluations.Management.Infrastructure.Repositories;
 
 /// <summary>
 /// Concrete repository for the EvaluationForm aggregate responsible for persistence operations

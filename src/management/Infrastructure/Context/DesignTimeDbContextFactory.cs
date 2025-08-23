@@ -1,11 +1,11 @@
-using CascVel.Module.Evaluations.Management.Domain.Entities.Criteria;
-using CascVel.Module.Evaluations.Management.Domain.Entities.Forms;
-using CascVel.Module.Evaluations.Management.Domain.Entities.Forms.Calculation;
+using CascVel.Modules.Evaluations.Management.Domain.Entities.Criteria;
+using CascVel.Modules.Evaluations.Management.Domain.Entities.Forms;
+using CascVel.Modules.Evaluations.Management.Domain.Entities.Forms.Calculation;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using Npgsql;
 
-namespace CascVel.Module.Evaluations.Management.Infrastructure.Context;
+namespace CascVel.Modules.Evaluations.Management.Infrastructure.Context;
 
 /// <summary>
 /// Design-time factory for EF Core migrations/tools.

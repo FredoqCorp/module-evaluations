@@ -7,4 +7,4 @@ WebApplication app = builder.Build();
 app.MapHealthChecks("/health");
 app.MapGet("/ping", () => Results.Ok(new { ok = true, ts = DateTimeOffset.UtcNow }));
 
-app.Run();
+await app.RunAsync();

@@ -1,4 +1,4 @@
-namespace CascVel.Module.Evaluations.Management.Domain.Entities.Criteria;
+namespace CascVel.Modules.Evaluations.Management.Domain.Entities.Criteria;
 
 /// <summary>
 /// Value object describing how a criterion is placed within a form or section.

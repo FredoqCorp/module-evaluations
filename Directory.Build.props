@@ -1,7 +1,7 @@
 <Project>
   <PropertyGroup>
     <TargetFramework>net9.0</TargetFramework>
-    <BaseNamespace>CascVel.Module.Evaluations.Management</BaseNamespace>
+    <BaseNamespace>CascVel.Modules.Evaluations.Management</BaseNamespace>
     <RootNamespace>$(BaseNamespace).$(MSBuildProjectName)</RootNamespace>
     <AssemblyName>$(RootNamespace)</AssemblyName>
     <Product>CascVel</Product>
@@ -11,6 +11,9 @@
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <LangVersion>preview</LangVersion>
     <AnalysisLevel>latest</AnalysisLevel>
+    <AnalysisMode>All</AnalysisMode>
+    <CodeAnalysisTreatWarningsAsErrors>true</CodeAnalysisTreatWarningsAsErrors>
+    <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(GITHUB_ACTIONS)' == 'true'">
@@ -18,8 +21,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Roslynator.Analyzers" PrivateAssets="all" />
-    <PackageReference Include="Meziantou.Analyzer" PrivateAssets="all" />
     <PackageReference Include="SecurityCodeScan.VS2019" PrivateAssets="all" />
+    <PackageReference Include="SonarAnalyzer.CSharp">
+          <PrivateAssets>all</PrivateAssets>
+          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
   </ItemGroup>
 </Project>

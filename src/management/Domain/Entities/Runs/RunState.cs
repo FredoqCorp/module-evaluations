@@ -1,4 +1,4 @@
-namespace CascVel.Module.Evaluations.Management.Domain.Entities.Runs;
+namespace CascVel.Modules.Evaluations.Management.Domain.Entities.Runs;
 
 /// <summary>
 /// Run state: lifecycle, context, results and agreement trail.

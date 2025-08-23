@@ -1,5 +1,5 @@
 using System.Data.Common;
-using CascVel.Module.Evaluations.Management.Infrastructure.Context;
+using CascVel.Modules.Evaluations.Management.Infrastructure.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -8,12 +8,14 @@ using Respawn;
 using Respawn.Graph;
 using Testcontainers.PostgreSql;
 
-namespace Infrastructure.IntegrationTests.Fixtures;
+namespace CascVel.Modules.Evaluations.Management.Infrastructure.IntegrationTests.Fixtures;
 
 /// <summary>
 /// xUnit fixture that starts a PostgreSQL 16-alpine container, applies EF Core migrations, and exposes services and reset capability.
 /// </summary>
+#pragma warning disable CA1515 // Consider making public types internal
 public sealed class PostgresFixture : IAsyncLifetime
+#pragma warning restore CA1515 // Consider making public types internal
 {
     private readonly PostgreSqlContainer _container;
     private string _connectionString = string.Empty;

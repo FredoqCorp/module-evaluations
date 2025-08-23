@@ -1,4 +1,4 @@
-namespace CascVel.Module.Evaluations.Management.Domain.Entities.Forms.ValueObjects;
+namespace CascVel.Modules.Evaluations.Management.Domain.Entities.Forms.ValueObjects;
 
 /// <summary>
 /// Period of validity. Start is required; End is optional (open-ended period when null).

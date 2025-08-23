@@ -1,4 +1,4 @@
-namespace CascVel.Module.Evaluations.Management.Domain.Entities.Runs;
+namespace CascVel.Modules.Evaluations.Management.Domain.Entities.Runs;
 
 /// <summary>
 /// Evidence for an automatic criterion: which parameter and value led to the option selection.

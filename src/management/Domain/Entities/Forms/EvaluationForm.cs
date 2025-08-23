@@ -1,6 +1,6 @@
-using CascVel.Module.Evaluations.Management.Domain.Entities.Forms.Calculation;
+using CascVel.Modules.Evaluations.Management.Domain.Entities.Forms.Calculation;
 
-namespace CascVel.Module.Evaluations.Management.Domain.Entities.Forms;
+namespace CascVel.Modules.Evaluations.Management.Domain.Entities.Forms;
 
 /// <summary>
 /// Aggregate root describing a form. Stores metadata, lifecycle and the calculation rule kind only.

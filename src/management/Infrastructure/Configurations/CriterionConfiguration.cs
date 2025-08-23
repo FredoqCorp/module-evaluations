@@ -1,8 +1,8 @@
-using CascVel.Module.Evaluations.Management.Domain.Entities.Criteria;
+using CascVel.Modules.Evaluations.Management.Domain.Entities.Criteria;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace CascVel.Module.Evaluations.Management.Infrastructure.Configurations;
+namespace CascVel.Modules.Evaluations.Management.Infrastructure.Configurations;
 
 internal sealed class CriterionConfiguration : IEntityTypeConfiguration<Criterion>
 {

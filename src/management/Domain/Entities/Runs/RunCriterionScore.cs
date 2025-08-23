@@ -1,4 +1,4 @@
-namespace CascVel.Module.Evaluations.Management.Domain.Entities.Runs;
+namespace CascVel.Modules.Evaluations.Management.Domain.Entities.Runs;
 
 /// <summary>
 /// Result for a single criterion within a form run.

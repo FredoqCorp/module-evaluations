@@ -1,8 +1,9 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <ItemGroup>
-    <InternalsVisibleTo Include="CascVel.Module.Evaluations.Management.Infrastructure.IntegrationTests" />
+    <InternalsVisibleTo Include="CascVel.Modules.Evaluations.Management.Infrastructure.IntegrationTests" />
   </ItemGroup>
     <ItemGroup>
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Analyzers" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.Design">
           <PrivateAssets>all</PrivateAssets>
           <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>

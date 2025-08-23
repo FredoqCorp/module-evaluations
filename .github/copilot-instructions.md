@@ -18,8 +18,8 @@
 * Use ComplexType for Value Objects where applicable.
 
 ## Code Design
-* Every class/record must have a supplementary docblock preceding it.
-* A class/record docblock must explain the purpose of the class/record and provide usage examples.
+* Every class or record must have a supplementary docblock preceding it.
+* A class or record docblock must explain the purpose of the class or record and provide usage examples.
 * Every method and function must have a supplementary docblock preceding it.
 * Docblocks must be written in English only, using UTF-8 encoding.
 
@@ -35,17 +35,17 @@
 * The DDD paradigm must be respected.
 * Elegant Objects design principles must be respected.
 
-* Every class may have only one primary constructor; any secondary constructor must delegate to it.
+* Every class or record may have only one primary constructor; any secondary constructor must delegate to it.
 
-* Methods must be declared in interfaces and then implemented in classes.
+* Methods must be declared in interfaces and then implemented in classes or records.
 * Public methods that do not implement an interface must be avoided.
 * Methods must never return null.
 * null may not be passed as an argument.
 * Type introspection and type casting are strictly prohibited.
 * Reflection on object internals is strictly prohibited.
 
-* Class names may not end with the -er suffix.
-  Class names should be based on what they are, not what they do.
+* Class or record names may not end with the -er suffix.
+  Class or record names should be based on what they are, not what they do.
   Examples of bad names:
 
     Manager, Controller, Helper, Handler, Writer, Reader, Converter, Validator (-or также вреден), Router, Dispatcher, Observer, Listener, Sorter, Encoder и Decoder.
@@ -57,16 +57,16 @@
 
   Data processing will occur on demand by calling the object's methods.
 
-* Encapsulate as few fields as possible in classes
+* Encapsulate as few fields as possible in classes or records
   Encapsulate no more than four fields.
 
 * Thoughtfully name methods:
   - Methods that return something in response should be named with nouns.
   - Methods that manipulate state should be named with verbs. They do not return anything in response.
 
-* Make classes immutable
+* Make classes or records immutable
 
-* Limit classes to a maximum of 5 public methods
+* Limit classes or records to a maximum of 5 public methods
 
 * Never return NULL
   There are three options for handling this:
@@ -75,11 +75,11 @@
   - Return a collection of objects. This helps handle the case of an empty search result.
   - Use the "Null Object" pattern if it fits the situation. Such an object resembles a real one but behaves differently.
 
-* Classes must be sealed by default.
+* Classes or records must be sealed by default.
 
-* Prefer composition over inheritance for classes.
+* Prefer composition over inheritance for classes or records.
 
-* Do not use static methods to implement business logic in classes
+* Do not use static methods to implement business logic in classes or records
 
 ## Tests
 

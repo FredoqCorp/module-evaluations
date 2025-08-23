@@ -1,9 +1,9 @@
-using CascVel.Module.Evaluations.Management.Domain.Entities.Forms;
+using CascVel.Modules.Evaluations.Management.Domain.Entities.Forms;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace CascVel.Module.Evaluations.Management.Infrastructure.Configurations;
+namespace CascVel.Modules.Evaluations.Management.Infrastructure.Configurations;
 
 internal sealed class EvaluationFormConfiguration : IEntityTypeConfiguration<EvaluationForm>
 {

@@ -1,9 +1,9 @@
-namespace CascVel.Module.Evaluations.Management.Domain.Entities.Criteria;
+namespace CascVel.Modules.Evaluations.Management.Domain.Entities.Criteria;
 
 /// <summary>
 /// An option representing a selectable score and optional annotations for a criterion.
 /// </summary>
-public sealed record Option
+public sealed record Choise
 {
     /// <summary>
     /// Score value associated with the option (e.g., 1..5).

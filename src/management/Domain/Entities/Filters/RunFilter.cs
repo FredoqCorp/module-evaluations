@@ -1,4 +1,4 @@
-namespace CascVel.Module.Evaluations.Management.Domain.Entities.Filters;
+namespace CascVel.Modules.Evaluations.Management.Domain.Entities.Filters;
 
 /// <summary>
 /// Represents a filter for querying run entities.

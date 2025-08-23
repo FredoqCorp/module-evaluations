@@ -1,6 +1,6 @@
-using CascVel.Module.Evaluations.Management.Domain.Entities.Forms.ValueObjects;
+using CascVel.Modules.Evaluations.Management.Domain.Entities.Forms.ValueObjects;
 
-namespace CascVel.Module.Evaluations.Management.Domain.Entities.Forms;
+namespace CascVel.Modules.Evaluations.Management.Domain.Entities.Forms;
 
 /// <summary>
 /// A group of criteria within a form. Carries a title, order, optional weight and ordered criteria references.
@@ -49,7 +49,7 @@ public sealed class FormGroup
     /// <summary>
     /// The identifier of the form to which this group belongs.
     /// </summary>
-    public long FormId { get; private set; }
+    public long FormId { get; init; }
 
     /// <summary>
     /// The parent group of this group, if any.
@@ -59,7 +59,7 @@ public sealed class FormGroup
     /// <summary>
     /// The identifier of the parent group, if any.
     /// </summary>
-    public long? ParentId { get; private set; }
+    public long? ParentId { get; init; }
 
     /// <summary>
     /// Adds a child group to this group and attaches it to the form if already set.

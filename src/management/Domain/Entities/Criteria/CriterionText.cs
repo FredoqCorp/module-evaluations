@@ -1,4 +1,4 @@
-namespace CascVel.Module.Evaluations.Management.Domain.Entities.Criteria;
+namespace CascVel.Modules.Evaluations.Management.Domain.Entities.Criteria;
 
 /// <summary>
 /// Text content of a criterion: title and detailed description.

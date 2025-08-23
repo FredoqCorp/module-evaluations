@@ -1,11 +1,11 @@
-using CascVel.Module.Evaluations.Management.Domain.Entities.Criteria;
-using CascVel.Module.Evaluations.Management.Domain.Entities.Forms;
-using CascVel.Module.Evaluations.Management.Domain.Entities.Forms.Calculation;
+using CascVel.Modules.Evaluations.Management.Domain.Entities.Criteria;
+using CascVel.Modules.Evaluations.Management.Domain.Entities.Forms;
+using CascVel.Modules.Evaluations.Management.Domain.Entities.Forms.Calculation;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Npgsql;
 
-namespace CascVel.Module.Evaluations.Management.Infrastructure.Context;
+namespace CascVel.Modules.Evaluations.Management.Infrastructure.Context;
 
 /// <summary>
 /// Extensions to configure EF Core with Npgsql/PostgreSQL best practices for this module.

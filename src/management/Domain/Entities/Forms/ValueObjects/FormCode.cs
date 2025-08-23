@@ -1,4 +1,4 @@
-namespace CascVel.Module.Evaluations.Management.Domain.Entities.Forms.ValueObjects;
+namespace CascVel.Modules.Evaluations.Management.Domain.Entities.Forms.ValueObjects;
 
 /// <summary>
 /// Globally-unique code of a form. Change is allowed only in Draft.

@@ -1,4 +1,4 @@
-namespace CascVel.Module.Evaluations.Management.Domain.Entities.Criteria;
+namespace CascVel.Modules.Evaluations.Management.Domain.Entities.Criteria;
 
 /// <summary>
 /// Policy describing how thresholds on options should be interpreted.

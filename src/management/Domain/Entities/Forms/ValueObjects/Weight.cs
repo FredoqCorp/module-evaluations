@@ -1,4 +1,4 @@
-namespace CascVel.Module.Evaluations.Management.Domain.Entities.Forms.ValueObjects;
+namespace CascVel.Modules.Evaluations.Management.Domain.Entities.Forms.ValueObjects;
 
 /// <summary>
 /// Non-negative percentage weight. For groups/criteria in the form.

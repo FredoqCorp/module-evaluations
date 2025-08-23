@@ -1,4 +1,4 @@
-namespace CascVel.Module.Evaluations.Management.Domain.Entities.Runs;
+namespace CascVel.Modules.Evaluations.Management.Domain.Entities.Runs;
 
 /// <summary>
 /// Run context: arbitrary key/value pairs used by automatic criteria.

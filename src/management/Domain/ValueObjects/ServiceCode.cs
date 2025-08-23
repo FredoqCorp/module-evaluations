@@ -1,4 +1,4 @@
-namespace CascVel.Module.Evaluations.Management.Domain.ValueObjects;
+namespace CascVel.Modules.Evaluations.Management.Domain.ValueObjects;
 
 
 

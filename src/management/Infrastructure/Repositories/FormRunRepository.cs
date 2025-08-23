@@ -1,10 +1,10 @@
-using CascVel.Module.Evaluations.Management.Application.Interfaces;
-using CascVel.Module.Evaluations.Management.Domain.Entities.Runs;
-using CascVel.Module.Evaluations.Management.Infrastructure.Context;
+using CascVel.Modules.Evaluations.Management.Application.Interfaces;
+using CascVel.Modules.Evaluations.Management.Domain.Entities.Runs;
+using CascVel.Modules.Evaluations.Management.Infrastructure.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
-namespace CascVel.Module.Evaluations.Management.Infrastructure.Repositories;
+namespace CascVel.Modules.Evaluations.Management.Infrastructure.Repositories;
 
 internal sealed class FormRunRepository : IFormRunRepository
 {
