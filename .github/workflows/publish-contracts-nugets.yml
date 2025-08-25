@@ -28,6 +28,16 @@ jobs:
             **/*.csproj
             Directory.Packages.props
 
+      - name: Authenticate GitHub Packages for restore
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          dotnet nuget update source "github-casc-vel" \
+            --configfile ./nuget.config \
+            --username "${{ github.actor }}" \
+            --password "$GITHUB_TOKEN" \
+            --store-password-in-clear-text
+
       - name: Restore dependencies
         run: dotnet restore slnf/contracts.slnf
 
@@ -40,19 +50,10 @@ jobs:
             dotnet pack "$csproj" --configuration Release --no-build --output ./nupkgs
           done
 
-      - name: Configure GitHub Packages source
+      - name: Push packages to GitHub Packages
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          dotnet nuget remove source github || true
-          dotnet nuget add source "https://nuget.pkg.github.com/FredoqCorp/index.json" \
-            --name "github" \
-            --username "${{ github.actor }}" \
-            --password "$GITHUB_TOKEN" \
-            --store-password-in-clear-text
-
-      - name: Push packages to GitHub Packages
-        run: |
           for nupkg in ./nupkgs/*.nupkg; do
-            dotnet nuget push "$nupkg" --source "github" --skip-duplicate
+            dotnet nuget push "$nupkg" --source "github-casc-vel" --api-key "$GITHUB_TOKEN" --skip-duplicate
           done
