@@ -9,6 +9,9 @@ on:
 jobs:
   publish-nugets:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -37,10 +40,19 @@ jobs:
             dotnet pack "$csproj" --configuration Release --no-build --output ./nupkgs
           done
 
-      - name: Push NuGet packages
+      - name: Configure GitHub Packages source
         env:
-          NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          dotnet nuget remove source github || true
+          dotnet nuget add source "https://nuget.pkg.github.com/FredoqCorp/index.json" \
+            --name "github" \
+            --username "${{ github.actor }}" \
+            --password "$GITHUB_TOKEN" \
+            --store-password-in-clear-text
+
+      - name: Push packages to GitHub Packages
         run: |
           for nupkg in ./nupkgs/*.nupkg; do
-            dotnet nuget push "$nupkg" --api-key "$NUGET_API_KEY" --source "https://api.nuget.org/v3/index.json" --skip-duplicate
+            dotnet nuget push "$nupkg" --source "github" --skip-duplicate
           done
