@@ -4,7 +4,10 @@
     <BaseNamespace>CascVel.Modules.Evaluations.Management</BaseNamespace>
     <RootNamespace>$(BaseNamespace).$(MSBuildProjectName)</RootNamespace>
     <AssemblyName>$(RootNamespace)</AssemblyName>
-    <Product>CascVel</Product>
+    <Product>casc-vel</Product>
+    <Authors>fredoqw</Authors>
+    <Company>casc-vel</Company>
+    <Copyright>Copyright (c) casc-vel 2025</Copyright>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>

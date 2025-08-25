@@ -1,7 +1,43 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+        <IsPackable>true</IsPackable>
+        <PackageId>$(AssemblyName)</PackageId>
+        <Title>casc-vel module Evaluations Contracts</Title>
+        <Description>Contracts and data models for the casc-vel module Evaluations domain</Description>
+        <PackageTags>module-evaluations;contracts;casc-vel</PackageTags>
+       
+        <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+        <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
+
+        <RepositoryType>git</RepositoryType>
+        <RepositoryUrl>https://github.com/FredoqCorp/module-evaluations.git</RepositoryUrl>
+        <PackageProjectUrl>https://github.com/FredoqCorp/module-evaluations</PackageProjectUrl>
+        <PublishRepositoryUrl>true</PublishRepositoryUrl>
+
+        <IncludeSymbols>true</IncludeSymbols>
+        <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+        <EmbedUntrackedSources>true</EmbedUntrackedSources>
+
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
+        <EnablePackageValidation>true</EnablePackageValidation>
+
+        <MinVerTagPrefix>contracts-v</MinVerTagPrefix>
+        <MinVerDefaultPrereleaseIdentifiers>preview</MinVerDefaultPrereleaseIdentifiers>
     </PropertyGroup>
+
+    <ItemGroup>
+        <None Include="README.md" Pack="true" PackagePath="" />
+        <None Include="../../../icon.png" Pack="true" PackagePath="" Link="icon.png" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Microsoft.SourceLink.GitHub" PrivateAssets="All" />
+        <PackageReference Include="MinVer">
+          <PrivateAssets>all</PrivateAssets>
+          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+    </ItemGroup>
 
 </Project>
