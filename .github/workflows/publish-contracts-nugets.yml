@@ -9,9 +9,6 @@ on:
 jobs:
   publish-nugets:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: src/contracts
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -33,7 +30,7 @@ jobs:
 
       - name: Pack NuGet packages
         run: |
-          for csproj in $(find . -name '*.csproj'); do
+          for csproj in $(find src/contracts -name '*.csproj'); do
             dotnet pack "$csproj" --configuration Release --no-build --output ./nupkgs
           done
 
