@@ -1,0 +1,41 @@
+name: Publish Contracts NuGet Packages
+
+on:
+  push:
+    tags:
+      - 'contracts-v*'
+
+jobs:
+  publish-nugets:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: src/contracts
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Restore dependencies
+        run: dotnet restore
+
+      - name: Build projects
+        run: dotnet build --configuration Release --no-restore
+
+      - name: Pack NuGet packages
+        run: |
+          for csproj in $(find . -name '*.csproj'); do
+            dotnet pack "$csproj" --configuration Release --no-build --output ./nupkgs
+          done
+
+      - name: Push NuGet packages
+        env:
+          NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
+        run: |
+          for nupkg in ./nupkgs/*.nupkg; do
+            dotnet nuget push "$nupkg" --api-key "$NUGET_API_KEY" --source "https://api.nuget.org/v3/index.json" --skip-duplicate
+          done
