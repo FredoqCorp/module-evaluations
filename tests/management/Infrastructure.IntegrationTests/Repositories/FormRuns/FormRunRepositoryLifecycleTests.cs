@@ -1,13 +1,13 @@
-using CascVel.Module.Evaluations.Management.Domain.Entities.Forms;
-using CascVel.Module.Evaluations.Management.Domain.Entities.Runs;
-using CascVel.Module.Evaluations.Management.Infrastructure.Context;
-using CascVel.Module.Evaluations.Management.Infrastructure.Repositories;
-using Infrastructure.IntegrationTests.Fixtures;
+using CascVel.Modules.Evaluations.Management.Domain.Entities.Forms;
+using CascVel.Modules.Evaluations.Management.Domain.Entities.Runs;
+using CascVel.Modules.Evaluations.Management.Infrastructure.Context;
+using CascVel.Modules.Evaluations.Management.Infrastructure.IntegrationTests.Fixtures;
+using CascVel.Modules.Evaluations.Management.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
-namespace CascVel.Module.Evaluations.Management.Infrastructure.IntegrationTests.Repositories.FormRuns;
+namespace CascVel.Modules.Evaluations.Management.Infrastructure.IntegrationTests.Repositories.FormRuns;
 
 /// <summary>
 /// Verifies meta and lifecycle integrity after persistence and retrieval

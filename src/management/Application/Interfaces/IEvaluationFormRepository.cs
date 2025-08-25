@@ -1,6 +1,6 @@
-using CascVel.Module.Evaluations.Management.Domain.Entities.Forms;
+using CascVel.Modules.Evaluations.Management.Domain.Entities.Forms;
 
-namespace CascVel.Module.Evaluations.Management.Application.Interfaces;
+namespace CascVel.Modules.Evaluations.Management.Application.Interfaces;
 
 /// <summary>
 /// Repository for EvaluationForm aggregate root.

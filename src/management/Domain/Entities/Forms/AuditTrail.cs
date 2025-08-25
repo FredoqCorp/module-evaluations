@@ -1,4 +1,4 @@
-namespace CascVel.Module.Evaluations.Management.Domain.Entities.Forms;
+namespace CascVel.Modules.Evaluations.Management.Domain.Entities.Forms;
 
 /// <summary>
 /// Creation, update and status change stamps.

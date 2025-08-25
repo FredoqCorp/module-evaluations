@@ -1,7 +1,7 @@
-using CascVel.Module.Evaluations.Management.Domain.Entities.Criteria;
-using CascVel.Module.Evaluations.Management.Domain.Entities.Forms.ValueObjects;
+using CascVel.Modules.Evaluations.Management.Domain.Entities.Criteria;
+using CascVel.Modules.Evaluations.Management.Domain.Entities.Forms.ValueObjects;
 
-namespace CascVel.Module.Evaluations.Management.Domain.Entities.Forms;
+namespace CascVel.Modules.Evaluations.Management.Domain.Entities.Forms;
 
 /// <summary>
 /// Criterion positioned within a form or a group, with order and optional weight.

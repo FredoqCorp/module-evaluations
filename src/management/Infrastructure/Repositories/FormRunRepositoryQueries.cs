@@ -1,7 +1,7 @@
-using CascVel.Module.Evaluations.Management.Domain.Entities.Runs;
+using CascVel.Modules.Evaluations.Management.Domain.Entities.Runs;
 using Microsoft.EntityFrameworkCore;
 
-namespace CascVel.Module.Evaluations.Management.Infrastructure.Repositories;
+namespace CascVel.Modules.Evaluations.Management.Infrastructure.Repositories;
 
 internal static class FormRunRepositoryQueries
 {

@@ -1,11 +1,11 @@
-namespace CascVel.Module.Evaluations.Management.Domain.UnitTests.Forms;
-
 using System.Globalization;
 using System.Security.Cryptography;
-using CascVel.Module.Evaluations.Management.Domain.Entities.Forms;
-using CascVel.Module.Evaluations.Management.Domain.Entities.Forms.ValueObjects;
-using Entities.Criteria;
+using CascVel.Modules.Evaluations.Management.Domain.Entities.Criteria;
+using CascVel.Modules.Evaluations.Management.Domain.Entities.Forms;
+using CascVel.Modules.Evaluations.Management.Domain.Entities.Forms.ValueObjects;
 using Shouldly;
+
+namespace CascVel.Modules.Evaluations.Management.Domain.UnitTests.Forms;
 
 /// <summary>
 /// Tests for EvaluationForm aggregate methods AddGroups and AddCriteria

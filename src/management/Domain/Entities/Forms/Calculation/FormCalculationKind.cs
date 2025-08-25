@@ -1,4 +1,4 @@
-namespace CascVel.Module.Evaluations.Management.Domain.Entities.Forms.Calculation;
+namespace CascVel.Modules.Evaluations.Management.Domain.Entities.Forms.Calculation;
 
 /// <summary>
 /// Describes how total score should be calculated for a form.

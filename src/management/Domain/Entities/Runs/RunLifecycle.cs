@@ -1,6 +1,6 @@
-namespace CascVel.Module.Evaluations.Management.Domain.Entities.Runs;
+using CascVel.Modules.Evaluations.Management.Domain.Entities.Forms;
 
-using CascVel.Module.Evaluations.Management.Domain.Entities.Forms;
+namespace CascVel.Modules.Evaluations.Management.Domain.Entities.Runs;
 
 /// <summary>
 /// Run lifecycle: launch, first and last save, and publish.

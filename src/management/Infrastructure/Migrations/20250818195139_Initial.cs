@@ -1,12 +1,12 @@
-using CascVel.Module.Evaluations.Management.Domain.Entities.Criteria;
-using CascVel.Module.Evaluations.Management.Domain.Entities.Forms;
-using CascVel.Module.Evaluations.Management.Domain.Entities.Forms.Calculation;
+using CascVel.Modules.Evaluations.Management.Domain.Entities.Criteria;
+using CascVel.Modules.Evaluations.Management.Domain.Entities.Forms;
+using CascVel.Modules.Evaluations.Management.Domain.Entities.Forms.Calculation;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace CascVel.Module.Evaluations.Management.Infrastructure.Migrations
+namespace CascVel.Modules.Evaluations.Management.Infrastructure.Migrations
 {
     /// <inheritdoc />
     public partial class Initial : Migration
@@ -30,7 +30,7 @@ namespace CascVel.Module.Evaluations.Management.Infrastructure.Migrations
                     id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     description = table.Column<string>(type: "text", nullable: false),
-                    title = table.Column<string>(type: "text", nullable: false)
+                    title = table.Column<string>(type: "text", nullable: false),
                 },
                 constraints: table =>
                 {
@@ -57,7 +57,7 @@ namespace CascVel.Module.Evaluations.Management.Infrastructure.Migrations
                     description = table.Column<string>(type: "text", nullable: true),
                     tags = table.Column<string[]>(type: "text[]", nullable: false, defaultValueSql: "'{}'::text[]"),
                     code = table.Column<string>(type: "text", nullable: false),
-                    name = table.Column<string>(type: "text", nullable: false)
+                    name = table.Column<string>(type: "text", nullable: false),
                 },
                 constraints: table =>
                 {
@@ -91,7 +91,7 @@ namespace CascVel.Module.Evaluations.Management.Infrastructure.Migrations
                     run_for = table.Column<string>(type: "character varying(128)", maxLength: 128, nullable: false),
                     supervisor_comment = table.Column<string>(type: "text", nullable: true),
                     form_code = table.Column<string>(type: "text", nullable: false),
-                    form_id = table.Column<long>(type: "bigint", nullable: false)
+                    form_id = table.Column<long>(type: "bigint", nullable: false),
                 },
                 constraints: table =>
                 {
@@ -105,7 +105,7 @@ namespace CascVel.Module.Evaluations.Management.Infrastructure.Migrations
                 {
                     criterion_id = table.Column<long>(type: "bigint", nullable: false),
                     auto_source_key = table.Column<string>(type: "text", nullable: false),
-                    auto_goal = table.Column<OptimizationGoal>(type: "evaluations.optimization_goal", nullable: false)
+                    auto_goal = table.Column<OptimizationGoal>(type: "evaluations.optimization_goal", nullable: false),
                 },
                 constraints: table =>
                 {
@@ -130,7 +130,7 @@ namespace CascVel.Module.Evaluations.Management.Infrastructure.Migrations
                     caption = table.Column<string>(type: "text", nullable: true),
                     annotation = table.Column<string>(type: "text", nullable: true),
                     threshold = table.Column<decimal>(type: "numeric(10,2)", precision: 10, scale: 2, nullable: true),
-                    criterion_id = table.Column<long>(type: "bigint", nullable: false)
+                    criterion_id = table.Column<long>(type: "bigint", nullable: false),
                 },
                 constraints: table =>
                 {
@@ -155,7 +155,7 @@ namespace CascVel.Module.Evaluations.Management.Infrastructure.Migrations
                     weight = table.Column<short>(type: "smallint", nullable: true),
                     form_id = table.Column<long>(type: "bigint", nullable: false),
                     parent_id = table.Column<long>(type: "bigint", nullable: true),
-                    order_index = table.Column<int>(type: "integer", nullable: false)
+                    order_index = table.Column<int>(type: "integer", nullable: false),
                 },
                 constraints: table =>
                 {
@@ -191,7 +191,7 @@ namespace CascVel.Module.Evaluations.Management.Infrastructure.Migrations
                     comment = table.Column<string>(type: "text", nullable: true),
                     auto_parameter_key = table.Column<string>(type: "text", nullable: true),
                     auto_value = table.Column<decimal>(type: "numeric(10,2)", precision: 10, scale: 2, nullable: true),
-                    run_id = table.Column<long>(type: "bigint", nullable: false)
+                    run_id = table.Column<long>(type: "bigint", nullable: false),
                 },
                 constraints: table =>
                 {
@@ -216,7 +216,7 @@ namespace CascVel.Module.Evaluations.Management.Infrastructure.Migrations
                     weight = table.Column<short>(type: "smallint", nullable: true),
                     form_id = table.Column<long>(type: "bigint", nullable: true),
                     group_id = table.Column<long>(type: "bigint", nullable: true),
-                    order_index = table.Column<int>(type: "integer", nullable: false)
+                    order_index = table.Column<int>(type: "integer", nullable: false),
                 },
                 constraints: table =>
                 {

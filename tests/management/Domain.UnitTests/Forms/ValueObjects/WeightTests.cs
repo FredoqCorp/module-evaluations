@@ -1,8 +1,8 @@
-namespace CascVel.Module.Evaluations.Management.Domain.UnitTests.Forms.ValueObjects;
-
 using System.Security.Cryptography;
-using CascVel.Module.Evaluations.Management.Domain.Entities.Forms.ValueObjects;
+using CascVel.Modules.Evaluations.Management.Domain.Entities.Forms.ValueObjects;
 using Shouldly;
+
+namespace CascVel.Modules.Evaluations.Management.Domain.UnitTests.Forms.ValueObjects;
 
 /// <summary>
 /// Tests for Weight value object conversion methods.

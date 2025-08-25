@@ -1,9 +1,9 @@
-namespace CascVel.Module.Evaluations.Management.Domain.UnitTests.ValueObjects;
-
 using System.Collections.Concurrent;
 using System.Security.Cryptography;
-using CascVel.Module.Evaluations.Management.Domain.ValueObjects;
+using CascVel.Modules.Evaluations.Management.Domain.ValueObjects;
 using Shouldly;
+
+namespace CascVel.Modules.Evaluations.Management.Domain.UnitTests.ValueObjects;
 
 /// <summary>
 /// Tests for the ServiceCode value object behavior
@@ -18,7 +18,19 @@ public sealed class ServiceCodeTests
         for (int i = 0; i < len; i++)
         {
             int range = RandomNumberGenerator.GetInt32(0, 3);
-            int code = range == 0 ? RandomNumberGenerator.GetInt32(0x0370, 0x03FF) : range == 1 ? RandomNumberGenerator.GetInt32(0x0400, 0x04FF) : '0' + RandomNumberGenerator.GetInt32(0, 10);
+            int code;
+            if (range == 0)
+            {
+                code = RandomNumberGenerator.GetInt32(0x0370, 0x03FF);
+            }
+            else if (range == 1)
+            {
+                code = RandomNumberGenerator.GetInt32(0x0400, 0x04FF);
+            }
+            else
+            {
+                code = '0' + RandomNumberGenerator.GetInt32(0, 10);
+            }
             arr[i] = (char)code;
         }
         return new string(arr);

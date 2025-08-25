@@ -1,16 +1,16 @@
-using CascVel.Module.Evaluations.Management.Application.Interfaces;
-using CascVel.Module.Evaluations.Management.Domain.Entities.Criteria;
-using CascVel.Module.Evaluations.Management.Domain.Entities.Forms;
-using CascVel.Module.Evaluations.Management.Domain.Entities.Forms.Calculation;
-using CascVel.Module.Evaluations.Management.Domain.Entities.Forms.ValueObjects;
-using CascVel.Module.Evaluations.Management.Infrastructure.Context;
-using CascVel.Module.Evaluations.Management.Infrastructure.Repositories;
-using Infrastructure.IntegrationTests.Fixtures;
+using CascVel.Modules.Evaluations.Management.Application.Interfaces;
+using CascVel.Modules.Evaluations.Management.Domain.Entities.Criteria;
+using CascVel.Modules.Evaluations.Management.Domain.Entities.Forms;
+using CascVel.Modules.Evaluations.Management.Domain.Entities.Forms.Calculation;
+using CascVel.Modules.Evaluations.Management.Domain.Entities.Forms.ValueObjects;
+using CascVel.Modules.Evaluations.Management.Infrastructure.Context;
+using CascVel.Modules.Evaluations.Management.Infrastructure.IntegrationTests.Fixtures;
+using CascVel.Modules.Evaluations.Management.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
-namespace CascVel.Module.Evaluations.Management.Infrastructure.IntegrationTests.Repositories.EvaluationForms;
+namespace CascVel.Modules.Evaluations.Management.Infrastructure.IntegrationTests.Repositories.EvaluationForms;
 
 /// <summary>
 /// Integration tests for EvaluationFormRepository using real PostgreSQL via Testcontainers and EF Core migrations.
@@ -40,7 +40,7 @@ public sealed class EvaluationFormRepositoryTests
         await using var scope = _fx.Services.CreateAsyncScope();
         var factory = scope.ServiceProvider.GetRequiredService<IDbContextFactory<DatabaseContext>>();
         var logger = scope.ServiceProvider.GetRequiredService<ILogger<EvaluationFormRepository>>();
-        IEvaluationFormRepository repo = new EvaluationFormRepository(factory, logger);
+        var repo = new EvaluationFormRepository(factory, logger);
         var now = DateTime.UtcNow;
         var form = new EvaluationForm
         {
@@ -251,12 +251,12 @@ public sealed class EvaluationFormRepositoryTests
         };
         group.AddCriteria([
             new FormCriterion
-                { Id = 0, Criterion = inside, Order = new OrderIndex { Value = 3 }, Weight = new Weight(7500) }
+                { Id = 0, Criterion = inside, Order = new OrderIndex { Value = 3 }, Weight = new Weight(7500) },
         ]);
         form.AddGroups([group]);
         form.AddCriteria([
             new FormCriterion
-                { Id = 0, Criterion = top, Order = new OrderIndex { Value = 2 }, Weight = new Weight(1200) }
+                { Id = 0, Criterion = top, Order = new OrderIndex { Value = 2 }, Weight = new Weight(1200) },
         ]);
         return form;
     }
@@ -296,7 +296,7 @@ public sealed class EvaluationFormRepositoryTests
             Weight = null,
         };
         childGroup.AddCriteria([
-            new FormCriterion { Id = 0, Criterion = inside, Order = new OrderIndex { Value = 0 }, Weight = null }
+            new FormCriterion { Id = 0, Criterion = inside, Order = new OrderIndex { Value = 0 }, Weight = null },
         ]);
         rootGroup.AddChilds([childGroup]);
         form.AddGroups([rootGroup]);

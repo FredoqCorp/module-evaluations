@@ -2,7 +2,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace CascVel.Module.Evaluations.Management.Infrastructure.Migrations
+namespace CascVel.Modules.Evaluations.Management.Infrastructure.Migrations
 {
     /// <inheritdoc />
     public partial class AddIndexes : Migration
@@ -10,7 +10,7 @@ namespace CascVel.Module.Evaluations.Management.Infrastructure.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-             // evaluation_forms: index on status (from Lifecycle.Status)
+            // evaluation_forms: index on status (from Lifecycle.Status)
             migrationBuilder.CreateIndex(
                 name: "ix_evalform_status",
                 table: "evaluation_forms",

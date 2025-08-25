@@ -1,4 +1,4 @@
-﻿<Solution>
+<Solution>
   <Folder Name="/deployments/">
     <File Path=".github\workflows\ci.yml" />
   </Folder>
@@ -9,16 +9,21 @@
     <File Path=".gitignore" />
   </Folder>
   <Folder Name="/src/" />
-  <Folder Name="/src/management/">
-    <Project Path="src\management\Application\Application.csproj" Type="Classic C#" />
-    <Project Path="src\management\Domain\Domain.csproj" Type="Classic C#" />
-    <Project Path="src\management\Host\Host.csproj" Type="Classic C#" />
-    <Project Path="src\management\Infrastructure\Infrastructure.csproj" Type="Classic C#" />
+  <Folder Name="/src/contracts/">
+    <Project Path="src/contracts/DataContracts/DataContracts.csproj" />
   </Folder>
-  <Folder Name="/tests/" />
+  <Folder Name="/src/management/">
+    <Project Path="src\management\Application\Application.csproj" />
+    <Project Path="src\management\Domain\Domain.csproj" />
+    <Project Path="src\management\Host\Host.csproj" />
+    <Project Path="src\management\Infrastructure\Infrastructure.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <File Path=".editorconfig" />
+  </Folder>
   <Folder Name="/tests/management/">
-    <Project Path="tests\management\Domain.UnitTests\Domain.UnitTests.csproj" Type="Classic C#" />
-    <Project Path="tests\management\Host.Tests\Host.Tests.csproj" Type="Classic C#" />
-    <Project Path="tests\management\Infrastructure.IntegrationTests\Infrastructure.IntegrationTests.csproj" Type="Classic C#" />
+    <Project Path="tests\management\Domain.UnitTests\Domain.UnitTests.csproj" />
+    <Project Path="tests\management\Host.Tests\Host.Tests.csproj" />
+    <Project Path="tests\management\Infrastructure.IntegrationTests\Infrastructure.IntegrationTests.csproj" />
   </Folder>
 </Solution>

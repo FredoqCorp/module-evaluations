@@ -1,7 +1,7 @@
-using CascVel.Module.Evaluations.Management.Domain.Entities.Forms;
+using CascVel.Modules.Evaluations.Management.Domain.Entities.Forms;
 using Microsoft.EntityFrameworkCore;
 
-namespace CascVel.Module.Evaluations.Management.Infrastructure.Repositories;
+namespace CascVel.Modules.Evaluations.Management.Infrastructure.Repositories;
 
 /// <summary>
 /// Query helpers for EvaluationForm repository

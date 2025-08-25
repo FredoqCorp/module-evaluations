@@ -1,6 +1,6 @@
-namespace CascVel.Module.Evaluations.Management.Domain.Entities.Runs;
+using CascVel.Modules.Evaluations.Management.Domain.Enums.Runs;
 
-using CascVel.Module.Evaluations.Management.Domain.Enums.Runs;
+namespace CascVel.Modules.Evaluations.Management.Domain.Entities.Runs;
 
 /// <summary>
 /// Tracking of viewing and agreement/disagreement by the evaluated subject.

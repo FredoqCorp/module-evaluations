@@ -1,9 +1,9 @@
-using CascVel.Module.Evaluations.Management.Domain.Entities.Criteria;
-using CascVel.Module.Evaluations.Management.Domain.Entities.Forms;
-using CascVel.Module.Evaluations.Management.Domain.Entities.Runs;
+using CascVel.Modules.Evaluations.Management.Domain.Entities.Criteria;
+using CascVel.Modules.Evaluations.Management.Domain.Entities.Forms;
+using CascVel.Modules.Evaluations.Management.Domain.Entities.Runs;
 using Microsoft.EntityFrameworkCore;
 
-namespace CascVel.Module.Evaluations.Management.Infrastructure.Context;
+namespace CascVel.Modules.Evaluations.Management.Infrastructure.Context;
 
 /// <summary>
 /// EF Core database context for Evaluations module.
@@ -13,22 +13,22 @@ public sealed class DatabaseContext : DbContext
     /// <summary>
     /// Criteria
     /// </summary>
-    internal DbSet<Criterion> Criteria { get; set; }
+    public DbSet<Criterion> Criteria { get; init; } = null!;
 
     /// <summary>
     /// Form evaluation runs
     /// </summary>
-    internal DbSet<FormRun> FormRuns { get; set; }
+    public DbSet<FormRun> FormRuns { get; init; } = null!;
 
     /// <summary>
     /// Evaluation forms
     /// </summary>
-    internal DbSet<EvaluationForm> EvaluationForms { get; set; }
+    public DbSet<EvaluationForm> EvaluationForms { get; init; } = null!;
 
     /// <summary>
     /// Evaluation form groups
     /// </summary>
-    internal DbSet<FormGroup> FormGroups { get; set; }
+    public DbSet<FormGroup> FormGroups { get; init; } = null!;
 
     /// <summary>
     /// Initializes the context with options.
@@ -40,20 +40,19 @@ public sealed class DatabaseContext : DbContext
     /// <inheritdoc />
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        // Use dedicated schema for this module
+        ArgumentNullException.ThrowIfNull(modelBuilder);
+
         modelBuilder.HasDefaultSchema("evaluations");
-
-        // Apply entity configurations from this assembly
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(DatabaseContext).Assembly);
-
         base.OnModelCreating(modelBuilder);
     }
 
     /// <inheritdoc />
     protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
     {
-        configurationBuilder.Properties<decimal>().HavePrecision(10, 2);
+        ArgumentNullException.ThrowIfNull(configurationBuilder);
 
+        configurationBuilder.Properties<decimal>().HavePrecision(10, 2);
         base.ConfigureConventions(configurationBuilder);
     }
 }

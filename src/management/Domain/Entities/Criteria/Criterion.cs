@@ -1,4 +1,4 @@
-namespace CascVel.Module.Evaluations.Management.Domain.Entities.Criteria;
+namespace CascVel.Modules.Evaluations.Management.Domain.Entities.Criteria;
 
 /// <summary>
 /// Criterion is a question used to evaluate a fact and choose a score via predefined options.
@@ -18,7 +18,7 @@ public sealed class Criterion
     /// <summary>
     /// Available options to choose a score from.
     /// </summary>
-    public required IReadOnlyList<Option> Options { get; init; }
+    public required IReadOnlyList<Choise> Options { get; init; }
 
     /// <summary>
     /// Optional automation description. When provided, selection is determined automatically.

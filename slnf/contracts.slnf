@@ -1,0 +1,8 @@
+{
+  "solution": {
+    "path": "../module-evaluations.slnx",
+    "projects": [
+      "src/contracts/DataContracts/DataContracts.csproj"
+    ]
+  }
+}
