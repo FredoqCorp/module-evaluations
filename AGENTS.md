@@ -60,7 +60,6 @@
 * Every method and function must have a supplementary docblock preceding it.
 * Docblocks must be written in English only, using UTF-8 encoding.
 
-* Method bodies may not contain blank lines.
 * Method and function bodies may not contain comments.
 * Variable names must be single nouns, never compound or composite.
 * Method names must be single verbs, never compound or composite.

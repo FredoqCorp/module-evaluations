@@ -27,7 +27,7 @@ public sealed record BpsOfPercent
     {
         if (_percent is < 0m or > 100m)
         {
-            throw new InvalidDataException("Weight percent must be between 0..100%.");
+            throw new InvalidDataException("Percent must be in 0..100 range");
         }
 
         decimal bps = decimal.Round(_percent * 100m, 0, _policy);

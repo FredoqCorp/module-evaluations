@@ -19,12 +19,4 @@ public sealed record Choice
     /// Optional annotation/notes for the option.
     /// </summary>
     public string? Annotation { get; init; }
-
-    /// <summary>
-    /// Optional boundary for automatic selection.
-    /// For Goal=Minimize: value ≤ Threshold selects this option.
-    /// For Goal=Maximize: value ≥ Threshold selects this option.
-    /// The fallback option should have no threshold.
-    /// </summary>
-    public decimal? Threshold { get; init; }
 }
