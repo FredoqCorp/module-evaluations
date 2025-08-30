@@ -1,3 +1,5 @@
+using CascVel.Modules.Evaluations.Management.Domain.Entities.Runs.ValueObjects;
+
 namespace CascVel.Modules.Evaluations.Management.Domain.Entities.Runs;
 
 /// <summary>

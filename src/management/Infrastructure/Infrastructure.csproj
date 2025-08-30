@@ -16,6 +16,7 @@
       <ProjectReference Include="../Domain/Domain.csproj" />
     </ItemGroup>
     <ItemGroup>
+      <Folder Include="Configurations/" />
       <Folder Include="Migrations/scripts/" />
     </ItemGroup>
 

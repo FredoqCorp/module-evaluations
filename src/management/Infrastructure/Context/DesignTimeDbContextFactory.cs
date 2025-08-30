@@ -1,6 +1,4 @@
-using CascVel.Modules.Evaluations.Management.Domain.Entities.Criteria;
-using CascVel.Modules.Evaluations.Management.Domain.Entities.Forms;
-using CascVel.Modules.Evaluations.Management.Domain.Entities.Forms.Calculation;
+using CascVel.Modules.Evaluations.Management.Domain.Entities.Forms.Enums;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using Npgsql;
@@ -28,7 +26,6 @@ public sealed class DesignTimeDbContextFactory : IDesignTimeDbContextFactory<Dat
         var dataSourceBuilder = new NpgsqlDataSourceBuilder(connectionString);
         dataSourceBuilder.EnableDynamicJson();
         dataSourceBuilder.MapEnum<FormStatus>("evaluations.form_status");
-        dataSourceBuilder.MapEnum<OptimizationGoal>("evaluations.optimization_goal");
         dataSourceBuilder.MapEnum<FormCalculationKind>("evaluations.form_calculation_kind");
         var dataSource = dataSourceBuilder.Build();
 
@@ -38,7 +35,6 @@ public sealed class DesignTimeDbContextFactory : IDesignTimeDbContextFactory<Dat
                 // Ensure EF migrations history is stored in the same module schema
                 npgsql.MigrationsHistoryTable("__EFMigrationsHistory", "evaluations");
                 npgsql.MapEnum<FormStatus>("form_status", "evaluations");
-                npgsql.MapEnum<OptimizationGoal>("optimization_goal", "evaluations");
                 npgsql.MapEnum<FormCalculationKind>("form_calculation_kind", "evaluations");
             });
 
