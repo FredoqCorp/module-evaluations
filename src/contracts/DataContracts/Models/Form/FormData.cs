@@ -17,7 +17,7 @@ public sealed record FormData(
     [Required][MaxLength(365)] string Title,
     [MaxLength(365)] string? Description,
     [Required][MaxLength(72)][MinLength(3)] string Code,
-    [DataType(DataType.DateTime)] DateTime? ValidFrom,
+    [DataType(DataType.DateTime)] DateTime ValidFrom,
     [DataType(DataType.DateTime)] DateTime? ValidUntil,
     [Required][EnumDataType(typeof(CalculationRule))] CalculationRule CalculationRule,
     IReadOnlyList<string> FormKeywords
