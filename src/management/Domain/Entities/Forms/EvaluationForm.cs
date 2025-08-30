@@ -1,5 +1,6 @@
 using CascVel.Modules.Evaluations.Management.Domain.Entities.Forms.Enums;
 using CascVel.Modules.Evaluations.Management.Domain.Entities.Forms.ValueObjects;
+using CascVel.Modules.Evaluations.Management.Domain.Identifiers;
 
 namespace CascVel.Modules.Evaluations.Management.Domain.Entities.Forms;
 
@@ -12,7 +13,7 @@ public sealed class EvaluationForm
     /// <summary>
     /// Unique identifier.
     /// </summary>
-    public long Id { get; init; }
+    public FormId Id { get; init; }
 
     /// <summary>
     /// Human-facing meta: name, description and tags.

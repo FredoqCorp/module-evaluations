@@ -1,4 +1,5 @@
 using CascVel.Modules.Evaluations.Management.Domain.Entities.Runs.ValueObjects;
+using CascVel.Modules.Evaluations.Management.Domain.Identifiers;
 
 namespace CascVel.Modules.Evaluations.Management.Domain.Entities.Runs;
 
@@ -10,7 +11,7 @@ public sealed class FormRun
     /// <summary>
     /// Run identifier.
     /// </summary>
-    public long Id { get; init; }
+    public RunId Id { get; init; }
 
     /// <summary>
     /// Run metadata (form, subject, comment).

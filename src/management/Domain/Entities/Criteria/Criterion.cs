@@ -1,4 +1,5 @@
 using CascVel.Modules.Evaluations.Management.Domain.Entities.Criteria.ValueObjects;
+using CascVel.Modules.Evaluations.Management.Domain.Identifiers;
 
 namespace CascVel.Modules.Evaluations.Management.Domain.Entities.Criteria;
 
@@ -10,7 +11,7 @@ public sealed class Criterion
     /// <summary>
     /// Unique identifier.
     /// </summary>
-    public long Id { get; init; }
+    public CriterionId Id { get; init; }
 
     /// <summary>
     /// Textual content (title + description).

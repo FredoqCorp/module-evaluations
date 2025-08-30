@@ -1,3 +1,5 @@
+using CascVel.Modules.Evaluations.Management.Domain.Identifiers;
+
 namespace CascVel.Modules.Evaluations.Management.Domain.Entities.Runs.ValueObjects;
 
 /// <summary>
@@ -8,7 +10,7 @@ public sealed record RunFormRef
     /// <summary>
     /// Form identifier.
     /// </summary>
-    public required long FormId { get; init; }
+    public required FormId FormId { get; init; }
 
     /// <summary>
     /// Immutable form code captured at launch time (for stable references in external systems).

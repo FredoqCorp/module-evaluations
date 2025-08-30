@@ -1,3 +1,5 @@
+using CascVel.Modules.Evaluations.Management.Domain.Identifiers;
+
 namespace CascVel.Modules.Evaluations.Management.Domain.Entities.Runs.ValueObjects;
 
 /// <summary>
@@ -8,7 +10,7 @@ public sealed record RunCriterionScore
     /// <summary>
     /// Criterion identifier.
     /// </summary>
-    public required long CriterionId { get; init; }
+    public required CriterionId CriterionId { get; init; }
 
     /// <summary>
     /// Whether the criterion is skipped (excluded from calculation).
