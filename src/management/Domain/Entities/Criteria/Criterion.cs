@@ -4,22 +4,31 @@ using CascVel.Modules.Evaluations.Management.Domain.Interfaces;
 namespace CascVel.Modules.Evaluations.Management.Domain.Entities.Criteria;
 
 /// <summary>
-/// Criterion is a question used to evaluate a fact and choose a score via predefined options.
+/// Domain layer entity representing a single evaluation criterion with identity, text and selectable options.
 /// </summary>
-public sealed class Criterion
+public sealed class Criterion(IId id, ICriterionText text, IReadOnlyList<IChoice> options) : ICriterion
 {
-    /// <summary>
-    /// Unique identifier.
-    /// </summary>
-    public required IId Id { get; init; }
+    private readonly IId _id = id;
+    private readonly ICriterionText _text = text;
+    private readonly IReadOnlyList<IChoice> _options = options;
 
     /// <summary>
-    /// Textual content (title + description).
+    /// Returns the unique identifier of this criterion.
     /// </summary>
-    public required CriterionText Text { get; init; }
+    public IId Id() => _id;
 
     /// <summary>
-    /// Available options to choose a score from.
+    /// Returns the human readable title string.
     /// </summary>
-    public required IReadOnlyList<IChoice> Options { get; init; }
+    public string Title() => _text.Title();
+
+    /// <summary>
+    /// Returns the detailed description string.
+    /// </summary>
+    public string Description() => _text.Description();
+
+    /// <summary>
+    /// Returns the list of available options for scoring.
+    /// </summary>
+    public IReadOnlyList<IChoice> Options() => _options;
 }

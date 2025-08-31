@@ -1,17 +1,22 @@
 namespace CascVel.Modules.Evaluations.Management.Domain.Entities.Criteria.ValueObjects;
 
+using CascVel.Modules.Evaluations.Management.Domain.Interfaces;
+
 /// <summary>
-/// Text content of a criterion: title and detailed description.
+/// Domain layer value object that encapsulates a criterion title and description as immutable text.
 /// </summary>
-public sealed record CriterionText
+public sealed record CriterionText(string name, string text) : ICriterionText
 {
-    /// <summary>
-    /// Human-readable title.
-    /// </summary>
-    public required CriterionTitle Title { get; init; }
+    private readonly string _title = name;
+    private readonly string _description = text;
 
     /// <summary>
-    /// Detailed description of the criterion intent.
+    /// Returns the human readable title string.
     /// </summary>
-    public required CriterionDescription Description { get; init; }
+    public string Title() => _title;
+
+    /// <summary>
+    /// Returns the detailed description string.
+    /// </summary>
+    public string Description() => _description;
 }
