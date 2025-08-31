@@ -1,25 +1,42 @@
-using CascVel.Modules.Evaluations.Management.Domain.Entities.Runs.ValueObjects;
 using CascVel.Modules.Evaluations.Management.Domain.Identifiers;
+using CascVel.Modules.Evaluations.Management.Domain.Interfaces;
+using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Runs;
 
 namespace CascVel.Modules.Evaluations.Management.Domain.Entities.Runs;
 
 /// <summary>
 /// Aggregate representing a form evaluation run.
 /// </summary>
-public sealed class FormRun
+public sealed class FormRun : IFormRun
 {
-    /// <summary>
-    /// Run identifier.
-    /// </summary>
-    public required Uuid Id { get; init; }
+    private readonly Uuid _id;
+    private readonly IRunMeta _meta;
+    private readonly IRunState _state;
 
     /// <summary>
-    /// Run metadata (form, subject, comment).
+    /// Creates a form run aggregate with identifier, metadata and state.
     /// </summary>
-    public required RunMeta Meta { get; init; }
+    public FormRun(Uuid id, IRunMeta meta, IRunState state)
+    {
+        ArgumentNullException.ThrowIfNull(meta);
+        ArgumentNullException.ThrowIfNull(state);
+        _id = id;
+        _meta = meta;
+        _state = state;
+    }
 
     /// <summary>
-    /// Run state: lifecycle, context, results and agreement.
+    /// Returns the run identifier of this form run aggregate.
     /// </summary>
-    public required RunState State { get; init; }
+    public IId Id() => _id;
+
+    /// <summary>
+    /// Returns the run metadata of this form run aggregate.
+    /// </summary>
+    public IRunMeta Meta() => _meta;
+
+    /// <summary>
+    /// Returns the run state of this form run aggregate.
+    /// </summary>
+    public IRunState State() => _state;
 }
