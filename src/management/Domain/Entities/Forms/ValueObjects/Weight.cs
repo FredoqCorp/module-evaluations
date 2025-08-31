@@ -20,10 +20,24 @@ public sealed record Weight : IWeight
     /// <summary>
     /// Returns the weight value as a percentage.
     /// </summary>
-    public decimal Percent() => _bps / 100m;
+    public decimal Percent()
+    {
+        if (_bps > 10_000)
+        {
+            throw new InvalidDataException("Weight must be less than or equal to one hundred percent");
+        }
+        return _bps / 100m;
+    }
 
     /// <summary>
     /// Returns the weight value in basis points.
     /// </summary>
-    public ushort Bps() => _bps;
+    public ushort Bps()
+    {
+        if (_bps > 10_000)
+        {
+            throw new InvalidDataException("Weight basis points must be less than or equal to ten thousand");
+        }
+        return _bps;
+    }
 }

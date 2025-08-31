@@ -23,6 +23,10 @@ public sealed record FormCode : IFormCode
     /// </summary>
     public string Code()
     {
+        if (string.IsNullOrWhiteSpace(_value))
+        {
+            throw new InvalidDataException("Code must not be empty");
+        }
         return _value;
     }
 

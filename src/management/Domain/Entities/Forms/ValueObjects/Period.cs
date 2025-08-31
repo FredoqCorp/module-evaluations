@@ -24,6 +24,10 @@ public sealed record Period : IPeriod
     /// </summary>
     public DateTime Start()
     {
+        if (_end.HasValue && _end.Value < _start)
+        {
+            throw new InvalidDataException("Period finish must be greater than or equal to start");
+        }
         return _start;
     }
 
@@ -32,6 +36,10 @@ public sealed record Period : IPeriod
     /// </summary>
     public DateTime Finish()
     {
+        if (_end.HasValue && _end.Value < _start)
+        {
+            throw new InvalidDataException("Period finish must be greater than or equal to start");
+        }
         return _end ?? DateTime.MaxValue;
     }
 }

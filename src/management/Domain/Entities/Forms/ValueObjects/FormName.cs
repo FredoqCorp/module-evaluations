@@ -23,6 +23,10 @@ public sealed record FormName : IFormName
     /// </summary>
     public string Name()
     {
+        if (string.IsNullOrWhiteSpace(_value))
+        {
+            throw new InvalidDataException("Name must not be empty");
+        }
         return _value;
     }
 
