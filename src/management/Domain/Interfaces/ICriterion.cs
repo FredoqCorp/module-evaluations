@@ -1,5 +1,7 @@
 namespace CascVel.Modules.Evaluations.Management.Domain.Interfaces;
 
+using System.Collections.Immutable;
+
 /// <summary>
 /// Contract for a domain criterion exposing identity, text parts and available options.
 /// </summary>
@@ -18,6 +20,5 @@ public interface ICriterion
     /// <summary>
     /// Returns the list of available options for scoring.
     /// </summary>
-    IReadOnlyList<IChoice> Options();
+    IImmutableList<IChoice> Options();
 }
-

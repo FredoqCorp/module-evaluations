@@ -1,17 +1,33 @@
 namespace CascVel.Modules.Evaluations.Management.Domain.Entities.Forms.ValueObjects;
 
+using CascVel.Modules.Evaluations.Management.Domain.Interfaces;
+
 /// <summary>
-/// Name/title of a form.
+/// Name/title of a form as an immutable value object.
 /// </summary>
-public sealed record FormName
+public sealed record FormName : IFormName
 {
-    /// <summary>
-    /// Raw string value of the name.
-    /// </summary>
-    public required string Value { get; init; }
+    private readonly string _value;
 
     /// <summary>
-    /// Returns the raw name.
+    /// Creates a form name with a non-null raw string.
     /// </summary>
-    public override string ToString() => Value;
+    public FormName(string value)
+    {
+        ArgumentNullException.ThrowIfNull(value);
+        _value = value;
+    }
+
+    /// <summary>
+    /// Returns the raw name string.
+    /// </summary>
+    public string Name()
+    {
+        return _value;
+    }
+
+    /// <summary>
+    /// Returns the raw name string representation.
+    /// </summary>
+    public override string ToString() => _value;
 }

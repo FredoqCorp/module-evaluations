@@ -1,12 +1,32 @@
 namespace CascVel.Modules.Evaluations.Management.Domain.Entities.Forms.ValueObjects;
 
+using CascVel.Modules.Evaluations.Management.Domain.Interfaces;
+
 /// <summary>
-/// Display order index within a collection. Must be non-negative and unique in scope.
+/// Display order index within a collection as an immutable value object.
 /// </summary>
-public sealed record OrderIndex
+public sealed record OrderIndex : IOrderIndex
 {
+    private readonly int _value;
+
     /// <summary>
-    /// Zero-based order value.
+    /// Creates a display order index with a raw integer value.
     /// </summary>
-    public required int Value { get; init; }
+    public OrderIndex(int value)
+    {
+        _value = value;
+    }
+
+    /// <summary>
+    /// Returns the zero-based order value and fails fast when negative.
+    /// </summary>
+    public int Value()
+    {
+        if (_value < 0)
+        {
+            throw new InvalidDataException("Order index must not be negative");
+        }
+
+        return _value;
+    }
 }

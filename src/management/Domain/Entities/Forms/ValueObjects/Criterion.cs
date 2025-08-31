@@ -1,4 +1,5 @@
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces;
+using System.Collections.Immutable;
 
 namespace CascVel.Modules.Evaluations.Management.Domain.Entities.Forms.ValueObjects;
 
@@ -8,14 +9,14 @@ namespace CascVel.Modules.Evaluations.Management.Domain.Entities.Forms.ValueObje
 public sealed record Criterion : ICriterion
 {
     private readonly ICriterionText _text;
-    private readonly IReadOnlyList<IChoice> _options;
+    private readonly IImmutableList<IChoice> _options;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="Criterion"/> record with the specified criterion text and options.
     /// </summary>
     /// <param name="text">The criterion text value object.</param>
     /// <param name="options">The list of selectable options for this criterion.</param>
-    public Criterion(ICriterionText text, IReadOnlyList<IChoice> options)
+    public Criterion(ICriterionText text, IImmutableList<IChoice> options)
     {
         ArgumentNullException.ThrowIfNull(text);
         ArgumentNullException.ThrowIfNull(options);
@@ -41,11 +42,10 @@ public sealed record Criterion : ICriterion
     }
 
     /// <summary>
-    /// Returns the list of available options for scoring as a read-only snapshot and fails fast when invalid.
+    /// Returns the list of available options for scoring.
     /// </summary>
-    public IReadOnlyList<IChoice> Options()
+    public IImmutableList<IChoice> Options()
     {
-        IChoice[] snapshot = [.. _options];
-        return Array.AsReadOnly(snapshot);
+        return _options;
     }
 }

@@ -1,22 +1,50 @@
 namespace CascVel.Modules.Evaluations.Management.Domain.Entities.Forms.ValueObjects;
 
+using CascVel.Modules.Evaluations.Management.Domain.Interfaces;
+
 /// <summary>
 /// Criterion positioned within a form or a group, with order and optional weight.
 /// </summary>
-public sealed record FormCriterion
+public sealed record FormCriterion : IFormCriterion
 {
-    /// <summary>
-    /// Domain criterion.
-    /// </summary>
-    public required Criterion Criterion { get; init; }
+    private readonly Criterion _criterion;
+    private readonly IOrderIndex _order;
+    private readonly IWeight? _weight;
 
     /// <summary>
-    /// Display order within its container (form or group).
+    /// Creates a positioned criterion with order and optional weight.
     /// </summary>
-    public required OrderIndex Order { get; init; }
+    public FormCriterion(Criterion criterion, IOrderIndex order, IWeight? weight)
+    {
+        ArgumentNullException.ThrowIfNull(criterion);
+        ArgumentNullException.ThrowIfNull(order);
+
+        _criterion = criterion;
+        _order = order;
+        _weight = weight;
+    }
 
     /// <summary>
-    /// Optional weight when WeightedMean is used.
+    /// Returns the domain criterion value object.
     /// </summary>
-    public Weight? Weight { get; init; }
+    public Criterion Criterion()
+    {
+        return _criterion;
+    }
+
+    /// <summary>
+    /// Returns the display order index.
+    /// </summary>
+    public IOrderIndex Order()
+    {
+        return _order;
+    }
+
+    /// <summary>
+    /// Returns the optional weight when used.
+    /// </summary>
+    public IWeight? Weight()
+    {
+        return _weight;
+    }
 }

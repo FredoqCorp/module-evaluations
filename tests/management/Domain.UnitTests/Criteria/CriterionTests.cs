@@ -17,7 +17,7 @@ public sealed class CriterionTests
     {
         var title = "тест-✓-タイトル-🚀-" + Guid.NewGuid();
         var description = "описание-✓-説明-🧪-" + Guid.NewGuid();
-        var criterion = new Criterion(new CriterionText(title, description), []);
+        var criterion = new Criterion(new CriterionText(title, description), System.Collections.Immutable.ImmutableList<IChoice>.Empty);
 
         criterion.Title().ShouldBe(title, "title value returned is not equal to input");
     }
@@ -30,7 +30,7 @@ public sealed class CriterionTests
     {
         var title = "заголовок-✓-見出し-🛰️-" + Guid.NewGuid();
         var description = "описание-✓-説明-🧫-" + Guid.NewGuid();
-        var criterion = new Criterion(new CriterionText(title, description), []);
+        var criterion = new Criterion(new CriterionText(title, description), System.Collections.Immutable.ImmutableList<IChoice>.Empty);
 
         criterion.Description().ShouldBe(description, "description value returned is not equal to input");
     }
@@ -42,13 +42,13 @@ public sealed class CriterionTests
     public void It_returns_the_same_options_count()
     {
         var count = System.Security.Cryptography.RandomNumberGenerator.GetInt32(1, 5);
-        var opts = new List<IChoice>();
+        var builder = System.Collections.Immutable.ImmutableList.CreateBuilder<IChoice>();
         for (var i = 0; i < count; i++)
         {
-            opts.Add(new Choice((ushort)System.Security.Cryptography.RandomNumberGenerator.GetInt32(0, ushort.MaxValue + 1)));
+            builder.Add(new Choice((ushort)System.Security.Cryptography.RandomNumberGenerator.GetInt32(0, ushort.MaxValue + 1)));
         }
 
-        var criterion = new Criterion(new CriterionText("титул-✓-标题-🚀-" + Guid.NewGuid(), "описание-✓-説明-🧪-" + Guid.NewGuid()), opts);
+        var criterion = new Criterion(new CriterionText("титул-✓-标题-🚀-" + Guid.NewGuid(), "описание-✓-説明-🧪-" + Guid.NewGuid()), builder.ToImmutable());
 
         criterion.Options().Count.ShouldBe(count, "options count returned is not equal to input size");
     }

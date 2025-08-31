@@ -1,6 +1,7 @@
 using CascVel.Modules.Evaluations.Management.Domain.Entities.Forms.Enums;
 using CascVel.Modules.Evaluations.Management.Domain.Entities.Forms.ValueObjects;
 using CascVel.Modules.Evaluations.Management.Domain.Identifiers;
+using System.Collections.Immutable;
 
 namespace CascVel.Modules.Evaluations.Management.Domain.Entities.Forms;
 
@@ -33,10 +34,10 @@ public sealed class EvaluationForm
     /// <summary>
     /// Ordered groups of criteria.
     /// </summary>
-    public required IReadOnlyList<FormGroup> Groups { get; init; }
+    public required IImmutableList<FormGroup> Groups { get; init; }
 
     /// <summary>
     /// Criteria outside of any group
     /// </summary>
-    public required IReadOnlyList<FormCriterion> Criteria { get; init; }
+    public required IImmutableList<FormCriterion> Criteria { get; init; }
 }

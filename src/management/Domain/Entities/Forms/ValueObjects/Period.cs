@@ -1,17 +1,35 @@
 namespace CascVel.Modules.Evaluations.Management.Domain.Entities.Forms.ValueObjects;
 
 /// <summary>
-/// Period of validity. Start is required; End is optional (open-ended period when null).
+/// Period of validity as an immutable value object. Start is required; End is optional.
 /// </summary>
 public sealed record Period
 {
-    /// <summary>
-    /// Inclusive start of the period.
-    /// </summary>
-    public required DateTime Start { get; init; }
+    private readonly DateTime _start;
+    private readonly DateTime? _end;
 
     /// <summary>
-    /// Inclusive end of the period, if any. When null, the period is open-ended.
+    /// Creates a period with inclusive start and optional inclusive end.
     /// </summary>
-    public DateTime? End { get; init; }
+    public Period(DateTime start, DateTime? end)
+    {
+        _start = start;
+        _end = end;
+    }
+
+    /// <summary>
+    /// Returns the inclusive start of the period.
+    /// </summary>
+    public DateTime Start()
+    {
+        return _start;
+    }
+
+    /// <summary>
+    /// Returns the inclusive end of the period when present.
+    /// </summary>
+    public DateTime? End()
+    {
+        return _end;
+    }
 }

@@ -1,32 +1,74 @@
 namespace CascVel.Modules.Evaluations.Management.Domain.Entities.Forms.ValueObjects;
 
+using CascVel.Modules.Evaluations.Management.Domain.Interfaces;
+using System.Collections.Immutable;
+
 /// <summary>
-/// A group of criteria within a form. Carries a title, order, optional weight and ordered criteria references.
+/// A group of criteria within a form with title, order, optional weight and ordered references.
 /// </summary>
-public sealed record FormGroup
+public sealed record FormGroup : IFormGroup
 {
-    /// <summary>
-    /// Human-friendly title of the group.
-    /// </summary>
-    public required string Title { get; init; }
+    private readonly string _title;
+    private readonly IOrderIndex _order;
+    private readonly IWeight? _weight;
+    private readonly IImmutableList<FormCriterion> _criteria;
+    private readonly IImmutableList<FormGroup> _groups;
 
     /// <summary>
-    /// Display order of the group in the form.
+    /// Creates a form group with title, order, optional weight, criteria and nested groups.
     /// </summary>
-    public required OrderIndex Order { get; init; }
+    public FormGroup(string title, IOrderIndex order, IWeight? weight, IImmutableList<FormCriterion> criteria, IImmutableList<FormGroup> groups)
+    {
+        ArgumentNullException.ThrowIfNull(title);
+        ArgumentNullException.ThrowIfNull(order);
+        ArgumentNullException.ThrowIfNull(criteria);
+        ArgumentNullException.ThrowIfNull(groups);
+
+        _title = title;
+        _order = order;
+        _weight = weight;
+
+        _criteria = criteria;
+        _groups = groups;
+    }
 
     /// <summary>
-    /// Optional weight of the group when WeightedMean is used.
+    /// Returns the human-friendly title of the group.
     /// </summary>
-    public Weight? Weight { get; init; }
+    public string Title()
+    {
+        return _title;
+    }
 
     /// <summary>
-    /// Criteria inside the group, ordered.
+    /// Returns the display order of the group in the form.
     /// </summary>
-    public required IReadOnlyList<FormCriterion> Criteria { get; init; }
+    public IOrderIndex Order()
+    {
+        return _order;
+    }
 
     /// <summary>
-    /// Nested groups inside this group
+    /// Returns the optional weight of the group when used.
     /// </summary>
-    public required IReadOnlyList<FormGroup> Groups { get; init; }
+    public IWeight? Weight()
+    {
+        return _weight;
+    }
+
+    /// <summary>
+    /// Returns the ordered criteria inside the group.
+    /// </summary>
+    public IImmutableList<FormCriterion> Criteria()
+    {
+        return _criteria;
+    }
+
+    /// <summary>
+    /// Returns the nested groups inside this group.
+    /// </summary>
+    public IImmutableList<FormGroup> Groups()
+    {
+        return _groups;
+    }
 }
