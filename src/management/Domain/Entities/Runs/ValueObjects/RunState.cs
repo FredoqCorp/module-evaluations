@@ -10,16 +10,17 @@ public sealed record RunState : IRunState
     private readonly IRunLifecycle _lifecycle;
     private readonly IRunContext _context;
     private readonly IRunResult _result;
-    private readonly IRunAgreementTrail? _agreement;
+    private readonly IRunAgreementTrail _agreement;
 
     /// <summary>
     /// Creates a run state snapshot.
     /// </summary>
-    public RunState(IRunLifecycle lifecycle, IRunContext context, IRunResult result, IRunAgreementTrail? agreement)
+    public RunState(IRunLifecycle lifecycle, IRunContext context, IRunResult result, IRunAgreementTrail agreement)
     {
         ArgumentNullException.ThrowIfNull(lifecycle);
         ArgumentNullException.ThrowIfNull(context);
         ArgumentNullException.ThrowIfNull(result);
+        ArgumentNullException.ThrowIfNull(agreement);
         _lifecycle = lifecycle;
         _context = context;
         _result = result;
@@ -42,7 +43,7 @@ public sealed record RunState : IRunState
     public IRunResult Result() => _result;
 
     /// <summary>
-    /// Returns the agreement trail when present.
+    /// Returns the agreement trail.
     /// </summary>
-    public IRunAgreementTrail? Agreement() => _agreement;
+    public IRunAgreementTrail Agreement() => _agreement;
 }

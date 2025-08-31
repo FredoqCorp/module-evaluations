@@ -9,9 +9,9 @@ using CascVel.Modules.Evaluations.Management.Domain.Entities.Runs.ValueObjects;
 public interface IRunResult
 {
     /// <summary>
-    /// Returns the current calculated total score when present.
+    /// Returns the current calculated total score.
     /// </summary>
-    decimal? CurrentTotal();
+    decimal CurrentTotal();
 
     /// <summary>
     /// Returns the per-criterion scores.

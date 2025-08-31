@@ -8,15 +8,17 @@ using CascVel.Modules.Evaluations.Management.Domain.Interfaces;
 public sealed record AuditTrail : IAuditTrail
 {
     private readonly IStamp _created;
-    private readonly IStamp? _updated;
-    private readonly IStamp? _stateChanged;
+    private readonly IStamp _updated;
+    private readonly IStamp _stateChanged;
 
     /// <summary>
-    /// Creates an audit trail with a mandatory creation stamp and optional update and state change stamps.
+    /// Creates an audit trail with a mandatory creation stamp and update and state change stamps.
     /// </summary>
-    public AuditTrail(IStamp created, IStamp? updated, IStamp? stateChanged)
+    public AuditTrail(IStamp created, IStamp updated, IStamp stateChanged)
     {
         ArgumentNullException.ThrowIfNull(created);
+        ArgumentNullException.ThrowIfNull(updated);
+        ArgumentNullException.ThrowIfNull(stateChanged);
         _created = created;
         _updated = updated;
         _stateChanged = stateChanged;
@@ -31,17 +33,17 @@ public sealed record AuditTrail : IAuditTrail
     }
 
     /// <summary>
-    /// Returns the last update stamp when present.
+    /// Returns the last update stamp.
     /// </summary>
-    public IStamp? Updated()
+    public IStamp Updated()
     {
         return _updated;
     }
 
     /// <summary>
-    /// Returns the last status change stamp when present.
+    /// Returns the last status change stamp.
     /// </summary>
-    public IStamp? StateChanged()
+    public IStamp StateChanged()
     {
         return _stateChanged;
     }

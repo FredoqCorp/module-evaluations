@@ -21,8 +21,8 @@ public sealed class EvaluationFormTests
     {
         var id = new Uuid();
         var meta = new FormMeta(new FormName("n-✓-" + Guid.NewGuid()), string.Empty, ImmutableList<string>.Empty, new FormCode("c-✓-" + Guid.NewGuid()));
-        var audit = new AuditTrail(new Stamp("u-✓-" + Guid.NewGuid(), DateTime.UtcNow), null, null);
-        var life = new FormLifecycle(FormStatus.Draft, null, audit);
+        var audit = new AuditTrail(new Stamp("u-✓-" + Guid.NewGuid(), DateTime.UtcNow), new NullStamp(), new NullStamp());
+        var life = new FormLifecycle(FormStatus.Draft, new NoPeriod(), audit);
         var groups = ImmutableList<FormGroup>.Empty;
         var criteria = ImmutableList<FormCriterion>.Empty;
         var agg = new EvaluationForm(id, meta, life, FormCalculationKind.ArithmeticMean, groups, criteria);

@@ -15,9 +15,9 @@ public interface IFormLifecycle
     FormStatus Status();
 
     /// <summary>
-    /// Returns the validity period when present.
+    /// Returns the validity period object.
     /// </summary>
-    IPeriod? Validity();
+    IPeriod Validity();
 
     /// <summary>
     /// Returns the audit trail.

@@ -10,16 +10,22 @@ namespace CascVel.Modules.Evaluations.Management.Domain.Entities.Runs.ValueObjec
 public sealed record RunLifecycle : IRunLifecycle
 {
     private readonly IStamp _launched;
-    private readonly IStamp? _firstSaved;
-    private readonly IStamp? _lastSaved;
-    private readonly IStamp? _published;
+    private readonly IStamp _firstSaved;
+    private readonly IStamp _lastSaved;
+    private readonly IStamp _published;
 
     /// <summary>
     /// Creates a run lifecycle value object.
     /// </summary>
-    public RunLifecycle(IStamp launched, IStamp? firstSaved, IStamp? lastSaved, IStamp? published)
+    public RunLifecycle(IStamp launched, IStamp firstSaved, IStamp lastSaved, IStamp published)
     {
         ArgumentNullException.ThrowIfNull(launched);
+        ArgumentNullException.ThrowIfNull(firstSaved);
+        ArgumentNullException.ThrowIfNull(lastSaved);
+        ArgumentNullException.ThrowIfNull(published);
+        ArgumentNullException.ThrowIfNull(firstSaved);
+        ArgumentNullException.ThrowIfNull(lastSaved);
+        ArgumentNullException.ThrowIfNull(published);
         _launched = launched;
         _firstSaved = firstSaved;
         _lastSaved = lastSaved;
@@ -32,17 +38,17 @@ public sealed record RunLifecycle : IRunLifecycle
     public IStamp Launched() => _launched;
 
     /// <summary>
-    /// Returns the first save stamp when present.
+    /// Returns the first save stamp.
     /// </summary>
-    public IStamp? FirstSaved() => _firstSaved;
+    public IStamp FirstSaved() => _firstSaved;
 
     /// <summary>
-    /// Returns the last save stamp when present.
+    /// Returns the last save stamp.
     /// </summary>
-    public IStamp? LastSaved() => _lastSaved;
+    public IStamp LastSaved() => _lastSaved;
 
     /// <summary>
-    /// Returns the publish stamp when present.
+    /// Returns the publish stamp.
     /// </summary>
-    public IStamp? Published() => _published;
+    public IStamp Published() => _published;
 }

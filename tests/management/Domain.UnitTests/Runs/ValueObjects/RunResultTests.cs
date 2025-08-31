@@ -15,7 +15,7 @@ public sealed class RunResultTests
     [Fact(DisplayName = "RunResult cannot be created with null criteria list")]
     public void RunResult_cannot_be_created_with_null_criteria_list()
     {
-        Should.Throw<ArgumentNullException>(() => new RunResult(null, null!), "RunResult accepted a null criteria list which is incorrect");
+        Should.Throw<ArgumentNullException>(() => new RunResult(0m, null!), "RunResult accepted a null criteria list which is incorrect");
     }
 
     /// <summary>
@@ -26,7 +26,7 @@ public sealed class RunResultTests
     {
         var builder = ImmutableList.CreateBuilder<CascVel.Modules.Evaluations.Management.Domain.Interfaces.Runs.IRunCriterionScore>();
         builder.Add(new RunCriterionScore(new CascVel.Modules.Evaluations.Management.Domain.Identifiers.Uuid(), false, null));
-        var vo = new RunResult(null, builder.ToImmutable());
+        var vo = new RunResult(0m, builder.ToImmutable());
         vo.Criteria().Count.ShouldBe(1, "RunResult returned an unexpected criteria count which is incorrect");
     }
 }

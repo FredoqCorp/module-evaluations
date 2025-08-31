@@ -11,13 +11,12 @@ public interface IAuditTrail
     IStamp Created();
 
     /// <summary>
-    /// Returns the last update stamp when present.
+    /// Returns the last update stamp.
     /// </summary>
-    IStamp? Updated();
+    IStamp Updated();
 
     /// <summary>
-    /// Returns the last status change stamp when present.
+    /// Returns the last status change stamp.
     /// </summary>
-    IStamp? StateChanged();
+    IStamp StateChanged();
 }
-

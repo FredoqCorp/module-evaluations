@@ -11,7 +11,7 @@ public interface IPeriod
     DateTime Start();
 
     /// <summary>
-    /// Returns the inclusive finish of the period when present.
+    /// Returns the inclusive finish of the period.
     /// </summary>
-    DateTime? Finish();
+    DateTime Finish();
 }

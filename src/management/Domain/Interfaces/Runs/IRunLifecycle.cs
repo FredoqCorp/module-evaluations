@@ -13,18 +13,17 @@ public interface IRunLifecycle
     IStamp Launched();
 
     /// <summary>
-    /// Returns the first save stamp when present.
+    /// Returns the first save stamp.
     /// </summary>
-    IStamp? FirstSaved();
+    IStamp FirstSaved();
 
     /// <summary>
-    /// Returns the last save stamp when present.
+    /// Returns the last save stamp.
     /// </summary>
-    IStamp? LastSaved();
+    IStamp LastSaved();
 
     /// <summary>
-    /// Returns the publish stamp when present.
+    /// Returns the publish stamp.
     /// </summary>
-    IStamp? Published();
+    IStamp Published();
 }
-

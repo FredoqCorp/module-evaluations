@@ -28,10 +28,10 @@ public sealed record Period : IPeriod
     }
 
     /// <summary>
-    /// Returns the inclusive finish of the period when present.
+    /// Returns the inclusive finish of the period.
     /// </summary>
-    public DateTime? Finish()
+    public DateTime Finish()
     {
-        return _end;
+        return _end ?? DateTime.MaxValue;
     }
 }

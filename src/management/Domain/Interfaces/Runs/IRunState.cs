@@ -21,8 +21,7 @@ public interface IRunState
     IRunResult Result();
 
     /// <summary>
-    /// Returns the agreement trail when present.
+    /// Returns the agreement trail.
     /// </summary>
-    IRunAgreementTrail? Agreement();
+    IRunAgreementTrail Agreement();
 }
-
