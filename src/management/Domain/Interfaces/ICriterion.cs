@@ -6,11 +6,6 @@ namespace CascVel.Modules.Evaluations.Management.Domain.Interfaces;
 public interface ICriterion
 {
     /// <summary>
-    /// Returns the unique identifier of this criterion.
-    /// </summary>
-    IId Id();
-
-    /// <summary>
     /// Returns the human readable title string.
     /// </summary>
     string Title();

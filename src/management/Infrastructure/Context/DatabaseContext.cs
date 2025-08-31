@@ -1,4 +1,3 @@
-using CascVel.Modules.Evaluations.Management.Domain.Entities.Criteria;
 using CascVel.Modules.Evaluations.Management.Domain.Entities.Forms;
 using CascVel.Modules.Evaluations.Management.Domain.Entities.Forms.ValueObjects;
 using CascVel.Modules.Evaluations.Management.Domain.Entities.Runs;

@@ -1,5 +1,3 @@
-using CascVel.Modules.Evaluations.Management.Domain.Entities.Criteria;
-
 namespace CascVel.Modules.Evaluations.Management.Domain.Entities.Forms.ValueObjects;
 
 /// <summary>

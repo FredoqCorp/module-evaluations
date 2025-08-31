@@ -1,4 +1,4 @@
-using CascVel.Modules.Evaluations.Management.Domain.Entities.Criteria.ValueObjects;
+using CascVel.Modules.Evaluations.Management.Domain.Entities.Forms.ValueObjects;
 using Shouldly;
 
 namespace CascVel.Modules.Evaluations.Management.Domain.UnitTests.Criteria.ValueObjects;

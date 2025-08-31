@@ -1,21 +1,25 @@
-using CascVel.Modules.Evaluations.Management.Domain.Entities.Criteria.ValueObjects;
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces;
 
-namespace CascVel.Modules.Evaluations.Management.Domain.Entities.Criteria;
+namespace CascVel.Modules.Evaluations.Management.Domain.Entities.Forms.ValueObjects;
 
 /// <summary>
 /// Domain layer entity representing a single evaluation criterion with identity, text and selectable options.
 /// </summary>
-public sealed class Criterion(IId id, ICriterionText text, IReadOnlyList<IChoice> options) : ICriterion
+public sealed record Criterion : ICriterion
 {
-    private readonly IId _id = id;
-    private readonly ICriterionText _text = text;
-    private readonly IReadOnlyList<IChoice> _options = options;
+    private readonly ICriterionText _text;
+    private readonly IReadOnlyList<IChoice> _options;
 
     /// <summary>
-    /// Returns the unique identifier of this criterion.
+    /// Initializes a new instance of the <see cref="Criterion"/> record with the specified criterion text and options.
     /// </summary>
-    public IId Id() => _id;
+    /// <param name="text">The criterion text value object.</param>
+    /// <param name="options">The list of selectable options for this criterion.</param>
+    public Criterion(ICriterionText text, IReadOnlyList<IChoice> options)
+    {
+        _text = text;
+        _options = options;
+    }
 
     /// <summary>
     /// Returns the human readable title string.
