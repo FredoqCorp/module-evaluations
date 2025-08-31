@@ -26,10 +26,10 @@ public interface IFormGroup
     /// <summary>
     /// Returns the ordered criteria inside this group.
     /// </summary>
-    IImmutableList<FormCriterion> Criteria();
+    IImmutableList<IFormCriterion> Criteria();
 
     /// <summary>
     /// Returns the nested groups inside this group.
     /// </summary>
-    IImmutableList<FormGroup> Groups();
+    IImmutableList<IFormGroup> Groups();
 }

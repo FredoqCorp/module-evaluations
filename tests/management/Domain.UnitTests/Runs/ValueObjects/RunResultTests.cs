@@ -24,10 +24,9 @@ public sealed class RunResultTests
     [Fact(DisplayName = "RunResult returns the same criteria count")]
     public void RunResult_returns_the_same_criteria_count()
     {
-        var builder = ImmutableList.CreateBuilder<RunCriterionScore>();
+        var builder = ImmutableList.CreateBuilder<CascVel.Modules.Evaluations.Management.Domain.Interfaces.Runs.IRunCriterionScore>();
         builder.Add(new RunCriterionScore(new CascVel.Modules.Evaluations.Management.Domain.Identifiers.Uuid(), false, null));
         var vo = new RunResult(null, builder.ToImmutable());
         vo.Criteria().Count.ShouldBe(1, "RunResult returned an unexpected criteria count which is incorrect");
     }
 }
-

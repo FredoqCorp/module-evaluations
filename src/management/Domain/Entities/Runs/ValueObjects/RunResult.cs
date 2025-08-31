@@ -9,12 +9,12 @@ namespace CascVel.Modules.Evaluations.Management.Domain.Entities.Runs.ValueObjec
 public sealed record RunResult : IRunResult
 {
     private readonly decimal? _currentTotal;
-    private readonly IImmutableList<RunCriterionScore> _criteria;
+    private readonly IImmutableList<IRunCriterionScore> _criteria;
 
     /// <summary>
     /// Creates a run result with optional total and per-criterion scores.
     /// </summary>
-    public RunResult(decimal? currentTotal, IImmutableList<RunCriterionScore> criteria)
+    public RunResult(decimal? currentTotal, IImmutableList<IRunCriterionScore> criteria)
     {
         ArgumentNullException.ThrowIfNull(criteria);
         _currentTotal = currentTotal;
@@ -29,5 +29,5 @@ public sealed record RunResult : IRunResult
     /// <summary>
     /// Returns the per-criterion scores.
     /// </summary>
-    public IImmutableList<RunCriterionScore> Criteria() => _criteria;
+    public IImmutableList<IRunCriterionScore> Criteria() => _criteria;
 }

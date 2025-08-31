@@ -16,6 +16,5 @@ public interface IRunResult
     /// <summary>
     /// Returns the per-criterion scores.
     /// </summary>
-    IImmutableList<RunCriterionScore> Criteria();
+    IImmutableList<IRunCriterionScore> Criteria();
 }
-

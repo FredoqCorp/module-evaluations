@@ -17,11 +17,10 @@ public interface IFormLifecycle
     /// <summary>
     /// Returns the validity period when present.
     /// </summary>
-    Period? Validity();
+    IPeriod? Validity();
 
     /// <summary>
     /// Returns the audit trail.
     /// </summary>
     IAuditTrail Audit();
 }
-

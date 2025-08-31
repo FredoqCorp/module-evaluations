@@ -10,13 +10,13 @@ using CascVel.Modules.Evaluations.Management.Domain.Interfaces;
 public sealed record FormLifecycle : IFormLifecycle
 {
     private readonly FormStatus _status;
-    private readonly Period? _validity;
+    private readonly IPeriod? _validity;
     private readonly IAuditTrail _audit;
 
     /// <summary>
     /// Creates a lifecycle with a status, optional validity period and audit trail.
     /// </summary>
-    public FormLifecycle(FormStatus status, Period? validity, IAuditTrail audit)
+    public FormLifecycle(FormStatus status, IPeriod? validity, IAuditTrail audit)
     {
         ArgumentNullException.ThrowIfNull(audit);
         _status = status;
@@ -35,7 +35,7 @@ public sealed record FormLifecycle : IFormLifecycle
     /// <summary>
     /// Returns the validity period when present.
     /// </summary>
-    public Period? Validity()
+    public IPeriod? Validity()
     {
         return _validity;
     }

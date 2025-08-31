@@ -10,7 +10,7 @@ public interface IFormCriterion
     /// <summary>
     /// Returns the domain criterion value object.
     /// </summary>
-    Criterion Criterion();
+    ICriterion Criterion();
 
     /// <summary>
     /// Returns the display order index value object.
@@ -22,4 +22,3 @@ public interface IFormCriterion
     /// </summary>
     IWeight? Weight();
 }
-
