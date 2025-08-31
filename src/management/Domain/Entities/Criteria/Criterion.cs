@@ -1,5 +1,5 @@
 using CascVel.Modules.Evaluations.Management.Domain.Entities.Criteria.ValueObjects;
-using CascVel.Modules.Evaluations.Management.Domain.Identifiers;
+using CascVel.Modules.Evaluations.Management.Domain.Interfaces;
 
 namespace CascVel.Modules.Evaluations.Management.Domain.Entities.Criteria;
 
@@ -11,7 +11,7 @@ public sealed class Criterion
     /// <summary>
     /// Unique identifier.
     /// </summary>
-    public CriterionId Id { get; init; }
+    public required IId Id { get; init; }
 
     /// <summary>
     /// Textual content (title + description).
@@ -21,5 +21,5 @@ public sealed class Criterion
     /// <summary>
     /// Available options to choose a score from.
     /// </summary>
-    public required IReadOnlyList<Choice> Options { get; init; }
+    public required IReadOnlyList<IChoice> Options { get; init; }
 }

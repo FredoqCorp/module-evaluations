@@ -13,7 +13,7 @@ public sealed class EvaluationForm
     /// <summary>
     /// Unique identifier.
     /// </summary>
-    public FormId Id { get; init; }
+    public required Uuid Id { get; init; }
 
     /// <summary>
     /// Human-facing meta: name, description and tags.

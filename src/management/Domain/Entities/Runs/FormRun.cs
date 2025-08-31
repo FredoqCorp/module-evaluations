@@ -11,7 +11,7 @@ public sealed class FormRun
     /// <summary>
     /// Run identifier.
     /// </summary>
-    public RunId Id { get; init; }
+    public required Uuid Id { get; init; }
 
     /// <summary>
     /// Run metadata (form, subject, comment).

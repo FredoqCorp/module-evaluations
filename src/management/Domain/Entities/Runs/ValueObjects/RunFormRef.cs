@@ -10,7 +10,7 @@ public sealed record RunFormRef
     /// <summary>
     /// Form identifier.
     /// </summary>
-    public required FormId FormId { get; init; }
+    public required Uuid FormId { get; init; }
 
     /// <summary>
     /// Immutable form code captured at launch time (for stable references in external systems).

@@ -10,7 +10,7 @@ public sealed record RunCriterionScore
     /// <summary>
     /// Criterion identifier.
     /// </summary>
-    public required CriterionId CriterionId { get; init; }
+    public required Uuid CriterionId { get; init; }
 
     /// <summary>
     /// Whether the criterion is skipped (excluded from calculation).
