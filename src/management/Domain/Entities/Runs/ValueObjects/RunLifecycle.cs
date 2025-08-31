@@ -1,29 +1,48 @@
 using CascVel.Modules.Evaluations.Management.Domain.Entities.Forms.ValueObjects;
+using CascVel.Modules.Evaluations.Management.Domain.Interfaces;
+using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Runs;
 
 namespace CascVel.Modules.Evaluations.Management.Domain.Entities.Runs.ValueObjects;
 
 /// <summary>
-/// Run lifecycle: launch, first and last save, and publish.
+/// Run lifecycle: launch, first and last save, and publish as an immutable value object.
 /// </summary>
-public sealed record RunLifecycle
+public sealed record RunLifecycle : IRunLifecycle
 {
-    /// <summary>
-    /// Launch timestamp and actor.
-    /// </summary>
-    public required Stamp Launched { get; init; }
+    private readonly IStamp _launched;
+    private readonly IStamp? _firstSaved;
+    private readonly IStamp? _lastSaved;
+    private readonly IStamp? _published;
 
     /// <summary>
-    /// First save (for draft), if any.
+    /// Creates a run lifecycle value object.
     /// </summary>
-    public Stamp? FirstSaved { get; init; }
+    public RunLifecycle(IStamp launched, IStamp? firstSaved, IStamp? lastSaved, IStamp? published)
+    {
+        ArgumentNullException.ThrowIfNull(launched);
+        _launched = launched;
+        _firstSaved = firstSaved;
+        _lastSaved = lastSaved;
+        _published = published;
+    }
 
     /// <summary>
-    /// Last save, if any.
+    /// Returns the launch stamp.
     /// </summary>
-    public Stamp? LastSaved { get; init; }
+    public IStamp Launched() => _launched;
 
     /// <summary>
-    /// Publish stamp (who/when), if any.
+    /// Returns the first save stamp when present.
     /// </summary>
-    public Stamp? Published { get; init; }
+    public IStamp? FirstSaved() => _firstSaved;
+
+    /// <summary>
+    /// Returns the last save stamp when present.
+    /// </summary>
+    public IStamp? LastSaved() => _lastSaved;
+
+    /// <summary>
+    /// Returns the publish stamp when present.
+    /// </summary>
+    public IStamp? Published() => _published;
 }

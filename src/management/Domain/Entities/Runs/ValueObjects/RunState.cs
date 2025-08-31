@@ -1,27 +1,48 @@
+using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Runs;
+
 namespace CascVel.Modules.Evaluations.Management.Domain.Entities.Runs.ValueObjects;
 
 /// <summary>
-/// Run state: lifecycle, context, results and agreement trail.
+/// Run state: lifecycle, context, results and agreement trail as an immutable value object.
 /// </summary>
-public sealed record RunState
+public sealed record RunState : IRunState
 {
-    /// <summary>
-    /// Run lifecycle (who/when launched, saved, published).
-    /// </summary>
-    public required RunLifecycle Lifecycle { get; init; }
+    private readonly IRunLifecycle _lifecycle;
+    private readonly IRunContext _context;
+    private readonly IRunResult _result;
+    private readonly IRunAgreementTrail? _agreement;
 
     /// <summary>
-    /// Context parameters for the run.
+    /// Creates a run state snapshot.
     /// </summary>
-    public required RunContext Context { get; init; }
+    public RunState(IRunLifecycle lifecycle, IRunContext context, IRunResult result, IRunAgreementTrail? agreement)
+    {
+        ArgumentNullException.ThrowIfNull(lifecycle);
+        ArgumentNullException.ThrowIfNull(context);
+        ArgumentNullException.ThrowIfNull(result);
+        _lifecycle = lifecycle;
+        _context = context;
+        _result = result;
+        _agreement = agreement;
+    }
 
     /// <summary>
-    /// Total and per-criterion assessments.
+    /// Returns the run lifecycle object.
     /// </summary>
-    public required RunResult Result { get; init; }
+    public IRunLifecycle Lifecycle() => _lifecycle;
 
     /// <summary>
-    /// Views and agreement/disagreement after publication.
+    /// Returns the run context object.
     /// </summary>
-    public RunAgreementTrail? Agreement { get; init; }
+    public IRunContext Context() => _context;
+
+    /// <summary>
+    /// Returns the aggregated result object.
+    /// </summary>
+    public IRunResult Result() => _result;
+
+    /// <summary>
+    /// Returns the agreement trail when present.
+    /// </summary>
+    public IRunAgreementTrail? Agreement() => _agreement;
 }

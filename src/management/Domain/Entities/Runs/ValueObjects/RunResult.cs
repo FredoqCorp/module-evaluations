@@ -1,17 +1,33 @@
+using System.Collections.Immutable;
+using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Runs;
+
 namespace CascVel.Modules.Evaluations.Management.Domain.Entities.Runs.ValueObjects;
 
 /// <summary>
-/// Aggregated result data: current total score and per-criterion scores.
+/// Aggregated result data: current total score and per-criterion scores as an immutable value object.
 /// </summary>
-public sealed record RunResult
+public sealed record RunResult : IRunResult
 {
-    /// <summary>
-    /// Current calculated total score of the form (captured on each save).
-    /// </summary>
-    public decimal? CurrentTotal { get; init; }
+    private readonly decimal? _currentTotal;
+    private readonly IImmutableList<RunCriterionScore> _criteria;
 
     /// <summary>
-    /// Criterion scores for the run.
+    /// Creates a run result with optional total and per-criterion scores.
     /// </summary>
-    public required IReadOnlyList<RunCriterionScore> Criteria { get; init; }
+    public RunResult(decimal? currentTotal, IImmutableList<RunCriterionScore> criteria)
+    {
+        ArgumentNullException.ThrowIfNull(criteria);
+        _currentTotal = currentTotal;
+        _criteria = criteria;
+    }
+
+    /// <summary>
+    /// Returns the current calculated total score when present.
+    /// </summary>
+    public decimal? CurrentTotal() => _currentTotal;
+
+    /// <summary>
+    /// Returns the per-criterion scores.
+    /// </summary>
+    public IImmutableList<RunCriterionScore> Criteria() => _criteria;
 }

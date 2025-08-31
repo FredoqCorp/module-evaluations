@@ -1,19 +1,33 @@
 using CascVel.Modules.Evaluations.Management.Domain.Identifiers;
+using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Runs;
 
 namespace CascVel.Modules.Evaluations.Management.Domain.Entities.Runs.ValueObjects;
 
 /// <summary>
-/// Reference to the evaluation form used for this run.
+/// Reference to the evaluation form used for this run as an immutable value object.
 /// </summary>
-public sealed record RunFormRef
+public sealed record RunFormRef : IRunFormRef
 {
-    /// <summary>
-    /// Form identifier.
-    /// </summary>
-    public required Uuid FormId { get; init; }
+    private readonly Uuid _formId;
+    private readonly string _formCode;
 
     /// <summary>
-    /// Immutable form code captured at launch time (for stable references in external systems).
+    /// Creates a reference to the evaluation form with identifier and code.
     /// </summary>
-    public required string FormCode { get; init; }
+    public RunFormRef(Uuid formId, string formCode)
+    {
+        ArgumentNullException.ThrowIfNull(formCode);
+        _formId = formId;
+        _formCode = formCode;
+    }
+
+    /// <summary>
+    /// Returns the form identifier.
+    /// </summary>
+    public Uuid FormId() => _formId;
+
+    /// <summary>
+    /// Returns the immutable form code captured at launch time.
+    /// </summary>
+    public string FormCode() => _formCode;
 }
