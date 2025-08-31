@@ -93,6 +93,8 @@
 
   Data processing will occur on demand by calling the object's methods.
 
+* Constructors can validate that the object passed as an argument is a valid object (not null, correct type, etc), nothing more
+
 * Encapsulate as few fields as possible in classes or records
   Encapsulate no more than four fields.
 
@@ -134,7 +136,7 @@ Tests may not test functionality irrelevant to their stated purpose.
 Tests must close resources they use, such as file handlers, sockets, and database connections.
 Objects must not provide functionality used only by tests.
 Tests may not assert on side effects such as logging output.
-Tests may not check the behavior of setters, getters, or constructors.
+Tests may not check the behavior of setters, getters.
 Tests must not clean up after themselves; instead, they must prepare a clean state at the start.
 Tests should not use mocks, favoring fake objects and stubs.
 The best tests consist of a single statement.

@@ -52,5 +52,15 @@ public sealed class CriterionTests
 
         criterion.Options().Count.ShouldBe(count, "options count returned is not equal to input size");
     }
-}
 
+    /// <summary>
+    /// Ensures options accessor fails fast when created with null options list.
+    /// </summary>
+    [Fact(DisplayName = "Criterion cannot be created with null options list")]
+    public void Criterion_cannot_be_created_with_null_options_list()
+    {
+        Should.Throw<ArgumentNullException>(
+            () => new Criterion(new CriterionText("титул-✓-标题-🚀-" + Guid.NewGuid(), "описание-✓-説明-🧪-" + Guid.NewGuid()), null!),
+            "Criterion accepted a null options list which is incorrect");
+    }
+}

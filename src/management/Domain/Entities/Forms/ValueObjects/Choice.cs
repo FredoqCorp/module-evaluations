@@ -16,6 +16,9 @@ public sealed record Choice : IChoice
     /// </summary>
     public Choice(ushort score, string caption, string annotation)
     {
+        ArgumentNullException.ThrowIfNull(caption);
+        ArgumentNullException.ThrowIfNull(annotation);
+
         _score = score;
         _caption = caption;
         _annotation = annotation;
@@ -31,15 +34,24 @@ public sealed record Choice : IChoice
     /// <summary>
     /// Returns the score value associated with this choice.
     /// </summary>
-    public ushort Score() => _score;
+    public ushort Score()
+    {
+        return _score;
+    }
 
     /// <summary>
-    /// Returns the caption string or an empty string when absent.
+    /// Returns the caption string.
     /// </summary>
-    public string Caption() => _caption;
+    public string Caption()
+    {
+        return _caption;
+    }
 
     /// <summary>
-    /// Returns the annotation string or an empty string when absent.
+    /// Returns the annotation string.
     /// </summary>
-    public string Annotation() => _annotation;
+    public string Annotation()
+    {
+        return _annotation;
+    }
 }

@@ -3,7 +3,7 @@ using CascVel.Modules.Evaluations.Management.Domain.Interfaces;
 namespace CascVel.Modules.Evaluations.Management.Domain.Entities.Forms.ValueObjects;
 
 /// <summary>
-/// Domain layer entity representing a single evaluation criterion with identity, text and selectable options.
+/// Domain layer value object representing an evaluation criterion with text and selectable options.
 /// </summary>
 public sealed record Criterion : ICriterion
 {
@@ -17,6 +17,9 @@ public sealed record Criterion : ICriterion
     /// <param name="options">The list of selectable options for this criterion.</param>
     public Criterion(ICriterionText text, IReadOnlyList<IChoice> options)
     {
+        ArgumentNullException.ThrowIfNull(text);
+        ArgumentNullException.ThrowIfNull(options);
+
         _text = text;
         _options = options;
     }
@@ -24,15 +27,25 @@ public sealed record Criterion : ICriterion
     /// <summary>
     /// Returns the human readable title string.
     /// </summary>
-    public string Title() => _text.Title();
+    public string Title()
+    {
+        return _text.Title();
+    }
 
     /// <summary>
     /// Returns the detailed description string.
     /// </summary>
-    public string Description() => _text.Description();
+    public string Description()
+    {
+        return _text.Description();
+    }
 
     /// <summary>
-    /// Returns the list of available options for scoring.
+    /// Returns the list of available options for scoring as a read-only snapshot and fails fast when invalid.
     /// </summary>
-    public IReadOnlyList<IChoice> Options() => _options;
+    public IReadOnlyList<IChoice> Options()
+    {
+        IChoice[] snapshot = [.. _options];
+        return Array.AsReadOnly(snapshot);
+    }
 }

@@ -69,4 +69,26 @@ public sealed class ChoiceTests
 
         choice.Annotation().ShouldBe(annotation, "annotation value is not preserved for non ASCII input");
     }
+
+    /// <summary>
+    /// Ensures caption accessor fails fast when created with null.
+    /// </summary>
+    [Fact(DisplayName = "Choice cannot be created with null caption")]
+    public void Choice_cannot_be_created_with_null_caption()
+    {
+        var score = (ushort)System.Security.Cryptography.RandomNumberGenerator.GetInt32(0, ushort.MaxValue + 1);
+
+        Should.Throw<ArgumentNullException>(() => new Choice(score, null!, string.Empty), "Choice accepted a null caption which is incorrect");
+    }
+
+    /// <summary>
+    /// Ensures annotation accessor fails fast when created with null.
+    /// </summary>
+    [Fact(DisplayName = "Choice cannot be created with null annotation")]
+    public void Choice_cannot_be_created_with_null_annotation()
+    {
+        var score = (ushort)System.Security.Cryptography.RandomNumberGenerator.GetInt32(0, ushort.MaxValue + 1);
+
+        Should.Throw<ArgumentNullException>(() => new Choice(score, string.Empty, null!), "Choice accepted a null annotation which is incorrect");
+    }
 }

@@ -17,17 +17,30 @@ public sealed record CriterionText : ICriterionText
     /// <param name="description">The detailed description of the criterion.</param>
     public CriterionText(string title, string description)
     {
+        ArgumentNullException.ThrowIfNull(title);
+        ArgumentNullException.ThrowIfNull(description);
+
         _title = title;
         _description = description;
     }
 
     /// <summary>
-    /// Returns the human readable title string.
+    /// Returns the human readable title string and fails fast when empty or whitespace.
     /// </summary>
-    public string Title() => _title;
+    public string Title()
+    {
+        if (string.IsNullOrWhiteSpace(_title))
+        {
+            throw new InvalidDataException("Title must not be empty or whitespace");
+        }
+        return _title.Trim();
+    }
 
     /// <summary>
     /// Returns the detailed description string.
     /// </summary>
-    public string Description() => _description;
+    public string Description()
+    {
+        return _description.Trim();
+    }
 }
