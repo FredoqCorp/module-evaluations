@@ -12,7 +12,7 @@ public interface IEvaluationForm
     /// <summary>
     /// Returns the unique identifier.
     /// </summary>
-    Identifiers.Uuid Id();
+    IId Id();
 
     /// <summary>
     /// Returns the human-facing metadata.

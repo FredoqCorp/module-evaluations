@@ -46,7 +46,7 @@ public sealed class EvaluationForm : IEvaluationForm
     /// <summary>
     /// Returns the unique identifier of this evaluation form aggregate.
     /// </summary>
-    public Identifiers.Uuid Id() => _id;
+    public IId Id() => _id;
 
     /// <summary>
     /// Returns the human-facing metadata of this evaluation form aggregate.
