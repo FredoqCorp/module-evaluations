@@ -23,8 +23,8 @@ public sealed class EvaluationFormTests
         var meta = new FormMeta(new FormName("n-✓-" + Guid.NewGuid()), string.Empty, ImmutableList<string>.Empty, new FormCode("c-✓-" + Guid.NewGuid()));
         var audit = new AuditTrail(new Stamp("u-✓-" + Guid.NewGuid(), DateTime.UtcNow), new NullStamp(), new NullStamp());
         var life = new FormLifecycle(FormStatus.Draft, new NoPeriod(), audit);
-        var groups = ImmutableList<FormGroup>.Empty;
-        var criteria = ImmutableList<FormCriterion>.Empty;
+        var groups = ImmutableList<IFormGroup>.Empty;
+        var criteria = ImmutableList<IFormCriterion>.Empty;
         var agg = new EvaluationForm(id, meta, life, FormCalculationKind.ArithmeticMean, groups, criteria);
 
         ((IEvaluationForm)agg).Groups().Count.ShouldBe(0, "EvaluationForm returned an unexpected groups count which is incorrect");

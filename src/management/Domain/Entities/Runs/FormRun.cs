@@ -9,14 +9,14 @@ namespace CascVel.Modules.Evaluations.Management.Domain.Entities.Runs;
 /// </summary>
 public sealed class FormRun : IFormRun
 {
-    private readonly Uuid _id;
+    private readonly IId _id;
     private readonly IRunMeta _meta;
     private readonly IRunState _state;
 
     /// <summary>
     /// Creates a form run aggregate with identifier, metadata and state.
     /// </summary>
-    public FormRun(Uuid id, IRunMeta meta, IRunState state)
+    public FormRun(IId id, IRunMeta meta, IRunState state)
     {
         ArgumentNullException.ThrowIfNull(meta);
         ArgumentNullException.ThrowIfNull(state);

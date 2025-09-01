@@ -32,10 +32,10 @@ public interface IEvaluationForm
     /// <summary>
     /// Returns the ordered groups of criteria.
     /// </summary>
-    IImmutableList<FormGroup> Groups();
+    IImmutableList<IFormGroup> Groups();
 
     /// <summary>
     /// Returns the criteria outside of any group.
     /// </summary>
-    IImmutableList<FormCriterion> Criteria();
+    IImmutableList<IFormCriterion> Criteria();
 }

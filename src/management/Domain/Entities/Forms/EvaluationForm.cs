@@ -16,8 +16,8 @@ public sealed class EvaluationForm : IEvaluationForm
     private readonly IFormMeta _meta;
     private readonly IFormLifecycle _lifecycle;
     private readonly FormCalculationKind _rule;
-    private readonly IImmutableList<FormGroup> _groups;
-    private readonly IImmutableList<FormCriterion> _criteria;
+    private readonly IImmutableList<IFormGroup> _groups;
+    private readonly IImmutableList<IFormCriterion> _criteria;
 
     /// <summary>
     /// Creates an evaluation form aggregate with identifier, meta, lifecycle, calculation rule, groups and criteria.
@@ -27,8 +27,8 @@ public sealed class EvaluationForm : IEvaluationForm
         IFormMeta meta,
         IFormLifecycle lifecycle,
         FormCalculationKind rule,
-        IImmutableList<FormGroup> groups,
-        IImmutableList<FormCriterion> criteria)
+        IImmutableList<IFormGroup> groups,
+        IImmutableList<IFormCriterion> criteria)
     {
         ArgumentNullException.ThrowIfNull(meta);
         ArgumentNullException.ThrowIfNull(lifecycle);
@@ -66,10 +66,10 @@ public sealed class EvaluationForm : IEvaluationForm
     /// <summary>
     /// Returns the ordered groups of criteria belonging to this evaluation form aggregate.
     /// </summary>
-    public IImmutableList<FormGroup> Groups() => _groups;
+    public IImmutableList<IFormGroup> Groups() => _groups;
 
     /// <summary>
     /// Returns the criteria outside of any group belonging to this evaluation form aggregate.
     /// </summary>
-    public IImmutableList<FormCriterion> Criteria() => _criteria;
+    public IImmutableList<IFormCriterion> Criteria() => _criteria;
 }
