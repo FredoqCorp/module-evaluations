@@ -3,6 +3,10 @@ using CascVel.Modules.Evaluations.Management.Domain.Entities.Forms.ValueObjects;
 using CascVel.Modules.Evaluations.Management.Domain.Identifiers;
 using System.Collections.Immutable;
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces;
+using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Policies;
+using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Runs;
+using CascVel.Modules.Evaluations.Management.Domain.Entities.Runs.ValueObjects;
+using System;
 
 namespace CascVel.Modules.Evaluations.Management.Domain.Entities.Forms;
 
@@ -72,4 +76,60 @@ public sealed class EvaluationForm : IEvaluationForm
     /// Returns the criteria outside of any group belonging to this evaluation form aggregate.
     /// </summary>
     public IImmutableList<IFormCriterion> Criteria() => _criteria;
+
+    /// <summary>
+    /// Returns a run form snapshot for this evaluation form using the form's current calculation rule.
+    /// Throws when the rule requires an explicit definition.
+    /// </summary>
+    public IRunFormSnapshot Snapshot()
+    {
+        if (_rule == FormCalculationKind.WeightedMean)
+        {
+            throw new InvalidOperationException("Weighted calculation requires an explicit definition");
+        }
+
+        var groups = BuildGroups(_groups);
+        var criteria = BuildCriteria(_criteria);
+        return new RunFormSnapshot(_id, _meta, _rule, groups, criteria);
+    }
+
+    /// <summary>
+    /// Returns a run form snapshot for this evaluation form by binding a calculation policy definition.
+    /// </summary>
+    public IRunFormSnapshot Snapshot(ICalculationPolicyDefinition definition)
+    {
+        ArgumentNullException.ThrowIfNull(definition);
+        definition.Verify(this);
+
+        var groups = BuildGroups(_groups);
+        var criteria = BuildCriteria(_criteria);
+        var probe = new RunFormSnapshot(_id, _meta, _rule, groups, criteria);
+        var policy = definition.Bind(probe);
+        policy.Verify(probe);
+        return new RunFormSnapshot(_id, _meta, policy, groups, criteria);
+    }
+
+    private static ImmutableList<IRunFormGroup> BuildGroups(IImmutableList<IFormGroup> source)
+    {
+        var res = ImmutableList.CreateBuilder<IRunFormGroup>();
+        foreach (var g in source)
+        {
+            var childrenGroups = BuildGroups(g.Groups());
+            var childrenCriteria = BuildCriteria(g.Criteria());
+            var rg = new RunFormGroup(Guid.CreateVersion7(), g.Title(), g.Order(), childrenCriteria, childrenGroups);
+            res.Add(rg);
+        }
+        return res.ToImmutable();
+    }
+
+    private static ImmutableList<IRunFormCriterion> BuildCriteria(IImmutableList<IFormCriterion> source)
+    {
+        var res = ImmutableList.CreateBuilder<IRunFormCriterion>();
+        foreach (var c in source)
+        {
+            var rc = new RunFormCriterion(Guid.CreateVersion7(), c);
+            res.Add(rc);
+        }
+        return res.ToImmutable();
+    }
 }

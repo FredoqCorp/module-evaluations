@@ -36,9 +36,5 @@ public sealed record RunFormCriterion : IRunFormCriterion
     /// </summary>
     public IOrderIndex Order() => _inner.Order();
 
-    /// <summary>
-    /// Returns the weight by delegating to the wrapped criterion.
-    /// </summary>
-    public IWeight Weight() => _inner.Weight();
+    
 }
-

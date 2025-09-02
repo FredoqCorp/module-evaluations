@@ -18,10 +18,6 @@ public interface IFormGroup
     /// </summary>
     IOrderIndex Order();
 
-    /// <summary>
-    /// Returns the group weight object.
-    /// </summary>
-    IWeight Weight();
 
     /// <summary>
     /// Returns the ordered criteria inside this group.

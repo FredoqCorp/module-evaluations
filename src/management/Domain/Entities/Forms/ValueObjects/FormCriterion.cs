@@ -9,20 +9,17 @@ public sealed record FormCriterion : IFormCriterion
 {
     private readonly ICriterion _criterion;
     private readonly IOrderIndex _order;
-    private readonly IWeight _weight;
 
     /// <summary>
     /// Creates a positioned criterion with order and weight.
     /// </summary>
-    public FormCriterion(ICriterion criterion, IOrderIndex order, IWeight weight)
+    public FormCriterion(ICriterion criterion, IOrderIndex order)
     {
         ArgumentNullException.ThrowIfNull(criterion);
         ArgumentNullException.ThrowIfNull(order);
-        ArgumentNullException.ThrowIfNull(weight);
 
         _criterion = criterion;
         _order = order;
-        _weight = weight;
     }
 
     /// <summary>
@@ -41,11 +38,5 @@ public sealed record FormCriterion : IFormCriterion
         return _order;
     }
 
-    /// <summary>
-    /// Returns the weight when used.
-    /// </summary>
-    public IWeight Weight()
-    {
-        return _weight;
-    }
+    
 }

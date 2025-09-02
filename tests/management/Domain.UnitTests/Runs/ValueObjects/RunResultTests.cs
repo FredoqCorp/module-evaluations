@@ -30,8 +30,7 @@ public sealed class RunResultTests
                 new CascVel.Modules.Evaluations.Management.Domain.Entities.Forms.ValueObjects.CriterionText("тест✓", "описание✓"),
                 System.Collections.Immutable.ImmutableList<CascVel.Modules.Evaluations.Management.Domain.Interfaces.IChoice>.Empty
             ),
-            new CascVel.Modules.Evaluations.Management.Domain.Entities.Forms.ValueObjects.OrderIndex(0),
-            new CascVel.Modules.Evaluations.Management.Domain.Entities.Forms.ValueObjects.ZeroWeight()
+            new CascVel.Modules.Evaluations.Management.Domain.Entities.Forms.ValueObjects.OrderIndex(0)
         );
         var runCriterion = new CascVel.Modules.Evaluations.Management.Domain.Entities.Runs.ValueObjects.RunFormCriterion(Guid.NewGuid(), baseCriterion);
         builder.Add(new RunCriterionScore(runCriterion, false, null));

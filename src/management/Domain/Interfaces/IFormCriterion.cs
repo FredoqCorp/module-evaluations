@@ -17,8 +17,4 @@ public interface IFormCriterion
     /// </summary>
     IOrderIndex Order();
 
-    /// <summary>
-    /// Returns the weight when used.
-    /// </summary>
-    IWeight Weight();
 }

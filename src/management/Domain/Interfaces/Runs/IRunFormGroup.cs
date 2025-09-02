@@ -24,10 +24,6 @@ public interface IRunFormGroup
     /// </summary>
     IOrderIndex Order();
 
-    /// <summary>
-    /// Returns the weight of the group.
-    /// </summary>
-    IWeight Weight();
 
     /// <summary>
     /// Returns the run-level decorated criteria inside this group.

@@ -10,24 +10,21 @@ public sealed record FormGroup : IFormGroup
 {
     private readonly string _title;
     private readonly IOrderIndex _order;
-    private readonly IWeight _weight;
     private readonly IImmutableList<IFormCriterion> _criteria;
     private readonly IImmutableList<IFormGroup> _groups;
 
     /// <summary>
     /// Creates a form group with title, order, weight, criteria and nested groups.
     /// </summary>
-    public FormGroup(string title, IOrderIndex order, IWeight weight, IImmutableList<IFormCriterion> criteria, IImmutableList<IFormGroup> groups)
+    public FormGroup(string title, IOrderIndex order, IImmutableList<IFormCriterion> criteria, IImmutableList<IFormGroup> groups)
     {
         ArgumentNullException.ThrowIfNull(title);
         ArgumentNullException.ThrowIfNull(order);
-        ArgumentNullException.ThrowIfNull(weight);
         ArgumentNullException.ThrowIfNull(criteria);
         ArgumentNullException.ThrowIfNull(groups);
 
         _title = title;
         _order = order;
-        _weight = weight;
 
         _criteria = criteria;
         _groups = groups;
@@ -49,13 +46,7 @@ public sealed record FormGroup : IFormGroup
         return _order;
     }
 
-    /// <summary>
-    /// Returns the weight of the group.
-    /// </summary>
-    public IWeight Weight()
-    {
-        return _weight;
-    }
+    
 
     /// <summary>
     /// Returns the ordered criteria inside the group.

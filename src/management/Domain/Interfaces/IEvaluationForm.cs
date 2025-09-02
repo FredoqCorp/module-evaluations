@@ -1,6 +1,8 @@
 using System.Collections.Immutable;
 using CascVel.Modules.Evaluations.Management.Domain.Entities.Forms.Enums;
 using CascVel.Modules.Evaluations.Management.Domain.Entities.Forms.ValueObjects;
+using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Policies;
+using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Runs;
 
 namespace CascVel.Modules.Evaluations.Management.Domain.Interfaces;
 
@@ -38,4 +40,15 @@ public interface IEvaluationForm
     /// Returns the criteria outside of any group.
     /// </summary>
     IImmutableList<IFormCriterion> Criteria();
+
+    /// <summary>
+    /// Returns a run form snapshot for this evaluation form using the form's current calculation rule.
+    /// Throws when the rule requires an explicit definition.
+    /// </summary>
+    IRunFormSnapshot Snapshot();
+
+    /// <summary>
+    /// Returns a run form snapshot for this evaluation form by binding a calculation policy definition.
+    /// </summary>
+    IRunFormSnapshot Snapshot(ICalculationPolicyDefinition definition);
 }
