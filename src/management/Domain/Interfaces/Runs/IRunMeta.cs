@@ -6,9 +6,9 @@ namespace CascVel.Modules.Evaluations.Management.Domain.Interfaces.Runs;
 public interface IRunMeta
 {
     /// <summary>
-    /// Returns the reference to the form used by the run.
+    /// Returns the snapshot of the form captured at launch time.
     /// </summary>
-    IRunFormRef Form();
+    IRunFormSnapshot Snapshot();
 
     /// <summary>
     /// Returns the identifier of the evaluated subject.
@@ -20,4 +20,3 @@ public interface IRunMeta
     /// </summary>
     string SupervisorComment();
 }
-

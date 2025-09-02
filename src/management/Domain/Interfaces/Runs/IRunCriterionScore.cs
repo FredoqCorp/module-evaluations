@@ -1,16 +1,13 @@
 namespace CascVel.Modules.Evaluations.Management.Domain.Interfaces.Runs;
-
-using CascVel.Modules.Evaluations.Management.Domain.Identifiers;
-
 /// <summary>
 /// Contract for a per-criterion result in a form run.
 /// </summary>
 public interface IRunCriterionScore
 {
     /// <summary>
-    /// Returns the criterion identifier.
+    /// Returns the run-level decorated criterion captured at launch.
     /// </summary>
-    Uuid CriterionId();
+    IRunFormCriterion Criterion();
 
     /// <summary>
     /// Returns whether the criterion is skipped.
@@ -22,4 +19,3 @@ public interface IRunCriterionScore
     /// </summary>
     ICriterionAssessment? Assessment();
 }
-

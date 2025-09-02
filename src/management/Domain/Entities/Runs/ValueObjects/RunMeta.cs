@@ -7,26 +7,26 @@ namespace CascVel.Modules.Evaluations.Management.Domain.Entities.Runs.ValueObjec
 /// </summary>
 public sealed record RunMeta : IRunMeta
 {
-    private readonly IRunFormRef _form;
+    private readonly IRunFormSnapshot _snapshot;
     private readonly string _runFor;
     private readonly string _supervisorComment;
 
     /// <summary>
-    /// Creates a run metadata with form reference, subject identifier and optional supervisor comment.
+    /// Creates a run metadata with form reference, snapshot, subject identifier and optional supervisor comment.
     /// </summary>
-    public RunMeta(IRunFormRef form, string runFor, string? supervisorComment)
+    public RunMeta(IRunFormSnapshot snapshot, string runFor, string? supervisorComment)
     {
-        ArgumentNullException.ThrowIfNull(form);
+        ArgumentNullException.ThrowIfNull(snapshot);
         ArgumentNullException.ThrowIfNull(runFor);
-        _form = form;
+        _snapshot = snapshot;
         _runFor = runFor;
         _supervisorComment = supervisorComment ?? string.Empty;
     }
 
     /// <summary>
-    /// Returns the reference to the form used by the run.
+    /// Returns the snapshot of the form captured at launch time.
     /// </summary>
-    public IRunFormRef Form() => _form;
+    public IRunFormSnapshot Snapshot() => _snapshot;
 
     /// <summary>
     /// Returns the identifier of the evaluated subject.

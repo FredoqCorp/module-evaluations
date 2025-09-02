@@ -1,4 +1,3 @@
-using CascVel.Modules.Evaluations.Management.Domain.Identifiers;
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Runs;
 
 namespace CascVel.Modules.Evaluations.Management.Domain.Entities.Runs.ValueObjects;
@@ -8,24 +7,25 @@ namespace CascVel.Modules.Evaluations.Management.Domain.Entities.Runs.ValueObjec
 /// </summary>
 public sealed record RunCriterionScore : IRunCriterionScore
 {
-    private readonly Uuid _criterionId;
+    private readonly IRunFormCriterion _criterion;
     private readonly bool _skipped;
     private readonly ICriterionAssessment? _assessment;
 
     /// <summary>
-    /// Creates a per-criterion score with identifier, skipped flag and optional assessment.
+    /// Creates a per-criterion score with a snapshot reference, skipped flag and optional assessment.
     /// </summary>
-    public RunCriterionScore(Uuid criterionId, bool skipped, ICriterionAssessment? assessment)
+    public RunCriterionScore(IRunFormCriterion criterion, bool skipped, ICriterionAssessment? assessment)
     {
-        _criterionId = criterionId;
+        ArgumentNullException.ThrowIfNull(criterion);
+        _criterion = criterion;
         _skipped = skipped;
         _assessment = assessment;
     }
 
     /// <summary>
-    /// Returns the criterion identifier.
+    /// Returns the criterion reference inside the launched form snapshot.
     /// </summary>
-    public Uuid CriterionId() => _criterionId;
+    public IRunFormCriterion Criterion() => _criterion;
 
     /// <summary>
     /// Returns whether the criterion is skipped.

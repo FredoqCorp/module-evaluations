@@ -1,4 +1,6 @@
 using CascVel.Modules.Evaluations.Management.Domain.Entities.Runs.ValueObjects;
+using CascVel.Modules.Evaluations.Management.Domain.Entities.Forms.Enums;
+using CascVel.Modules.Evaluations.Management.Domain.Entities.Forms.ValueObjects;
 using Shouldly;
 
 namespace CascVel.Modules.Evaluations.Management.Domain.UnitTests.Runs.ValueObjects;
@@ -9,12 +11,12 @@ namespace CascVel.Modules.Evaluations.Management.Domain.UnitTests.Runs.ValueObje
 public sealed class RunMetaTests
 {
     /// <summary>
-    /// Verifies that constructor rejects null form reference.
+    /// Verifies that constructor rejects null snapshot.
     /// </summary>
-    [Fact(DisplayName = "RunMeta cannot be created with null form reference")]
-    public void RunMeta_cannot_be_created_with_null_form_reference()
+    [Fact(DisplayName = "RunMeta cannot be created with null snapshot")]
+    public void RunMeta_cannot_be_created_with_null_snapshot()
     {
-        Should.Throw<ArgumentNullException>(() => new RunMeta(null!, "op-✓-" + Guid.NewGuid(), string.Empty), "RunMeta accepted a null form reference which is incorrect");
+        Should.Throw<ArgumentNullException>(() => new RunMeta(null!, "op-✓-" + Guid.NewGuid(), string.Empty), "RunMeta accepted a null snapshot which is incorrect");
     }
 
     /// <summary>
@@ -23,8 +25,13 @@ public sealed class RunMetaTests
     [Fact(DisplayName = "RunMeta cannot be created with null runFor value")]
     public void RunMeta_cannot_be_created_with_null_runFor_value()
     {
-        var form = new RunFormRef(new CascVel.Modules.Evaluations.Management.Domain.Identifiers.Uuid(), "code-✓-" + Guid.NewGuid());
-        Should.Throw<ArgumentNullException>(() => new RunMeta(form, null!, string.Empty), "RunMeta accepted a null runFor which is incorrect");
+        var formId = new CascVel.Modules.Evaluations.Management.Domain.Identifiers.Uuid();
+        var formCode = "code-✓-" + Guid.NewGuid();
+        var meta = new FormMeta(new FormName("name✓"), "desc✓", System.Collections.Immutable.ImmutableList<string>.Empty, new FormCode(formCode));
+        var snapshot = new RunFormSnapshot(formId, meta, FormCalculationKind.ArithmeticMean,
+            System.Collections.Immutable.ImmutableList<CascVel.Modules.Evaluations.Management.Domain.Interfaces.Runs.IRunFormGroup>.Empty,
+            System.Collections.Immutable.ImmutableList<CascVel.Modules.Evaluations.Management.Domain.Interfaces.Runs.IRunFormCriterion>.Empty);
+        Should.Throw<ArgumentNullException>(() => new RunMeta(snapshot, null!, string.Empty), "RunMeta accepted a null runFor which is incorrect");
     }
 
     /// <summary>
@@ -33,8 +40,13 @@ public sealed class RunMetaTests
     [Fact(DisplayName = "RunMeta normalizes null supervisor comment to empty string")]
     public void RunMeta_normalizes_null_supervisor_comment_to_empty_string()
     {
-        var form = new RunFormRef(new CascVel.Modules.Evaluations.Management.Domain.Identifiers.Uuid(), "code-✓-" + Guid.NewGuid());
-        var vo = new RunMeta(form, "op-✓-" + Guid.NewGuid(), null);
+        var formId = new CascVel.Modules.Evaluations.Management.Domain.Identifiers.Uuid();
+        var formCode = "code-✓-" + Guid.NewGuid();
+        var meta = new FormMeta(new FormName("name✓"), "desc✓", System.Collections.Immutable.ImmutableList<string>.Empty, new FormCode(formCode));
+        var snapshot = new RunFormSnapshot(formId, meta, FormCalculationKind.ArithmeticMean,
+            System.Collections.Immutable.ImmutableList<CascVel.Modules.Evaluations.Management.Domain.Interfaces.Runs.IRunFormGroup>.Empty,
+            System.Collections.Immutable.ImmutableList<CascVel.Modules.Evaluations.Management.Domain.Interfaces.Runs.IRunFormCriterion>.Empty);
+        var vo = new RunMeta(snapshot, "op-✓-" + Guid.NewGuid(), null);
         vo.SupervisorComment().ShouldBe(string.Empty, "RunMeta returned a null supervisor comment which is incorrect");
     }
 }
