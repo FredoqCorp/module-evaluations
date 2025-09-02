@@ -1,5 +1,6 @@
 using System.Collections.Immutable;
 using CascVel.Modules.Evaluations.Management.Domain.Entities.Forms.Enums;
+using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Policies;
 
 namespace CascVel.Modules.Evaluations.Management.Domain.Interfaces.Runs;
 
@@ -28,6 +29,11 @@ public interface IRunFormSnapshot
     /// Returns the calculation rule kind captured at launch time.
     /// </summary>
     FormCalculationKind Rule();
+
+    /// <summary>
+    /// Returns the bound runtime calculation policy captured at launch time.
+    /// </summary>
+    ICalculationPolicy Policy();
 
     /// <summary>
     /// Returns the ordered groups of criteria captured at launch time.
