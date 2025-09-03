@@ -14,13 +14,7 @@ public interface ICalculationPolicy
     string Code();
 
     /// <summary>
-    /// Verifies that the bound policy is compatible with the provided snapshot and fails fast on mismatch.
-    /// </summary>
-    void Verify(IRunFormSnapshot snapshot);
-
-    /// <summary>
     /// Calculates total score from the snapshot and provided per-criterion scores.
     /// </summary>
     decimal Total(IRunFormSnapshot snapshot, IImmutableList<IRunCriterionScore> scores);
 }
-

@@ -7,17 +7,20 @@ using CascVel.Modules.Evaluations.Management.Domain.Interfaces;
 /// </summary>
 public sealed record FormCriterion : IFormCriterion
 {
+    private readonly IId _id;
     private readonly ICriterion _criterion;
     private readonly IOrderIndex _order;
 
     /// <summary>
     /// Creates a positioned criterion with order and weight.
     /// </summary>
-    public FormCriterion(ICriterion criterion, IOrderIndex order)
+    public FormCriterion(IId id, ICriterion criterion, IOrderIndex order)
     {
+        ArgumentNullException.ThrowIfNull(id);
         ArgumentNullException.ThrowIfNull(criterion);
         ArgumentNullException.ThrowIfNull(order);
 
+        _id = id;
         _criterion = criterion;
         _order = order;
     }
@@ -36,6 +39,14 @@ public sealed record FormCriterion : IFormCriterion
     public IOrderIndex Order()
     {
         return _order;
+    }
+
+    /// <summary>
+    /// Returns the stable identifier of this positioned criterion.
+    /// </summary>
+    public IId Id()
+    {
+        return _id;
     }
 
     

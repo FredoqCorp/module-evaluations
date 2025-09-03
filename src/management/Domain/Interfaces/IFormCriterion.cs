@@ -8,6 +8,10 @@ using CascVel.Modules.Evaluations.Management.Domain.Entities.Forms.ValueObjects;
 public interface IFormCriterion
 {
     /// <summary>
+    /// Returns the stable identifier of this positioned criterion.
+    /// </summary>
+    IId Id();
+    /// <summary>
     /// Returns the domain criterion value object.
     /// </summary>
     ICriterion Criterion();

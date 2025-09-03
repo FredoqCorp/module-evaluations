@@ -8,23 +8,24 @@ namespace CascVel.Modules.Evaluations.Management.Domain.Entities.Runs.ValueObjec
 /// </summary>
 public sealed record RunFormCriterion : IRunFormCriterion
 {
-    private readonly Guid _key;
+    private readonly IId _id;
     private readonly IFormCriterion _inner;
 
     /// <summary>
     /// Creates a decorated form criterion with a run-local key and an original criterion instance.
     /// </summary>
-    public RunFormCriterion(Guid key, IFormCriterion inner)
+    public RunFormCriterion(IId id, IFormCriterion inner)
     {
+        ArgumentNullException.ThrowIfNull(id);
         ArgumentNullException.ThrowIfNull(inner);
-        _key = key;
+        _id = id;
         _inner = inner;
     }
 
     /// <summary>
-    /// Returns the run-local unique key of this criterion within the snapshot.
+    /// Returns the stable identifier of this criterion within the snapshot.
     /// </summary>
-    public Guid Key() => _key;
+    public IId Id() => _id;
 
     /// <summary>
     /// Returns the domain criterion value object by delegating to the wrapped criterion.

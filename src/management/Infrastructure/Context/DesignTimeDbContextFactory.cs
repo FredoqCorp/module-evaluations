@@ -26,7 +26,6 @@ public sealed class DesignTimeDbContextFactory : IDesignTimeDbContextFactory<Dat
         var dataSourceBuilder = new NpgsqlDataSourceBuilder(connectionString);
         dataSourceBuilder.EnableDynamicJson();
         dataSourceBuilder.MapEnum<FormStatus>("evaluations.form_status");
-        dataSourceBuilder.MapEnum<FormCalculationKind>("evaluations.form_calculation_kind");
         var dataSource = dataSourceBuilder.Build();
 
         DbContextOptionsBuilder<DatabaseContext> optionsBuilder = new DbContextOptionsBuilder<DatabaseContext>()
@@ -35,7 +34,6 @@ public sealed class DesignTimeDbContextFactory : IDesignTimeDbContextFactory<Dat
                 // Ensure EF migrations history is stored in the same module schema
                 npgsql.MigrationsHistoryTable("__EFMigrationsHistory", "evaluations");
                 npgsql.MapEnum<FormStatus>("form_status", "evaluations");
-                npgsql.MapEnum<FormCalculationKind>("form_calculation_kind", "evaluations");
             });
 
         return new DatabaseContext(optionsBuilder.Options);

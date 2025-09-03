@@ -1,5 +1,4 @@
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Policies;
-using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Runs;
 
 namespace CascVel.Modules.Evaluations.Management.Domain.Entities.Policies;
 
@@ -24,10 +23,5 @@ public sealed record ArithmeticMeanPolicyDefinition : ICalculationPolicyDefiniti
     /// <summary>
     /// Binds the definition to the snapshot and returns a runtime policy.
     /// </summary>
-    public ICalculationPolicy Bind(IRunFormSnapshot snapshot)
-    {
-        ArgumentNullException.ThrowIfNull(snapshot);
-        return new ArithmeticMeanPolicy();
-    }
+    public ICalculationPolicy Policy() => new ArithmeticMeanPolicy();
 }
-

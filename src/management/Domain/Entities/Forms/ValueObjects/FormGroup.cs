@@ -8,6 +8,7 @@ using System.Collections.Immutable;
 /// </summary>
 public sealed record FormGroup : IFormGroup
 {
+    private readonly IId _id;
     private readonly string _title;
     private readonly IOrderIndex _order;
     private readonly IImmutableList<IFormCriterion> _criteria;
@@ -16,18 +17,28 @@ public sealed record FormGroup : IFormGroup
     /// <summary>
     /// Creates a form group with title, order, weight, criteria and nested groups.
     /// </summary>
-    public FormGroup(string title, IOrderIndex order, IImmutableList<IFormCriterion> criteria, IImmutableList<IFormGroup> groups)
+    public FormGroup(IId id, string title, IOrderIndex order, IImmutableList<IFormCriterion> criteria, IImmutableList<IFormGroup> groups)
     {
+        ArgumentNullException.ThrowIfNull(id);
         ArgumentNullException.ThrowIfNull(title);
         ArgumentNullException.ThrowIfNull(order);
         ArgumentNullException.ThrowIfNull(criteria);
         ArgumentNullException.ThrowIfNull(groups);
 
+        _id = id;
         _title = title;
         _order = order;
 
         _criteria = criteria;
         _groups = groups;
+    }
+
+    /// <summary>
+    /// Returns the stable identifier of the group.
+    /// </summary>
+    public IId Id()
+    {
+        return _id;
     }
 
     /// <summary>

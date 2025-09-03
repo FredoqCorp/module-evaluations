@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Immutable;
-using CascVel.Modules.Evaluations.Management.Domain.Entities.Forms.Enums;
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces;
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Runs;
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Policies;
@@ -15,33 +14,10 @@ namespace CascVel.Modules.Evaluations.Management.Domain.Entities.Runs.ValueObjec
 public sealed record RunFormSnapshot : IRunFormSnapshot
 {
     private readonly IFormMeta _meta;
-    private readonly FormCalculationKind _rule;
     private readonly IImmutableList<IRunFormGroup> _groups;
     private readonly IImmutableList<IRunFormCriterion> _criteria;
     private readonly IId _formId;
     private readonly ICalculationPolicy _policy;
-
-    /// <summary>
-    /// Creates a form snapshot with meta, rule, ordered groups and root-level criteria.
-    /// </summary>
-    public RunFormSnapshot(IId formId, IFormMeta meta, FormCalculationKind rule, IImmutableList<IRunFormGroup> groups, IImmutableList<IRunFormCriterion> criteria)
-    {
-        ArgumentNullException.ThrowIfNull(formId);
-        ArgumentNullException.ThrowIfNull(meta);
-        ArgumentNullException.ThrowIfNull(groups);
-        ArgumentNullException.ThrowIfNull(criteria);
-        _meta = meta;
-        _rule = rule;
-        _groups = groups;
-        _criteria = criteria;
-        _formId = formId;
-        _policy = rule switch
-        {
-            FormCalculationKind.ArithmeticMean => new ArithmeticMeanPolicy(),
-            FormCalculationKind.WeightedMean => new WeightedMeanPolicy(ImmutableDictionary<Guid, Weight>.Empty),
-            _ => new ArithmeticMeanPolicy()
-        };
-    }
 
     /// <summary>
     /// Creates a form snapshot with meta, explicit runtime policy, ordered groups and root-level criteria.
@@ -54,11 +30,6 @@ public sealed record RunFormSnapshot : IRunFormSnapshot
         ArgumentNullException.ThrowIfNull(groups);
         ArgumentNullException.ThrowIfNull(criteria);
         _meta = meta;
-        _rule = policy.Code() switch
-        {
-            "weighted-mean" => FormCalculationKind.WeightedMean,
-            _ => FormCalculationKind.ArithmeticMean
-        };
         _groups = groups;
         _criteria = criteria;
         _formId = formId;
@@ -79,11 +50,6 @@ public sealed record RunFormSnapshot : IRunFormSnapshot
     /// Returns the immutable form code captured at launch time derived from Meta.
     /// </summary>
     public string Code() => _meta.Code().Code();
-
-    /// <summary>
-    /// Returns the calculation rule kind captured at launch time.
-    /// </summary>
-    public FormCalculationKind Rule() => _rule;
 
     /// <summary>
     /// Returns the bound runtime calculation policy captured at launch time.

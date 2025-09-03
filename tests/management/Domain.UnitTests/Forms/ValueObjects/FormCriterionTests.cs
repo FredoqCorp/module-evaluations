@@ -14,6 +14,6 @@ public sealed class FormCriterionTests
     [Fact(DisplayName = "FormCriterion cannot be created with null criterion object")]
     public void FormCriterion_cannot_be_created_with_null_criterion_object()
     {
-        Should.Throw<ArgumentNullException>(() => new FormCriterion(null!, new OrderIndex(0)), "FormCriterion accepted a null criterion which is incorrect");
+        Should.Throw<ArgumentNullException>(() => new FormCriterion(new CascVel.Modules.Evaluations.Management.Domain.Identifiers.Uuid(), null!, new OrderIndex(0)), "FormCriterion accepted a null criterion which is incorrect");
     }
 }

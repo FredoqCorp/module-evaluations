@@ -6,9 +6,4 @@ namespace CascVel.Modules.Evaluations.Management.Domain.Interfaces.Runs;
 /// </summary>
 public interface IRunFormCriterion : IFormCriterion
 {
-    /// <summary>
-    /// Returns the run-local unique key of this criterion within the snapshot.
-    /// </summary>
-    Guid Key();
 }
-

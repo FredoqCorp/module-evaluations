@@ -15,14 +15,6 @@ public sealed record ArithmeticMeanPolicy : ICalculationPolicy
     public string Code() => "arithmetic-mean";
 
     /// <summary>
-    /// Verifies compatibility of the bound policy with the snapshot which is always true.
-    /// </summary>
-    public void Verify(IRunFormSnapshot snapshot)
-    {
-        ArgumentNullException.ThrowIfNull(snapshot);
-    }
-
-    /// <summary>
     /// Calculates arithmetic mean over non-skipped criteria that have assessments.
     /// </summary>
     public decimal Total(IRunFormSnapshot snapshot, IImmutableList<IRunCriterionScore> scores)
@@ -57,4 +49,3 @@ public sealed record ArithmeticMeanPolicy : ICalculationPolicy
         return sum / count;
     }
 }
-

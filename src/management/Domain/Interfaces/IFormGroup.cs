@@ -9,6 +9,10 @@ using CascVel.Modules.Evaluations.Management.Domain.Entities.Forms.ValueObjects;
 public interface IFormGroup
 {
     /// <summary>
+    /// Returns the stable identifier of the group.
+    /// </summary>
+    IId Id();
+    /// <summary>
     /// Returns the title string.
     /// </summary>
     string Title();

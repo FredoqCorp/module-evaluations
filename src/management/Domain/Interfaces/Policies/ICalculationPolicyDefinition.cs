@@ -19,8 +19,7 @@ public interface ICalculationPolicyDefinition
     void Verify(Interfaces.IEvaluationForm form);
 
     /// <summary>
-    /// Binds the definition to a run snapshot and returns a runtime policy instance.
+    /// Creates a runtime calculation policy from this definition.
     /// </summary>
-    ICalculationPolicy Bind(IRunFormSnapshot snapshot);
+    ICalculationPolicy Policy();
 }
-

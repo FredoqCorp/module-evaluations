@@ -28,7 +28,7 @@ public sealed class RunMetaTests
         var formId = new CascVel.Modules.Evaluations.Management.Domain.Identifiers.Uuid();
         var formCode = "code-✓-" + Guid.NewGuid();
         var meta = new FormMeta(new FormName("name✓"), "desc✓", System.Collections.Immutable.ImmutableList<string>.Empty, new FormCode(formCode));
-        var snapshot = new RunFormSnapshot(formId, meta, FormCalculationKind.ArithmeticMean,
+        var snapshot = new RunFormSnapshot(formId, meta, new CascVel.Modules.Evaluations.Management.Domain.Entities.Policies.ArithmeticMeanPolicy(),
             System.Collections.Immutable.ImmutableList<CascVel.Modules.Evaluations.Management.Domain.Interfaces.Runs.IRunFormGroup>.Empty,
             System.Collections.Immutable.ImmutableList<CascVel.Modules.Evaluations.Management.Domain.Interfaces.Runs.IRunFormCriterion>.Empty);
         Should.Throw<ArgumentNullException>(() => new RunMeta(snapshot, null!, string.Empty), "RunMeta accepted a null runFor which is incorrect");
@@ -43,7 +43,7 @@ public sealed class RunMetaTests
         var formId = new CascVel.Modules.Evaluations.Management.Domain.Identifiers.Uuid();
         var formCode = "code-✓-" + Guid.NewGuid();
         var meta = new FormMeta(new FormName("name✓"), "desc✓", System.Collections.Immutable.ImmutableList<string>.Empty, new FormCode(formCode));
-        var snapshot = new RunFormSnapshot(formId, meta, FormCalculationKind.ArithmeticMean,
+        var snapshot = new RunFormSnapshot(formId, meta, new CascVel.Modules.Evaluations.Management.Domain.Entities.Policies.ArithmeticMeanPolicy(),
             System.Collections.Immutable.ImmutableList<CascVel.Modules.Evaluations.Management.Domain.Interfaces.Runs.IRunFormGroup>.Empty,
             System.Collections.Immutable.ImmutableList<CascVel.Modules.Evaluations.Management.Domain.Interfaces.Runs.IRunFormCriterion>.Empty);
         var vo = new RunMeta(snapshot, "op-✓-" + Guid.NewGuid(), null);

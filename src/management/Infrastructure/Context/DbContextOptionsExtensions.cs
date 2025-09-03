@@ -21,7 +21,6 @@ public static class DbContextOptionsExtensions
         var dataSourceBuilder = new NpgsqlDataSourceBuilder(connectionString);
         dataSourceBuilder.EnableDynamicJson();
         dataSourceBuilder.MapEnum<FormStatus>("evaluations.form_status");
-        dataSourceBuilder.MapEnum<FormCalculationKind>("evaluations.form_calculation_kind");
         dataSourceConfigure?.Invoke(dataSourceBuilder);
         var dataSource = dataSourceBuilder.Build();
 
@@ -33,7 +32,6 @@ public static class DbContextOptionsExtensions
                 npgsql.EnableRetryOnFailure();
                 npgsql.MigrationsHistoryTable("__EFMigrationsHistory", schema: "evaluations");
                 npgsql.MapEnum<FormStatus>("form_status", "evaluations");
-                npgsql.MapEnum<FormCalculationKind>("form_calculation_kind", "evaluations");
             });
             options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
         });

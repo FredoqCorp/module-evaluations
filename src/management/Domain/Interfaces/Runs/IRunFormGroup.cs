@@ -10,9 +10,9 @@ namespace CascVel.Modules.Evaluations.Management.Domain.Interfaces.Runs;
 public interface IRunFormGroup
 {
     /// <summary>
-    /// Returns the run-local unique key of this group within the snapshot.
+    /// Returns the stable identifier of the group.
     /// </summary>
-    Guid Key();
+    IId Id();
 
     /// <summary>
     /// Returns the human-friendly title of the group.

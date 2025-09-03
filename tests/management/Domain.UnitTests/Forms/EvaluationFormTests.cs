@@ -25,7 +25,7 @@ public sealed class EvaluationFormTests
         var life = new FormLifecycle(FormStatus.Draft, new NoPeriod(), audit);
         var groups = ImmutableList<IFormGroup>.Empty;
         var criteria = ImmutableList<IFormCriterion>.Empty;
-        var agg = new EvaluationForm(id, meta, life, FormCalculationKind.ArithmeticMean, groups, criteria);
+        var agg = new EvaluationForm(id, meta, life, groups, criteria);
 
         ((IEvaluationForm)agg).Groups().Count.ShouldBe(0, "EvaluationForm returned an unexpected groups count which is incorrect");
     }

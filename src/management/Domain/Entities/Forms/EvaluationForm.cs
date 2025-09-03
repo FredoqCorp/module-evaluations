@@ -1,4 +1,3 @@
-using CascVel.Modules.Evaluations.Management.Domain.Entities.Forms.Enums;
 using CascVel.Modules.Evaluations.Management.Domain.Entities.Forms.ValueObjects;
 using CascVel.Modules.Evaluations.Management.Domain.Identifiers;
 using System.Collections.Immutable;
@@ -7,6 +6,7 @@ using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Policies;
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Runs;
 using CascVel.Modules.Evaluations.Management.Domain.Entities.Runs.ValueObjects;
 using System;
+using CascVel.Modules.Evaluations.Management.Domain.Entities.Policies;
 
 namespace CascVel.Modules.Evaluations.Management.Domain.Entities.Forms;
 
@@ -19,7 +19,6 @@ public sealed class EvaluationForm : IEvaluationForm
     private readonly Uuid _id;
     private readonly IFormMeta _meta;
     private readonly IFormLifecycle _lifecycle;
-    private readonly FormCalculationKind _rule;
     private readonly IImmutableList<IFormGroup> _groups;
     private readonly IImmutableList<IFormCriterion> _criteria;
 
@@ -30,7 +29,6 @@ public sealed class EvaluationForm : IEvaluationForm
         Uuid id,
         IFormMeta meta,
         IFormLifecycle lifecycle,
-        FormCalculationKind rule,
         IImmutableList<IFormGroup> groups,
         IImmutableList<IFormCriterion> criteria)
     {
@@ -42,7 +40,6 @@ public sealed class EvaluationForm : IEvaluationForm
         _id = id;
         _meta = meta;
         _lifecycle = lifecycle;
-        _rule = rule;
         _groups = groups;
         _criteria = criteria;
     }
@@ -63,11 +60,6 @@ public sealed class EvaluationForm : IEvaluationForm
     public IFormLifecycle Lifecycle() => _lifecycle;
 
     /// <summary>
-    /// Returns the calculation rule kind of this evaluation form aggregate.
-    /// </summary>
-    public FormCalculationKind Rule() => _rule;
-
-    /// <summary>
     /// Returns the ordered groups of criteria belonging to this evaluation form aggregate.
     /// </summary>
     public IImmutableList<IFormGroup> Groups() => _groups;
@@ -77,21 +69,6 @@ public sealed class EvaluationForm : IEvaluationForm
     /// </summary>
     public IImmutableList<IFormCriterion> Criteria() => _criteria;
 
-    /// <summary>
-    /// Returns a run form snapshot for this evaluation form using the form's current calculation rule.
-    /// Throws when the rule requires an explicit definition.
-    /// </summary>
-    public IRunFormSnapshot Snapshot()
-    {
-        if (_rule == FormCalculationKind.WeightedMean)
-        {
-            throw new InvalidOperationException("Weighted calculation requires an explicit definition");
-        }
-
-        var groups = BuildGroups(_groups);
-        var criteria = BuildCriteria(_criteria);
-        return new RunFormSnapshot(_id, _meta, _rule, groups, criteria);
-    }
 
     /// <summary>
     /// Returns a run form snapshot for this evaluation form by binding a calculation policy definition.
@@ -103,9 +80,7 @@ public sealed class EvaluationForm : IEvaluationForm
 
         var groups = BuildGroups(_groups);
         var criteria = BuildCriteria(_criteria);
-        var probe = new RunFormSnapshot(_id, _meta, _rule, groups, criteria);
-        var policy = definition.Bind(probe);
-        policy.Verify(probe);
+        var policy = definition.Policy();
         return new RunFormSnapshot(_id, _meta, policy, groups, criteria);
     }
 
@@ -116,7 +91,7 @@ public sealed class EvaluationForm : IEvaluationForm
         {
             var childrenGroups = BuildGroups(g.Groups());
             var childrenCriteria = BuildCriteria(g.Criteria());
-            var rg = new RunFormGroup(Guid.CreateVersion7(), g.Title(), g.Order(), childrenCriteria, childrenGroups);
+            var rg = new RunFormGroup(g.Id(), g.Title(), g.Order(), childrenCriteria, childrenGroups);
             res.Add(rg);
         }
         return res.ToImmutable();
@@ -127,7 +102,7 @@ public sealed class EvaluationForm : IEvaluationForm
         var res = ImmutableList.CreateBuilder<IRunFormCriterion>();
         foreach (var c in source)
         {
-            var rc = new RunFormCriterion(Guid.CreateVersion7(), c);
+            var rc = new RunFormCriterion(c.Id(), c);
             res.Add(rc);
         }
         return res.ToImmutable();
