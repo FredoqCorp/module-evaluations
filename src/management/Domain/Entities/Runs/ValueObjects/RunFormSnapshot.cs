@@ -1,10 +1,7 @@
-using System;
 using System.Collections.Immutable;
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces;
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Runs;
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Policies;
-using CascVel.Modules.Evaluations.Management.Domain.Entities.Policies;
-using CascVel.Modules.Evaluations.Management.Domain.Entities.Forms.ValueObjects;
 
 namespace CascVel.Modules.Evaluations.Management.Domain.Entities.Runs.ValueObjects;
 
@@ -45,11 +42,6 @@ public sealed record RunFormSnapshot : IRunFormSnapshot
     /// Returns human-facing metadata captured at launch time.
     /// </summary>
     public IFormMeta Meta() => _meta;
-
-    /// <summary>
-    /// Returns the immutable form code captured at launch time derived from Meta.
-    /// </summary>
-    public string Code() => _meta.Code().Code();
 
     /// <summary>
     /// Returns the bound runtime calculation policy captured at launch time.

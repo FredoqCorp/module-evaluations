@@ -20,11 +20,6 @@ public interface IRunFormSnapshot
     IFormMeta Meta();
 
     /// <summary>
-    /// Returns the immutable form code captured at launch time.
-    /// </summary>
-    string Code();
-
-    /// <summary>
     /// Returns the bound runtime calculation policy captured at launch time.
     /// </summary>
     ICalculationPolicy Policy();

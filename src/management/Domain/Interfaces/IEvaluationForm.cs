@@ -1,6 +1,4 @@
 using System.Collections.Immutable;
-using CascVel.Modules.Evaluations.Management.Domain.Entities.Forms.ValueObjects;
-using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Policies;
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Runs;
 
 namespace CascVel.Modules.Evaluations.Management.Domain.Interfaces;
@@ -10,16 +8,6 @@ namespace CascVel.Modules.Evaluations.Management.Domain.Interfaces;
 /// </summary>
 public interface IEvaluationForm
 {
-    /// <summary>
-    /// Returns the unique identifier.
-    /// </summary>
-    IId Id();
-
-    /// <summary>
-    /// Returns the human-facing metadata.
-    /// </summary>
-    IFormMeta Meta();
-
     /// <summary>
     /// Returns the lifecycle value object.
     /// </summary>
@@ -31,7 +19,7 @@ public interface IEvaluationForm
     IImmutableList<IFormGroup> Groups();
 
     /// <summary>
-    /// Returns the criteria outside of any group.
+    /// Returns the criteria outside any group.
     /// </summary>
     IImmutableList<IFormCriterion> Criteria();
 

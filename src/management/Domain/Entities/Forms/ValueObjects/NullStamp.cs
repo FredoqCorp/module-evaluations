@@ -1,6 +1,6 @@
 namespace CascVel.Modules.Evaluations.Management.Domain.Entities.Forms.ValueObjects;
 
-using CascVel.Modules.Evaluations.Management.Domain.Interfaces;
+using Interfaces;
 
 /// <summary>
 /// Null Object implementation of IStamp representing absence of a stamp.

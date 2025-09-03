@@ -1,7 +1,6 @@
 using System.Collections.Concurrent;
 using CascVel.Modules.Evaluations.Management.Domain.Identifiers;
 using Shouldly;
-using Xunit;
 
 namespace CascVel.Modules.Evaluations.Management.Domain.UnitTests.Identifiers;
 

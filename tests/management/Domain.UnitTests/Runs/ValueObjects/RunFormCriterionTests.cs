@@ -17,11 +17,11 @@ public sealed class RunFormCriterionTests
     public void RunFormCriterion_returns_the_same_identifier()
     {
         var id = new Uuid();
-        var baseCriterion = new CascVel.Modules.Evaluations.Management.Domain.Entities.Forms.ValueObjects.FormCriterion(
+        var baseCriterion = new FormCriterion(
             id,
-            new CascVel.Modules.Evaluations.Management.Domain.Entities.Forms.ValueObjects.Criterion(
-                new CascVel.Modules.Evaluations.Management.Domain.Entities.Forms.ValueObjects.CriterionText("t✓", "d"),
-                System.Collections.Immutable.ImmutableList<CascVel.Modules.Evaluations.Management.Domain.Interfaces.IChoice>.Empty
+            new Criterion(
+                new CriterionText("t✓", "d"),
+                System.Collections.Immutable.ImmutableList<Interfaces.IChoice>.Empty
             ),
             new OrderIndex(0)
         );

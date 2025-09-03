@@ -1,6 +1,3 @@
-using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Runs;
-using System.Collections.Immutable;
-
 namespace CascVel.Modules.Evaluations.Management.Domain.Interfaces.Policies;
 
 /// <summary>
@@ -16,7 +13,7 @@ public interface ICalculationPolicyDefinition
     /// <summary>
     /// Verifies that the definition is compatible with the provided form structure and fails fast on mismatch.
     /// </summary>
-    void Verify(Interfaces.IEvaluationForm form);
+    void Verify(IEvaluationForm form);
 
     /// <summary>
     /// Creates a runtime calculation policy from this definition.

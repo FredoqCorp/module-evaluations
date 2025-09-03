@@ -2,7 +2,7 @@ using CascVel.Modules.Evaluations.Management.Domain.Entities.Forms.Enums;
 
 namespace CascVel.Modules.Evaluations.Management.Domain.Entities.Forms.ValueObjects;
 
-using CascVel.Modules.Evaluations.Management.Domain.Interfaces;
+using Interfaces;
 
 /// <summary>
 /// Lifecycle state, validity period and audit as an immutable value object.

@@ -1,6 +1,6 @@
 namespace CascVel.Modules.Evaluations.Management.Domain.Entities.Forms.ValueObjects;
 
-using CascVel.Modules.Evaluations.Management.Domain.Interfaces;
+using Interfaces;
 
 /// <summary>
 /// Globally-unique code of a form as an immutable value object.

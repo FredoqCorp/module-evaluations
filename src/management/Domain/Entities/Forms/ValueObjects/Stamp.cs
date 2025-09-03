@@ -1,6 +1,6 @@
 namespace CascVel.Modules.Evaluations.Management.Domain.Entities.Forms.ValueObjects;
 
-using CascVel.Modules.Evaluations.Management.Domain.Interfaces;
+using Interfaces;
 
 /// <summary>
 /// Actor and time stamp as an immutable value object.

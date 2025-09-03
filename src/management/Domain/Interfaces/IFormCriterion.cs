@@ -1,7 +1,5 @@
 namespace CascVel.Modules.Evaluations.Management.Domain.Interfaces;
 
-using CascVel.Modules.Evaluations.Management.Domain.Entities.Forms.ValueObjects;
-
 /// <summary>
 /// Contract for a criterion positioned within a form or group.
 /// </summary>

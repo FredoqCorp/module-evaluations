@@ -16,14 +16,14 @@ public sealed class RunCriterionScoreTests
     public void RunCriterionScore_returns_the_same_skipped_flag_value()
     {
         var baseCriterion = new CascVel.Modules.Evaluations.Management.Domain.Entities.Forms.ValueObjects.FormCriterion(
-            new CascVel.Modules.Evaluations.Management.Domain.Identifiers.Uuid(),
+            new Uuid(),
             new CascVel.Modules.Evaluations.Management.Domain.Entities.Forms.ValueObjects.Criterion(
                 new CascVel.Modules.Evaluations.Management.Domain.Entities.Forms.ValueObjects.CriterionText("тест✓", "описание✓"),
-                System.Collections.Immutable.ImmutableList<CascVel.Modules.Evaluations.Management.Domain.Interfaces.IChoice>.Empty
+                System.Collections.Immutable.ImmutableList<Interfaces.IChoice>.Empty
             ),
             new CascVel.Modules.Evaluations.Management.Domain.Entities.Forms.ValueObjects.OrderIndex(0)
         );
-        var rc = new RunFormCriterion(new CascVel.Modules.Evaluations.Management.Domain.Identifiers.Uuid(), baseCriterion);
+        var rc = new RunFormCriterion(new Uuid(), baseCriterion);
         var vo = new RunCriterionScore(rc, true, null);
         vo.Skipped().ShouldBeTrue("RunCriterionScore returned a false skipped value which is incorrect");
     }

@@ -1,7 +1,6 @@
 namespace CascVel.Modules.Evaluations.Management.Domain.Interfaces.Runs;
 
 using System.Collections.Immutable;
-using CascVel.Modules.Evaluations.Management.Domain.Entities.Runs.ValueObjects;
 
 /// <summary>
 /// Contract for aggregated result data of a form run.

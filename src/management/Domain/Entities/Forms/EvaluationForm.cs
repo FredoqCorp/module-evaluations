@@ -1,12 +1,8 @@
-using CascVel.Modules.Evaluations.Management.Domain.Entities.Forms.ValueObjects;
-using CascVel.Modules.Evaluations.Management.Domain.Identifiers;
 using System.Collections.Immutable;
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces;
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Policies;
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Runs;
 using CascVel.Modules.Evaluations.Management.Domain.Entities.Runs.ValueObjects;
-using System;
-using CascVel.Modules.Evaluations.Management.Domain.Entities.Policies;
 
 namespace CascVel.Modules.Evaluations.Management.Domain.Entities.Forms;
 
@@ -16,7 +12,7 @@ namespace CascVel.Modules.Evaluations.Management.Domain.Entities.Forms;
 /// </summary>
 public sealed class EvaluationForm : IEvaluationForm
 {
-    private readonly Uuid _id;
+    private readonly IId _id;
     private readonly IFormMeta _meta;
     private readonly IFormLifecycle _lifecycle;
     private readonly IImmutableList<IFormGroup> _groups;
@@ -27,7 +23,7 @@ public sealed class EvaluationForm : IEvaluationForm
     /// Creates an evaluation form aggregate with identifier, meta, lifecycle, calculation definition, groups and criteria.
     /// </summary>
     public EvaluationForm(
-        Uuid id,
+        IId id,
         IFormMeta meta,
         IFormLifecycle lifecycle,
         IImmutableList<IFormGroup> groups,
@@ -47,16 +43,6 @@ public sealed class EvaluationForm : IEvaluationForm
         _criteria = criteria;
         _definition = definition;
     }
-
-    /// <summary>
-    /// Returns the unique identifier of this evaluation form aggregate.
-    /// </summary>
-    public IId Id() => _id;
-
-    /// <summary>
-    /// Returns the human-facing metadata of this evaluation form aggregate.
-    /// </summary>
-    public IFormMeta Meta() => _meta;
 
     /// <summary>
     /// Returns the lifecycle value object of this evaluation form aggregate.

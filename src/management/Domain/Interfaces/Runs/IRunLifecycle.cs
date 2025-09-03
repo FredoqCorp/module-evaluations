@@ -1,6 +1,6 @@
 namespace CascVel.Modules.Evaluations.Management.Domain.Interfaces.Runs;
 
-using CascVel.Modules.Evaluations.Management.Domain.Interfaces;
+using Interfaces;
 
 /// <summary>
 /// Contract for run lifecycle stamps.

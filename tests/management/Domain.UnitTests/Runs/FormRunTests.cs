@@ -3,8 +3,6 @@ using CascVel.Modules.Evaluations.Management.Domain.Entities.Runs;
 using CascVel.Modules.Evaluations.Management.Domain.Entities.Runs.Enums;
 using CascVel.Modules.Evaluations.Management.Domain.Entities.Runs.ValueObjects;
 using CascVel.Modules.Evaluations.Management.Domain.Identifiers;
-using CascVel.Modules.Evaluations.Management.Domain.Interfaces;
-using CascVel.Modules.Evaluations.Management.Domain.Entities.Forms.Enums;
 using Shouldly;
 
 namespace CascVel.Modules.Evaluations.Management.Domain.UnitTests.Runs;
@@ -31,7 +29,7 @@ public sealed class FormRunTests
         var lc = new RunLifecycle(new Stamp("u-✓-" + Guid.NewGuid(), DateTime.UtcNow), new NullStamp(), new NullStamp(), new NullStamp());
         var ctx = new RunContext(System.Collections.Immutable.ImmutableDictionary<string, string>.Empty);
         var res = new RunResult(0m, System.Collections.Immutable.ImmutableList<CascVel.Modules.Evaluations.Management.Domain.Interfaces.Runs.IRunCriterionScore>.Empty);
-        var state = new RunState(lc, ctx, res, new RunAgreementTrail(null, CascVel.Modules.Evaluations.Management.Domain.Entities.Runs.Enums.RunAgreementStatus.Disagree, null));
+        var state = new RunState(lc, ctx, res, new RunAgreementTrail(null, RunAgreementStatus.Disagree, null));
         var agg = new FormRun(id, meta, state);
 
         agg.Id().ShouldBe(id, "FormRun returned an unexpected identifier which is incorrect");
