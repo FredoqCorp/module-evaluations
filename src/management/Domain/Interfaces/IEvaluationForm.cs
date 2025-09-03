@@ -36,7 +36,7 @@ public interface IEvaluationForm
     IImmutableList<IFormCriterion> Criteria();
 
     /// <summary>
-    /// Returns a run form snapshot for this evaluation form by binding a calculation policy definition.
+    /// Returns a run form snapshot for this evaluation form using the stored calculation policy definition.
     /// </summary>
-    IRunFormSnapshot Snapshot(ICalculationPolicyDefinition definition);
+    IRunFormSnapshot Snapshot();
 }

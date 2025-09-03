@@ -21,27 +21,31 @@ public sealed class EvaluationForm : IEvaluationForm
     private readonly IFormLifecycle _lifecycle;
     private readonly IImmutableList<IFormGroup> _groups;
     private readonly IImmutableList<IFormCriterion> _criteria;
+    private readonly ICalculationPolicyDefinition _definition;
 
     /// <summary>
-    /// Creates an evaluation form aggregate with identifier, meta, lifecycle, calculation rule, groups and criteria.
+    /// Creates an evaluation form aggregate with identifier, meta, lifecycle, calculation definition, groups and criteria.
     /// </summary>
     public EvaluationForm(
         Uuid id,
         IFormMeta meta,
         IFormLifecycle lifecycle,
         IImmutableList<IFormGroup> groups,
-        IImmutableList<IFormCriterion> criteria)
+        IImmutableList<IFormCriterion> criteria,
+        ICalculationPolicyDefinition definition)
     {
         ArgumentNullException.ThrowIfNull(meta);
         ArgumentNullException.ThrowIfNull(lifecycle);
         ArgumentNullException.ThrowIfNull(groups);
         ArgumentNullException.ThrowIfNull(criteria);
+        ArgumentNullException.ThrowIfNull(definition);
 
         _id = id;
         _meta = meta;
         _lifecycle = lifecycle;
         _groups = groups;
         _criteria = criteria;
+        _definition = definition;
     }
 
     /// <summary>
@@ -71,16 +75,15 @@ public sealed class EvaluationForm : IEvaluationForm
 
 
     /// <summary>
-    /// Returns a run form snapshot for this evaluation form by binding a calculation policy definition.
+    /// Returns a run form snapshot for this evaluation form using stored calculation policy definition.
     /// </summary>
-    public IRunFormSnapshot Snapshot(ICalculationPolicyDefinition definition)
+    public IRunFormSnapshot Snapshot()
     {
-        ArgumentNullException.ThrowIfNull(definition);
-        definition.Verify(this);
+        _definition.Verify(this);
 
         var groups = BuildGroups(_groups);
         var criteria = BuildCriteria(_criteria);
-        var policy = definition.Policy();
+        var policy = _definition.Policy();
         return new RunFormSnapshot(_id, _meta, policy, groups, criteria);
     }
 
