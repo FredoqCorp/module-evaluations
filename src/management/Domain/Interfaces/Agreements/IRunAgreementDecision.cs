@@ -1,4 +1,4 @@
-using CascVel.Modules.Evaluations.Management.Domain.Entities.Runs.Enums;
+using CascVel.Modules.Evaluations.Management.Domain.Entities.Agreements.Enums;
 
 namespace CascVel.Modules.Evaluations.Management.Domain.Interfaces.Runs;
 
