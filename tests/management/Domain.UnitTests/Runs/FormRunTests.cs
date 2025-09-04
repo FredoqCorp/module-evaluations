@@ -18,7 +18,7 @@ public sealed class FormRunTests
     [Fact(DisplayName = "FormRun returns the same identifier")]
     public void FormRun_returns_the_same_identifier()
     {
-        var id = new Uuid();
+        var id = new RunId(Guid.CreateVersion7());
         var formId = new Uuid();
         var formCode = "code-✓-" + Guid.NewGuid();
         var formMeta = new FormMeta(new FormName("name✓"), "desc✓", System.Collections.Immutable.ImmutableList<string>.Empty, new FormCode(formCode));
@@ -29,7 +29,7 @@ public sealed class FormRunTests
         var lc = new RunLifecycle(new Stamp("u-✓-" + Guid.NewGuid(), DateTime.UtcNow), new NullStamp(), new NullStamp(), new NullStamp());
         var ctx = new RunContext(System.Collections.Immutable.ImmutableDictionary<string, string>.Empty);
         var res = new RunResult(0m, System.Collections.Immutable.ImmutableList<CascVel.Modules.Evaluations.Management.Domain.Interfaces.Runs.IRunCriterionScore>.Empty);
-        var state = new RunState(lc, ctx, res, new RunAgreementTrail(null, RunAgreementStatus.Disagree, null));
+        var state = new RunState(lc, ctx, res);
         var agg = new FormRun(id, meta, state);
 
         agg.Id().ShouldBe(id, "FormRun returned an unexpected identifier which is incorrect");

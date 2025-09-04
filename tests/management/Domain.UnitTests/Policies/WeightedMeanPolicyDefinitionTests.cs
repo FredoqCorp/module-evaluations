@@ -22,7 +22,7 @@ public sealed class WeightedMeanPolicyDefinitionTests
     {
         var gid = new Uuid();
         var cid = new Uuid();
-        var id = new Uuid();
+        var id = new EvaluationFormId(Guid.CreateVersion7());
         var meta = new FormMeta(new FormName("n✓"), string.Empty, ImmutableList<string>.Empty, new FormCode("c✓"));
         var audit = new AuditTrail(new Stamp("u✓", DateTime.UtcNow), new NullStamp(), new NullStamp());
         var life = new FormLifecycle(FormStatus.Published, new NoPeriod(), audit);
@@ -38,4 +38,3 @@ public sealed class WeightedMeanPolicyDefinitionTests
         Should.Throw<InvalidDataException>(() => def.Verify(form), "Weighted definition accepted incorrect weights sum which is incorrect");
     }
 }
-

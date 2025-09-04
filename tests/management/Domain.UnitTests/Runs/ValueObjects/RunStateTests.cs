@@ -17,19 +17,6 @@ public sealed class RunStateTests
     {
         var ctx = new RunContext(System.Collections.Immutable.ImmutableDictionary<string, string>.Empty);
         var res = new RunResult(0m, System.Collections.Immutable.ImmutableList<CascVel.Modules.Evaluations.Management.Domain.Interfaces.Runs.IRunCriterionScore>.Empty);
-        Should.Throw<ArgumentNullException>(() => new RunState(null!, ctx, res, new RunAgreementTrail(null, Entities.Runs.Enums.RunAgreementStatus.Disagree, null)), "RunState accepted a null lifecycle which is incorrect");
-    }
-
-    /// <summary>
-    /// Verifies that Agreement returns null when constructed with null.
-    /// </summary>
-    [Fact(DisplayName = "RunState returns null agreement when constructed with null")]
-    public void RunState_returns_null_agreement_when_constructed_with_null()
-    {
-        var lc = new RunLifecycle(new Stamp("u-" + Guid.NewGuid(), DateTime.UtcNow), new NullStamp(), new NullStamp(), new NullStamp());
-        var ctx = new RunContext(System.Collections.Immutable.ImmutableDictionary<string, string>.Empty);
-        var res = new RunResult(0m, System.Collections.Immutable.ImmutableList<CascVel.Modules.Evaluations.Management.Domain.Interfaces.Runs.IRunCriterionScore>.Empty);
-        var vo = new RunState(lc, ctx, res, new RunAgreementTrail(null, Entities.Runs.Enums.RunAgreementStatus.Disagree, null));
-        (vo.Agreement() is null).ShouldBeFalse("RunState returned a null agreement which is incorrect");
+        Should.Throw<ArgumentNullException>(() => new RunState(null!, ctx, res), "RunState accepted a null lifecycle which is incorrect");
     }
 }

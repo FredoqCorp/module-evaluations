@@ -20,7 +20,7 @@ public sealed class ArithmeticMeanPolicyDefinitionTests
     [Fact(DisplayName = "Arithmetic mean definition does not throw on verify")]
     public void Arithmetic_mean_definition_does_not_throw_on_verify()
     {
-        var id = new Uuid();
+        var id = new EvaluationFormId(Guid.CreateVersion7());
         var meta = new FormMeta(new FormName("name✓"), string.Empty, ImmutableList<string>.Empty, new FormCode("code✓"));
         var audit = new AuditTrail(new Stamp("user✓", DateTime.UtcNow), new NullStamp(), new NullStamp());
         var life = new FormLifecycle(FormStatus.Draft, new NoPeriod(), audit);
@@ -29,4 +29,3 @@ public sealed class ArithmeticMeanPolicyDefinitionTests
         Should.NotThrow(() => new ArithmeticMeanPolicyDefinition().Verify(form), "Arithmetic mean definition threw unexpectedly which is incorrect");
     }
 }
-

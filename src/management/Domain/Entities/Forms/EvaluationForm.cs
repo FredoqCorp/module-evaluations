@@ -23,7 +23,7 @@ public sealed class EvaluationForm : IEvaluationForm
     /// Creates an evaluation form aggregate with identifier, meta, lifecycle, calculation definition, groups and criteria.
     /// </summary>
     public EvaluationForm(
-        IId id,
+        CascVel.Modules.Evaluations.Management.Domain.Identifiers.EvaluationFormId id,
         IFormMeta meta,
         IFormLifecycle lifecycle,
         IImmutableList<IFormGroup> groups,

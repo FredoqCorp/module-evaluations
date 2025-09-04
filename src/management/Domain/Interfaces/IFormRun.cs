@@ -22,4 +22,3 @@ public interface IFormRun
     /// </summary>
     IRunState State();
 }
-

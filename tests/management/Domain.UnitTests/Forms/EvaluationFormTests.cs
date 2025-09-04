@@ -19,7 +19,7 @@ public sealed class EvaluationFormTests
     [Fact(DisplayName = "EvaluationForm returns the same groups count")]
     public void EvaluationForm_returns_the_same_groups_count()
     {
-        var id = new Uuid();
+        var id = new EvaluationFormId(Guid.CreateVersion7());
         var meta = new FormMeta(new FormName("n-✓-" + Guid.NewGuid()), string.Empty, ImmutableList<string>.Empty, new FormCode("c-✓-" + Guid.NewGuid()));
         var audit = new AuditTrail(new Stamp("u-✓-" + Guid.NewGuid(), DateTime.UtcNow), new NullStamp(), new NullStamp());
         var life = new FormLifecycle(FormStatus.Draft, new NoPeriod(), audit);

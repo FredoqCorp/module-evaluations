@@ -19,9 +19,4 @@ public interface IRunState
     /// Returns the aggregated result object.
     /// </summary>
     IRunResult Result();
-
-    /// <summary>
-    /// Returns the agreement trail.
-    /// </summary>
-    IRunAgreementTrail Agreement();
 }

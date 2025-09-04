@@ -42,7 +42,7 @@ public sealed class WeightedMeanPolicyTests
         weights[c2.Text()] = new Weight(4_000);
 
         var def = new WeightedMeanPolicyDefinition(weights.ToImmutable());
-        var form = new EvaluationForm(new Uuid(), meta, life, ImmutableList<IFormGroup>.Empty.Add(g), ImmutableList<IFormCriterion>.Empty.Add(rootCrit), def);
+        var form = new EvaluationForm(new EvaluationFormId(Guid.CreateVersion7()), meta, life, ImmutableList<IFormGroup>.Empty.Add(g), ImmutableList<IFormCriterion>.Empty.Add(rootCrit), def);
         var snapshot = form.Snapshot();
 
         // expected: groupScore = 50*0.6 + 100*0.4 = 70; total = 100*0.3 + 70*0.7 = 79
@@ -54,4 +54,3 @@ public sealed class WeightedMeanPolicyTests
         snapshot.Policy().Total(snapshot, scores).ShouldBe(79m, "Weighted mean returned an unexpected total which is incorrect");
     }
 }
-

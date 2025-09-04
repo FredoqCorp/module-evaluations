@@ -21,7 +21,7 @@ public sealed class ArithmeticMeanPolicyTests
     [Fact(DisplayName = "Arithmetic mean returns expected total")]
     public void Arithmetic_mean_returns_expected_total()
     {
-        var id = new Uuid();
+        var id = new EvaluationFormId(Guid.CreateVersion7());
         var meta = new FormMeta(new FormName("nm✓"), string.Empty, ImmutableList<string>.Empty, new FormCode("cd✓"));
         var audit = new AuditTrail(new Stamp("u✓", DateTime.UtcNow), new NullStamp(), new NullStamp());
         var life = new FormLifecycle(FormStatus.Published, new NoPeriod(), audit);
@@ -38,4 +38,3 @@ public sealed class ArithmeticMeanPolicyTests
         snapshot.Policy().Total(snapshot, s).ShouldBe(20m, "Arithmetic mean returned an unexpected total which is incorrect");
     }
 }
-
