@@ -1,4 +1,4 @@
-namespace CascVel.Modules.Evaluations.Management.Domain.Interfaces.Runs;
+namespace CascVel.Modules.Evaluations.Management.Domain.Interfaces.Agreements;
 
 /// <summary>
 /// Contract for an operator view fact of a published run.

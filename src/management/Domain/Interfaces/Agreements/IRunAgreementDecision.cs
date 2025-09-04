@@ -1,6 +1,6 @@
 using CascVel.Modules.Evaluations.Management.Domain.Entities.Agreements.Enums;
 
-namespace CascVel.Modules.Evaluations.Management.Domain.Interfaces.Runs;
+namespace CascVel.Modules.Evaluations.Management.Domain.Interfaces.Agreements;
 
 /// <summary>
 /// Contract for an operator decision on a published run.

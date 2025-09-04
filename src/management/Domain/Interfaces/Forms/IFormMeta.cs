@@ -1,6 +1,6 @@
-namespace CascVel.Modules.Evaluations.Management.Domain.Interfaces;
-
 using System.Collections.Immutable;
+
+namespace CascVel.Modules.Evaluations.Management.Domain.Interfaces.Forms;
 
 /// <summary>
 /// Contract for human-facing metadata of a form.

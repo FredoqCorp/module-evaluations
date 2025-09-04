@@ -1,9 +1,10 @@
-using CascVel.Modules.Evaluations.Management.Domain.Entities.Runs.Enums;
+using CascVel.Modules.Evaluations.Management.Domain.Entities.Agreements.Enums;
 using CascVel.Modules.Evaluations.Management.Domain.Identifiers;
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces;
+using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Agreements;
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Runs;
 
-namespace CascVel.Modules.Evaluations.Management.Domain.Entities.Runs;
+namespace CascVel.Modules.Evaluations.Management.Domain.Entities.Agreements;
 
 /// <summary>
 /// Operator decision for a published run identified by a shared agreement identifier.

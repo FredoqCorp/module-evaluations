@@ -1,5 +1,6 @@
 using System.Collections.Immutable;
 using CascVel.Modules.Evaluations.Management.Domain.Entities.Forms.ValueObjects;
+using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Forms;
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Policies;
 
 namespace CascVel.Modules.Evaluations.Management.Domain.Entities.Policies;
@@ -28,12 +29,12 @@ public sealed record WeightedMeanPolicyDefinition : ICalculationPolicyDefinition
     /// <summary>
     /// Verifies that the definition is structurally compatible with the form.
     /// </summary>
-    public void Verify(Interfaces.IEvaluationForm form)
+    public void Verify(IEvaluationForm form)
     {
         ArgumentNullException.ThrowIfNull(form);
 
-        void VerifyLevel(IImmutableList<Interfaces.IFormGroup> formGroups,
-            IImmutableList<Interfaces.IFormCriterion> formCriteria)
+        void VerifyLevel(IImmutableList<IFormGroup> formGroups,
+            IImmutableList<IFormCriterion> formCriteria)
         {
             if (formGroups.Count + formCriteria.Count == 0)
             {

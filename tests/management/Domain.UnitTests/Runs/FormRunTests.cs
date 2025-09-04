@@ -1,6 +1,5 @@
 using CascVel.Modules.Evaluations.Management.Domain.Entities.Forms.ValueObjects;
 using CascVel.Modules.Evaluations.Management.Domain.Entities.Runs;
-using CascVel.Modules.Evaluations.Management.Domain.Entities.Runs.Enums;
 using CascVel.Modules.Evaluations.Management.Domain.Entities.Runs.ValueObjects;
 using CascVel.Modules.Evaluations.Management.Domain.Identifiers;
 using Shouldly;

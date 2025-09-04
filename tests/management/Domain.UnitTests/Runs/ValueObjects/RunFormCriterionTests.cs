@@ -1,6 +1,7 @@
 using CascVel.Modules.Evaluations.Management.Domain.Entities.Runs.ValueObjects;
 using CascVel.Modules.Evaluations.Management.Domain.Entities.Forms.ValueObjects;
 using CascVel.Modules.Evaluations.Management.Domain.Identifiers;
+using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Forms;
 using Shouldly;
 
 namespace CascVel.Modules.Evaluations.Management.Domain.UnitTests.Runs.ValueObjects;
@@ -21,7 +22,7 @@ public sealed class RunFormCriterionTests
             id,
             new Criterion(
                 new CriterionText("t✓", "d"),
-                System.Collections.Immutable.ImmutableList<Interfaces.IChoice>.Empty
+                System.Collections.Immutable.ImmutableList<IChoice>.Empty
             ),
             new OrderIndex(0)
         );

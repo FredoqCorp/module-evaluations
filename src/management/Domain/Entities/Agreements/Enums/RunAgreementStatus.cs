@@ -1,4 +1,4 @@
-namespace CascVel.Modules.Evaluations.Management.Domain.Entities.Runs.Enums;
+namespace CascVel.Modules.Evaluations.Management.Domain.Entities.Agreements.Enums;
 
 /// <summary>
 /// Represents the agreement status for a run.

@@ -1,6 +1,6 @@
 using CascVel.Modules.Evaluations.Management.Domain.Entities.Forms.Enums;
 
-namespace CascVel.Modules.Evaluations.Management.Domain.Interfaces;
+namespace CascVel.Modules.Evaluations.Management.Domain.Interfaces.Forms;
 
 /// <summary>
 /// Contract for form lifecycle state, validity and audit.

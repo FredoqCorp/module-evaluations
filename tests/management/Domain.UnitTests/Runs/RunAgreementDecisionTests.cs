@@ -1,5 +1,6 @@
+using CascVel.Modules.Evaluations.Management.Domain.Entities.Agreements;
+using CascVel.Modules.Evaluations.Management.Domain.Entities.Agreements.Enums;
 using CascVel.Modules.Evaluations.Management.Domain.Entities.Runs;
-using CascVel.Modules.Evaluations.Management.Domain.Entities.Runs.Enums;
 using CascVel.Modules.Evaluations.Management.Domain.Identifiers;
 using Shouldly;
 
