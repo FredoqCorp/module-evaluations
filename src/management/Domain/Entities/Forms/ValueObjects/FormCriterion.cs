@@ -2,6 +2,7 @@ using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Forms;
 
 namespace CascVel.Modules.Evaluations.Management.Domain.Entities.Forms.ValueObjects;
 
+using Identifiers;
 using Interfaces;
 
 /// <summary>
@@ -16,9 +17,8 @@ public sealed record FormCriterion : IFormCriterion
     /// <summary>
     /// Creates a positioned criterion with order and weight.
     /// </summary>
-    public FormCriterion(IId id, ICriterion criterion, IOrderIndex order)
+    public FormCriterion(FormCriterionId id, ICriterion criterion, IOrderIndex order)
     {
-        ArgumentNullException.ThrowIfNull(id);
         ArgumentNullException.ThrowIfNull(criterion);
         ArgumentNullException.ThrowIfNull(order);
 

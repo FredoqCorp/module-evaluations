@@ -26,15 +26,14 @@ public sealed class RunResultTests
     public void RunResult_returns_the_same_criteria_count()
     {
         var builder = ImmutableList.CreateBuilder<CascVel.Modules.Evaluations.Management.Domain.Interfaces.Runs.IRunCriterionScore>();
-        var baseCriterion = new CascVel.Modules.Evaluations.Management.Domain.Entities.Forms.ValueObjects.FormCriterion(
-            new CascVel.Modules.Evaluations.Management.Domain.Identifiers.Uuid(),
+        var runCriterion = new CascVel.Modules.Evaluations.Management.Domain.Entities.Forms.ValueObjects.FormCriterion(
+            new Identifiers.FormCriterionId(),
             new CascVel.Modules.Evaluations.Management.Domain.Entities.Forms.ValueObjects.Criterion(
                 new CascVel.Modules.Evaluations.Management.Domain.Entities.Forms.ValueObjects.CriterionText("тест✓", "описание✓"),
                 ImmutableList<IChoice>.Empty
             ),
             new CascVel.Modules.Evaluations.Management.Domain.Entities.Forms.ValueObjects.OrderIndex(0)
         );
-        var runCriterion = new RunFormCriterion(baseCriterion.Id(), baseCriterion);
         builder.Add(new RunCriterionScore(runCriterion, false, null));
         var vo = new RunResult(0m, builder.ToImmutable());
         vo.Criteria().Count.ShouldBe(1, "RunResult returned an unexpected criteria count which is incorrect");

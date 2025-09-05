@@ -2,6 +2,7 @@ using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Forms;
 
 namespace CascVel.Modules.Evaluations.Management.Domain.Entities.Forms.ValueObjects;
 
+using Identifiers;
 using Interfaces;
 using System.Collections.Immutable;
 
@@ -19,9 +20,8 @@ public sealed record FormGroup : IFormGroup
     /// <summary>
     /// Creates a form group with title, order, weight, criteria and nested groups.
     /// </summary>
-    public FormGroup(IId id, string title, IOrderIndex order, IImmutableList<IFormCriterion> criteria, IImmutableList<IFormGroup> groups)
+    public FormGroup(FormGroupId id, string title, IOrderIndex order, IImmutableList<IFormCriterion> criteria, IImmutableList<IFormGroup> groups)
     {
-        ArgumentNullException.ThrowIfNull(id);
         ArgumentNullException.ThrowIfNull(title);
         ArgumentNullException.ThrowIfNull(order);
         ArgumentNullException.ThrowIfNull(criteria);

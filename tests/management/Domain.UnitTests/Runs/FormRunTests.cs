@@ -18,12 +18,12 @@ public sealed class FormRunTests
     public void FormRun_returns_the_same_identifier()
     {
         var id = new RunId(Guid.CreateVersion7());
-        var formId = new Uuid();
+        var formId = new EvaluationFormId(Guid.NewGuid());
         var formCode = "code-✓-" + Guid.NewGuid();
         var formMeta = new FormMeta(new FormName("name✓"), "desc✓", System.Collections.Immutable.ImmutableList<string>.Empty, new FormCode(formCode));
         var snapshot = new RunFormSnapshot(formId, formMeta, new CascVel.Modules.Evaluations.Management.Domain.Entities.Policies.ArithmeticMeanPolicy(),
-            System.Collections.Immutable.ImmutableList<CascVel.Modules.Evaluations.Management.Domain.Interfaces.Runs.IRunFormGroup>.Empty,
-            System.Collections.Immutable.ImmutableList<CascVel.Modules.Evaluations.Management.Domain.Interfaces.Runs.IRunFormCriterion>.Empty);
+            System.Collections.Immutable.ImmutableList<CascVel.Modules.Evaluations.Management.Domain.Interfaces.Forms.IFormGroup>.Empty,
+            System.Collections.Immutable.ImmutableList<CascVel.Modules.Evaluations.Management.Domain.Interfaces.Forms.IFormCriterion>.Empty);
         var meta = new RunMeta(snapshot, "op-✓-" + Guid.NewGuid(), null);
         var lc = new RunLifecycle(new Stamp("u-✓-" + Guid.NewGuid(), DateTime.UtcNow), new NullStamp(), new NullStamp(), new NullStamp());
         var ctx = new RunContext(System.Collections.Immutable.ImmutableDictionary<string, string>.Empty);

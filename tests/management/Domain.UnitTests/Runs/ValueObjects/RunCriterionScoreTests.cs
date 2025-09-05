@@ -1,3 +1,4 @@
+using CascVel.Modules.Evaluations.Management.Domain.Entities.Forms.ValueObjects;
 using CascVel.Modules.Evaluations.Management.Domain.Entities.Runs.ValueObjects;
 using CascVel.Modules.Evaluations.Management.Domain.Identifiers;
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Forms;
@@ -16,15 +17,15 @@ public sealed class RunCriterionScoreTests
     [Fact(DisplayName = "RunCriterionScore returns the same skipped flag value")]
     public void RunCriterionScore_returns_the_same_skipped_flag_value()
     {
-        var baseCriterion = new CascVel.Modules.Evaluations.Management.Domain.Entities.Forms.ValueObjects.FormCriterion(
-            new Uuid(),
-            new CascVel.Modules.Evaluations.Management.Domain.Entities.Forms.ValueObjects.Criterion(
-                new CascVel.Modules.Evaluations.Management.Domain.Entities.Forms.ValueObjects.CriterionText("тест✓", "описание✓"),
+        
+        var rc = new FormCriterion(
+            new FormCriterionId(Guid.NewGuid()),
+            new Criterion(
+                new CriterionText("тест✓", "описание✓"),
                 System.Collections.Immutable.ImmutableList<IChoice>.Empty
             ),
-            new CascVel.Modules.Evaluations.Management.Domain.Entities.Forms.ValueObjects.OrderIndex(0)
+            new OrderIndex(0)
         );
-        var rc = new RunFormCriterion(new Uuid(), baseCriterion);
         var vo = new RunCriterionScore(rc, true, null);
         vo.Skipped().ShouldBeTrue("RunCriterionScore returned a false skipped value which is incorrect");
     }

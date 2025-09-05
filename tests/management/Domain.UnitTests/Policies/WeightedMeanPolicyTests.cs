@@ -22,10 +22,10 @@ public sealed class WeightedMeanPolicyTests
     [Fact(DisplayName = "Weighted mean returns expected hierarchical total")]
     public void Weighted_mean_returns_expected_hierarchical_total()
     {
-        var gid = new Uuid();
-        var c0 = new Uuid();
-        var c1 = new Uuid();
-        var c2 = new Uuid();
+        var gid = new FormGroupId(Guid.NewGuid());
+        var c0 = new FormCriterionId(Guid.NewGuid());
+        var c1 = new FormCriterionId(Guid.NewGuid());
+        var c2 = new FormCriterionId(Guid.NewGuid());
 
         var meta = new FormMeta(new FormName("nm✓"), string.Empty, ImmutableList<string>.Empty, new FormCode("cd✓"));
         var audit = new AuditTrail(new Stamp("u✓", DateTime.UtcNow), new NullStamp(), new NullStamp());

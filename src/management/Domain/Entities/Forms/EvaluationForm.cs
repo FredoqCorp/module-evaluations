@@ -68,33 +68,7 @@ public sealed class EvaluationForm : IEvaluationForm
     {
         _definition.Verify(this);
 
-        var groups = BuildGroups(_groups);
-        var criteria = BuildCriteria(_criteria);
         var policy = _definition.Policy();
-        return new RunFormSnapshot(_id, _meta, policy, groups, criteria);
-    }
-
-    private static ImmutableList<IRunFormGroup> BuildGroups(IImmutableList<IFormGroup> source)
-    {
-        var res = ImmutableList.CreateBuilder<IRunFormGroup>();
-        foreach (var g in source)
-        {
-            var childrenGroups = BuildGroups(g.Groups());
-            var childrenCriteria = BuildCriteria(g.Criteria());
-            var rg = new RunFormGroup(g.Id(), g.Title(), g.Order(), childrenCriteria, childrenGroups);
-            res.Add(rg);
-        }
-        return res.ToImmutable();
-    }
-
-    private static ImmutableList<IRunFormCriterion> BuildCriteria(IImmutableList<IFormCriterion> source)
-    {
-        var res = ImmutableList.CreateBuilder<IRunFormCriterion>();
-        foreach (var c in source)
-        {
-            var rc = new RunFormCriterion(c.Id(), c);
-            res.Add(rc);
-        }
-        return res.ToImmutable();
+        return new RunFormSnapshot(_id, _meta, policy, _groups, _criteria);
     }
 }

@@ -12,15 +12,15 @@ namespace CascVel.Modules.Evaluations.Management.Domain.Entities.Runs.ValueObjec
 public sealed record RunFormSnapshot : IRunFormSnapshot
 {
     private readonly IFormMeta _meta;
-    private readonly IImmutableList<IRunFormGroup> _groups;
-    private readonly IImmutableList<IRunFormCriterion> _criteria;
+    private readonly IImmutableList<IFormGroup> _groups;
+    private readonly IImmutableList<IFormCriterion> _criteria;
     private readonly IId _formId;
     private readonly ICalculationPolicy _policy;
 
     /// <summary>
     /// Creates a form snapshot with meta, explicit runtime policy, ordered groups and root-level criteria.
     /// </summary>
-    public RunFormSnapshot(IId formId, IFormMeta meta, ICalculationPolicy policy, IImmutableList<IRunFormGroup> groups, IImmutableList<IRunFormCriterion> criteria)
+    public RunFormSnapshot(IId formId, IFormMeta meta, ICalculationPolicy policy, IImmutableList<IFormGroup> groups, IImmutableList<IFormCriterion> criteria)
     {
         ArgumentNullException.ThrowIfNull(formId);
         ArgumentNullException.ThrowIfNull(meta);
@@ -52,11 +52,11 @@ public sealed record RunFormSnapshot : IRunFormSnapshot
     /// <summary>
     /// Returns the ordered groups of criteria captured at launch time.
     /// </summary>
-    public IImmutableList<IRunFormGroup> Groups() => _groups;
+    public IImmutableList<IFormGroup> Groups() => _groups;
 
     /// <summary>
     /// Returns the root-level criteria captured at launch time.
     /// </summary>
-    public IImmutableList<IRunFormCriterion> Criteria() => _criteria;
+    public IImmutableList<IFormCriterion> Criteria() => _criteria;
 
 }

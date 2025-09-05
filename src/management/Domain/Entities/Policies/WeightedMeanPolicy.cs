@@ -1,4 +1,5 @@
 using System.Collections.Immutable;
+using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Forms;
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Policies;
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Runs;
 
@@ -83,7 +84,7 @@ public sealed record WeightedMeanPolicy : ICalculationPolicy
         return totalRoot;
     }
 
-    private (bool any, decimal score) CombineGroup(IRunFormGroup g, Dictionary<string, decimal> scoreByKey)
+    private (bool any, decimal score) CombineGroup(IFormGroup g, Dictionary<string, decimal> scoreByKey)
     {
         var entries = new List<(decimal score, decimal weightBps)>();
 

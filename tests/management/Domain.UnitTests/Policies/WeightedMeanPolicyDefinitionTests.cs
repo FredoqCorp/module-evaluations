@@ -21,8 +21,8 @@ public sealed class WeightedMeanPolicyDefinitionTests
     [Fact(DisplayName = "Weighted definition throws on incorrect weights sum for siblings")]
     public void Weighted_definition_throws_on_incorrect_weights_sum_for_siblings()
     {
-        var gid = new Uuid();
-        var cid = new Uuid();
+        var gid = new FormGroupId(Guid.NewGuid());
+        var cid = new FormCriterionId(Guid.NewGuid());
         var id = new EvaluationFormId(Guid.CreateVersion7());
         var meta = new FormMeta(new FormName("n✓"), string.Empty, ImmutableList<string>.Empty, new FormCode("c✓"));
         var audit = new AuditTrail(new Stamp("u✓", DateTime.UtcNow), new NullStamp(), new NullStamp());
