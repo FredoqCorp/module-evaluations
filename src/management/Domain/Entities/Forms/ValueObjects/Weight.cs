@@ -2,8 +2,6 @@ using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Forms;
 
 namespace CascVel.Modules.Evaluations.Management.Domain.Entities.Forms.ValueObjects;
 
-using Interfaces;
-
 /// <summary>
 /// Non-negative percentage weight as an immutable value object.
 /// </summary>

@@ -7,7 +7,7 @@ using Interfaces;
 using System.Collections.Immutable;
 
 /// <summary>
-/// A group of criteria within a form with title, order, optional weight and ordered references.
+/// A group of criteria within a form with title, order and ordered references.
 /// </summary>
 public sealed record FormGroup : IFormGroup
 {

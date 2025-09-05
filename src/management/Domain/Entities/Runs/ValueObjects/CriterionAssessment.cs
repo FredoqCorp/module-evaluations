@@ -4,7 +4,6 @@ namespace CascVel.Modules.Evaluations.Management.Domain.Entities.Runs.ValueObjec
 
 /// <summary>
 /// Criterion assessment: selected score and optional comment as an immutable value object.
-/// Absence of an instance for a criterion means the criterion is skipped.
 /// </summary>
 public sealed record CriterionAssessment : ICriterionAssessment
 {

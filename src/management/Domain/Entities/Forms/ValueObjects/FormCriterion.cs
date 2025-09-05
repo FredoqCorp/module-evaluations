@@ -6,7 +6,7 @@ using Identifiers;
 using Interfaces;
 
 /// <summary>
-/// Criterion positioned within a form or a group, with order and optional weight.
+/// Criterion positioned within a form or a group, with order.
 /// </summary>
 public sealed record FormCriterion : IFormCriterion
 {

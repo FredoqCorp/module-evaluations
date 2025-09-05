@@ -2,8 +2,6 @@ using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Forms;
 
 namespace CascVel.Modules.Evaluations.Management.Domain.Entities.Forms.ValueObjects;
 
-using Interfaces;
-
 /// <summary>
 /// Creation, update and status change stamps as an immutable value object.
 /// </summary>

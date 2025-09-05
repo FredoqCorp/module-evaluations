@@ -6,7 +6,7 @@ using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Runs;
 namespace CascVel.Modules.Evaluations.Management.Domain.Entities.Policies;
 
 /// <summary>
-/// Runtime weighted mean policy using optional per-node weights, defaults to equal weights when missing.
+/// Runtime weighted mean policy using per-node weights.
 /// </summary>
 public sealed record WeightedMeanPolicy : ICalculationPolicy
 {
@@ -29,7 +29,7 @@ public sealed record WeightedMeanPolicy : ICalculationPolicy
     
 
     /// <summary>
-    /// Calculates weighted mean with local normalization and equal weights fallback when not provided.
+    /// Calculates weighted mean with local normalization.
     /// </summary>
     public decimal Total(IRunFormSnapshot snapshot, IImmutableList<IRunCriterionScore> scores)
     {

@@ -1,4 +1,3 @@
-using CascVel.Modules.Evaluations.Management.Domain.Interfaces;
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Forms;
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Runs;
 
@@ -20,9 +19,6 @@ public sealed record RunLifecycle : IRunLifecycle
     public RunLifecycle(IStamp launched, IStamp firstSaved, IStamp lastSaved, IStamp published)
     {
         ArgumentNullException.ThrowIfNull(launched);
-        ArgumentNullException.ThrowIfNull(firstSaved);
-        ArgumentNullException.ThrowIfNull(lastSaved);
-        ArgumentNullException.ThrowIfNull(published);
         ArgumentNullException.ThrowIfNull(firstSaved);
         ArgumentNullException.ThrowIfNull(lastSaved);
         ArgumentNullException.ThrowIfNull(published);

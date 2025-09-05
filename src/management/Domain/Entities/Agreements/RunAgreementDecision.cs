@@ -2,7 +2,6 @@ using CascVel.Modules.Evaluations.Management.Domain.Entities.Agreements.Enums;
 using CascVel.Modules.Evaluations.Management.Domain.Identifiers;
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces;
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Agreements;
-using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Runs;
 
 namespace CascVel.Modules.Evaluations.Management.Domain.Entities.Agreements;
 
