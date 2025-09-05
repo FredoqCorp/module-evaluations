@@ -10,14 +10,15 @@ public sealed record RunCriterionScore : IRunCriterionScore
 {
     private readonly IFormCriterion _criterion;
     private readonly bool _skipped;
-    private readonly ICriterionAssessment? _assessment;
+    private readonly ICriterionAssessment _assessment;
 
     /// <summary>
     /// Creates a per-criterion score with a snapshot reference, skipped flag and optional assessment.
     /// </summary>
-    public RunCriterionScore(IFormCriterion criterion, bool skipped, ICriterionAssessment? assessment)
+    public RunCriterionScore(IFormCriterion criterion, bool skipped, ICriterionAssessment assessment)
     {
         ArgumentNullException.ThrowIfNull(criterion);
+        ArgumentNullException.ThrowIfNull(assessment);
         _criterion = criterion;
         _skipped = skipped;
         _assessment = assessment;
@@ -34,7 +35,7 @@ public sealed record RunCriterionScore : IRunCriterionScore
     public bool Skipped() => _skipped;
 
     /// <summary>
-    /// Returns the criterion assessment when present.
+    /// Returns the criterion assessment.
     /// </summary>
-    public ICriterionAssessment? Assessment() => _assessment;
+    public ICriterionAssessment Assessment() => _assessment;
 }

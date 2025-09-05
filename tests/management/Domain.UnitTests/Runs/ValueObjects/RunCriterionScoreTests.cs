@@ -26,7 +26,7 @@ public sealed class RunCriterionScoreTests
             ),
             new OrderIndex(0)
         );
-        var vo = new RunCriterionScore(rc, true, null);
+        var vo = new RunCriterionScore(rc, true, new NoAssessment());
         vo.Skipped().ShouldBeTrue("RunCriterionScore returned a false skipped value which is incorrect");
     }
 }

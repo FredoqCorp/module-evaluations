@@ -17,7 +17,7 @@ public interface IRunCriterionScore
     bool Skipped();
 
     /// <summary>
-    /// Returns the criterion assessment when present.
+    /// Returns the criterion assessment.
     /// </summary>
-    ICriterionAssessment? Assessment();
+    ICriterionAssessment Assessment();
 }

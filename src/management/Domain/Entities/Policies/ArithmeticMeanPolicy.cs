@@ -26,16 +26,12 @@ public sealed record ArithmeticMeanPolicy : ICalculationPolicy
         int count = 0;
         foreach (var s in scores)
         {
-            if (s is null)
-            {
-                continue;
-            }
             if (s.Skipped())
             {
                 continue;
             }
             var a = s.Assessment();
-            if (a is null)
+            if (!a.Present())
             {
                 continue;
             }

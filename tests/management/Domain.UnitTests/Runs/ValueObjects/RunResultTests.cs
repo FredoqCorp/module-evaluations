@@ -34,7 +34,7 @@ public sealed class RunResultTests
             ),
             new CascVel.Modules.Evaluations.Management.Domain.Entities.Forms.ValueObjects.OrderIndex(0)
         );
-        builder.Add(new RunCriterionScore(runCriterion, false, null));
+        builder.Add(new RunCriterionScore(runCriterion, false, new NoAssessment()));
         var vo = new RunResult(0m, builder.ToImmutable());
         vo.Criteria().Count.ShouldBe(1, "RunResult returned an unexpected criteria count which is incorrect");
     }

@@ -37,8 +37,8 @@ public sealed record WeightedMeanPolicy : ICalculationPolicy
         ArgumentNullException.ThrowIfNull(scores);
 
         var scoreByKey = scores
-            .Where(s => !s.Skipped() && s.Assessment() is not null)
-            .ToDictionary(s => s.Criterion().Id().Text(), s => (decimal)s.Assessment()!.SelectedScore());
+            .Where(s => !s.Skipped() && s.Assessment().Present())
+            .ToDictionary(s => s.Criterion().Id().Text(), s => (decimal)s.Assessment().SelectedScore());
 
         var rootEntries = new List<(decimal score, decimal weightBps)>();
         foreach (var c in snapshot.Criteria())

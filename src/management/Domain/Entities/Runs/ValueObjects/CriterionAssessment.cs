@@ -21,6 +21,11 @@ public sealed record CriterionAssessment : ICriterionAssessment
     }
 
     /// <summary>
+    /// Returns true indicating the assessment contains a selected score.
+    /// </summary>
+    public bool Present() => true;
+
+    /// <summary>
     /// Returns the selected score value.
     /// </summary>
     public ushort SelectedScore() => _selectedScore;
