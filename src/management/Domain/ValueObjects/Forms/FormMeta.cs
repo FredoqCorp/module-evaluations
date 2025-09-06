@@ -1,8 +1,7 @@
+using System.Collections.Immutable;
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Forms;
 
-namespace CascVel.Modules.Evaluations.Management.Domain.Entities.Forms.ValueObjects;
-
-using System.Collections.Immutable;
+namespace CascVel.Modules.Evaluations.Management.Domain.ValueObjects.Forms;
 
 /// <summary>
 /// Human-facing meta information as an immutable value object.

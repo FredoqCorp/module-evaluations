@@ -1,4 +1,4 @@
-using CascVel.Modules.Evaluations.Management.Domain.Entities.Runs.ValueObjects;
+using CascVel.Modules.Evaluations.Management.Domain.ValueObjects.Runs;
 using Shouldly;
 
 namespace CascVel.Modules.Evaluations.Management.Domain.UnitTests.Runs.ValueObjects;

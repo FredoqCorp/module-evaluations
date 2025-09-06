@@ -1,7 +1,7 @@
 using System.Collections.Immutable;
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Runs;
 
-namespace CascVel.Modules.Evaluations.Management.Domain.Entities.Runs.ValueObjects;
+namespace CascVel.Modules.Evaluations.Management.Domain.ValueObjects.Runs;
 
 /// <summary>
 /// Run context: arbitrary key/value pairs used by automatic criteria as an immutable value object.

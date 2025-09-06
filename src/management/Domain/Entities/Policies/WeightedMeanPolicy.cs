@@ -2,6 +2,7 @@ using System.Collections.Immutable;
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Forms;
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Policies;
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Runs;
+using CascVel.Modules.Evaluations.Management.Domain.ValueObjects.Forms;
 
 namespace CascVel.Modules.Evaluations.Management.Domain.Entities.Policies;
 
@@ -10,12 +11,12 @@ namespace CascVel.Modules.Evaluations.Management.Domain.Entities.Policies;
 /// </summary>
 public sealed record WeightedMeanPolicy : ICalculationPolicy
 {
-    private readonly IImmutableDictionary<Guid, Forms.ValueObjects.Weight> _weights;
+    private readonly IImmutableDictionary<Guid, Weight> _weights;
 
     /// <summary>
     /// Creates a weighted mean policy with per-node weights map.
     /// </summary>
-    public WeightedMeanPolicy(IImmutableDictionary<Guid, Forms.ValueObjects.Weight> weights)
+    public WeightedMeanPolicy(IImmutableDictionary<Guid, Weight> weights)
     {
         ArgumentNullException.ThrowIfNull(weights);
         _weights = weights;

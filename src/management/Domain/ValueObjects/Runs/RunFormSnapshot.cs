@@ -1,10 +1,10 @@
 using System.Collections.Immutable;
-using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Forms;
-using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Runs;
-using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Policies;
 using CascVel.Modules.Evaluations.Management.Domain.Identifiers;
+using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Forms;
+using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Policies;
+using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Runs;
 
-namespace CascVel.Modules.Evaluations.Management.Domain.Entities.Runs.ValueObjects;
+namespace CascVel.Modules.Evaluations.Management.Domain.ValueObjects.Runs;
 
 /// <summary>
 /// Immutable snapshot of a form captured at run launch time for stable addressing and reproducible calculation.

@@ -1,9 +1,10 @@
 using System.Collections.Immutable;
 using CascVel.Modules.Evaluations.Management.Domain.Entities.Forms;
 using CascVel.Modules.Evaluations.Management.Domain.Entities.Forms.Enums;
-using CascVel.Modules.Evaluations.Management.Domain.Entities.Forms.ValueObjects;
 using CascVel.Modules.Evaluations.Management.Domain.Identifiers;
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Forms;
+using CascVel.Modules.Evaluations.Management.Domain.ValueObjects;
+using CascVel.Modules.Evaluations.Management.Domain.ValueObjects.Forms;
 using Shouldly;
 
 namespace CascVel.Modules.Evaluations.Management.Domain.UnitTests.Forms;
@@ -21,7 +22,7 @@ public sealed class EvaluationFormTests
     {
         var id = new EvaluationFormId(Guid.CreateVersion7());
         var meta = new FormMeta(new FormName("n-✓-" + Guid.NewGuid()), string.Empty, ImmutableList<string>.Empty, new FormCode("c-✓-" + Guid.NewGuid()));
-        var audit = new AuditTrail(new Stamp("u-✓-" + Guid.NewGuid(), DateTime.UtcNow), new NullStamp(), new NullStamp());
+        var audit = new AuditTrail(new Stamp("u-✓-" + Guid.NewGuid(), DateTime.UtcNow), new Stamp("s-✓-" + Guid.NewGuid(), DateTime.UtcNow), new Stamp("c-✓-" + Guid.NewGuid(), DateTime.UtcNow));
         var life = new FormLifecycle(FormStatus.Draft, new NoPeriod(), audit);
         var groups = ImmutableList<IFormGroup>.Empty;
         var criteria = ImmutableList<IFormCriterion>.Empty;

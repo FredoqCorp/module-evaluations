@@ -1,6 +1,6 @@
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Forms;
 
-namespace CascVel.Modules.Evaluations.Management.Domain.Entities.Forms.ValueObjects;
+namespace CascVel.Modules.Evaluations.Management.Domain.ValueObjects.Forms;
 
 /// <summary>
 /// Display order index within a collection as an immutable value object.

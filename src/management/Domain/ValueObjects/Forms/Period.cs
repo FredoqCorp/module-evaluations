@@ -1,6 +1,6 @@
-namespace CascVel.Modules.Evaluations.Management.Domain.Entities.Forms.ValueObjects;
+using CascVel.Modules.Evaluations.Management.Domain.Interfaces;
 
-using Interfaces;
+namespace CascVel.Modules.Evaluations.Management.Domain.ValueObjects.Forms;
 
 /// <summary>
 /// Period of validity as an immutable value object. Start is required; End is optional.

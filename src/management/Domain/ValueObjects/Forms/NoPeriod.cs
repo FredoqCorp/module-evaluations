@@ -1,6 +1,6 @@
-namespace CascVel.Modules.Evaluations.Management.Domain.Entities.Forms.ValueObjects;
+using CascVel.Modules.Evaluations.Management.Domain.Interfaces;
 
-using Interfaces;
+namespace CascVel.Modules.Evaluations.Management.Domain.ValueObjects.Forms;
 
 /// <summary>
 /// Null Object implementation of IPeriod representing no validity constraints.

@@ -1,6 +1,6 @@
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Runs;
 
-namespace CascVel.Modules.Evaluations.Management.Domain.Entities.Runs.ValueObjects;
+namespace CascVel.Modules.Evaluations.Management.Domain.ValueObjects.Runs;
 
 /// <summary>
 /// Criterion assessment: selected score and optional comment as an immutable value object.

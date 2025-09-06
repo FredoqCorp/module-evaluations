@@ -1,4 +1,4 @@
-using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Forms;
+using CascVel.Modules.Evaluations.Management.Domain.ValueObjects;
 
 namespace CascVel.Modules.Evaluations.Management.Domain.Interfaces.Runs;
 
@@ -10,20 +10,20 @@ public interface IRunLifecycle
     /// <summary>
     /// Returns the launch stamp.
     /// </summary>
-    IStamp Launched();
+    Stamp Launched();
 
     /// <summary>
     /// Returns the first save stamp.
     /// </summary>
-    IStamp FirstSaved();
+    Stamp FirstSaved();
 
     /// <summary>
     /// Returns the last save stamp.
     /// </summary>
-    IStamp LastSaved();
+    Stamp LastSaved();
 
     /// <summary>
     /// Returns the publish stamp.
     /// </summary>
-    IStamp Published();
+    Stamp Published();
 }

@@ -1,8 +1,7 @@
+using CascVel.Modules.Evaluations.Management.Domain.Identifiers;
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Forms;
 
-namespace CascVel.Modules.Evaluations.Management.Domain.Entities.Forms.ValueObjects;
-
-using Identifiers;
+namespace CascVel.Modules.Evaluations.Management.Domain.ValueObjects.Forms;
 
 /// <summary>
 /// Criterion positioned within a form or a group, with order.

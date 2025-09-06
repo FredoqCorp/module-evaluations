@@ -1,6 +1,6 @@
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Forms;
 
-namespace CascVel.Modules.Evaluations.Management.Domain.Entities.Forms.ValueObjects;
+namespace CascVel.Modules.Evaluations.Management.Domain.ValueObjects.Forms;
 
 /// <summary>
 /// A selectable option carrying a raw discrete score used in evaluation without any range validation.

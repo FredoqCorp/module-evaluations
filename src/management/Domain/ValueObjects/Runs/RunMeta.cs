@@ -1,6 +1,6 @@
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Runs;
 
-namespace CascVel.Modules.Evaluations.Management.Domain.Entities.Runs.ValueObjects;
+namespace CascVel.Modules.Evaluations.Management.Domain.ValueObjects.Runs;
 
 /// <summary>
 /// Run metadata: who is evaluated, which form is used, and an optional supervisor comment as an immutable value object.

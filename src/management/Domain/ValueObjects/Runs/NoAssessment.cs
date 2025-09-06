@@ -1,6 +1,6 @@
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Runs;
 
-namespace CascVel.Modules.Evaluations.Management.Domain.Entities.Runs.ValueObjects;
+namespace CascVel.Modules.Evaluations.Management.Domain.ValueObjects.Runs;
 
 /// <summary>
 /// Null Object implementation of ICriterionAssessment representing absence of a selected score.

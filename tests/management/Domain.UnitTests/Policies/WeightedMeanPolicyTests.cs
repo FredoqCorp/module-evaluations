@@ -1,11 +1,12 @@
 using System.Collections.Immutable;
 using CascVel.Modules.Evaluations.Management.Domain.Entities.Forms;
 using CascVel.Modules.Evaluations.Management.Domain.Entities.Forms.Enums;
-using CascVel.Modules.Evaluations.Management.Domain.Entities.Forms.ValueObjects;
 using CascVel.Modules.Evaluations.Management.Domain.Entities.Policies;
-using CascVel.Modules.Evaluations.Management.Domain.Entities.Runs.ValueObjects;
 using CascVel.Modules.Evaluations.Management.Domain.Identifiers;
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Forms;
+using CascVel.Modules.Evaluations.Management.Domain.ValueObjects;
+using CascVel.Modules.Evaluations.Management.Domain.ValueObjects.Forms;
+using CascVel.Modules.Evaluations.Management.Domain.ValueObjects.Runs;
 using Shouldly;
 
 namespace CascVel.Modules.Evaluations.Management.Domain.UnitTests.Policies;
@@ -27,7 +28,7 @@ public sealed class WeightedMeanPolicyTests
         var c2 = new FormCriterionId(Guid.NewGuid());
 
         var meta = new FormMeta(new FormName("nm✓"), string.Empty, ImmutableList<string>.Empty, new FormCode("cd✓"));
-        var audit = new AuditTrail(new Stamp("u✓", DateTime.UtcNow), new NullStamp(), new NullStamp());
+        var audit = new AuditTrail(new Stamp("u✓", DateTime.UtcNow), new Stamp("s✓", DateTime.UtcNow), new Stamp("c✓", DateTime.UtcNow));
         var life = new FormLifecycle(FormStatus.Published, new NoPeriod(), audit);
 
         var g = new FormGroup(gid, "G✓", new OrderIndex(0), ImmutableList<IFormCriterion>.Empty.Add(new FormCriterion(c1, new Criterion(new CriterionText("t1", "d1"), ImmutableList<IChoice>.Empty), new OrderIndex(0))).Add(new FormCriterion(c2, new Criterion(new CriterionText("t2", "d2"), ImmutableList<IChoice>.Empty), new OrderIndex(1))), ImmutableList<IFormGroup>.Empty);

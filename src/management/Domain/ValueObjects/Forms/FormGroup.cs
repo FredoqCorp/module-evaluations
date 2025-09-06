@@ -1,9 +1,8 @@
+using System.Collections.Immutable;
+using CascVel.Modules.Evaluations.Management.Domain.Identifiers;
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Forms;
 
-namespace CascVel.Modules.Evaluations.Management.Domain.Entities.Forms.ValueObjects;
-
-using Identifiers;
-using System.Collections.Immutable;
+namespace CascVel.Modules.Evaluations.Management.Domain.ValueObjects.Forms;
 
 /// <summary>
 /// A group of criteria within a form with title, order and ordered references.

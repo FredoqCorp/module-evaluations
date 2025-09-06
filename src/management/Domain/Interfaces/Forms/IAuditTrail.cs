@@ -1,3 +1,5 @@
+using CascVel.Modules.Evaluations.Management.Domain.ValueObjects;
+
 namespace CascVel.Modules.Evaluations.Management.Domain.Interfaces.Forms;
 
 /// <summary>
@@ -8,15 +10,15 @@ public interface IAuditTrail
     /// <summary>
     /// Returns the creation stamp.
     /// </summary>
-    IStamp Created();
-
+    Stamp Created();
+    
     /// <summary>
     /// Returns the last update stamp.
     /// </summary>
-    IStamp Updated();
+    Stamp Updated();
 
     /// <summary>
     /// Returns the last status change stamp.
     /// </summary>
-    IStamp StateChanged();
+    Stamp StateChanged();
 }

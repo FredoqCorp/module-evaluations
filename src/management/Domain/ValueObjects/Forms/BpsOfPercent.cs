@@ -1,4 +1,4 @@
-namespace CascVel.Modules.Evaluations.Management.Domain.Entities.Forms.ValueObjects;
+namespace CascVel.Modules.Evaluations.Management.Domain.ValueObjects.Forms;
 
 
 /// <summary>

@@ -1,24 +1,21 @@
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Forms;
 
-namespace CascVel.Modules.Evaluations.Management.Domain.Entities.Forms.ValueObjects;
+namespace CascVel.Modules.Evaluations.Management.Domain.ValueObjects.Forms;
 
 /// <summary>
 /// Creation, update and status change stamps as an immutable value object.
 /// </summary>
 public sealed record AuditTrail : IAuditTrail
 {
-    private readonly IStamp _created;
-    private readonly IStamp _updated;
-    private readonly IStamp _stateChanged;
+    private readonly Stamp _created;
+    private readonly Stamp _updated;
+    private readonly Stamp _stateChanged;
 
     /// <summary>
     /// Creates an audit trail with a mandatory creation stamp and update and state change stamps.
     /// </summary>
-    public AuditTrail(IStamp created, IStamp updated, IStamp stateChanged)
+    public AuditTrail(Stamp created, Stamp updated, Stamp stateChanged)
     {
-        ArgumentNullException.ThrowIfNull(created);
-        ArgumentNullException.ThrowIfNull(updated);
-        ArgumentNullException.ThrowIfNull(stateChanged);
         _created = created;
         _updated = updated;
         _stateChanged = stateChanged;
@@ -27,7 +24,7 @@ public sealed record AuditTrail : IAuditTrail
     /// <summary>
     /// Returns the creation stamp.
     /// </summary>
-    public IStamp Created()
+    public Stamp Created()
     {
         return _created;
     }
@@ -35,7 +32,7 @@ public sealed record AuditTrail : IAuditTrail
     /// <summary>
     /// Returns the last update stamp.
     /// </summary>
-    public IStamp Updated()
+    public Stamp Updated()
     {
         return _updated;
     }
@@ -43,7 +40,7 @@ public sealed record AuditTrail : IAuditTrail
     /// <summary>
     /// Returns the last status change stamp.
     /// </summary>
-    public IStamp StateChanged()
+    public Stamp StateChanged()
     {
         return _stateChanged;
     }

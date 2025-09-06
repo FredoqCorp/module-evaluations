@@ -1,7 +1,8 @@
-using CascVel.Modules.Evaluations.Management.Domain.Entities.Forms.ValueObjects;
 using CascVel.Modules.Evaluations.Management.Domain.Entities.Runs;
-using CascVel.Modules.Evaluations.Management.Domain.Entities.Runs.ValueObjects;
 using CascVel.Modules.Evaluations.Management.Domain.Identifiers;
+using CascVel.Modules.Evaluations.Management.Domain.ValueObjects;
+using CascVel.Modules.Evaluations.Management.Domain.ValueObjects.Forms;
+using CascVel.Modules.Evaluations.Management.Domain.ValueObjects.Runs;
 using Shouldly;
 
 namespace CascVel.Modules.Evaluations.Management.Domain.UnitTests.Runs;
@@ -25,7 +26,7 @@ public sealed class FormRunTests
             System.Collections.Immutable.ImmutableList<CascVel.Modules.Evaluations.Management.Domain.Interfaces.Forms.IFormGroup>.Empty,
             System.Collections.Immutable.ImmutableList<CascVel.Modules.Evaluations.Management.Domain.Interfaces.Forms.IFormCriterion>.Empty);
         var meta = new RunMeta(snapshot, "op-✓-" + Guid.NewGuid(), null);
-        var lc = new RunLifecycle(new Stamp("u-✓-" + Guid.NewGuid(), DateTime.UtcNow), new NullStamp(), new NullStamp(), new NullStamp());
+        var lc = new RunLifecycle(new Stamp("u-✓-" + Guid.NewGuid(), DateTime.UtcNow), new Stamp("s-✓-" + Guid.NewGuid(), DateTime.UtcNow), new Stamp("c-✓-" + Guid.NewGuid(), DateTime.UtcNow), new Stamp("p-✓-" + Guid.NewGuid(), DateTime.UtcNow));
         var ctx = new RunContext(System.Collections.Immutable.ImmutableDictionary<string, string>.Empty);
         var res = new RunResult(0m, System.Collections.Immutable.ImmutableList<CascVel.Modules.Evaluations.Management.Domain.Interfaces.Runs.IRunCriterionScore>.Empty);
         var state = new RunState(lc, ctx, res);
