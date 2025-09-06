@@ -1,11 +1,9 @@
-using CascVel.Modules.Evaluations.Management.Domain.Interfaces;
-
-namespace CascVel.Modules.Evaluations.Management.Domain.ValueObjects.Forms;
+namespace CascVel.Modules.Evaluations.Management.Domain.ValueObjects;
 
 /// <summary>
 /// Period of validity as an immutable value object. Start is required; End is optional.
 /// </summary>
-public sealed record Period : IPeriod
+public readonly record struct Period
 {
     private readonly DateTime _start;
     private readonly DateTime? _end;

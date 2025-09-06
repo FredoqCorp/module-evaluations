@@ -1,4 +1,5 @@
 using CascVel.Modules.Evaluations.Management.Domain.Entities.Forms.Enums;
+using CascVel.Modules.Evaluations.Management.Domain.ValueObjects;
 
 namespace CascVel.Modules.Evaluations.Management.Domain.Interfaces.Forms;
 
@@ -15,7 +16,7 @@ public interface IFormLifecycle
     /// <summary>
     /// Returns the validity period object.
     /// </summary>
-    IPeriod Validity();
+    Period Validity();
 
     /// <summary>
     /// Returns the audit trail.

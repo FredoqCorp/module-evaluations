@@ -29,7 +29,7 @@ public sealed class WeightedMeanPolicyTests
 
         var meta = new FormMeta(new FormName("nm✓"), string.Empty, ImmutableList<string>.Empty, new FormCode("cd✓"));
         var audit = new AuditTrail(new Stamp("u✓", DateTime.UtcNow), new Stamp("s✓", DateTime.UtcNow), new Stamp("c✓", DateTime.UtcNow));
-        var life = new FormLifecycle(FormStatus.Published, new NoPeriod(), audit);
+        var life = new FormLifecycle(FormStatus.Published, new Period(DateTime.UtcNow, DateTime.UtcNow.AddDays(1)), audit);
 
         var g = new FormGroup(gid, "G✓", new OrderIndex(0), ImmutableList<IFormCriterion>.Empty.Add(new FormCriterion(c1, new Criterion(new CriterionText("t1", "d1"), ImmutableList<IChoice>.Empty), new OrderIndex(0))).Add(new FormCriterion(c2, new Criterion(new CriterionText("t2", "d2"), ImmutableList<IChoice>.Empty), new OrderIndex(1))), ImmutableList<IFormGroup>.Empty);
         var rootCrit = new FormCriterion(c0, new Criterion(new CriterionText("t0", "d0"), ImmutableList<IChoice>.Empty), new OrderIndex(0));
