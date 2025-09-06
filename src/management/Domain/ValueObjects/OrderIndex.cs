@@ -1,11 +1,9 @@
-using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Forms;
-
-namespace CascVel.Modules.Evaluations.Management.Domain.ValueObjects.Forms;
+namespace CascVel.Modules.Evaluations.Management.Domain.ValueObjects;
 
 /// <summary>
 /// Display order index within a collection as an immutable value object.
 /// </summary>
-public sealed record OrderIndex : IOrderIndex
+public readonly record struct OrderIndex
 {
     private readonly int _value;
 

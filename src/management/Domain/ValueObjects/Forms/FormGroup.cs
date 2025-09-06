@@ -11,17 +11,16 @@ public sealed record FormGroup : IFormGroup
 {
     private readonly FormGroupId _id;
     private readonly string _title;
-    private readonly IOrderIndex _order;
+    private readonly OrderIndex _order;
     private readonly IImmutableList<IFormCriterion> _criteria;
     private readonly IImmutableList<IFormGroup> _groups;
 
     /// <summary>
     /// Creates a form group with title, order, weight, criteria and nested groups.
     /// </summary>
-    public FormGroup(FormGroupId id, string title, IOrderIndex order, IImmutableList<IFormCriterion> criteria, IImmutableList<IFormGroup> groups)
+    public FormGroup(FormGroupId id, string title, OrderIndex order, IImmutableList<IFormCriterion> criteria, IImmutableList<IFormGroup> groups)
     {
         ArgumentNullException.ThrowIfNull(title);
-        ArgumentNullException.ThrowIfNull(order);
         ArgumentNullException.ThrowIfNull(criteria);
         ArgumentNullException.ThrowIfNull(groups);
 
@@ -52,7 +51,7 @@ public sealed record FormGroup : IFormGroup
     /// <summary>
     /// Returns the display order of the group in the form.
     /// </summary>
-    public IOrderIndex Order()
+    public OrderIndex Order()
     {
         return _order;
     }

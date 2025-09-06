@@ -1,4 +1,5 @@
 using CascVel.Modules.Evaluations.Management.Domain.Identifiers;
+using CascVel.Modules.Evaluations.Management.Domain.ValueObjects;
 
 namespace CascVel.Modules.Evaluations.Management.Domain.Interfaces.Forms;
 
@@ -19,6 +20,6 @@ public interface IFormCriterion
     /// <summary>
     /// Returns the display order index value object.
     /// </summary>
-    IOrderIndex Order();
+    OrderIndex Order();
 
 }
