@@ -10,12 +10,12 @@ namespace CascVel.Modules.Evaluations.Management.Domain.Entities.Policies;
 /// </summary>
 public sealed record WeightedMeanPolicyDefinition : ICalculationPolicyDefinition
 {
-    private readonly IImmutableDictionary<string, Weight> _weights;
+    private readonly IImmutableDictionary<Guid, Weight> _weights;
 
     /// <summary>
     /// Creates a definition with a flat map of weights keyed by stable form node identifiers.
     /// </summary>
-    public WeightedMeanPolicyDefinition(IImmutableDictionary<string, Weight> weights)
+    public WeightedMeanPolicyDefinition(IImmutableDictionary<Guid, Weight> weights)
     {
         ArgumentNullException.ThrowIfNull(weights);
         _weights = weights;
@@ -43,7 +43,7 @@ public sealed record WeightedMeanPolicyDefinition : ICalculationPolicyDefinition
             decimal sum = 0m;
             foreach (var c in formCriteria)
             {
-                if (!_weights.TryGetValue(c.Id().Text(), out var w))
+                if (!_weights.TryGetValue(c.Id().Value, out var w))
                 {
                     throw new InvalidDataException("Weight is missing for form criterion in weighted policy definition");
                 }
@@ -51,7 +51,7 @@ public sealed record WeightedMeanPolicyDefinition : ICalculationPolicyDefinition
             }
             foreach (var g in formGroups)
             {
-                if (!_weights.TryGetValue(g.Id().Text(), out var w))
+                if (!_weights.TryGetValue(g.Id().Value, out var w))
                 {
                     throw new InvalidDataException("Weight is missing for form group in weighted policy definition");
                 }

@@ -1,4 +1,5 @@
 using CascVel.Modules.Evaluations.Management.Domain.Entities.Agreements.Enums;
+using CascVel.Modules.Evaluations.Management.Domain.Identifiers;
 
 namespace CascVel.Modules.Evaluations.Management.Domain.Interfaces.Agreements;
 
@@ -10,12 +11,12 @@ public interface IRunAgreementDecision
     /// <summary>
     /// Returns the agreement identifier shared across agreement records.
     /// </summary>
-    IId Id();
+    AgreementId Id();
 
     /// <summary>
     /// Returns the identifier of the run this decision refers to.
     /// </summary>
-    IId RunId();
+    RunId RunId();
 
     /// <summary>
     /// Returns the decision status.

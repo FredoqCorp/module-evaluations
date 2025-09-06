@@ -1,8 +1,8 @@
 using System.Collections.Immutable;
-using CascVel.Modules.Evaluations.Management.Domain.Interfaces;
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Forms;
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Runs;
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Policies;
+using CascVel.Modules.Evaluations.Management.Domain.Identifiers;
 
 namespace CascVel.Modules.Evaluations.Management.Domain.Entities.Runs.ValueObjects;
 
@@ -14,15 +14,14 @@ public sealed record RunFormSnapshot : IRunFormSnapshot
     private readonly IFormMeta _meta;
     private readonly IImmutableList<IFormGroup> _groups;
     private readonly IImmutableList<IFormCriterion> _criteria;
-    private readonly IId _formId;
+    private readonly EvaluationFormId _formId;
     private readonly ICalculationPolicy _policy;
 
     /// <summary>
     /// Creates a form snapshot with meta, explicit runtime policy, ordered groups and root-level criteria.
     /// </summary>
-    public RunFormSnapshot(IId formId, IFormMeta meta, ICalculationPolicy policy, IImmutableList<IFormGroup> groups, IImmutableList<IFormCriterion> criteria)
+    public RunFormSnapshot(EvaluationFormId formId, IFormMeta meta, ICalculationPolicy policy, IImmutableList<IFormGroup> groups, IImmutableList<IFormCriterion> criteria)
     {
-        ArgumentNullException.ThrowIfNull(formId);
         ArgumentNullException.ThrowIfNull(meta);
         ArgumentNullException.ThrowIfNull(policy);
         ArgumentNullException.ThrowIfNull(groups);
@@ -37,7 +36,7 @@ public sealed record RunFormSnapshot : IRunFormSnapshot
     /// <summary>
     /// Returns the unique identifier of the form.
     /// </summary>
-    public IId FormId() => _formId;
+    public EvaluationFormId FormId() => _formId;
 
     /// <summary>
     /// Returns human-facing metadata captured at launch time.

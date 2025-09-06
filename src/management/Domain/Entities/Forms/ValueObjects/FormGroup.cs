@@ -3,7 +3,6 @@ using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Forms;
 namespace CascVel.Modules.Evaluations.Management.Domain.Entities.Forms.ValueObjects;
 
 using Identifiers;
-using Interfaces;
 using System.Collections.Immutable;
 
 /// <summary>
@@ -11,7 +10,7 @@ using System.Collections.Immutable;
 /// </summary>
 public sealed record FormGroup : IFormGroup
 {
-    private readonly IId _id;
+    private readonly FormGroupId _id;
     private readonly string _title;
     private readonly IOrderIndex _order;
     private readonly IImmutableList<IFormCriterion> _criteria;
@@ -38,7 +37,7 @@ public sealed record FormGroup : IFormGroup
     /// <summary>
     /// Returns the stable identifier of the group.
     /// </summary>
-    public IId Id()
+    public FormGroupId Id()
     {
         return _id;
     }

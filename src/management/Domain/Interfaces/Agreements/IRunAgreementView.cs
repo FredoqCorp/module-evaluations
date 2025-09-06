@@ -1,3 +1,5 @@
+using CascVel.Modules.Evaluations.Management.Domain.Identifiers;
+
 namespace CascVel.Modules.Evaluations.Management.Domain.Interfaces.Agreements;
 
 /// <summary>
@@ -8,12 +10,12 @@ public interface IRunAgreementView
     /// <summary>
     /// Returns the agreement identifier shared across agreement records.
     /// </summary>
-    IId Id();
+    AgreementId Id();
 
     /// <summary>
     /// Returns the identifier of the run this view refers to.
     /// </summary>
-    IId RunId();
+    RunId RunId();
 
     /// <summary>
     /// Returns the first view time.

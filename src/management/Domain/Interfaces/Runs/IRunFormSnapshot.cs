@@ -1,4 +1,5 @@
 using System.Collections.Immutable;
+using CascVel.Modules.Evaluations.Management.Domain.Identifiers;
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Forms;
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Policies;
 
@@ -13,7 +14,7 @@ public interface IRunFormSnapshot
     /// <summary>
     /// Returns the unique identifier of the form.
     /// </summary>
-    IId FormId();
+    EvaluationFormId FormId();
 
     /// <summary>
     /// Returns human-facing metadata captured at launch time.

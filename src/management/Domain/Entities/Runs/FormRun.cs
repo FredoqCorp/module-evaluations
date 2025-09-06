@@ -1,4 +1,4 @@
-using CascVel.Modules.Evaluations.Management.Domain.Interfaces;
+using CascVel.Modules.Evaluations.Management.Domain.Identifiers;
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Forms;
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Runs;
 
@@ -9,14 +9,14 @@ namespace CascVel.Modules.Evaluations.Management.Domain.Entities.Runs;
 /// </summary>
 public sealed class FormRun : IFormRun
 {
-    private readonly IId _id;
+    private readonly RunId _id;
     private readonly IRunMeta _meta;
     private readonly IRunState _state;
 
     /// <summary>
     /// Creates a form run aggregate with identifier, metadata and state.
     /// </summary>
-    public FormRun(Identifiers.RunId id, IRunMeta meta, IRunState state)
+    public FormRun(RunId id, IRunMeta meta, IRunState state)
     {
         ArgumentNullException.ThrowIfNull(meta);
         ArgumentNullException.ThrowIfNull(state);
@@ -28,7 +28,7 @@ public sealed class FormRun : IFormRun
     /// <summary>
     /// Returns the run identifier of this form run aggregate.
     /// </summary>
-    public IId Id() => _id;
+    public RunId Id() => _id;
 
     /// <summary>
     /// Returns the run metadata of this form run aggregate.

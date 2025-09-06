@@ -1,3 +1,4 @@
+using CascVel.Modules.Evaluations.Management.Domain.Identifiers;
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Runs;
 
 namespace CascVel.Modules.Evaluations.Management.Domain.Interfaces.Forms;
@@ -10,7 +11,7 @@ public interface IFormRun
     /// <summary>
     /// Returns the run identifier.
     /// </summary>
-    IId Id();
+    RunId Id();
 
     /// <summary>
     /// Returns the run metadata value object.

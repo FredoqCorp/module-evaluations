@@ -3,14 +3,13 @@ using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Forms;
 namespace CascVel.Modules.Evaluations.Management.Domain.Entities.Forms.ValueObjects;
 
 using Identifiers;
-using Interfaces;
 
 /// <summary>
 /// Criterion positioned within a form or a group, with order.
 /// </summary>
 public sealed record FormCriterion : IFormCriterion
 {
-    private readonly IId _id;
+    private readonly FormCriterionId _id;
     private readonly ICriterion _criterion;
     private readonly IOrderIndex _order;
 
@@ -46,7 +45,7 @@ public sealed record FormCriterion : IFormCriterion
     /// <summary>
     /// Returns the stable identifier of this positioned criterion.
     /// </summary>
-    public IId Id()
+    public FormCriterionId Id()
     {
         return _id;
     }

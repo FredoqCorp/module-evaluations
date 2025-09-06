@@ -1,5 +1,4 @@
 using CascVel.Modules.Evaluations.Management.Domain.Identifiers;
-using CascVel.Modules.Evaluations.Management.Domain.Interfaces;
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Agreements;
 
 namespace CascVel.Modules.Evaluations.Management.Domain.Entities.Agreements;
@@ -9,8 +8,8 @@ namespace CascVel.Modules.Evaluations.Management.Domain.Entities.Agreements;
 /// </summary>
 public sealed class RunAgreementView : IRunAgreementView
 {
-    private readonly IId _id;
-    private readonly IId _runId;
+    private readonly AgreementId _id;
+    private readonly RunId _runId;
     private readonly DateTime _viewedAt;
 
     /// <summary>
@@ -26,12 +25,12 @@ public sealed class RunAgreementView : IRunAgreementView
     /// <summary>
     /// Returns the agreement identifier shared across agreement records.
     /// </summary>
-    public IId Id() => _id;
+    public AgreementId Id() => _id;
 
     /// <summary>
     /// Returns the identifier of the run this view refers to.
     /// </summary>
-    public IId RunId() => _runId;
+    public RunId RunId() => _runId;
 
     /// <summary>
     /// Returns the first view time.

@@ -30,9 +30,9 @@ public sealed class WeightedMeanPolicyDefinitionTests
         var crit = new FormCriterion(cid, new Criterion(new CriterionText("T✓", "D"), ImmutableList<IChoice>.Empty), new OrderIndex(1));
         var form = new EvaluationForm(id, meta, life, ImmutableList<IFormGroup>.Empty.Add(group), ImmutableList<IFormCriterion>.Empty.Add(crit), new ArithmeticMeanPolicyDefinition());
 
-        var map = ImmutableDictionary.CreateBuilder<string, Weight>();
-        map[gid.Text()] = new Weight(6_000);
-        map[cid.Text()] = new Weight(3_000); // sums to 9_000, not 10_000
+        var map = ImmutableDictionary.CreateBuilder<Guid, Weight>();
+        map[gid.Value] = new Weight(6_000);
+        map[cid.Value] = new Weight(3_000); // sums to 9_000, not 10_000
         var def = new WeightedMeanPolicyDefinition(map.ToImmutable());
 
         Should.Throw<InvalidDataException>(() => def.Verify(form), "Weighted definition accepted incorrect weights sum which is incorrect");

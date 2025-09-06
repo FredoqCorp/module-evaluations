@@ -1,9 +1,9 @@
 using System.Collections.Immutable;
-using CascVel.Modules.Evaluations.Management.Domain.Interfaces;
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Policies;
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Runs;
 using CascVel.Modules.Evaluations.Management.Domain.Entities.Runs.ValueObjects;
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Forms;
+using CascVel.Modules.Evaluations.Management.Domain.Identifiers;
 
 namespace CascVel.Modules.Evaluations.Management.Domain.Entities.Forms;
 
@@ -13,7 +13,7 @@ namespace CascVel.Modules.Evaluations.Management.Domain.Entities.Forms;
 /// </summary>
 public sealed class EvaluationForm : IEvaluationForm
 {
-    private readonly IId _id;
+    private readonly EvaluationFormId _id;
     private readonly IFormMeta _meta;
     private readonly IFormLifecycle _lifecycle;
     private readonly IImmutableList<IFormGroup> _groups;
@@ -24,7 +24,7 @@ public sealed class EvaluationForm : IEvaluationForm
     /// Creates an evaluation form aggregate with identifier, meta, lifecycle, calculation definition, groups and criteria.
     /// </summary>
     public EvaluationForm(
-        Identifiers.EvaluationFormId id,
+        EvaluationFormId id,
         IFormMeta meta,
         IFormLifecycle lifecycle,
         IImmutableList<IFormGroup> groups,

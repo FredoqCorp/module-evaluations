@@ -10,12 +10,12 @@ namespace CascVel.Modules.Evaluations.Management.Domain.Entities.Policies;
 /// </summary>
 public sealed record WeightedMeanPolicy : ICalculationPolicy
 {
-    private readonly IImmutableDictionary<string, Forms.ValueObjects.Weight> _weights;
+    private readonly IImmutableDictionary<Guid, Forms.ValueObjects.Weight> _weights;
 
     /// <summary>
     /// Creates a weighted mean policy with per-node weights map.
     /// </summary>
-    public WeightedMeanPolicy(IImmutableDictionary<string, Forms.ValueObjects.Weight> weights)
+    public WeightedMeanPolicy(IImmutableDictionary<Guid, Forms.ValueObjects.Weight> weights)
     {
         ArgumentNullException.ThrowIfNull(weights);
         _weights = weights;
@@ -38,16 +38,16 @@ public sealed record WeightedMeanPolicy : ICalculationPolicy
 
         var scoreByKey = scores
             .Where(s => !s.Skipped() && s.Assessment().Present())
-            .ToDictionary(s => s.Criterion().Id().Text(), s => (decimal)s.Assessment().SelectedScore());
+            .ToDictionary(s => s.Criterion().Id().Value, s => (decimal)s.Assessment().SelectedScore());
 
         var rootEntries = new List<(decimal score, decimal weightBps)>();
         foreach (var c in snapshot.Criteria())
         {
-            if (!scoreByKey.TryGetValue(c.Id().Text(), out var sc))
+            if (!scoreByKey.TryGetValue(c.Id().Value, out var sc))
             {
                 continue;
             }
-            if (!_weights.TryGetValue(c.Id().Text(), out var w))
+            if (!_weights.TryGetValue(c.Id().Value, out var w))
             {
                 throw new InvalidDataException("Weight is missing for root criterion in weighted policy");
             }
@@ -60,7 +60,7 @@ public sealed record WeightedMeanPolicy : ICalculationPolicy
             {
                 continue;
             }
-            if (!_weights.TryGetValue(g.Id().Text(), out var w))
+            if (!_weights.TryGetValue(g.Id().Value, out var w))
             {
                 throw new InvalidDataException("Weight is missing for root group in weighted policy");
             }
@@ -84,17 +84,17 @@ public sealed record WeightedMeanPolicy : ICalculationPolicy
         return totalRoot;
     }
 
-    private (bool any, decimal score) CombineGroup(IFormGroup g, Dictionary<string, decimal> scoreByKey)
+    private (bool any, decimal score) CombineGroup(IFormGroup g, Dictionary<Guid, decimal> scoreByKey)
     {
         var entries = new List<(decimal score, decimal weightBps)>();
 
         foreach (var c in g.Criteria())
         {
-            if (!scoreByKey.TryGetValue(c.Id().Text(), out var sc))
+            if (!scoreByKey.TryGetValue(c.Id().Value, out var sc))
             {
                 continue;
             }
-            if (!_weights.TryGetValue(c.Id().Text(), out var w))
+            if (!_weights.TryGetValue(c.Id().Value, out var w))
             {
                 throw new InvalidDataException("Weight is missing for criterion in weighted policy");
             }
@@ -107,7 +107,7 @@ public sealed record WeightedMeanPolicy : ICalculationPolicy
             {
                 continue;
             }
-            if (!_weights.TryGetValue(child.Id().Text(), out var w))
+            if (!_weights.TryGetValue(child.Id().Value, out var w))
             {
                 throw new InvalidDataException("Weight is missing for group in weighted policy");
             }

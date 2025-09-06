@@ -1,4 +1,5 @@
 using System.Collections.Immutable;
+using CascVel.Modules.Evaluations.Management.Domain.Identifiers;
 
 namespace CascVel.Modules.Evaluations.Management.Domain.Interfaces.Forms;
 
@@ -10,7 +11,7 @@ public interface IFormGroup
     /// <summary>
     /// Returns the stable identifier of the group.
     /// </summary>
-    IId Id();
+    FormGroupId Id();
     /// <summary>
     /// Returns the title string.
     /// </summary>

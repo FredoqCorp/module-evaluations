@@ -1,3 +1,5 @@
+using CascVel.Modules.Evaluations.Management.Domain.Identifiers;
+
 namespace CascVel.Modules.Evaluations.Management.Domain.Interfaces.Forms;
 
 /// <summary>
@@ -8,7 +10,7 @@ public interface IFormCriterion
     /// <summary>
     /// Returns the stable identifier of this positioned criterion.
     /// </summary>
-    IId Id();
+    FormCriterionId Id();
     /// <summary>
     /// Returns the domain criterion value object.
     /// </summary>

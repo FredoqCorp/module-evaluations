@@ -33,13 +33,13 @@ public sealed class WeightedMeanPolicyTests
         var g = new FormGroup(gid, "G✓", new OrderIndex(0), ImmutableList<IFormCriterion>.Empty.Add(new FormCriterion(c1, new Criterion(new CriterionText("t1", "d1"), ImmutableList<IChoice>.Empty), new OrderIndex(0))).Add(new FormCriterion(c2, new Criterion(new CriterionText("t2", "d2"), ImmutableList<IChoice>.Empty), new OrderIndex(1))), ImmutableList<IFormGroup>.Empty);
         var rootCrit = new FormCriterion(c0, new Criterion(new CriterionText("t0", "d0"), ImmutableList<IChoice>.Empty), new OrderIndex(0));
 
-        var weights = ImmutableDictionary.CreateBuilder<string, Weight>();
+        var weights = ImmutableDictionary.CreateBuilder<Guid, Weight>();
         // root siblings: group and c0
-        weights[gid.Text()] = new Weight(7_000);
-        weights[c0.Text()] = new Weight(3_000);
+        weights[gid.Value] = new Weight(7_000);
+        weights[c0.Value] = new Weight(3_000);
         // inside group: c1 and c2
-        weights[c1.Text()] = new Weight(6_000);
-        weights[c2.Text()] = new Weight(4_000);
+        weights[c1.Value] = new Weight(6_000);
+        weights[c2.Value] = new Weight(4_000);
 
         var def = new WeightedMeanPolicyDefinition(weights.ToImmutable());
         var form = new EvaluationForm(new EvaluationFormId(Guid.CreateVersion7()), meta, life, ImmutableList<IFormGroup>.Empty.Add(g), ImmutableList<IFormCriterion>.Empty.Add(rootCrit), def);
