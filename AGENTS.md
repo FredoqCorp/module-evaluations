@@ -73,8 +73,8 @@
 
 * Every class or record may have only one primary constructor; any secondary constructor must delegate to it.
 
-* Methods must be declared in interfaces and then implemented in classes or records.
-* Public methods that do not implement an interface must be avoided.
+* Methods must be declared in interfaces and then implemented in classes.
+* Public methods that do not implement an interface must be avoided, except public methods in record structs.
 * Methods must never return null.
 * null may not be passed as an argument.
 * Type introspection and type casting are strictly prohibited.

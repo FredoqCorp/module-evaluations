@@ -29,9 +29,4 @@ public sealed record FormName : IFormName
         }
         return _value;
     }
-
-    /// <summary>
-    /// Returns the raw name string representation.
-    /// </summary>
-    public override string ToString() => _value;
 }
