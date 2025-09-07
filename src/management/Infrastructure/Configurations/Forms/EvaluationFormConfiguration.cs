@@ -42,6 +42,5 @@ internal sealed class EvaluationFormConfiguration : IEntityTypeConfiguration<Eva
 
         builder.HasKey("id");
 
-
     }
 }

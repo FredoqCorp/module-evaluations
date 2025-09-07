@@ -16,7 +16,7 @@ public sealed class EvaluationForm : IEvaluationForm
 {
     private readonly EvaluationFormId _id;
     private readonly FormMeta _meta;
-    private readonly IFormLifecycle _lifecycle;
+    private readonly FormLifecycle _lifecycle;
     private readonly IImmutableList<IFormGroup> _groups;
     private readonly IImmutableList<IFormCriterion> _criteria;
     private readonly ICalculationPolicyDefinition _definition;
@@ -27,7 +27,7 @@ public sealed class EvaluationForm : IEvaluationForm
     public EvaluationForm(
         EvaluationFormId id,
         FormMeta meta,
-        IFormLifecycle lifecycle,
+        FormLifecycle lifecycle,
         IImmutableList<IFormGroup> groups,
         IImmutableList<IFormCriterion> criteria,
         ICalculationPolicyDefinition definition)
@@ -49,7 +49,7 @@ public sealed class EvaluationForm : IEvaluationForm
     /// <summary>
     /// Returns the lifecycle value object of this evaluation form aggregate.
     /// </summary>
-    public IFormLifecycle Lifecycle() => _lifecycle;
+    public FormLifecycle Lifecycle() => _lifecycle;
 
     /// <summary>
     /// Returns the ordered groups of criteria belonging to this evaluation form aggregate.

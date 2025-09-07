@@ -1,5 +1,6 @@
 using System.Collections.Immutable;
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Runs;
+using CascVel.Modules.Evaluations.Management.Domain.ValueObjects.Forms;
 
 namespace CascVel.Modules.Evaluations.Management.Domain.Interfaces.Forms;
 
@@ -11,7 +12,7 @@ public interface IEvaluationForm
     /// <summary>
     /// Returns the lifecycle value object.
     /// </summary>
-    IFormLifecycle Lifecycle();
+    FormLifecycle Lifecycle();
 
     /// <summary>
     /// Returns the ordered groups of criteria.
