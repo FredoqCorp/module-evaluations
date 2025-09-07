@@ -1,63 +1,42 @@
 using System.Collections.Immutable;
-using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Forms;
 
 namespace CascVel.Modules.Evaluations.Management.Domain.ValueObjects.Forms;
 
 /// <summary>
 /// Human-facing meta information as an immutable value object.
 /// </summary>
-public sealed record FormMeta : IFormMeta
+public sealed record FormMeta
 {
-    private readonly IFormName _name;
-    private readonly string _description;
-    private readonly IImmutableList<string> _tags;
-    private readonly IFormCode _code;
-
     /// <summary>
     /// Creates a form meta with name, optional description, tags and code.
     /// </summary>
-    public FormMeta(IFormName name, string? description, IImmutableList<string> tags, IFormCode code)
+    public FormMeta(FormName name, string? description, IImmutableList<string> tags, FormCode code)
     {
-        ArgumentNullException.ThrowIfNull(name);
         ArgumentNullException.ThrowIfNull(tags);
-        ArgumentNullException.ThrowIfNull(code);
 
-        _name = name;
-        _description = description ?? string.Empty;
-
-        _tags = tags;
-        _code = code;
+        Name = name;
+        Description = description ?? string.Empty;
+        Tags = tags;
+        Code = code;
     }
 
     /// <summary>
     /// Returns the form name value object.
     /// </summary>
-    public IFormName Name()
-    {
-        return _name;
-    }
+    public FormName Name { get; }
 
     /// <summary>
-    /// Returns the optional description as a non-null string.
+    /// Returns the description.
     /// </summary>
-    public string Description()
-    {
-        return _description;
-    }
+    public string Description { get; }
 
     /// <summary>
     /// Returns the case-insensitive tags list.
     /// </summary>
-    public IImmutableList<string> Tags()
-    {
-        return _tags;
-    }
+    public IImmutableList<string> Tags { get; }
 
     /// <summary>
     /// Returns the globally unique form code value object.
     /// </summary>
-    public IFormCode Code()
-    {
-        return _code;
-    }
+    public FormCode Code { get; }
 }

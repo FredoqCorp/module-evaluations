@@ -25,7 +25,7 @@ public sealed class FormCodeTests
     {
         var v = "код-✓-コード-" + Guid.NewGuid();
         var vo = new FormCode(v);
-        vo.Code().ShouldBe(v, "FormCode returned an unexpected string which is incorrect");
+        vo.Value.ShouldBe(v, "FormCode returned an unexpected string which is incorrect");
     }
 }
 

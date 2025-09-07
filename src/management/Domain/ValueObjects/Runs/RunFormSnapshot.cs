@@ -3,6 +3,7 @@ using CascVel.Modules.Evaluations.Management.Domain.Identifiers;
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Forms;
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Policies;
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Runs;
+using CascVel.Modules.Evaluations.Management.Domain.ValueObjects.Forms;
 
 namespace CascVel.Modules.Evaluations.Management.Domain.ValueObjects.Runs;
 
@@ -11,7 +12,7 @@ namespace CascVel.Modules.Evaluations.Management.Domain.ValueObjects.Runs;
 /// </summary>
 public sealed record RunFormSnapshot : IRunFormSnapshot
 {
-    private readonly IFormMeta _meta;
+    private readonly FormMeta _meta;
     private readonly IImmutableList<IFormGroup> _groups;
     private readonly IImmutableList<IFormCriterion> _criteria;
     private readonly EvaluationFormId _formId;
@@ -20,7 +21,7 @@ public sealed record RunFormSnapshot : IRunFormSnapshot
     /// <summary>
     /// Creates a form snapshot with meta, explicit runtime policy, ordered groups and root-level criteria.
     /// </summary>
-    public RunFormSnapshot(EvaluationFormId formId, IFormMeta meta, ICalculationPolicy policy, IImmutableList<IFormGroup> groups, IImmutableList<IFormCriterion> criteria)
+    public RunFormSnapshot(EvaluationFormId formId, FormMeta meta, ICalculationPolicy policy, IImmutableList<IFormGroup> groups, IImmutableList<IFormCriterion> criteria)
     {
         ArgumentNullException.ThrowIfNull(meta);
         ArgumentNullException.ThrowIfNull(policy);
@@ -41,7 +42,7 @@ public sealed record RunFormSnapshot : IRunFormSnapshot
     /// <summary>
     /// Returns human-facing metadata captured at launch time.
     /// </summary>
-    public IFormMeta Meta() => _meta;
+    public FormMeta Meta() => _meta;
 
     /// <summary>
     /// Returns the bound runtime calculation policy captured at launch time.

@@ -4,6 +4,7 @@ using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Runs;
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Forms;
 using CascVel.Modules.Evaluations.Management.Domain.Identifiers;
 using CascVel.Modules.Evaluations.Management.Domain.ValueObjects.Runs;
+using CascVel.Modules.Evaluations.Management.Domain.ValueObjects.Forms;
 
 namespace CascVel.Modules.Evaluations.Management.Domain.Entities.Forms;
 
@@ -14,7 +15,7 @@ namespace CascVel.Modules.Evaluations.Management.Domain.Entities.Forms;
 public sealed class EvaluationForm : IEvaluationForm
 {
     private readonly EvaluationFormId _id;
-    private readonly IFormMeta _meta;
+    private readonly FormMeta _meta;
     private readonly IFormLifecycle _lifecycle;
     private readonly IImmutableList<IFormGroup> _groups;
     private readonly IImmutableList<IFormCriterion> _criteria;
@@ -25,7 +26,7 @@ public sealed class EvaluationForm : IEvaluationForm
     /// </summary>
     public EvaluationForm(
         EvaluationFormId id,
-        IFormMeta meta,
+        FormMeta meta,
         IFormLifecycle lifecycle,
         IImmutableList<IFormGroup> groups,
         IImmutableList<IFormCriterion> criteria,

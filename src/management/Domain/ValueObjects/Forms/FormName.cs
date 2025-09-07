@@ -1,32 +1,22 @@
-using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Forms;
-
 namespace CascVel.Modules.Evaluations.Management.Domain.ValueObjects.Forms;
 
 /// <summary>
-/// Name/title of a form as an immutable value object.
+/// Name/title of a form.
 /// </summary>
-public sealed record FormName : IFormName
+public readonly record struct FormName
 {
-    private readonly string _value;
 
     /// <summary>
     /// Creates a form name with a non-null raw string.
     /// </summary>
     public FormName(string value)
     {
-        ArgumentNullException.ThrowIfNull(value);
-        _value = value;
+        ArgumentException.ThrowIfNullOrWhiteSpace(value);
+        Value = value;
     }
 
     /// <summary>
     /// Returns the raw name string.
     /// </summary>
-    public string Name()
-    {
-        if (string.IsNullOrWhiteSpace(_value))
-        {
-            throw new InvalidDataException("Name must not be empty");
-        }
-        return _value;
-    }
+    public string Value { get; }
 }

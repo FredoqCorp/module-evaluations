@@ -2,6 +2,7 @@ using System.Collections.Immutable;
 using CascVel.Modules.Evaluations.Management.Domain.Identifiers;
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Forms;
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Policies;
+using CascVel.Modules.Evaluations.Management.Domain.ValueObjects.Forms;
 
 namespace CascVel.Modules.Evaluations.Management.Domain.Interfaces.Runs;
 
@@ -19,7 +20,7 @@ public interface IRunFormSnapshot
     /// <summary>
     /// Returns human-facing metadata captured at launch time.
     /// </summary>
-    IFormMeta Meta();
+    FormMeta Meta();
 
     /// <summary>
     /// Returns the bound runtime calculation policy captured at launch time.

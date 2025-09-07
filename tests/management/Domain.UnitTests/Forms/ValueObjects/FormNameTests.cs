@@ -25,7 +25,7 @@ public sealed class FormNameTests
     {
         var v = "имя-✓-名前-" + Guid.NewGuid();
         var vo = new FormName(v);
-        vo.Name().ShouldBe(v, "FormName returned an unexpected string which is incorrect");
+        vo.Value.ShouldBe(v, "FormName returned an unexpected string which is incorrect");
     }
 }
 

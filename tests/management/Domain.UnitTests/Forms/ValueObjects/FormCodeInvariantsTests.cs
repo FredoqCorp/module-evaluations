@@ -11,11 +11,10 @@ public sealed class FormCodeInvariantsTests
     /// <summary>
     /// Verifies that Code throws on whitespace.
     /// </summary>
-    [Fact(DisplayName = "FormCode cannot return a whitespace code")]
-    public void FormCode_cannot_return_a_whitespace_code()
+    [Fact(DisplayName = "FormCode cannot be created with a whitespace code")]
+    public void FormCode_cannot_be_created_with_a_whitespace_code()
     {
-        var vo = new FormCode("   \r\n  ");
-        Should.Throw<InvalidDataException>(() => vo.Code(), "FormCode accepted a whitespace code which is incorrect");
+        Should.Throw<ArgumentException>(() => new FormCode("   \r\n  "), "FormCode accepted a whitespace code which is incorrect");
     }
 }
 

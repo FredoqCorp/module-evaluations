@@ -5,28 +5,19 @@ namespace CascVel.Modules.Evaluations.Management.Domain.ValueObjects.Forms;
 /// <summary>
 /// Globally-unique code of a form as an immutable value object.
 /// </summary>
-public sealed record FormCode : IFormCode
+public readonly record struct FormCode
 {
-    private readonly string _value;
-
     /// <summary>
     /// Creates a form code with a non-null raw string.
     /// </summary>
     public FormCode(string value)
     {
-        ArgumentNullException.ThrowIfNull(value);
-        _value = value;
+        ArgumentException.ThrowIfNullOrWhiteSpace(value);
+        Value = value;
     }
 
     /// <summary>
     /// Returns the raw code string.
     /// </summary>
-    public string Code()
-    {
-        if (string.IsNullOrWhiteSpace(_value))
-        {
-            throw new InvalidDataException("Code must not be empty");
-        }
-        return _value;
-    }
+    public string Value { get; }
 }
