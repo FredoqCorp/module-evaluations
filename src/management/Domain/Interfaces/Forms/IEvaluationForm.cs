@@ -3,6 +3,7 @@ using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Runs;
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Policies;
 using CascVel.Modules.Evaluations.Management.Domain.ValueObjects;
 using CascVel.Modules.Evaluations.Management.Domain.ValueObjects.Forms;
+using CascVel.Modules.Evaluations.Management.Domain.Entities.Forms.Enums;
 
 namespace CascVel.Modules.Evaluations.Management.Domain.Interfaces.Forms;
 
@@ -11,11 +12,6 @@ namespace CascVel.Modules.Evaluations.Management.Domain.Interfaces.Forms;
 /// </summary>
 public interface IEvaluationForm
 {
-    /// <summary>
-    /// Returns the lifecycle value object.
-    /// </summary>
-    FormLifecycle Lifecycle();
-
     /// <summary>
     /// Returns the ordered groups of criteria.
     /// </summary>
@@ -45,4 +41,9 @@ public interface IEvaluationForm
     /// Archives the form after validating audit rules and returns a new aggregate instance.
     /// </summary>
     IEvaluationForm Archive(Stamp stamp);
+
+    /// <summary>
+    /// Returns the status value object of this evaluation form aggregate.
+    /// </summary>
+    FormStatus Status();
 }

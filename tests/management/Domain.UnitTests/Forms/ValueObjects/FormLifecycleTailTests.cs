@@ -19,7 +19,7 @@ public sealed class FormLifecycleTailTests
     public void Form_lifecycle_tail_is_published_when_status_is_published()
     {
         var now = DateTime.UtcNow;
-        var life = new FormLifecycle(FormStatus.Published, new Period(now.AddDays(-1), now.AddDays(1)), new FormAuditTail(FormAuditKind.Published, new Stamp("p-✓-" + Guid.NewGuid(), now)));
+        var life = new FormLifecycle(new Period(now.AddDays(-1), now.AddDays(1)), new FormAuditTail(FormAuditKind.Published, new Stamp("p-✓-" + Guid.NewGuid(), now)));
         life.Tail().Kind().ShouldBe(FormAuditKind.Published, "Form lifecycle tail returned an unexpected kind which is incorrect");
     }
 
@@ -30,7 +30,7 @@ public sealed class FormLifecycleTailTests
     public void Form_lifecycle_tail_is_archived_when_status_is_archived()
     {
         var now = DateTime.UtcNow;
-        var life = new FormLifecycle(FormStatus.Archived, new Period(now.AddDays(-1), now.AddDays(1)), new FormAuditTail(FormAuditKind.Archived, new Stamp("a-✓-" + Guid.NewGuid(), now.AddMinutes(-1))));
+        var life = new FormLifecycle(new Period(now.AddDays(-1), now.AddDays(1)), new FormAuditTail(FormAuditKind.Archived, new Stamp("a-✓-" + Guid.NewGuid(), now.AddMinutes(-1))));
         life.Tail().Kind().ShouldBe(FormAuditKind.Archived, "Form lifecycle tail returned an unexpected kind which is incorrect");
     }
 }

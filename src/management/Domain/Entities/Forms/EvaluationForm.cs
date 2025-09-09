@@ -6,6 +6,7 @@ using CascVel.Modules.Evaluations.Management.Domain.Identifiers;
 using CascVel.Modules.Evaluations.Management.Domain.ValueObjects;
 using CascVel.Modules.Evaluations.Management.Domain.ValueObjects.Runs;
 using CascVel.Modules.Evaluations.Management.Domain.ValueObjects.Forms;
+using CascVel.Modules.Evaluations.Management.Domain.Entities.Forms.Enums;
 
 namespace CascVel.Modules.Evaluations.Management.Domain.Entities.Forms;
 
@@ -48,11 +49,6 @@ public sealed class EvaluationForm : IEvaluationForm
     }
 
     /// <summary>
-    /// Returns the lifecycle value object of this evaluation form aggregate.
-    /// </summary>
-    public FormLifecycle Lifecycle() => _lifecycle;
-
-    /// <summary>
     /// Returns the ordered groups of criteria belonging to this evaluation form aggregate.
     /// </summary>
     public IImmutableList<IFormGroup> Groups() => _groups;
@@ -84,10 +80,10 @@ public sealed class EvaluationForm : IEvaluationForm
         ArgumentNullException.ThrowIfNull(criteria);
         ArgumentNullException.ThrowIfNull(definition);
 
-        var tail = _lifecycle.Tail();
+        var tail = _lifecycle.Tail;
         var nextTail = tail.Accept(FormAuditKind.Edited, stamp);
 
-        var life = new FormLifecycle(_lifecycle.Status, _lifecycle.Validity, nextTail);
+        var life = new FormLifecycle(_lifecycle.Validity, nextTail);
         return new EvaluationForm(_id, meta, life, groups, criteria, definition);
     }
 
@@ -96,10 +92,10 @@ public sealed class EvaluationForm : IEvaluationForm
     /// </summary>
     public IEvaluationForm Publish(Stamp stamp)
     {
-        var tail = _lifecycle.Tail();
+        var tail = _lifecycle.Tail;
         var nextTail = tail.Accept(FormAuditKind.Published, stamp);
 
-        var life = new FormLifecycle(Entities.Forms.Enums.FormStatus.Published, _lifecycle.Validity, nextTail);
+        var life = new FormLifecycle(_lifecycle.Validity, nextTail);
         return new EvaluationForm(_id, _meta, life, _groups, _criteria, _definition);
     }
 
@@ -108,10 +104,20 @@ public sealed class EvaluationForm : IEvaluationForm
     /// </summary>
     public IEvaluationForm Archive(Stamp stamp)
     {
-        var tail = _lifecycle.Tail();
+        var tail = _lifecycle.Tail;
         var nextTail = tail.Accept(FormAuditKind.Archived, stamp);
 
-        var life = new FormLifecycle(Entities.Forms.Enums.FormStatus.Archived, _lifecycle.Validity, nextTail);
+        var life = new FormLifecycle(_lifecycle.Validity, nextTail);
         return new EvaluationForm(_id, _meta, life, _groups, _criteria, _definition);
     }
+
+    /// <inheritdoc/>
+    public FormStatus Status() => _lifecycle.Tail.Kind() switch
+    {
+        FormAuditKind.Created => FormStatus.Draft,
+        FormAuditKind.Edited => FormStatus.Draft,
+        FormAuditKind.Published => FormStatus.Published,
+        FormAuditKind.Archived => FormStatus.Archived,
+        _ => FormStatus.Draft,
+    };
 }
