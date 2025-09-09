@@ -22,8 +22,8 @@ public sealed class EvaluationFormTests
     {
         var id = new EvaluationFormId(Guid.CreateVersion7());
         var meta = new FormMeta(new FormName("n-✓-" + Guid.NewGuid()), string.Empty, ImmutableList<string>.Empty, new FormCode("c-✓-" + Guid.NewGuid()));
-        var audit = new AuditTrail(new Stamp("u-✓-" + Guid.NewGuid(), DateTime.UtcNow), new Stamp("s-✓-" + Guid.NewGuid(), DateTime.UtcNow), new Stamp("c-✓-" + Guid.NewGuid(), DateTime.UtcNow));
-        var life = new FormLifecycle(FormStatus.Draft, new Period(DateTime.UtcNow, DateTime.UtcNow.AddDays(1)), audit);
+        var tail = new FormAuditTail(FormAuditKind.Created, new Stamp("u-✓-" + Guid.NewGuid(), DateTime.UtcNow));
+        var life = new FormLifecycle(FormStatus.Draft, new Period(DateTime.UtcNow, DateTime.UtcNow.AddDays(1)), tail);
         var groups = ImmutableList<IFormGroup>.Empty;
         var criteria = ImmutableList<IFormCriterion>.Empty;
         var agg = new EvaluationForm(id, meta, life, groups, criteria, new CascVel.Modules.Evaluations.Management.Domain.Entities.Policies.ArithmeticMeanPolicyDefinition());

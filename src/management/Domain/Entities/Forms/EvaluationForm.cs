@@ -3,6 +3,7 @@ using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Policies;
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Runs;
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Forms;
 using CascVel.Modules.Evaluations.Management.Domain.Identifiers;
+using CascVel.Modules.Evaluations.Management.Domain.ValueObjects;
 using CascVel.Modules.Evaluations.Management.Domain.ValueObjects.Runs;
 using CascVel.Modules.Evaluations.Management.Domain.ValueObjects.Forms;
 
@@ -71,5 +72,46 @@ public sealed class EvaluationForm : IEvaluationForm
 
         var policy = _definition.Policy();
         return new RunFormSnapshot(_id, _meta, policy, _groups, _criteria);
+    }
+
+    /// <summary>
+    /// Applies content changes to the form after validating audit rules and returns a new aggregate instance.
+    /// </summary>
+    public IEvaluationForm Edit(FormMeta meta, IImmutableList<IFormGroup> groups, IImmutableList<IFormCriterion> criteria, ICalculationPolicyDefinition definition, Stamp stamp)
+    {
+        ArgumentNullException.ThrowIfNull(meta);
+        ArgumentNullException.ThrowIfNull(groups);
+        ArgumentNullException.ThrowIfNull(criteria);
+        ArgumentNullException.ThrowIfNull(definition);
+
+        var tail = _lifecycle.Tail();
+        var nextTail = tail.Accept(FormAuditKind.Edited, stamp);
+
+        var life = new FormLifecycle(_lifecycle.Status, _lifecycle.Validity, nextTail);
+        return new EvaluationForm(_id, meta, life, groups, criteria, definition);
+    }
+
+    /// <summary>
+    /// Publishes the form after validating audit rules and returns a new aggregate instance.
+    /// </summary>
+    public IEvaluationForm Publish(Stamp stamp)
+    {
+        var tail = _lifecycle.Tail();
+        var nextTail = tail.Accept(FormAuditKind.Published, stamp);
+
+        var life = new FormLifecycle(Entities.Forms.Enums.FormStatus.Published, _lifecycle.Validity, nextTail);
+        return new EvaluationForm(_id, _meta, life, _groups, _criteria, _definition);
+    }
+
+    /// <summary>
+    /// Archives the form after validating audit rules and returns a new aggregate instance.
+    /// </summary>
+    public IEvaluationForm Archive(Stamp stamp)
+    {
+        var tail = _lifecycle.Tail();
+        var nextTail = tail.Accept(FormAuditKind.Archived, stamp);
+
+        var life = new FormLifecycle(Entities.Forms.Enums.FormStatus.Archived, _lifecycle.Validity, nextTail);
+        return new EvaluationForm(_id, _meta, life, _groups, _criteria, _definition);
     }
 }

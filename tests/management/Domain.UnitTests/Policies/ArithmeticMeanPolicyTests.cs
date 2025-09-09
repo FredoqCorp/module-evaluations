@@ -24,8 +24,8 @@ public sealed class ArithmeticMeanPolicyTests
     {
         var id = new EvaluationFormId(Guid.CreateVersion7());
         var meta = new FormMeta(new FormName("nm✓"), string.Empty, ImmutableList<string>.Empty, new FormCode("cd✓"));
-        var audit = new AuditTrail(new Stamp("u✓", DateTime.UtcNow), new Stamp("s✓", DateTime.UtcNow), new Stamp("c✓", DateTime.UtcNow));
-        var life = new FormLifecycle(FormStatus.Published, new Period(DateTime.UtcNow, DateTime.UtcNow.AddDays(1)), audit);
+        var tail = new FormAuditTail(FormAuditKind.Published, new Stamp("u✓", DateTime.UtcNow));
+        var life = new FormLifecycle(FormStatus.Published, new Period(DateTime.UtcNow, DateTime.UtcNow.AddDays(1)), tail);
 
         var c1 = new FormCriterion(new FormCriterionId(Guid.NewGuid()), new Criterion(new CriterionText("t1✓", "d1"), ImmutableList<IChoice>.Empty), new OrderIndex(0));
         var c2 = new FormCriterion(new FormCriterionId(Guid.NewGuid()), new Criterion(new CriterionText("t2✓", "d2"), ImmutableList<IChoice>.Empty), new OrderIndex(1));

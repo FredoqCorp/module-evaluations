@@ -1,20 +1,21 @@
 using CascVel.Modules.Evaluations.Management.Domain.Entities.Forms.Enums;
+using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Forms;
 
 namespace CascVel.Modules.Evaluations.Management.Domain.ValueObjects.Forms;
 
 /// <summary>
-/// Lifecycle state, validity period and audit as an immutable value object.
+/// Lifecycle state, validity period and audit tail as an immutable value object.
 /// </summary>
 public sealed record FormLifecycle
 {
     /// <summary>
-    /// Creates a lifecycle with a status, optional validity period and audit trail.
+    /// Creates a lifecycle with a status, optional validity period and audit tail.
     /// </summary>
-    public FormLifecycle(FormStatus status, Period validity, AuditTrail audit)
+    public FormLifecycle(FormStatus status, Period validity, IFormAuditTail tail)
     {
         Status = status;
         Validity = validity;
-        Audit = audit;
+        _tail = tail;
     }
 
     /// <summary>
@@ -27,8 +28,10 @@ public sealed record FormLifecycle
     /// </summary>
     public Period Validity { get; }
 
+    private readonly IFormAuditTail _tail;
+
     /// <summary>
-    /// Returns the audit trail.
+    /// Returns the audit tail.
     /// </summary>
-    public AuditTrail Audit { get; }
+    public IFormAuditTail Tail() => _tail;
 }

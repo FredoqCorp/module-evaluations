@@ -23,8 +23,8 @@ public sealed class ArithmeticMeanPolicyDefinitionTests
     {
         var id = new EvaluationFormId(Guid.CreateVersion7());
         var meta = new FormMeta(new FormName("name✓"), string.Empty, ImmutableList<string>.Empty, new FormCode("code✓"));
-        var audit = new AuditTrail(new Stamp("user✓", DateTime.UtcNow), new Stamp("submitted✓", DateTime.UtcNow), new Stamp("created✓", DateTime.UtcNow));
-        var life = new FormLifecycle(FormStatus.Draft, new Period(DateTime.UtcNow, DateTime.UtcNow.AddDays(1)), audit);
+        var tail = new FormAuditTail(FormAuditKind.Created, new Stamp("user✓", DateTime.UtcNow));
+        var life = new FormLifecycle(FormStatus.Draft, new Period(DateTime.UtcNow, DateTime.UtcNow.AddDays(1)), tail);
         var form = new EvaluationForm(id, meta, life, ImmutableList<IFormGroup>.Empty, ImmutableList<IFormCriterion>.Empty, new ArithmeticMeanPolicyDefinition());
 
         Should.NotThrow(() => new ArithmeticMeanPolicyDefinition().Verify(form), "Arithmetic mean definition threw unexpectedly which is incorrect");
