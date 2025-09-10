@@ -14,11 +14,6 @@ public interface IFormAuditTail
     FormAuditKind Kind();
 
     /// <summary>
-    /// Returns the last audit stamp.
-    /// </summary>
-    Stamp Stamp();
-
-    /// <summary>
     /// Accepts the next action and returns the next tail or throws on violation.
     /// </summary>
     IFormAuditTail Accept(FormAuditKind kind, Stamp stamp);

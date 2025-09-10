@@ -37,8 +37,9 @@ public sealed class FormAuditTailTests
     [Fact(DisplayName = "Form audit tail denies timestamp regression")]
     public void Form_audit_tail_denies_timestamp_regression()
     {
-        var created = new FormAuditTail(FormAuditKind.Created, new Stamp("u-✓-" + Guid.NewGuid(), DateTime.UtcNow));
-        Should.Throw<InvalidOperationException>(() => created.Accept(FormAuditKind.Edited, new Stamp("e-✓-" + Guid.NewGuid(), created.Stamp().At.AddSeconds(-1))), "Form audit tail accepted a timestamp regression which is incorrect");
+        var createdStamp = new Stamp("u-✓-" + Guid.NewGuid(), DateTime.UtcNow);
+        var created = new FormAuditTail(FormAuditKind.Created, createdStamp);
+        Should.Throw<InvalidOperationException>(() => created.Accept(FormAuditKind.Edited, new Stamp("e-✓-" + Guid.NewGuid(), createdStamp.At.AddSeconds(-1))), "Form audit tail accepted a timestamp regression which is incorrect");
     }
 }
 

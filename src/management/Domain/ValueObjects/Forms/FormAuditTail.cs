@@ -25,11 +25,6 @@ public sealed record FormAuditTail : IFormAuditTail
     public FormAuditKind Kind() => _kind;
 
     /// <summary>
-    /// Returns the last audit stamp.
-    /// </summary>
-    public Stamp Stamp() => _stamp;
-
-    /// <summary>
     /// Accepts the next action and returns the next tail or throws on violation.
     /// </summary>
     public IFormAuditTail Accept(FormAuditKind kind, Stamp stamp)

@@ -7,6 +7,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using NpgsqlTypes;
+using CascVel.Modules.Evaluations.Management.Domain.ValueObjects;
 
 namespace CascVel.Modules.Evaluations.Management.Infrastructure.Configurations.Forms;
 /// <summary>
@@ -85,6 +87,40 @@ internal sealed class EvaluationFormConfiguration : IEntityTypeConfiguration<Eva
         });
 
         builder.HasIndex("meta.Code").IsUnique();
+
+        builder.ComplexProperty<FormLifecycle>("lifecycle", life =>
+        {
+            var periodConv = new ValueConverter<Period, NpgsqlRange<DateTime>>(
+                p => p.Finish() == DateTime.MaxValue
+                    ? new NpgsqlRange<DateTime>(p.Start(), DateTime.MaxValue)
+                    : new NpgsqlRange<DateTime>(p.Start(), p.Finish()),
+                r => new Period(r.LowerBound, r.UpperBound == DateTime.MaxValue ? null : r.UpperBound));
+
+            life.Property(l => l.Validity)
+                .HasConversion(periodConv)
+                .HasColumnType("tsrange")
+                .HasColumnName("life_validity")
+                .IsRequired();
+
+            life.ComplexProperty<FormAuditTail>(nameof(FormLifecycle.Tail), tail =>
+            {
+                tail.Property<FormAuditKind>("Kind")
+                    .HasField("_kind")
+                    .HasColumnName("life_tail_kind")
+                    .IsRequired();
+
+                tail.ComplexProperty<Stamp>("Stamp", stamp =>
+                {
+                    stamp.Property(s => s.UserId)
+                        .HasColumnName("life_tail_user")
+                        .IsRequired();
+
+                    stamp.Property(s => s.At)
+                        .HasColumnName("life_tail_at")
+                        .IsRequired();
+                }).HasField("_stamp");
+            });
+        });
 
 
 
