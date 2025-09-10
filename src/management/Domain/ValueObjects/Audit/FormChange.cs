@@ -1,4 +1,4 @@
-namespace CascVel.Modules.Evaluations.Management.Domain.ValueObjects.Forms;
+namespace CascVel.Modules.Evaluations.Management.Domain.ValueObjects.Audit;
 
 /// <summary>
 /// Single field-level change captured for edit audit entries.
