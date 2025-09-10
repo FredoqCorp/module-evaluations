@@ -1,10 +1,10 @@
 using System.Collections.Immutable;
-using System.Runtime.Intrinsics.X86;
+using System.Linq;
 using CascVel.Modules.Evaluations.Management.Domain.Entities.Forms;
 using CascVel.Modules.Evaluations.Management.Domain.Identifiers;
-using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Forms;
 using CascVel.Modules.Evaluations.Management.Domain.ValueObjects.Forms;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
@@ -41,6 +41,52 @@ internal sealed class EvaluationFormConfiguration : IEntityTypeConfiguration<Eva
             .IsRequired();
 
         builder.HasKey("id");
+
+        builder.ComplexProperty<FormMeta>("meta", b =>
+        {
+            var nameConv = new ValueConverter<FormName, string>(
+                v => v.Value,
+                v => new FormName(v));
+
+            var codeConv = new ValueConverter<FormCode, string>(
+                v => v.Value,
+                v => new FormCode(v));
+
+            var tagsConv = new ValueConverter<IImmutableList<string>, string[]>(
+                v => v.ToArray(),
+                v => v.ToImmutableList());
+
+            var tagsComparer = new ValueComparer<IImmutableList<string>>(
+                (l, r) => ReferenceEquals(l, r) || (l != null && r != null && l.SequenceEqual(r)),
+                v => v != null ? v.Aggregate(0, (a, e) => System.HashCode.Combine(a, e != null ? System.StringComparer.Ordinal.GetHashCode(e) : 0)) : 0,
+                v => v != null ? v.ToImmutableList() : ImmutableList<string>.Empty);
+
+            b.Property(m => m.Name)
+                .HasConversion(nameConv)
+                .HasColumnName("meta_name")
+                .IsRequired();
+
+            b.Property(m => m.Description)
+                .HasColumnName("meta_description")
+                .IsRequired();
+
+            b.Property(m => m.Tags)
+                .HasConversion(tagsConv)
+                .Metadata.SetValueComparer(tagsComparer);
+            b.Property(m => m.Tags)
+                .HasColumnType("text[]")
+                .HasColumnName("meta_tags")
+                .IsRequired();
+
+            b.Property(m => m.Code)
+                .HasConversion(codeConv)
+                .HasColumnName("meta_code")
+                .IsRequired();
+        });
+
+        builder.HasIndex("meta.Code").IsUnique();
+
+
 
     }
 }
