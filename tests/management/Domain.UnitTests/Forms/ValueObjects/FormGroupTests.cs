@@ -18,7 +18,7 @@ public sealed class FormGroupTests
     [Fact(DisplayName = "FormGroup cannot be created with null title")]
     public void FormGroup_cannot_be_created_with_null_title()
     {
-        Should.Throw<ArgumentNullException>(() => new FormGroup(new FormGroupId(Guid.NewGuid()), null!, new OrderIndex(0), ImmutableList<IFormCriterion>.Empty, ImmutableList<IFormGroup>.Empty), "FormGroup accepted a null title which is incorrect");
+        Should.Throw<ArgumentNullException>(() => new FormGroup(new FormGroupId(Guid.NewGuid()), null!, new OrderIndex(0), ImmutableList<FormCriterion>.Empty, ImmutableList<FormGroup>.Empty), "FormGroup accepted a null title which is incorrect");
     }
 
     

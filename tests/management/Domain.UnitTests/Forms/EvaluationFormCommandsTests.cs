@@ -25,7 +25,7 @@ public sealed class EvaluationFormCommandsTests
         var id = new EvaluationFormId(Guid.CreateVersion7());
         var meta = new FormMeta(new FormName("n-✓-" + Guid.NewGuid()), string.Empty, ImmutableList<string>.Empty, new FormCode("c-✓-" + Guid.NewGuid()));
         var life = new FormLifecycle(new Period(now.AddDays(-1), now.AddDays(1)), new FormAuditTail(FormAuditKind.Edited, new Stamp("e-✓-" + Guid.NewGuid(), now.AddMinutes(-1))));
-        var form = new EvaluationForm(id, meta, life, ImmutableList<IFormGroup>.Empty, ImmutableList<IFormCriterion>.Empty, new ArithmeticMeanPolicyDefinition());
+        var form = new EvaluationForm(id, meta, life, ImmutableList<FormGroup>.Empty, ImmutableList<FormCriterion>.Empty, new ArithmeticMeanPolicyDefinition());
 
         var next = form.Publish(new Stamp("p-✓-" + Guid.NewGuid(), now));
         next.Status().ShouldBe(FormStatus.Published, "EvaluationForm did not set published status which is incorrect");
@@ -41,10 +41,10 @@ public sealed class EvaluationFormCommandsTests
         var id = new EvaluationFormId(Guid.CreateVersion7());
         var meta = new FormMeta(new FormName("n-✓-" + Guid.NewGuid()), string.Empty, ImmutableList<string>.Empty, new FormCode("c-✓-" + Guid.NewGuid()));
         var life = new FormLifecycle(new Period(now.AddDays(-1), now.AddDays(1)), new FormAuditTail(FormAuditKind.Published, new Stamp("p-✓-" + Guid.NewGuid(), now.AddMinutes(-1))));
-        var form = new EvaluationForm(id, meta, life, ImmutableList<IFormGroup>.Empty, ImmutableList<IFormCriterion>.Empty, new ArithmeticMeanPolicyDefinition());
+        var form = new EvaluationForm(id, meta, life, ImmutableList<FormGroup>.Empty, ImmutableList<FormCriterion>.Empty, new ArithmeticMeanPolicyDefinition());
 
         Should.Throw<InvalidOperationException>(
-            () => form.Edit(meta, ImmutableList<IFormGroup>.Empty, ImmutableList<IFormCriterion>.Empty, new ArithmeticMeanPolicyDefinition(), new Stamp("e2-✓-" + Guid.NewGuid(), now)),
+            () => form.Edit(meta, ImmutableList<FormGroup>.Empty, ImmutableList<FormCriterion>.Empty, new ArithmeticMeanPolicyDefinition(), new Stamp("e2-✓-" + Guid.NewGuid(), now)),
             "EvaluationForm accepted edit after publish which is incorrect");
     }
 
@@ -58,7 +58,7 @@ public sealed class EvaluationFormCommandsTests
         var id = new EvaluationFormId(Guid.CreateVersion7());
         var meta = new FormMeta(new FormName("n-✓-" + Guid.NewGuid()), string.Empty, ImmutableList<string>.Empty, new FormCode("c-✓-" + Guid.NewGuid()));
         var life = new FormLifecycle(new Period(now.AddDays(-1), now.AddDays(1)), new FormAuditTail(FormAuditKind.Edited, new Stamp("e-✓-" + Guid.NewGuid(), now.AddMinutes(-1))));
-        var form = new EvaluationForm(id, meta, life, ImmutableList<IFormGroup>.Empty, ImmutableList<IFormCriterion>.Empty, new ArithmeticMeanPolicyDefinition());
+        var form = new EvaluationForm(id, meta, life, ImmutableList<FormGroup>.Empty, ImmutableList<FormCriterion>.Empty, new ArithmeticMeanPolicyDefinition());
 
         var next = form.Archive(new Stamp("a-✓-" + Guid.NewGuid(), now));
         next.Status().ShouldBe(FormStatus.Archived, "EvaluationForm did not set archived status which is incorrect");

@@ -29,7 +29,7 @@ public sealed class ArithmeticMeanPolicyTests
 
         var c1 = new FormCriterion(new FormCriterionId(Guid.NewGuid()), new Criterion(new CriterionText("t1✓", "d1"), ImmutableList<IChoice>.Empty), new OrderIndex(0));
         var c2 = new FormCriterion(new FormCriterionId(Guid.NewGuid()), new Criterion(new CriterionText("t2✓", "d2"), ImmutableList<IChoice>.Empty), new OrderIndex(1));
-        var form = new EvaluationForm(id, meta, life, ImmutableList<IFormGroup>.Empty, ImmutableList<IFormCriterion>.Empty.Add(c1).Add(c2), new ArithmeticMeanPolicyDefinition());
+        var form = new EvaluationForm(id, meta, life, ImmutableList<FormGroup>.Empty, ImmutableList<FormCriterion>.Empty.Add(c1).Add(c2), new ArithmeticMeanPolicyDefinition());
 
         var snapshot = form.Snapshot();
         var s = ImmutableList.Create<Interfaces.Runs.IRunCriterionScore>(

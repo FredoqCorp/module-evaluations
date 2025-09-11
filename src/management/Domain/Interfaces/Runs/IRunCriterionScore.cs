@@ -1,4 +1,4 @@
-using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Forms;
+using CascVel.Modules.Evaluations.Management.Domain.ValueObjects.Forms;
 
 namespace CascVel.Modules.Evaluations.Management.Domain.Interfaces.Runs;
 /// <summary>
@@ -9,7 +9,7 @@ public interface IRunCriterionScore
     /// <summary>
     /// Returns the run-level decorated criterion captured at launch.
     /// </summary>
-    IFormCriterion Criterion();
+    FormCriterion Criterion();
 
     /// <summary>
     /// Returns whether the criterion is skipped.

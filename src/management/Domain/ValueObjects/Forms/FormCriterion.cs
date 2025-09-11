@@ -6,7 +6,7 @@ namespace CascVel.Modules.Evaluations.Management.Domain.ValueObjects.Forms;
 /// <summary>
 /// Criterion positioned within a form or a group, with order.
 /// </summary>
-public sealed record FormCriterion : IFormCriterion
+public sealed record FormCriterion
 {
     private readonly FormCriterionId _id;
     private readonly ICriterion _criterion;

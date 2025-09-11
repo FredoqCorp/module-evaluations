@@ -85,7 +85,7 @@ public sealed record WeightedMeanPolicy : ICalculationPolicy
         return totalRoot;
     }
 
-    private (bool any, decimal score) CombineGroup(IFormGroup g, Dictionary<Guid, decimal> scoreByKey)
+    private (bool any, decimal score) CombineGroup(FormGroup g, Dictionary<Guid, decimal> scoreByKey)
     {
         var entries = new List<(decimal score, decimal weightBps)>();
 

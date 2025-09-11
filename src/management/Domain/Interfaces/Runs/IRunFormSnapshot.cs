@@ -30,11 +30,11 @@ public interface IRunFormSnapshot
     /// <summary>
     /// Returns the ordered groups of criteria captured at launch time.
     /// </summary>
-    IImmutableList<IFormGroup> Groups();
+    IImmutableList<FormGroup> Groups();
 
     /// <summary>
     /// Returns the root-level criteria captured at launch time.
     /// </summary>
-    IImmutableList<IFormCriterion> Criteria();
+    IImmutableList<FormCriterion> Criteria();
 
 }

@@ -33,8 +33,8 @@ public sealed record WeightedMeanPolicyDefinition : ICalculationPolicyDefinition
     {
         ArgumentNullException.ThrowIfNull(form);
 
-        void VerifyLevel(IImmutableList<IFormGroup> formGroups,
-            IImmutableList<IFormCriterion> formCriteria)
+        void VerifyLevel(IImmutableList<FormGroup> formGroups,
+            IImmutableList<FormCriterion> formCriteria)
         {
             if (formGroups.Count + formCriteria.Count == 0)
             {
