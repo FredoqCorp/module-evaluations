@@ -27,8 +27,8 @@ public sealed class ArithmeticMeanPolicyTests
         var tail = new FormAuditTail(FormAuditKind.Published, new Stamp("u✓", DateTime.UtcNow));
         var life = new FormLifecycle(new Period(DateTime.UtcNow, DateTime.UtcNow.AddDays(1)), tail);
 
-        var c1 = new FormCriterion(new FormCriterionId(Guid.NewGuid()), new Criterion(new CriterionText("t1✓", "d1"), ImmutableList<IChoice>.Empty), new OrderIndex(0));
-        var c2 = new FormCriterion(new FormCriterionId(Guid.NewGuid()), new Criterion(new CriterionText("t2✓", "d2"), ImmutableList<IChoice>.Empty), new OrderIndex(1));
+        var c1 = new FormCriterion(new FormCriterionId(Guid.NewGuid()), new Criterion(new CriterionText("t1✓", "d1"), ImmutableList<Choice>.Empty), new OrderIndex(0));
+        var c2 = new FormCriterion(new FormCriterionId(Guid.NewGuid()), new Criterion(new CriterionText("t2✓", "d2"), ImmutableList<Choice>.Empty), new OrderIndex(1));
         var form = new EvaluationForm(id, meta, life, ImmutableList<FormGroup>.Empty, ImmutableList<FormCriterion>.Empty.Add(c1).Add(c2), new ArithmeticMeanPolicyDefinition());
 
         var snapshot = form.Snapshot();

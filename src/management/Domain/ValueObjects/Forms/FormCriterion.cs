@@ -11,7 +11,7 @@ public sealed record FormCriterion
     /// <summary>
     /// Creates a positioned criterion with order and weight.
     /// </summary>
-    public FormCriterion(FormCriterionId id, ICriterion criterion, OrderIndex order)
+    public FormCriterion(FormCriterionId id, Criterion criterion, OrderIndex order)
     {
         ArgumentNullException.ThrowIfNull(criterion);
 
@@ -28,7 +28,7 @@ public sealed record FormCriterion
     /// <summary>
     /// Returns the domain criterion value object.
     /// </summary>
-    public ICriterion Criterion { get; }
+    public Criterion Criterion { get; }
 
     /// <summary>
     /// Returns the display order index.

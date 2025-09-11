@@ -17,9 +17,9 @@ public sealed class CriterionTests
     {
         var title = "тест-✓-タイトル-🚀-" + Guid.NewGuid();
         var description = "описание-✓-説明-🧪-" + Guid.NewGuid();
-        var criterion = new Criterion(new CriterionText(title, description), System.Collections.Immutable.ImmutableList<IChoice>.Empty);
+        var criterion = new Criterion(new CriterionText(title, description), System.Collections.Immutable.ImmutableList<Choice>.Empty);
 
-        criterion.Title().ShouldBe(title, "title value returned is not equal to input");
+        criterion.Text.Title.ShouldBe(title, "title value returned is not equal to input");
     }
 
     /// <summary>
@@ -30,9 +30,9 @@ public sealed class CriterionTests
     {
         var title = "заголовок-✓-見出し-🛰️-" + Guid.NewGuid();
         var description = "описание-✓-説明-🧫-" + Guid.NewGuid();
-        var criterion = new Criterion(new CriterionText(title, description), System.Collections.Immutable.ImmutableList<IChoice>.Empty);
+        var criterion = new Criterion(new CriterionText(title, description), System.Collections.Immutable.ImmutableList<Choice>.Empty);
 
-        criterion.Description().ShouldBe(description, "description value returned is not equal to input");
+        criterion.Text.Description.ShouldBe(description, "description value returned is not equal to input");
     }
 
     /// <summary>
@@ -42,7 +42,7 @@ public sealed class CriterionTests
     public void It_returns_the_same_options_count()
     {
         var count = System.Security.Cryptography.RandomNumberGenerator.GetInt32(1, 5);
-        var builder = System.Collections.Immutable.ImmutableList.CreateBuilder<IChoice>();
+        var builder = System.Collections.Immutable.ImmutableList.CreateBuilder<Choice>();
         for (var i = 0; i < count; i++)
         {
             builder.Add(new Choice((ushort)System.Security.Cryptography.RandomNumberGenerator.GetInt32(0, ushort.MaxValue + 1)));
@@ -50,7 +50,7 @@ public sealed class CriterionTests
 
         var criterion = new Criterion(new CriterionText("титул-✓-标题-🚀-" + Guid.NewGuid(), "описание-✓-説明-🧪-" + Guid.NewGuid()), builder.ToImmutable());
 
-        criterion.Options().Count.ShouldBe(count, "options count returned is not equal to input size");
+        criterion.Options.Count.ShouldBe(count, "options count returned is not equal to input size");
     }
 
     /// <summary>

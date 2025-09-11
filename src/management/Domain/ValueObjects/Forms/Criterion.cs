@@ -1,51 +1,35 @@
 using System.Collections.Immutable;
-using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Forms;
 
 namespace CascVel.Modules.Evaluations.Management.Domain.ValueObjects.Forms;
 
 /// <summary>
 /// Domain layer value object representing an evaluation criterion with text and selectable options.
 /// </summary>
-public sealed record Criterion : ICriterion
+public sealed record Criterion
 {
-    private readonly ICriterionText _text;
-    private readonly IImmutableList<IChoice> _options;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="Criterion"/> record with the specified criterion text and options.
     /// </summary>
     /// <param name="text">The criterion text value object.</param>
     /// <param name="options">The list of selectable options for this criterion.</param>
-    public Criterion(ICriterionText text, IImmutableList<IChoice> options)
+    public Criterion(CriterionText text, IImmutableList<Choice> options)
     {
-        ArgumentNullException.ThrowIfNull(text);
         ArgumentNullException.ThrowIfNull(options);
 
-        _text = text;
-        _options = options;
+        Text = text;
+        Options = options;
     }
 
     /// <summary>
-    /// Returns the human readable title string.
+    /// Returns the criterion text.
     /// </summary>
-    public string Title()
-    {
-        return _text.Title();
-    }
+    public CriterionText Text { get; }
 
     /// <summary>
-    /// Returns the detailed description string.
+    /// Returns the list of selectable options for this criterion.
     /// </summary>
-    public string Description()
-    {
-        return _text.Description();
-    }
+    public IImmutableList<Choice> Options { get; }
 
-    /// <summary>
-    /// Returns the list of available options for scoring.
-    /// </summary>
-    public IImmutableList<IChoice> Options()
-    {
-        return _options;
-    }
+
 }

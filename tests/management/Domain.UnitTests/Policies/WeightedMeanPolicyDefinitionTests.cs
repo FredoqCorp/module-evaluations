@@ -28,7 +28,7 @@ public sealed class WeightedMeanPolicyDefinitionTests
         var tail = new FormAuditTail(FormAuditKind.Published, new Stamp("u✓", DateTime.UtcNow));
         var life = new FormLifecycle(new Period(DateTime.UtcNow, DateTime.UtcNow.AddDays(1)), tail);
         var group = new FormGroup(gid, "G✓", new OrderIndex(0), ImmutableList<FormCriterion>.Empty, ImmutableList<FormGroup>.Empty);
-        var crit = new FormCriterion(cid, new Criterion(new CriterionText("T✓", "D"), ImmutableList<IChoice>.Empty), new OrderIndex(1));
+        var crit = new FormCriterion(cid, new Criterion(new CriterionText("T✓", "D"), ImmutableList<Choice>.Empty), new OrderIndex(1));
         var form = new EvaluationForm(id, meta, life, ImmutableList<FormGroup>.Empty.Add(group), ImmutableList<FormCriterion>.Empty.Add(crit), new ArithmeticMeanPolicyDefinition());
 
         var map = ImmutableDictionary.CreateBuilder<Guid, Weight>();

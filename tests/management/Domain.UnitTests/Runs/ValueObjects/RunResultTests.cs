@@ -32,7 +32,7 @@ public sealed class RunResultTests
             new Identifiers.FormCriterionId(),
             new Criterion(
                 new CriterionText("тест✓", "описание✓"),
-                ImmutableList<IChoice>.Empty
+                ImmutableList<Choice>.Empty
             ),
             new OrderIndex(0)
         );

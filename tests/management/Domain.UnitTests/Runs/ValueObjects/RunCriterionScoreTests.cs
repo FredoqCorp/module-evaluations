@@ -23,7 +23,7 @@ public sealed class RunCriterionScoreTests
             new FormCriterionId(Guid.NewGuid()),
             new Criterion(
                 new CriterionText("тест✓", "описание✓"),
-                System.Collections.Immutable.ImmutableList<IChoice>.Empty
+                System.Collections.Immutable.ImmutableList<Choice>.Empty
             ),
             new OrderIndex(0)
         );

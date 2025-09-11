@@ -1,16 +1,10 @@
-using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Forms;
-
 namespace CascVel.Modules.Evaluations.Management.Domain.ValueObjects.Forms;
 
 /// <summary>
 /// A selectable option carrying a raw discrete score used in evaluation without any range validation.
 /// </summary>
-public sealed record Choice : IChoice
+public sealed record Choice
 {
-    private readonly ushort _score;
-    private readonly string _caption;
-    private readonly string _annotation;
-
     /// <summary>
     /// Creates a choice with the provided score and encapsulated caption and annotation.
     /// </summary>
@@ -19,9 +13,9 @@ public sealed record Choice : IChoice
         ArgumentNullException.ThrowIfNull(caption);
         ArgumentNullException.ThrowIfNull(annotation);
 
-        _score = score;
-        _caption = caption;
-        _annotation = annotation;
+        Score = score;
+        Caption = caption;
+        Annotation = annotation;
     }
 
     /// <summary>
@@ -34,24 +28,16 @@ public sealed record Choice : IChoice
     /// <summary>
     /// Returns the score value associated with this choice.
     /// </summary>
-    public ushort Score()
-    {
-        return _score;
-    }
+    public ushort Score { get; }
 
     /// <summary>
     /// Returns the caption string.
     /// </summary>
-    public string Caption()
-    {
-        return _caption;
-    }
+    public string Caption { get; }
 
     /// <summary>
     /// Returns the annotation string.
     /// </summary>
-    public string Annotation()
-    {
-        return _annotation;
-    }
+    public string Annotation { get; }
+
 }

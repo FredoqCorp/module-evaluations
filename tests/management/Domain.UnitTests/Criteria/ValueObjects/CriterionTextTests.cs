@@ -18,7 +18,7 @@ public sealed class CriterionTextTests
         var description = "описание-✓-説明-🧪-" + Guid.NewGuid();
         var text = new CriterionText(title, description);
 
-        text.Title().ShouldBe(title, "title value returned is not equal to input");
+        text.Title.ShouldBe(title, "title value returned is not equal to input");
     }
 
     /// <summary>
@@ -31,7 +31,7 @@ public sealed class CriterionTextTests
         var description = "описание-✓-説明-🧫-" + Guid.NewGuid();
         var text = new CriterionText(title, description);
 
-        text.Description().ShouldBe(description, "description value returned is not equal to input");
+        text.Description.ShouldBe(description, "description value returned is not equal to input");
     }
 
     /// <summary>
@@ -52,9 +52,8 @@ public sealed class CriterionTextTests
     public void CriterionText_cannot_return_title_when_created_with_whitespace()
     {
         var description = "описание-✓-説明-🧪-" + Guid.NewGuid();
-        var text = new CriterionText("  \t\n  ", description);
 
-        Should.Throw<InvalidDataException>(() => text.Title(), "CriterionText accepted an empty title which is incorrect");
+        Should.Throw<ArgumentException>(() => new CriterionText("  \t\n  ", description), "CriterionText accepted an empty title which is incorrect");
     }
 
     /// <summary>

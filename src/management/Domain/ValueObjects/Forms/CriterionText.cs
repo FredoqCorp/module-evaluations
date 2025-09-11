@@ -1,15 +1,10 @@
-using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Forms;
-
 namespace CascVel.Modules.Evaluations.Management.Domain.ValueObjects.Forms;
 
 /// <summary>
 /// Domain layer value object that encapsulates a criterion title and description as immutable text.
 /// </summary>
-public sealed record CriterionText : ICriterionText
+public readonly record struct CriterionText
 {
-    private readonly string _title;
-    private readonly string _description;
-
     /// <summary>
     /// Initializes a new instance of the <see cref="CriterionText"/> value object with the specified title and description.
     /// </summary>
@@ -17,30 +12,20 @@ public sealed record CriterionText : ICriterionText
     /// <param name="description">The detailed description of the criterion.</param>
     public CriterionText(string title, string description)
     {
-        ArgumentNullException.ThrowIfNull(title);
+        ArgumentException.ThrowIfNullOrWhiteSpace(title);
         ArgumentNullException.ThrowIfNull(description);
 
-        _title = title;
-        _description = description;
+        Title = title.Trim();
+        Description = description.Trim();
     }
 
     /// <summary>
-    /// Returns the human readable title string and fails fast when empty or whitespace.
+    /// Returns the human readable title string.
     /// </summary>
-    public string Title()
-    {
-        if (string.IsNullOrWhiteSpace(_title))
-        {
-            throw new InvalidDataException("Title must not be empty or whitespace");
-        }
-        return _title.Trim();
-    }
+    public string Title { get; }
 
     /// <summary>
     /// Returns the detailed description string.
     /// </summary>
-    public string Description()
-    {
-        return _description.Trim();
-    }
+    public string Description { get; }
 }

@@ -17,7 +17,7 @@ public sealed class ChoiceTests
         var score = (ushort)System.Security.Cryptography.RandomNumberGenerator.GetInt32(0, ushort.MaxValue + 1);
         var choice = new Choice(score);
 
-        choice.Score().ShouldBe(score, "score value returned is not equal to input");
+        choice.Score.ShouldBe(score, "score value returned is not equal to input");
     }
 
     /// <summary>
@@ -29,7 +29,7 @@ public sealed class ChoiceTests
         var score = (ushort)System.Security.Cryptography.RandomNumberGenerator.GetInt32(0, ushort.MaxValue + 1);
         var choice = new Choice(score);
 
-        choice.Caption().ShouldBe(string.Empty, "caption is not empty when not provided");
+        choice.Caption.ShouldBe(string.Empty, "caption is not empty when not provided");
     }
 
     /// <summary>
@@ -41,7 +41,7 @@ public sealed class ChoiceTests
         var score = (ushort)System.Security.Cryptography.RandomNumberGenerator.GetInt32(0, ushort.MaxValue + 1);
         var choice = new Choice(score);
 
-        choice.Annotation().ShouldBe(string.Empty, "annotation is not empty when not provided");
+        choice.Annotation.ShouldBe(string.Empty, "annotation is not empty when not provided");
     }
 
     /// <summary>
@@ -54,7 +54,7 @@ public sealed class ChoiceTests
         var caption = "тест-✓-タイトル-🚀-" + Guid.NewGuid();
         var choice = new Choice(score, caption, string.Empty);
 
-        choice.Caption().ShouldBe(caption, "caption value is not preserved for non ASCII input");
+        choice.Caption.ShouldBe(caption, "caption value is not preserved for non ASCII input");
     }
 
     /// <summary>
@@ -67,7 +67,7 @@ public sealed class ChoiceTests
         var annotation = "примечание-✓-備考-🧪-" + Guid.NewGuid();
         var choice = new Choice(score, string.Empty, annotation);
 
-        choice.Annotation().ShouldBe(annotation, "annotation value is not preserved for non ASCII input");
+        choice.Annotation.ShouldBe(annotation, "annotation value is not preserved for non ASCII input");
     }
 
     /// <summary>
