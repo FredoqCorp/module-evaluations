@@ -49,8 +49,8 @@ public sealed class WeightedMeanPolicyTests
         // expected: groupScore = 50*0.6 + 100*0.4 = 70; total = 100*0.3 + 70*0.7 = 79
         var scores = ImmutableList.Create<Interfaces.Runs.IRunCriterionScore>(
             new RunCriterionScore(snapshot.Criteria()[0], false, new CriterionAssessment(100, "a")),
-            new RunCriterionScore(snapshot.Groups()[0].Criteria()[0], false, new CriterionAssessment(50, "b")),
-            new RunCriterionScore(snapshot.Groups()[0].Criteria()[1], false, new CriterionAssessment(100, "c"))
+            new RunCriterionScore(snapshot.Groups()[0].Criteria[0], false, new CriterionAssessment(50, "b")),
+            new RunCriterionScore(snapshot.Groups()[0].Criteria[1], false, new CriterionAssessment(100, "c"))
         );
         snapshot.Policy().Total(snapshot, scores).ShouldBe(79m, "Weighted mean returned an unexpected total which is incorrect");
     }

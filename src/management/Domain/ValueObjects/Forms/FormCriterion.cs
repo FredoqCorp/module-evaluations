@@ -8,10 +8,6 @@ namespace CascVel.Modules.Evaluations.Management.Domain.ValueObjects.Forms;
 /// </summary>
 public sealed record FormCriterion
 {
-    private readonly FormCriterionId _id;
-    private readonly ICriterion _criterion;
-    private readonly OrderIndex _order;
-
     /// <summary>
     /// Creates a positioned criterion with order and weight.
     /// </summary>
@@ -19,34 +15,23 @@ public sealed record FormCriterion
     {
         ArgumentNullException.ThrowIfNull(criterion);
 
-        _id = id;
-        _criterion = criterion;
-        _order = order;
-    }
-
-    /// <summary>
-    /// Returns the domain criterion value object.
-    /// </summary>
-    public ICriterion Criterion()
-    {
-        return _criterion;
-    }
-
-    /// <summary>
-    /// Returns the display order index.
-    /// </summary>
-    public OrderIndex Order()
-    {
-        return _order;
+        Id = id;
+        Criterion = criterion;
+        Order = order;
     }
 
     /// <summary>
     /// Returns the stable identifier of this positioned criterion.
     /// </summary>
-    public FormCriterionId Id()
-    {
-        return _id;
-    }
+    public FormCriterionId Id { get; }
 
-    
+    /// <summary>
+    /// Returns the domain criterion value object.
+    /// </summary>
+    public ICriterion Criterion { get; }
+
+    /// <summary>
+    /// Returns the display order index.
+    /// </summary>
+    public OrderIndex Order { get; }
 }

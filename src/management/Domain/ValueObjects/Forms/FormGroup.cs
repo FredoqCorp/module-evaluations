@@ -9,12 +9,6 @@ namespace CascVel.Modules.Evaluations.Management.Domain.ValueObjects.Forms;
 /// </summary>
 public sealed record FormGroup
 {
-    private readonly FormGroupId _id;
-    private readonly string _title;
-    private readonly OrderIndex _order;
-    private readonly IImmutableList<FormCriterion> _criteria;
-    private readonly IImmutableList<FormGroup> _groups;
-
     /// <summary>
     /// Creates a form group with title, order, weight, criteria and nested groups.
     /// </summary>
@@ -24,53 +18,35 @@ public sealed record FormGroup
         ArgumentNullException.ThrowIfNull(criteria);
         ArgumentNullException.ThrowIfNull(groups);
 
-        _id = id;
-        _title = title;
-        _order = order;
-
-        _criteria = criteria;
-        _groups = groups;
+        Id = id;
+        Title = title;
+        Order = order;
+        Criteria = criteria;
+        Groups = groups;
     }
 
     /// <summary>
     /// Returns the stable identifier of the group.
     /// </summary>
-    public FormGroupId Id()
-    {
-        return _id;
-    }
+    public FormGroupId Id { get; }
 
     /// <summary>
     /// Returns the human-friendly title of the group.
     /// </summary>
-    public string Title()
-    {
-        return _title;
-    }
+    public string Title { get; }
 
     /// <summary>
     /// Returns the display order of the group in the form.
     /// </summary>
-    public OrderIndex Order()
-    {
-        return _order;
-    }
-
-    
+    public OrderIndex Order { get; }
 
     /// <summary>
     /// Returns the ordered criteria inside the group.
     /// </summary>
-    public IImmutableList<FormCriterion> Criteria()
-    {
-        return _criteria;
-    }
+    public IImmutableList<FormCriterion> Criteria { get; }
 
     /// <summary>
     /// Returns the nested groups inside this group.
     /// </summary>
-    public IImmutableList<FormGroup> Groups()
-    {
-        return _groups;
-    }
+    public IImmutableList<FormGroup> Groups { get; }
 }

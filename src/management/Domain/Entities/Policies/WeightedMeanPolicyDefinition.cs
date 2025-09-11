@@ -43,7 +43,7 @@ public sealed record WeightedMeanPolicyDefinition : ICalculationPolicyDefinition
             decimal sum = 0m;
             foreach (var c in formCriteria)
             {
-                if (!_weights.TryGetValue(c.Id().Value, out var w))
+                if (!_weights.TryGetValue(c.Id.Value, out var w))
                 {
                     throw new InvalidDataException("Weight is missing for form criterion in weighted policy definition");
                 }
@@ -51,7 +51,7 @@ public sealed record WeightedMeanPolicyDefinition : ICalculationPolicyDefinition
             }
             foreach (var g in formGroups)
             {
-                if (!_weights.TryGetValue(g.Id().Value, out var w))
+                if (!_weights.TryGetValue(g.Id.Value, out var w))
                 {
                     throw new InvalidDataException("Weight is missing for form group in weighted policy definition");
                 }
@@ -64,7 +64,7 @@ public sealed record WeightedMeanPolicyDefinition : ICalculationPolicyDefinition
 
             foreach (var g in formGroups)
             {
-                VerifyLevel(g.Groups(), g.Criteria());
+                VerifyLevel(g.Groups, g.Criteria);
             }
         }
 
