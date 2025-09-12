@@ -1,7 +1,6 @@
 using CascVel.Modules.Evaluations.Management.Domain.Identifiers;
-using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Runs;
 
-namespace CascVel.Modules.Evaluations.Management.Domain.Interfaces.Forms;
+namespace CascVel.Modules.Evaluations.Management.Domain.Interfaces.Runs;
 
 /// <summary>
 /// Contract for the form run aggregate.

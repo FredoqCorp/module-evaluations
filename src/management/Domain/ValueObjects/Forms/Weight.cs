@@ -1,11 +1,9 @@
-using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Forms;
-
 namespace CascVel.Modules.Evaluations.Management.Domain.ValueObjects.Forms;
 
 /// <summary>
 /// Non-negative percentage weight as an immutable value object.
 /// </summary>
-public sealed record Weight : IWeight
+public sealed record Weight
 {
     private readonly ushort _bps;
 
