@@ -9,6 +9,8 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NpgsqlTypes;
 using CascVel.Modules.Evaluations.Management.Domain.ValueObjects;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace CascVel.Modules.Evaluations.Management.Infrastructure.Configurations.Forms;
 /// <summary>
@@ -17,6 +19,15 @@ namespace CascVel.Modules.Evaluations.Management.Infrastructure.Configurations.F
 /// </summary>
 internal sealed class EvaluationFormConfiguration : IEntityTypeConfiguration<EvaluationForm>
 {
+    /// <summary>
+    /// Deterministic JSON options for jsonb serialization.
+    /// </summary>
+    private static readonly JsonSerializerOptions Json = new()
+    {
+        PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+        DefaultIgnoreCondition = JsonIgnoreCondition.Never,
+        WriteIndented = false,
+    };
     /// <summary>
     /// Creates a configuration with a default JSON converter implementation.
     /// </summary>
@@ -122,7 +133,39 @@ internal sealed class EvaluationFormConfiguration : IEntityTypeConfiguration<Eva
             });
         });
 
+        var groupsConv = new ValueConverter<IImmutableList<FormGroup>, string>(
+            v => JsonSerializer.Serialize(v ?? ImmutableList<FormGroup>.Empty, Json),
+            v => JsonSerializer.Deserialize<ImmutableList<FormGroup>>(v, Json) ?? ImmutableList<FormGroup>.Empty);
 
+        var criteriaConv = new ValueConverter<IImmutableList<FormCriterion>, string>(
+            v => JsonSerializer.Serialize(v ?? ImmutableList<FormCriterion>.Empty, Json),
+            v => JsonSerializer.Deserialize<ImmutableList<FormCriterion>>(v, Json) ?? ImmutableList<FormCriterion>.Empty);
+
+        var groupsComparer = new ValueComparer<IImmutableList<FormGroup>>(
+            (l, r) => ReferenceEquals(l, r) || (l != null && r != null && l.SequenceEqual(r)),
+            v => v != null ? v.Aggregate(0, (a, e) => HashCode.Combine(a, e != null ? e.GetHashCode() : 0)) : 0,
+            v => v != null ? v.ToImmutableList() : ImmutableList<FormGroup>.Empty);
+
+        var criteriaComparer = new ValueComparer<IImmutableList<FormCriterion>>(
+            (l, r) => ReferenceEquals(l, r) || (l != null && r != null && l.SequenceEqual(r)),
+            v => v != null ? v.Aggregate(0, (a, e) => HashCode.Combine(a, e != null ? e.GetHashCode() : 0)) : 0,
+            v => v != null ? v.ToImmutableList() : ImmutableList<FormCriterion>.Empty);
+
+        builder.Property<IImmutableList<FormGroup>>("_groups")
+            .HasConversion(groupsConv)
+            .Metadata.SetValueComparer(groupsComparer);
+        builder.Property<IImmutableList<FormGroup>>("_groups")
+            .HasColumnType("jsonb")
+            .HasColumnName("groups")
+            .IsRequired();
+
+        builder.Property<IImmutableList<FormCriterion>>("_criteria")
+            .HasConversion(criteriaConv)
+            .Metadata.SetValueComparer(criteriaComparer);
+        builder.Property<IImmutableList<FormCriterion>>("_criteria")
+            .HasColumnType("jsonb")
+            .HasColumnName("criteria")
+            .IsRequired();
 
     }
 }
