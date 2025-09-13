@@ -25,7 +25,7 @@ public sealed class ArithmeticMeanPolicyDefinitionTests
         var meta = new FormMeta(new FormName("name✓"), string.Empty, ImmutableList<string>.Empty, new FormCode("code✓"));
         var tail = new FormAuditTail(FormAuditKind.Created, new Stamp("user✓", DateTime.UtcNow));
         var life = new FormLifecycle(new Period(DateTime.UtcNow, DateTime.UtcNow.AddDays(1)), tail);
-        var form = new EvaluationForm(id, meta, life, ImmutableList<FormGroup>.Empty, ImmutableList<FormCriterion>.Empty, new ArithmeticMeanPolicyDefinition());
+        var form = new EvaluationForm(id, meta, life, new FormGroupList(ImmutableList<FormGroup>.Empty), new FormCriteriaList(ImmutableList<FormCriterion>.Empty), new ArithmeticMeanPolicyDefinition());
 
         Should.NotThrow(() => new ArithmeticMeanPolicyDefinition().Verify(form), "Arithmetic mean definition threw unexpectedly which is incorrect");
     }

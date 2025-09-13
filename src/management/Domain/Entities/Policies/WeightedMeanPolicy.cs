@@ -38,32 +38,35 @@ public sealed record WeightedMeanPolicy : ICalculationPolicy
 
         var scoreByKey = scores
             .Where(s => !s.Skipped() && s.Assessment().Present())
-            .ToDictionary(s => s.Criterion().Id.Value, s => (decimal)s.Assessment().SelectedScore());
+            .ToDictionary(s => s.CriterionId().Value, s => (decimal)s.Assessment().SelectedScore());
 
         var rootCriteriaEntries = snapshot
             .Criteria()
-            .Where(c => scoreByKey.ContainsKey(c.Id.Value))
+            .Ids()
+            .Where(c => scoreByKey.ContainsKey(c.Value))
             .Select(c =>
             {
-                if (!_weights.TryGetValue(c.Id.Value, out var w))
+                if (!_weights.TryGetValue(c.Value, out var w))
                 {
                     throw new InvalidDataException("Weight is missing for root criterion in weighted policy");
                 }
-                var sc = scoreByKey[c.Id.Value];
+                var sc = scoreByKey[c.Value];
                 return (score: sc, weightBps: (decimal)w.Bps());
             });
 
         var rootGroupEntries = snapshot
             .Groups()
+            .Ids()
             .Select(g =>
             {
-                var (any, score) = CombineGroup(g, scoreByKey);
-                return (any, score, group: g);
+                var group = snapshot.Groups().Group(g.Value);
+                var (any, score) = CombineGroup(group, scoreByKey);
+                return (any, score, id: g.Value);
             })
             .Where(x => x.any)
             .Select(x =>
             {
-                if (!_weights.TryGetValue(x.group.Id.Value, out var w))
+                if (!_weights.TryGetValue(x.id, out var w))
                 {
                     throw new InvalidDataException("Weight is missing for root group in weighted policy");
                 }
@@ -91,21 +94,24 @@ public sealed record WeightedMeanPolicy : ICalculationPolicy
     {
         var criterionEntries = g
             .Criteria
-            .Where(c => scoreByKey.ContainsKey(c.Id.Value))
+            .Ids()
+            .Where(c => scoreByKey.ContainsKey(c.Value))
             .Select(c =>
             {
-                if (!_weights.TryGetValue(c.Id.Value, out var w))
+                if (!_weights.TryGetValue(c.Value, out var w))
                 {
                     throw new InvalidDataException("Weight is missing for criterion in weighted policy");
                 }
-                var sc = scoreByKey[c.Id.Value];
+                var sc = scoreByKey[c.Value];
                 return (score: sc, weightBps: (decimal)w.Bps());
             });
 
         var groupEntries = g
             .Groups
-            .Select(child =>
+            .Ids()
+            .Select(childId =>
             {
+                var child = g.Groups.Group(childId.Value);
                 var (any, score) = CombineGroup(child, scoreByKey);
                 return (any, score, child);
             })

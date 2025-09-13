@@ -33,25 +33,25 @@ public sealed record WeightedMeanPolicyDefinition : ICalculationPolicyDefinition
     {
         ArgumentNullException.ThrowIfNull(form);
 
-        void VerifyLevel(IImmutableList<FormGroup> formGroups,
-            IImmutableList<FormCriterion> formCriteria)
+        void VerifyLevel(FormGroupList formGroups,
+            FormCriteriaList formCriteria)
         {
-            if (formGroups.Count + formCriteria.Count == 0)
+            if (formGroups.Count() + formCriteria.Count() == 0)
             {
                 return;
             }
             decimal sum = 0m;
-            foreach (var c in formCriteria)
+            foreach (var c in formCriteria.Ids())
             {
-                if (!_weights.TryGetValue(c.Id.Value, out var w))
+                if (!_weights.TryGetValue(c.Value, out var w))
                 {
                     throw new InvalidDataException("Weight is missing for form criterion in weighted policy definition");
                 }
                 sum += w.Bps();
             }
-            foreach (var g in formGroups)
+            foreach (var g in formGroups.Ids())
             {
-                if (!_weights.TryGetValue(g.Id.Value, out var w))
+                if (!_weights.TryGetValue(g.Value, out var w))
                 {
                     throw new InvalidDataException("Weight is missing for form group in weighted policy definition");
                 }
@@ -62,7 +62,7 @@ public sealed record WeightedMeanPolicyDefinition : ICalculationPolicyDefinition
                 throw new InvalidDataException("Weights sum for siblings must be exactly one hundred percent");
             }
 
-            foreach (var g in formGroups)
+            foreach (var g in formGroups.Ids().Select(id => formGroups.Group(id.Value)))
             {
                 VerifyLevel(g.Groups, g.Criteria);
             }

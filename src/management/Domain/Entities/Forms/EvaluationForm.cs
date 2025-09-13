@@ -19,8 +19,8 @@ public sealed class EvaluationForm : IEvaluationForm
     private readonly EvaluationFormId _id;
     private readonly FormMeta _meta;
     private readonly FormLifecycle _lifecycle;
-    private readonly IImmutableList<FormGroup> _groups;
-    private readonly IImmutableList<FormCriterion> _criteria;
+    private readonly FormGroupList _groups;
+    private readonly FormCriteriaList _criteria;
     private readonly ICalculationPolicyDefinition _definition;
 
     /// <summary>
@@ -30,8 +30,8 @@ public sealed class EvaluationForm : IEvaluationForm
         EvaluationFormId id,
         FormMeta meta,
         FormLifecycle lifecycle,
-        IImmutableList<FormGroup> groups,
-        IImmutableList<FormCriterion> criteria,
+        FormGroupList groups,
+        FormCriteriaList criteria,
         ICalculationPolicyDefinition definition)
     {
         ArgumentNullException.ThrowIfNull(meta);
@@ -51,12 +51,12 @@ public sealed class EvaluationForm : IEvaluationForm
     /// <summary>
     /// Returns the ordered groups of criteria belonging to this evaluation form aggregate.
     /// </summary>
-    public IImmutableList<FormGroup> Groups() => _groups;
+    public FormGroupList Groups() => _groups;
 
     /// <summary>
     /// Returns the criteria outside of any group belonging to this evaluation form aggregate.
     /// </summary>
-    public IImmutableList<FormCriterion> Criteria() => _criteria;
+    public FormCriteriaList Criteria() => _criteria;
 
 
     /// <summary>
@@ -73,7 +73,7 @@ public sealed class EvaluationForm : IEvaluationForm
     /// <summary>
     /// Applies content changes to the form after validating audit rules and returns a new aggregate instance.
     /// </summary>
-    public IEvaluationForm Edit(FormMeta meta, IImmutableList<FormGroup> groups, IImmutableList<FormCriterion> criteria, ICalculationPolicyDefinition definition, Stamp stamp)
+    public IEvaluationForm Edit(FormMeta meta, FormGroupList groups, FormCriteriaList criteria, ICalculationPolicyDefinition definition, Stamp stamp)
     {
         ArgumentNullException.ThrowIfNull(meta);
         ArgumentNullException.ThrowIfNull(groups);

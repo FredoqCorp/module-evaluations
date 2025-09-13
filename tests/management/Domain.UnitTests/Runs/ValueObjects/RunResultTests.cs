@@ -27,7 +27,7 @@ public sealed class RunResultTests
     [Fact(DisplayName = "RunResult returns the same criteria count")]
     public void RunResult_returns_the_same_criteria_count()
     {
-        var builder = ImmutableList.CreateBuilder<CascVel.Modules.Evaluations.Management.Domain.Interfaces.Runs.IRunCriterionScore>();
+        var builder = ImmutableList.CreateBuilder<Interfaces.Runs.IRunCriterionScore>();
         var runCriterion = new FormCriterion(
             new Identifiers.FormCriterionId(),
             new Criterion(
@@ -36,7 +36,7 @@ public sealed class RunResultTests
             ),
             new OrderIndex(0)
         );
-        builder.Add(new RunCriterionScore(runCriterion, false, new NoAssessment()));
+        builder.Add(new RunCriterionScore(runCriterion.Id, false, new NoAssessment()));
         var vo = new RunResult(0m, builder.ToImmutable());
         vo.Criteria().Count.ShouldBe(1, "RunResult returned an unexpected criteria count which is incorrect");
     }

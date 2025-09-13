@@ -23,8 +23,8 @@ public sealed class FormRunTests
         var formCode = "code-✓-" + Guid.NewGuid();
         var formMeta = new FormMeta(new FormName("name✓"), "desc✓", System.Collections.Immutable.ImmutableList<string>.Empty, new FormCode(formCode));
         var snapshot = new RunFormSnapshot(formId, formMeta, new CascVel.Modules.Evaluations.Management.Domain.Entities.Policies.ArithmeticMeanPolicy(),
-            System.Collections.Immutable.ImmutableList<FormGroup>.Empty,
-            System.Collections.Immutable.ImmutableList<FormCriterion>.Empty);
+            new FormGroupList(System.Collections.Immutable.ImmutableList<FormGroup>.Empty),
+            new FormCriteriaList(System.Collections.Immutable.ImmutableList<FormCriterion>.Empty));
         var meta = new RunMeta(snapshot, "op-✓-" + Guid.NewGuid(), null);
         var lc = new RunLifecycle(new Stamp("u-✓-" + Guid.NewGuid(), DateTime.UtcNow), new Stamp("s-✓-" + Guid.NewGuid(), DateTime.UtcNow), new Stamp("c-✓-" + Guid.NewGuid(), DateTime.UtcNow), new Stamp("p-✓-" + Guid.NewGuid(), DateTime.UtcNow));
         var ctx = new RunContext(System.Collections.Immutable.ImmutableDictionary<string, string>.Empty);

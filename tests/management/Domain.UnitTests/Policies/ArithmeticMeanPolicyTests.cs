@@ -29,12 +29,13 @@ public sealed class ArithmeticMeanPolicyTests
 
         var c1 = new FormCriterion(new FormCriterionId(Guid.NewGuid()), new Criterion(new CriterionText("t1✓", "d1"), ImmutableList<Choice>.Empty), new OrderIndex(0));
         var c2 = new FormCriterion(new FormCriterionId(Guid.NewGuid()), new Criterion(new CriterionText("t2✓", "d2"), ImmutableList<Choice>.Empty), new OrderIndex(1));
-        var form = new EvaluationForm(id, meta, life, ImmutableList<FormGroup>.Empty, ImmutableList<FormCriterion>.Empty.Add(c1).Add(c2), new ArithmeticMeanPolicyDefinition());
+        var criteriaList = new FormCriteriaList(ImmutableList<FormCriterion>.Empty.Add(c1).Add(c2));
+        var form = new EvaluationForm(id, meta, life, new FormGroupList(ImmutableList<FormGroup>.Empty), criteriaList, new ArithmeticMeanPolicyDefinition());
 
         var snapshot = form.Snapshot();
         var s = ImmutableList.Create<Interfaces.Runs.IRunCriterionScore>(
-            new RunCriterionScore(snapshot.Criteria()[0], false, new CriterionAssessment(10, "a")),
-            new RunCriterionScore(snapshot.Criteria()[1], false, new CriterionAssessment(30, "b"))
+            new RunCriterionScore(snapshot.Criteria().Ids()[0], false, new CriterionAssessment(10, "a")),
+            new RunCriterionScore(snapshot.Criteria().Ids()[1], false, new CriterionAssessment(30, "b"))
         );
         snapshot.Policy().Total(snapshot, s).ShouldBe(20m, "Arithmetic mean returned an unexpected total which is incorrect");
     }

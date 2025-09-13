@@ -1,6 +1,4 @@
-using System.Collections.Immutable;
 using CascVel.Modules.Evaluations.Management.Domain.Identifiers;
-using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Forms;
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Policies;
 using CascVel.Modules.Evaluations.Management.Domain.ValueObjects.Forms;
 
@@ -30,11 +28,11 @@ public interface IRunFormSnapshot
     /// <summary>
     /// Returns the ordered groups of criteria captured at launch time.
     /// </summary>
-    IImmutableList<FormGroup> Groups();
+    FormGroupList Groups();
 
     /// <summary>
     /// Returns the root-level criteria captured at launch time.
     /// </summary>
-    IImmutableList<FormCriterion> Criteria();
+    FormCriteriaList Criteria();
 
 }

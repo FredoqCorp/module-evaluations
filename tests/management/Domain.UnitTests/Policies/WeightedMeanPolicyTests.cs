@@ -31,7 +31,7 @@ public sealed class WeightedMeanPolicyTests
         var tail = new FormAuditTail(FormAuditKind.Published, new Stamp("u✓", DateTime.UtcNow));
         var life = new FormLifecycle(new Period(DateTime.UtcNow, DateTime.UtcNow.AddDays(1)), tail);
 
-        var g = new FormGroup(gid, "G✓", new OrderIndex(0), ImmutableList<FormCriterion>.Empty.Add(new FormCriterion(c1, new Criterion(new CriterionText("t1", "d1"), ImmutableList<Choice>.Empty), new OrderIndex(0))).Add(new FormCriterion(c2, new Criterion(new CriterionText("t2", "d2"), ImmutableList<Choice>.Empty), new OrderIndex(1))), ImmutableList<FormGroup>.Empty);
+        var g = new FormGroup(gid, "G✓", new OrderIndex(0), new FormCriteriaList(ImmutableList<FormCriterion>.Empty.Add(new FormCriterion(c1, new Criterion(new CriterionText("t1", "d1"), ImmutableList<Choice>.Empty), new OrderIndex(0))).Add(new FormCriterion(c2, new Criterion(new CriterionText("t2", "d2"), ImmutableList<Choice>.Empty), new OrderIndex(1)))), new FormGroupList(ImmutableList<FormGroup>.Empty));
         var rootCrit = new FormCriterion(c0, new Criterion(new CriterionText("t0", "d0"), ImmutableList<Choice>.Empty), new OrderIndex(0));
 
         var weights = ImmutableDictionary.CreateBuilder<Guid, Weight>();
@@ -43,14 +43,15 @@ public sealed class WeightedMeanPolicyTests
         weights[c2.Value] = new Weight(4_000);
 
         var def = new WeightedMeanPolicyDefinition(weights.ToImmutable());
-        var form = new EvaluationForm(new EvaluationFormId(Guid.CreateVersion7()), meta, life, ImmutableList<FormGroup>.Empty.Add(g), ImmutableList<FormCriterion>.Empty.Add(rootCrit), def);
+        var form = new EvaluationForm(new EvaluationFormId(Guid.CreateVersion7()), meta, life, new FormGroupList([g]), new FormCriteriaList(ImmutableList<FormCriterion>.Empty.Add(rootCrit)), def);
         var snapshot = form.Snapshot();
 
         // expected: groupScore = 50*0.6 + 100*0.4 = 70; total = 100*0.3 + 70*0.7 = 79
+        var snapshotGroup = snapshot.Groups().Group(snapshot.Groups().Ids()[0].Value);
         var scores = ImmutableList.Create<Interfaces.Runs.IRunCriterionScore>(
-            new RunCriterionScore(snapshot.Criteria()[0], false, new CriterionAssessment(100, "a")),
-            new RunCriterionScore(snapshot.Groups()[0].Criteria[0], false, new CriterionAssessment(50, "b")),
-            new RunCriterionScore(snapshot.Groups()[0].Criteria[1], false, new CriterionAssessment(100, "c"))
+            new RunCriterionScore(snapshot.Criteria().Ids()[0], false, new CriterionAssessment(100, "a")),
+            new RunCriterionScore(snapshotGroup.Criteria.Ids()[0], false, new CriterionAssessment(50, "b")),
+            new RunCriterionScore(snapshotGroup.Criteria.Ids()[1], false, new CriterionAssessment(100, "c"))
         );
         snapshot.Policy().Total(snapshot, scores).ShouldBe(79m, "Weighted mean returned an unexpected total which is incorrect");
     }

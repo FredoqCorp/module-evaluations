@@ -15,12 +15,12 @@ public interface IEvaluationForm
     /// <summary>
     /// Returns the ordered groups of criteria.
     /// </summary>
-    IImmutableList<FormGroup> Groups();
+    FormGroupList Groups();
 
     /// <summary>
     /// Returns the criteria outside any group.
     /// </summary>
-    IImmutableList<FormCriterion> Criteria();
+    FormCriteriaList Criteria();
 
     /// <summary>
     /// Returns a run form snapshot for this evaluation form using the stored calculation policy definition.
@@ -30,7 +30,7 @@ public interface IEvaluationForm
     /// <summary>
     /// Applies content changes to the form after validating audit rules and returns a new aggregate instance.
     /// </summary>
-    IEvaluationForm Edit(FormMeta meta, IImmutableList<FormGroup> groups, IImmutableList<FormCriterion> criteria, ICalculationPolicyDefinition definition, Stamp stamp);
+    IEvaluationForm Edit(FormMeta meta, FormGroupList groups, FormCriteriaList criteria, ICalculationPolicyDefinition definition, Stamp stamp);
 
     /// <summary>
     /// Publishes the form after validating audit rules and returns a new aggregate instance.
