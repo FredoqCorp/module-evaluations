@@ -1,6 +1,4 @@
 using System.Collections.Immutable;
-using System.Collections.Generic;
-using System.Linq;
 using CascVel.Modules.Evaluations.Management.Domain.Entities.Forms;
 using CascVel.Modules.Evaluations.Management.Domain.Identifiers;
 using CascVel.Modules.Evaluations.Management.Domain.ValueObjects.Forms;
@@ -10,8 +8,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NpgsqlTypes;
 using CascVel.Modules.Evaluations.Management.Domain.ValueObjects;
-using System.Text.Json;
-using System.Text.Json.Serialization;
+using CascVel.Modules.Evaluations.Management.Infrastructure.Serialization;
 
 namespace CascVel.Modules.Evaluations.Management.Infrastructure.Configurations.Forms;
 /// <summary>
@@ -21,16 +18,7 @@ namespace CascVel.Modules.Evaluations.Management.Infrastructure.Configurations.F
 internal sealed class EvaluationFormConfiguration : IEntityTypeConfiguration<EvaluationForm>
 {
     /// <summary>
-    /// JSON options for deterministic jsonb serialization.
-    /// </summary>
-    private static readonly JsonSerializerOptions Json = new()
-    {
-        PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-        DefaultIgnoreCondition = JsonIgnoreCondition.Never,
-        WriteIndented = false,
-    };
-    /// <summary>
-    /// Creates a configuration with a default JSON converter implementation.
+    /// Creates a configuration for EvaluationForm.
     /// </summary>
     public EvaluationFormConfiguration()
     {
@@ -142,13 +130,13 @@ internal sealed class EvaluationFormConfiguration : IEntityTypeConfiguration<Eva
         });
 
         var criteriaConv = new ValueConverter<FormCriteriaList, string>(
-            v => SerializeCriteriaList(v),
-            s => DeserializeCriteriaList(s));
+            v => FormCriteriaJson.Serialize(v),
+            s => FormCriteriaJson.Deserialize(s));
 
         var criteriaComparer = new ValueComparer<FormCriteriaList>(
-            (l, r) => ReferenceEquals(l, r) || (l != null && r != null && SerializeCriteriaList(l) == SerializeCriteriaList(r)),
-            v => v != null ? StringComparer.Ordinal.GetHashCode(SerializeCriteriaList(v)) : 0,
-            v => v != null ? DeserializeCriteriaList(SerializeCriteriaList(v)) : new FormCriteriaList(new List<FormCriterion>(0)));
+            (l, r) => ReferenceEquals(l, r) || (l != null && r != null && FormCriteriaJson.Serialize(l) == FormCriteriaJson.Serialize(r)),
+            v => v != null ? StringComparer.Ordinal.GetHashCode(FormCriteriaJson.Serialize(v)) : 0,
+            v => v != null ? FormCriteriaJson.Deserialize(FormCriteriaJson.Serialize(v)) : new FormCriteriaList(new List<FormCriterion>(0)));
 
         var prop = builder.Property<FormCriteriaList>("criteria")
             .HasColumnName("criteria")
@@ -162,19 +150,5 @@ internal sealed class EvaluationFormConfiguration : IEntityTypeConfiguration<Eva
 
     }
 
-    private static string SerializeCriteriaList(FormCriteriaList value)
-    {
-        if (value == null)
-        {
-            return "[]";
-        }
-        var list = value.Items();
-        return JsonSerializer.Serialize(list, Json);
-    }
-
-    private static FormCriteriaList DeserializeCriteriaList(string json)
-    {
-        var list = JsonSerializer.Deserialize<List<FormCriterion>>(json, Json) ?? [];
-        return new FormCriteriaList(list);
-    }
+    
 }
