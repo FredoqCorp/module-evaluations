@@ -3,6 +3,9 @@
     <PackageReference Include="System.Collections.Immutable" />
   </ItemGroup>
   <ItemGroup>
+    <InternalsVisibleTo Include="CascVel.Modules.Evaluations.Management.Infrastructure" />
+  </ItemGroup>
+  <ItemGroup>
     <Folder Include="Entities\Forms\ValueObjects\" />
     <Folder Include="Entities\Runs\ValueObjects\" />
   </ItemGroup>

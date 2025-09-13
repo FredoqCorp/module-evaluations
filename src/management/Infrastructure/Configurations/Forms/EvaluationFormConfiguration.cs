@@ -1,4 +1,5 @@
 using System.Collections.Immutable;
+using System.Collections.Generic;
 using System.Linq;
 using CascVel.Modules.Evaluations.Management.Domain.Entities.Forms;
 using CascVel.Modules.Evaluations.Management.Domain.Identifiers;
@@ -19,6 +20,15 @@ namespace CascVel.Modules.Evaluations.Management.Infrastructure.Configurations.F
 /// </summary>
 internal sealed class EvaluationFormConfiguration : IEntityTypeConfiguration<EvaluationForm>
 {
+    /// <summary>
+    /// JSON options for deterministic jsonb serialization.
+    /// </summary>
+    private static readonly JsonSerializerOptions Json = new()
+    {
+        PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+        DefaultIgnoreCondition = JsonIgnoreCondition.Never,
+        WriteIndented = false,
+    };
     /// <summary>
     /// Creates a configuration with a default JSON converter implementation.
     /// </summary>
@@ -42,10 +52,14 @@ internal sealed class EvaluationFormConfiguration : IEntityTypeConfiguration<Eva
         builder.Property<EvaluationFormId>("id")
             .HasConversion(idConv)
             .HasColumnName("id")
+            .HasField("_id")
             .IsRequired();
 
         builder.HasKey("id");
 
+        var metaProp = builder.Property<FormMeta>("meta")
+            .UsePropertyAccessMode(PropertyAccessMode.Field);
+        metaProp.HasField("_meta");
         builder.ComplexProperty<FormMeta>("meta", b =>
         {
             var nameConv = new ValueConverter<FormName, string>(
@@ -87,9 +101,12 @@ internal sealed class EvaluationFormConfiguration : IEntityTypeConfiguration<Eva
                 .HasColumnName("meta_code")
                 .IsRequired();
         });
-
         builder.HasIndex("meta.Code").IsUnique();
 
+
+        var lifecycleProp = builder.Property<FormLifecycle>("lifecycle")
+            .UsePropertyAccessMode(PropertyAccessMode.Field);
+        lifecycleProp.HasField("_lifecycle");
         builder.ComplexProperty<FormLifecycle>("lifecycle", life =>
         {
             var periodConv = new ValueConverter<Period, NpgsqlRange<DateTime>>(
@@ -124,5 +141,40 @@ internal sealed class EvaluationFormConfiguration : IEntityTypeConfiguration<Eva
             });
         });
 
+        var criteriaConv = new ValueConverter<FormCriteriaList, string>(
+            v => SerializeCriteriaList(v),
+            s => DeserializeCriteriaList(s));
+
+        var criteriaComparer = new ValueComparer<FormCriteriaList>(
+            (l, r) => ReferenceEquals(l, r) || (l != null && r != null && SerializeCriteriaList(l) == SerializeCriteriaList(r)),
+            v => v != null ? StringComparer.Ordinal.GetHashCode(SerializeCriteriaList(v)) : 0,
+            v => v != null ? DeserializeCriteriaList(SerializeCriteriaList(v)) : new FormCriteriaList(new List<FormCriterion>(0)));
+
+        var prop = builder.Property<FormCriteriaList>("criteria")
+            .HasColumnName("criteria")
+            .HasColumnType("jsonb")
+            .HasConversion(criteriaConv)
+            .IsRequired();
+
+        prop.Metadata.SetValueComparer(criteriaComparer);
+        prop.HasField("_criteria");
+        prop.UsePropertyAccessMode(PropertyAccessMode.Field);
+
+    }
+
+    private static string SerializeCriteriaList(FormCriteriaList value)
+    {
+        if (value == null)
+        {
+            return "[]";
+        }
+        var list = value.Items();
+        return JsonSerializer.Serialize(list, Json);
+    }
+
+    private static FormCriteriaList DeserializeCriteriaList(string json)
+    {
+        var list = JsonSerializer.Deserialize<List<FormCriterion>>(json, Json) ?? [];
+        return new FormCriteriaList(list);
     }
 }

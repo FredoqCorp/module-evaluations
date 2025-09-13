@@ -1,5 +1,4 @@
 using System.Collections.Immutable;
-using System.Text.Json;
 using CascVel.Modules.Evaluations.Management.Domain.Identifiers;
 
 namespace CascVel.Modules.Evaluations.Management.Domain.ValueObjects.Forms;
@@ -31,6 +30,11 @@ public sealed record FormCriteriaList
     public IImmutableList<FormCriterionId> Ids()
     {
         return _criteria.Select(c => c.Id).ToImmutableList();
+    }
+
+    internal IReadOnlyList<FormCriterion> Items()
+    {
+        return _criteria;
     }
 
     /// <summary>
