@@ -8,10 +8,12 @@ namespace CascVel.Modules.Evaluations.Management.Domain.Entities.Policies;
 /// </summary>
 public sealed record ArithmeticMeanPolicyDefinition : ICalculationPolicyDefinition
 {
+    private const string PolicyCode = "arithmetic-mean";
+
     /// <summary>
     /// Returns stable policy code.
     /// </summary>
-    public string Code() => "arithmetic-mean";
+    public string Code() => PolicyCode;
 
     /// <summary>
     /// Verifies compatibility of the definition with the form which is always true for arithmetic mean.

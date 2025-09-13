@@ -10,6 +10,7 @@ namespace CascVel.Modules.Evaluations.Management.Domain.Entities.Policies;
 /// </summary>
 public sealed record WeightedMeanPolicyDefinition : ICalculationPolicyDefinition
 {
+    private const string PolicyCode = "weighted-mean";
     private readonly IImmutableDictionary<Guid, Weight> _weights;
 
     /// <summary>
@@ -24,7 +25,7 @@ public sealed record WeightedMeanPolicyDefinition : ICalculationPolicyDefinition
     /// <summary>
     /// Returns stable policy code.
     /// </summary>
-    public string Code() => "weighted-mean";
+    public string Code() => PolicyCode;
 
     /// <summary>
     /// Verifies that the definition is structurally compatible with the form.
