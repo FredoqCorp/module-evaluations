@@ -106,12 +106,11 @@ internal sealed class EvaluationFormConfiguration : IEntityTypeConfiguration<Eva
 
             life.ComplexProperty<FormAuditTail>("tail", tail =>
             {
-                tail.Property<FormAuditKind>("Kind")
-                    .HasField("_kind")
+                tail.Property<FormAuditKind>("_kind")
                     .HasColumnName("life_tail_kind")
                     .IsRequired();
 
-                tail.ComplexProperty<Stamp>("Stamp", stamp =>
+                tail.ComplexProperty<Stamp>("_stamp", stamp =>
                 {
                     stamp.Property(s => s.UserId)
                         .HasColumnName("life_tail_user")
@@ -120,7 +119,7 @@ internal sealed class EvaluationFormConfiguration : IEntityTypeConfiguration<Eva
                     stamp.Property(s => s.At)
                         .HasColumnName("life_tail_at")
                         .IsRequired();
-                }).HasField("_stamp");
+                });
             });
         });
 
