@@ -10,7 +10,7 @@ public sealed record FormLifecycle
     /// <summary>
     /// Creates a lifecycle with validity period and audit tail.
     /// </summary>
-    public FormLifecycle(Period validity, FormAuditTail tail)
+    public FormLifecycle(Period validity, IFormAuditTail tail)
     {
         Validity = validity;
         Tail = tail;
