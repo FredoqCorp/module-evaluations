@@ -87,7 +87,6 @@ internal sealed class EvaluationFormConfiguration : IEntityTypeConfiguration<Eva
                 .HasColumnName("meta_code")
                 .IsRequired();
         });
-        builder.HasIndex("_meta.Code").IsUnique();
 
 
         // Complex field-only property '_lifecycle'
