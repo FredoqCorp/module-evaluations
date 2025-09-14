@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NpgsqlTypes;
 using CascVel.Modules.Evaluations.Management.Domain.ValueObjects;
 using CascVel.Modules.Evaluations.Management.Infrastructure.Serialization;
+using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Policies;
 
 namespace CascVel.Modules.Evaluations.Management.Infrastructure.Configurations.Forms;
 /// <summary>
@@ -147,6 +148,18 @@ internal sealed class EvaluationFormConfiguration : IEntityTypeConfiguration<Eva
         prop.Metadata.SetValueComparer(criteriaComparer);
         prop.HasField("_criteria");
         prop.UsePropertyAccessMode(PropertyAccessMode.Field);
+
+        var defConv = new ValueConverter<ICalculationPolicyDefinition, string>(
+            d => PolicyDefinitionJson.Serialize(d),
+            s => PolicyDefinitionJson.Deserialize(s));
+
+        var defProp = builder.Property<ICalculationPolicyDefinition>("definition")
+            .HasColumnName("definition")
+            .HasColumnType("jsonb")
+            .HasConversion(defConv)
+            .IsRequired();
+        defProp.HasField("_definition");
+        defProp.UsePropertyAccessMode(PropertyAccessMode.Field);
 
     }
 

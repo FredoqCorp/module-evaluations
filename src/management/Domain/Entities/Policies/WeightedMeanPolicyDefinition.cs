@@ -76,4 +76,12 @@ public sealed record WeightedMeanPolicyDefinition : ICalculationPolicyDefinition
     /// Binds the definition to the snapshot by pairing nodes by order and returns a runtime weighted policy.
     /// </summary>
     public ICalculationPolicy Policy() => new WeightedMeanPolicy(_weights);
+
+    /// <summary>
+    /// Returns an immutable map of weights keyed by stable node identifiers for persistence needs.
+    /// </summary>
+    internal IImmutableDictionary<Guid, Weight> Weights()
+    {
+        return _weights;
+    }
 }
