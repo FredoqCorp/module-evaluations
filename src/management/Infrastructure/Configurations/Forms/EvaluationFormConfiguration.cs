@@ -45,7 +45,6 @@ internal sealed class EvaluationFormConfiguration : IEntityTypeConfiguration<Eva
 
         builder.HasKey("_id");
 
-        // Complex field-only property '_meta'
         builder.ComplexProperty<FormMeta>("_meta", b =>
         {
             var nameConv = new ValueConverter<FormName, string>(
@@ -89,7 +88,6 @@ internal sealed class EvaluationFormConfiguration : IEntityTypeConfiguration<Eva
         });
 
 
-        // Complex field-only property '_lifecycle'
         builder.ComplexProperty<FormLifecycle>("_lifecycle", life =>
         {
             var periodConv = new ValueConverter<Period, NpgsqlRange<DateTime>>(
@@ -98,7 +96,7 @@ internal sealed class EvaluationFormConfiguration : IEntityTypeConfiguration<Eva
                     : new NpgsqlRange<DateTime>(p.Start(), p.Finish()),
                 r => new Period(r.LowerBound, r.UpperBound == DateTime.MaxValue ? null : r.UpperBound));
 
-            life.Property(l => l.Validity)
+            life.Property<Period>("validity")
                 .HasConversion(periodConv)
                 .HasColumnType("tsrange")
                 .HasColumnName("life_validity")
@@ -151,7 +149,6 @@ internal sealed class EvaluationFormConfiguration : IEntityTypeConfiguration<Eva
             .HasConversion(defConv)
             .IsRequired();
         defProp.UsePropertyAccessMode(PropertyAccessMode.Field);
-        // definition mapping configured above via field-only property '_definition'
 
     }
 
