@@ -104,7 +104,7 @@ internal sealed class EvaluationFormConfiguration : IEntityTypeConfiguration<Eva
                 .HasColumnName("life_validity")
                 .IsRequired();
 
-            life.ComplexProperty<FormAuditTail>(nameof(FormLifecycle.Tail), tail =>
+            life.ComplexProperty<FormAuditTail>("tail", tail =>
             {
                 tail.Property<FormAuditKind>("Kind")
                     .HasField("_kind")
