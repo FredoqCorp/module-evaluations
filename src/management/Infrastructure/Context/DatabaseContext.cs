@@ -1,7 +1,6 @@
 using CascVel.Modules.Evaluations.Management.Domain.Entities.Forms;
 using CascVel.Modules.Evaluations.Management.Domain.Entities.Runs;
 using CascVel.Modules.Evaluations.Management.Domain.ValueObjects.Forms;
-using CascVel.Modules.Evaluations.Management.Infrastructure.Persistence.Rows;
 using Microsoft.EntityFrameworkCore;
 
 namespace CascVel.Modules.Evaluations.Management.Infrastructure.Context;
@@ -25,11 +24,6 @@ public sealed class DatabaseContext : DbContext
     /// Evaluation forms
     /// </summary>
     public DbSet<EvaluationForm> EvaluationForms { get; init; } = null!;
-
-    /// <summary>
-    /// Normalized form groups
-    /// </summary>
-    internal DbSet<FormGroupRow> FormGroups { get; init; } = null!;
 
     /// <summary>
     /// Initializes the context with options.
