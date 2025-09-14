@@ -38,18 +38,15 @@ internal sealed class EvaluationFormConfiguration : IEntityTypeConfiguration<Eva
             v => v.Value,
             v => new EvaluationFormId(v));
 
-        builder.Property<EvaluationFormId>("id")
+        builder.Property<EvaluationFormId>("_id")
             .HasConversion(idConv)
             .HasColumnName("id")
-            .HasField("_id")
             .IsRequired();
 
-        builder.HasKey("id");
+        builder.HasKey("_id");
 
-        var metaProp = builder.Property<FormMeta>("meta")
-            .UsePropertyAccessMode(PropertyAccessMode.Field);
-        metaProp.HasField("_meta");
-        builder.ComplexProperty<FormMeta>("meta", b =>
+        // Complex field-only property '_meta'
+        builder.ComplexProperty<FormMeta>("_meta", b =>
         {
             var nameConv = new ValueConverter<FormName, string>(
                 v => v.Value,
@@ -90,13 +87,11 @@ internal sealed class EvaluationFormConfiguration : IEntityTypeConfiguration<Eva
                 .HasColumnName("meta_code")
                 .IsRequired();
         });
-        builder.HasIndex("meta.Code").IsUnique();
+        builder.HasIndex("_meta.Code").IsUnique();
 
 
-        var lifecycleProp = builder.Property<FormLifecycle>("lifecycle")
-            .UsePropertyAccessMode(PropertyAccessMode.Field);
-        lifecycleProp.HasField("_lifecycle");
-        builder.ComplexProperty<FormLifecycle>("lifecycle", life =>
+        // Complex field-only property '_lifecycle'
+        builder.ComplexProperty<FormLifecycle>("_lifecycle", life =>
         {
             var periodConv = new ValueConverter<Period, NpgsqlRange<DateTime>>(
                 p => p.Finish() == DateTime.MaxValue
@@ -139,27 +134,26 @@ internal sealed class EvaluationFormConfiguration : IEntityTypeConfiguration<Eva
             v => v != null ? StringComparer.Ordinal.GetHashCode(FormCriteriaJson.Serialize(v)) : 0,
             v => v != null ? FormCriteriaJson.Deserialize(FormCriteriaJson.Serialize(v)) : new FormCriteriaList(new List<FormCriterion>(0)));
 
-        var prop = builder.Property<FormCriteriaList>("criteria")
+        var prop = builder.Property<FormCriteriaList>("_criteria")
             .HasColumnName("criteria")
             .HasColumnType("jsonb")
             .HasConversion(criteriaConv)
             .IsRequired();
 
         prop.Metadata.SetValueComparer(criteriaComparer);
-        prop.HasField("_criteria");
         prop.UsePropertyAccessMode(PropertyAccessMode.Field);
 
         var defConv = new ValueConverter<ICalculationPolicyDefinition, string>(
             d => PolicyDefinitionJson.Serialize(d),
             s => PolicyDefinitionJson.Deserialize(s));
 
-        var defProp = builder.Property<ICalculationPolicyDefinition>("definition")
+        var defProp = builder.Property<ICalculationPolicyDefinition>("_definition")
             .HasColumnName("definition")
             .HasColumnType("jsonb")
             .HasConversion(defConv)
             .IsRequired();
-        defProp.HasField("_definition");
         defProp.UsePropertyAccessMode(PropertyAccessMode.Field);
+        // definition mapping configured above via field-only property '_definition'
 
     }
 
