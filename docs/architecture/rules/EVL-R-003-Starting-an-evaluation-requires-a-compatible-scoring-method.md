@@ -17,3 +17,4 @@ Outcome
 
 Violation Handling
 - When incompatible, the system rejects starting the session
+

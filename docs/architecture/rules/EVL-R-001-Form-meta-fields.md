@@ -15,9 +15,12 @@ Invariants
 - Description is optional
 - Keywords are case-insensitive and unique, each item is non-empty
 - Code is unique across all forms
+- Name length is at most 100 characters
+- When provided, description length is at most 1000 characters
 
 Outcome
 - The system stores form metadata consisting of name, description, keywords, and code
 
 Violation Handling
 - If any requirement is not satisfied, the operation to create or update the form is rejected
+

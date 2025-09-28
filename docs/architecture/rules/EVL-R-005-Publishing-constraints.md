@@ -17,3 +17,4 @@ Outcome
 
 Violation Handling
 - Attempts to perform forbidden changes after publication are rejected
+

@@ -22,3 +22,4 @@ Outcome
 
 Violation Handling
 - If a transition is not allowed or timestamp order is broken, the change is rejected
+

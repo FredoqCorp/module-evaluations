@@ -17,3 +17,4 @@ Outcome
 
 Violation Handling
 - If the status cannot be determined, the operation is rejected until the inconsistency is resolved
+
