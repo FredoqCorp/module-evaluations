@@ -1,5 +1,13 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <ItemGroup>
-    <Folder Include="Enums/" />
+    <PackageReference Include="System.Collections.Immutable" />
+  </ItemGroup>
+  <ItemGroup>
+    <InternalsVisibleTo Include="CascVel.Modules.Evaluations.Management.Infrastructure" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Entities/" />
+    <Folder Include="Identifiers/" />
+    <Folder Include="Interfaces/" />
   </ItemGroup>
 </Project>

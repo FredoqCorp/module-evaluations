@@ -15,4 +15,7 @@
   <ItemGroup>
     <ProjectReference Include="../../../src/management/Domain/Domain.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Common/" />
+  </ItemGroup>
 </Project>
