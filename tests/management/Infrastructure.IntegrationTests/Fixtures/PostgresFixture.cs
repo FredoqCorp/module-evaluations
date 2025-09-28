@@ -1,5 +1,4 @@
 using System.Data.Common;
-using CascVel.Modules.Evaluations.Management.Infrastructure.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -54,15 +53,10 @@ public sealed class PostgresFixture : IAsyncLifetime
 
         var sc = new ServiceCollection();
         sc.AddLogging(b => b.SetMinimumLevel(LogLevel.None));
-        sc.AddEvaluationsDbContext(_connectionString);
         Services = sc.BuildServiceProvider();
 
         await using var scope = Services.CreateAsyncScope();
-        var factory = scope.ServiceProvider.GetRequiredService<IDbContextFactory<DatabaseContext>>();
-        await using var db = await factory.CreateDbContextAsync();
-        await db.Database.MigrateAsync();
 
-        await PrepareRespawnerAsync(db.Database.GetDbConnection());
     }
 
     /// <summary>
@@ -79,7 +73,9 @@ public sealed class PostgresFixture : IAsyncLifetime
         await _respawner.ResetAsync(conn);
     }
 
+#pragma warning disable S1144 // Unused private types or members should be removed
     private async Task PrepareRespawnerAsync(DbConnection connection)
+#pragma warning restore S1144 // Unused private types or members should be removed
     {
         await connection.OpenAsync();
         _respawner = await Respawner.CreateAsync(connection, new RespawnerOptions
