@@ -1,6 +1,3 @@
-using System;
-using System.IO;
-
 namespace CascVel.Modules.Evaluations.Management.Domain.ValueObjects;
 
 /// <summary>
@@ -8,8 +5,6 @@ namespace CascVel.Modules.Evaluations.Management.Domain.ValueObjects;
 /// </summary>
 public readonly record struct FormCode
 {
-    private readonly string _token;
-
     /// <summary>
     /// Initializes the value object with the provided token after validating basic integrity.
     /// </summary>
@@ -18,15 +13,11 @@ public readonly record struct FormCode
     {
         ArgumentException.ThrowIfNullOrEmpty(token);
 
-        _token = token;
+        Token = token;
     }
 
     /// <summary>
-    /// Returns the token representation for diagnostics and persistence mappings.
+    /// Textual representation of the form code.
     /// </summary>
-    /// <returns>String token matching the domain invariant.</returns>
-    public override string ToString()
-    {
-        return _token;
-    }
+    public string Token { get; init; }
 }
