@@ -8,6 +8,5 @@
   <ItemGroup>
     <Folder Include="Entities/" />
     <Folder Include="Identifiers/" />
-    <Folder Include="Interfaces/" />
   </ItemGroup>
 </Project>
