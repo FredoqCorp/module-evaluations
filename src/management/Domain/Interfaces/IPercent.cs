@@ -1,8 +1,8 @@
-using System;
-using CascVel.Modules.Evaluations.Management.Domain.ValueObjects;
-
 namespace CascVel.Modules.Evaluations.Management.Domain.Interfaces;
 
+/// <summary>
+/// Behavioral contract for percentage representation that provides a basis points view with matching granularity.
+/// </summary>
 public interface IPercent
 {
     /// <summary>

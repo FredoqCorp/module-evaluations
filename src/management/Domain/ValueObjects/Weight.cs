@@ -9,7 +9,6 @@ public sealed record Weight : IWeight
 {
     private readonly IBasisPoints _points;
 
-
     /// <summary>
     /// Initializes the weight from an explicit basis points value.
     /// </summary>
@@ -23,10 +22,21 @@ public sealed record Weight : IWeight
     /// Initializes the weight from a percentage value using basis points conversion.
     /// </summary>
     /// <param name="percent">Percentage representation of the weight.</param>
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1062:Validate arguments of public methods", Justification = "<Pending>")]
     public Weight(IPercent percent)
         : this(percent.Basis())
     {
     }
+
+    /// <summary>
+    /// Initializes the weight from a decimal percentage value using basis points conversion.
+    /// </summary>
+    /// <param name="percent">Percentage representation of the weight.</param>
+    public Weight(decimal percent)
+        : this(new Percent(percent))
+    {
+    }
+
     /// <summary>
     /// Returns a percentage representation derived from the stored basis points.
     /// </summary>
