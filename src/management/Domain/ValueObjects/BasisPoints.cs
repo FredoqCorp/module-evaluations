@@ -15,6 +15,9 @@ public sealed record BasisPoints : IBasisPoints
     /// <param name="value">Amount of basis points.</param>
     public BasisPoints(ushort value)
     {
+        ArgumentOutOfRangeException.ThrowIfGreaterThan(value, 10000);
+        ArgumentOutOfRangeException.ThrowIfLessThan(value, 0);
+
         _value = value;
     }
 
@@ -24,11 +27,6 @@ public sealed record BasisPoints : IBasisPoints
     /// <returns>Percent value equivalent to the stored basis points.</returns>
     public IPercent Percent()
     {
-        if (_value > 10000)
-        {
-            throw new InvalidDataException("Basis points must not exceed 10000");
-        }
-
         return new Percent(_value / 100m);
     }
 }

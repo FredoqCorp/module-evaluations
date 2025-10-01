@@ -17,5 +17,5 @@ public readonly record struct ValidityStart
     /// <summary>
     /// Underlying date and time of the validity start.
     /// </summary>
-    public DateTime Value { get; }
+    public DateTime Value { get; init; }
 }

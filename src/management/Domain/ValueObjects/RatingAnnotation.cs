@@ -19,5 +19,5 @@ public readonly record struct RatingAnnotation
     /// <summary>
     /// Normalized annotation text that may be empty when no annotation is provided.
     /// </summary>
-    public string Text { get; }
+    public string Text { get; init; }
 }

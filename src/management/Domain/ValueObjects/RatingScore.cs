@@ -19,5 +19,5 @@ public readonly record struct RatingScore
     /// <summary>
     /// Numeric score stored for downstream calculations.
     /// </summary>
-    public ushort Value { get; }
+    public ushort Value { get; init; }
 }

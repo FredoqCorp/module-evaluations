@@ -19,5 +19,5 @@ public readonly record struct RatingLabel
     /// <summary>
     /// Normalized label text.
     /// </summary>
-    public string Value { get; }
+    public string Value { get; init; }
 }

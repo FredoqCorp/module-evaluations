@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces;
 
 namespace CascVel.Modules.Evaluations.Management.Domain.ValueObjects;
@@ -22,8 +23,7 @@ public sealed record Weight : IWeight
     /// Initializes the weight from a percentage value using basis points conversion.
     /// </summary>
     /// <param name="percent">Percentage representation of the weight.</param>
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1062:Validate arguments of public methods", Justification = "<Pending>")]
-    public Weight(IPercent percent)
+    public Weight([NotNull] IPercent percent)
         : this(percent.Basis())
     {
     }

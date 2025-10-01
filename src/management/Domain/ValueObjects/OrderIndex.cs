@@ -5,26 +5,19 @@ namespace CascVel.Modules.Evaluations.Management.Domain.ValueObjects;
 /// </summary>
 public readonly record struct OrderIndex
 {
-    private readonly int _value;
 
     /// <summary>
     /// Creates a display order index with a raw integer value.
     /// </summary>
     public OrderIndex(int value)
     {
-        _value = value;
+        ArgumentOutOfRangeException.ThrowIfLessThan(value, 0);
+        
+        Value = value;
     }
 
     /// <summary>
-    /// Returns the zero-based order value and fails fast when negative.
+    /// Underlying integer value representing the order index.
     /// </summary>
-    public int Value()
-    {
-        if (_value < 0)
-        {
-            throw new InvalidDataException("Order index must not be negative");
-        }
-
-        return _value;
-    }
+    public int Value { get; init; }
 }
