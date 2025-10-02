@@ -3,70 +3,213 @@
 Диаграмма показывает предполагаемые агрегаты, сущности и value object'ы, удовлетворяющие правилам EVL-R-001 — EVL-R-014. Все связи отображают владение или использование объектов внутри предметной области.
 
 ```mermaid
-C4Component
-    title Form Domain Model
-    Boundary(domain, "Domain Layer") {
-        Component(form, "Form", "Aggregate Root", "Owns metadata, lifecycle, structure, scoring, audit trail")
-        Component(metadata, "FormMetadata", "Value Object", "Name, description, keywords, code, validity")
-        Component(code, "FormCode", "Value Object", "Unique public identifier")
-        Component(name, "FormName", "Value Object", "Non-null name text")
-        Component(desc, "FormDescription", "Value Object", "Optional description text")
-        Component(keywords, "Tags", "Value Object", "Case-insensitive unique keywords")
-        Component(tag, "Tag", "Value Object", "Single normalized keyword token")
-        Component(period, "ValidityPeriod", "Value Object", "Start and end availability moments")
-        Component(vstart, "ValidityStart", "Value Object", "Inclusive start moment")
-        Component(vend, "ValidityEnd", "Value Object", "Inclusive end moment")
-        Component(lifecycle, "FormLifecycle", "Entity", "Validates transitions and timestamps")
-        Component(event, "LifecycleEvent", "Value Object", "State with actor and timestamp")
-        Component(structure, "FormStructure", "Entity", "Root of ordered hierarchical nodes")
-        Component(nodeInterface, "IFormNode", "Interface", "Shared behaviour for groups and criteria")
-        Component(group, "FormGroup", "Entity", "Holds subgroups or criteria with ordering and optional weight")
-        Component(criterion, "FormCriterion", "Entity", "Contains title, text, scale, optional weight")
-        Component(scale, "CriterionScale", "Value Object", "Five-point or Binary configuration")
-        Component(scaleFive, "FivePointScale", "Value Object", "Enumerates five rating options")
-        Component(scaleBinary, "BinaryScale", "Value Object", "Represents Yes/No rating")
-        Component(weight, "WeightValue", "Value Object", "Normalized weight applied in weighted method")
-        Component(order, "NodeOrder", "Value Object", "Stable position identifier")
-        Component(scoring, "ScoringMethod", "Value Object", "Average or WeightedAverage definition")
-        Component(policy, "IScoringCompatibility", "Interface", "Verifies scoring method compatibility")
-        Component(session, "EvaluationSession", "Entity", "Locks form snapshot with scoring method")
-        Component(snapshot, "FormSnapshot", "Value Object", "Immutable view of form definition")
-        Component(audit, "AuditTrail", "Entity", "Collects change entries")
-        Component(auditEntry, "AuditEntry", "Value Object", "Actor, timestamp, change type details")
+classDiagram
+    %% Identifiers
+    class FormId {
+        <<Value Object>>
+        +Guid Value
     }
-    Rel(form, metadata, "aggregates")
-    Rel(metadata, code, "composes")
-    Rel(metadata, name, "composes")
-    Rel(metadata, desc, "composes optional")
-    Rel(metadata, keywords, "composes")
-    Rel(period, vstart, "composes")
-    Rel(period, vend, "composes optional")
-    Rel(keywords, tag, "contains")
-    Rel(metadata, period, "composes")
-    Rel(form, lifecycle, "aggregates")
-    Rel(lifecycle, event, "records")
-    Rel(form, structure, "aggregates")
-    Rel(structure, nodeInterface, "exposes")
-    Rel(nodeInterface, group, "implemented by")
-    Rel(nodeInterface, criterion, "implemented by")
-    Rel(group, group, "contains subgroups", "ordered collection")
-    Rel(group, criterion, "contains criteria", "ordered collection")
-    Rel(group, weight, "optional weight")
-    Rel(group, order, "position tracked by")
-    Rel(criterion, scale, "uses")
-    Rel(scale, scaleFive, "instantiated as")
-    Rel(scale, scaleBinary, "instantiated as")
-    Rel(criterion, weight, "optional weight")
-    Rel(criterion, order, "position tracked by")
-    Rel(form, scoring, "selects")
-    Rel(scoring, weight, "applies when weighted")
-    Rel(policy, scoring, "validates")
-    Rel(policy, structure, "validates")
-    Rel(session, snapshot, "locks")
-    Rel(session, scoring, "uses")
-    Rel(session, policy, "requires compatibility check via")
-    Rel(form, snapshot, "creates for sessions")
-    Rel(form, audit, "records events in")
-    Rel(audit, auditEntry, "contains")
-    Rel(form, session, "initiates")
+
+    class GroupId {
+        <<Value Object>>
+        +Guid Value
+    }
+
+    class CriterionId {
+        <<Value Object>>
+        +Guid Value
+    }
+
+    %% Form Metadata
+    class FormCode {
+        <<Value Object>>
+        +string Value
+    }
+
+    class FormName {
+        <<Value Object>>
+        +string Value
+    }
+
+    class FormDescription {
+        <<Value Object>>
+        +string Value
+    }
+
+    class Tags {
+        <<Value Object>>
+        +ImmutableHashSet~Tag~ Items
+    }
+
+    class Tag {
+        <<Value Object>>
+        +string Value
+    }
+
+    class ITags {
+        <<Interface>>
+        +Tags Add(Tag tag)
+        +Tags Remove(Tag tag)
+    }
+
+    Tags ..|> ITags
+    Tags o-- Tag
+
+    %% Validity Period
+    class ValidityStart {
+        <<Value Object>>
+        +DateTimeOffset Value
+    }
+
+    class ValidityEnd {
+        <<Value Object>>
+        +DateTimeOffset Value
+    }
+
+    class ValidityPeriod {
+        <<Value Object>>
+        +bool IsActiveAt(DateTimeOffset moment)
+        +bool IsExpiredAt(DateTimeOffset moment)
+    }
+
+    class IValidityPeriod {
+        <<Interface>>
+        +bool IsActiveAt(DateTimeOffset moment)
+        +bool IsExpiredAt(DateTimeOffset moment)
+    }
+
+    ValidityPeriod ..|> IValidityPeriod
+    ValidityPeriod *-- ValidityStart
+    ValidityPeriod *-- ValidityEnd
+
+    %% Weight
+    class BasisPoints {
+        <<Value Object>>
+        +ushort Value
+    }
+
+    class Percent {
+        <<Value Object>>
+        +double Value
+    }
+
+    class Weight {
+        <<Value Object>>
+    }
+
+    class IBasisPoints {
+        <<Interface>>
+        +ushort Value
+    }
+
+    class IPercent {
+        <<Interface>>
+        +double Value
+    }
+
+    class IWeight {
+        <<Interface>>
+        +BasisPoints ToBasisPoints()
+        +Percent ToPercent()
+    }
+
+    BasisPoints ..|> IBasisPoints
+    Percent ..|> IPercent
+    Weight ..|> IWeight
+    Weight *-- BasisPoints
+    Weight *-- Percent
+
+    %% Rating Components
+    class RatingScore {
+        <<Value Object>>
+        +ushort Value
+    }
+
+    class RatingLabel {
+        <<Value Object>>
+        +string Value
+    }
+
+    class RatingAnnotation {
+        <<Value Object>>
+        +string Value
+    }
+
+    class RatingOption {
+        <<Value Object>>
+        +bool Matches(RatingScore score)
+    }
+
+    class IRatingOption {
+        <<Interface>>
+        +bool Matches(RatingScore score)
+    }
+
+    RatingOption ..|> IRatingOption
+    RatingOption *-- RatingScore
+    RatingOption *-- RatingLabel
+    RatingOption *-- RatingAnnotation
+
+    class RatingOptions {
+        <<Value Object>>
+        +RatingOptions WithSelectedScore(RatingScore score)
+    }
+
+    class IRatingOptions {
+        <<Interface>>
+        +RatingOptions WithSelectedScore(RatingScore score)
+    }
+
+    RatingOptions ..|> IRatingOptions
+    RatingOptions o-- IRatingOption
+
+    %% Criterion Components
+    class CriterionTitle {
+        <<Value Object>>
+        +string Value
+    }
+
+    class CriterionText {
+        <<Value Object>>
+        +string Value
+    }
+
+    class GroupTitle {
+        <<Value Object>>
+        +string Value
+    }
+
+    class GroupDescription {
+        <<Value Object>>
+        +string Value
+    }
+
+    class OrderIndex {
+        <<Value Object>>
+        +ushort Value
+    }
+
+    %% Enums
+    class FormStatus {
+        <<Enumeration>>
+        Draft
+        Published
+        Archived
+    }
+
+    %% Common
+    class Option~T~ {
+        <<Value Object>>
+        +Map~TR~(Func~T,TR~ map) Option~TR~
+        +Bind~TR~(Func~T,Option~TR~~ bind) Option~TR~
+        +Reduce(T orElse) T
+    }
+
+    %% Exceptions
+    class ScoreNotFoundException {
+        <<Exception>>
+        +RatingScore Score
+    }
+
+    ScoreNotFoundException --> RatingScore
 ```

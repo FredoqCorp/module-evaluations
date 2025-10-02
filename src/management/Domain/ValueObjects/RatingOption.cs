@@ -7,9 +7,9 @@ namespace CascVel.Modules.Evaluations.Management.Domain.ValueObjects;
 /// </summary>
 public sealed record RatingOption : IRatingOption
 {
-    private readonly RatingScore score;
-    private readonly RatingLabel label;
-    private readonly RatingAnnotation annotation;
+    private readonly RatingScore _score;
+    private readonly RatingLabel _label;
+    private readonly RatingAnnotation _annotation;
 
     /// <summary>
     /// Creates a rating option from the provided components without accepting null.
@@ -19,35 +19,18 @@ public sealed record RatingOption : IRatingOption
     /// <param name="annotationValue">Annotation value object.</param>
     public RatingOption(RatingScore scoreValue, RatingLabel labelValue, RatingAnnotation annotationValue)
     {
-        score = scoreValue;
-        label = labelValue;
-        annotation = annotationValue;
+        _score = scoreValue;
+        _label = labelValue;
+        _annotation = annotationValue;
     }
 
     /// <summary>
-    /// Returns the numeric score associated with this option.
+    /// Determines if this rating option matches the given score.
     /// </summary>
-    /// <returns>Value object describing the numeric score.</returns>
-    public RatingScore Score()
+    /// <param name="score">The score to compare against.</param>
+    /// <returns>True if this option has the given score.</returns>
+    public bool Matches(RatingScore score)
     {
-        return score;
-    }
-
-    /// <summary>
-    /// Returns the label configured by the designer.
-    /// </summary>
-    /// <returns>Value object with human readable label.</returns>
-    public RatingLabel Label()
-    {
-        return label;
-    }
-
-    /// <summary>
-    /// Returns the optional annotation attached to this option.
-    /// </summary>
-    /// <returns>Value object describing the annotation.</returns>
-    public RatingAnnotation Annotation()
-    {
-        return annotation;
+        return _score.Equals(score);
     }
 }

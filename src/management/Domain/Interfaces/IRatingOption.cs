@@ -8,20 +8,9 @@ namespace CascVel.Modules.Evaluations.Management.Domain.Interfaces;
 public interface IRatingOption
 {
     /// <summary>
-    /// Returns the numeric score associated with the option.
+    /// Determines if this rating option matches the given score.
     /// </summary>
-    /// <returns>Value object that contains the numeric score.</returns>
-    RatingScore Score();
-
-    /// <summary>
-    /// Returns the label shown to form designers and evaluators.
-    /// </summary>
-    /// <returns>Value object that stores the configured label.</returns>
-    RatingLabel Label();
-
-    /// <summary>
-    /// Returns the optional annotation that explains the option.
-    /// </summary>
-    /// <returns>Value object with optional annotation content.</returns>
-    RatingAnnotation Annotation();
+    /// <param name="score">The score to compare against.</param>
+    /// <returns>True if this option has the given score.</returns>
+    bool Matches(RatingScore score);
 }
