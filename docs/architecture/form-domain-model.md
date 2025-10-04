@@ -1,6 +1,4 @@
-# Доменная модель модуля оценок
-
-Диаграмма показывает предполагаемые агрегаты, сущности и value object'ы, удовлетворяющие правилам EVL-R-001 — EVL-R-014. Все связи отображают владение или использование объектов внутри предметной области.
+# Domain
 
 ```mermaid
 classDiagram
@@ -85,39 +83,42 @@ classDiagram
     %% Weight
     class BasisPoints {
         <<Value Object>>
-        +ushort Value
+        +IPercent Percent()
+        +decimal Apply(decimal value)
     }
 
     class Percent {
         <<Value Object>>
-        +double Value
+        +IBasisPoints Basis()
     }
 
     class Weight {
         <<Value Object>>
+        +IPercent Percent()
+        +CriterionScore PercentOf(CriterionScore score)
     }
 
     class IBasisPoints {
         <<Interface>>
-        +ushort Value
+        +IPercent Percent()
+        +decimal Apply(decimal value)
     }
 
     class IPercent {
         <<Interface>>
-        +double Value
+        +IBasisPoints Basis()
     }
 
     class IWeight {
         <<Interface>>
-        +BasisPoints ToBasisPoints()
-        +Percent ToPercent()
+        +IPercent Percent()
+        +CriterionScore Weighted(CriterionScore score)
     }
 
     BasisPoints ..|> IBasisPoints
     Percent ..|> IPercent
     Weight ..|> IWeight
-    Weight *-- BasisPoints
-    Weight *-- Percent
+    Weight *-- IBasisPoints
 
     %% Rating Components
     class RatingScore {
@@ -163,6 +164,12 @@ classDiagram
     RatingOptions ..|> IRatingOptions
     RatingOptions o-- IRatingOption
 
+    %% Criterion Score
+    class CriterionScore {
+        <<Value Object>>
+        +decimal Value
+    }
+
     %% Criterion Components
     class CriterionTitle {
         <<Value Object>>
@@ -188,6 +195,31 @@ classDiagram
         <<Value Object>>
         +ushort Value
     }
+
+    %% Criterion Entities
+    class Criterion {
+        <<Entity>>
+        +Option~CriterionScore~ Score()
+    }
+
+    class ICriterion {
+        <<Interface>>
+        +Option~CriterionScore~ Score()
+    }
+
+    class WeightedCriterion {
+        <<Entity>>
+        +Option~CriterionScore~ Score()
+    }
+
+    Criterion ..|> ICriterion
+    WeightedCriterion ..|> ICriterion
+    Criterion *-- CriterionId
+    Criterion *-- CriterionText
+    Criterion *-- CriterionTitle
+    Criterion *-- IRatingOptions
+    WeightedCriterion *-- ICriterion
+    WeightedCriterion *-- IWeight
 
     %% Enums
     class FormStatus {
