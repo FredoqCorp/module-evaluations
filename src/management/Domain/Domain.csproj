@@ -6,7 +6,6 @@
     <InternalsVisibleTo Include="CascVel.Modules.Evaluations.Management.Infrastructure" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Entities/" />
     <Folder Include="Identifiers/" />
   </ItemGroup>
 </Project>

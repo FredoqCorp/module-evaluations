@@ -10,7 +10,7 @@ namespace CascVel.Modules.Evaluations.Management.Domain.ValueObjects;
 public sealed record RatingOptions : IRatingOptions
 {
     private readonly ImmutableList<IRatingOption> _options;
-    private readonly Option<IRatingOption> _selectedOption;
+    private readonly Option<RatingScore> _selectedOption;
 
     /// <summary>
     /// Creates a collection of rating options from the provided enumerable without accepting null.
@@ -20,13 +20,13 @@ public sealed record RatingOptions : IRatingOptions
     {
         _options = [.. options];
 
-        _selectedOption = Option.None<IRatingOption>();
+        _selectedOption = Option.None<RatingScore>();
     }
 
     /// <summary>
     /// Private constructor for creating a new instance with a selected option.
     /// </summary>
-    private RatingOptions(ImmutableList<IRatingOption> options, IRatingOption selectedOption)
+    private RatingOptions(ImmutableList<IRatingOption> options, RatingScore selectedOption)
     {
         _options = options;
         _selectedOption = Option.Of(selectedOption);
@@ -40,8 +40,21 @@ public sealed record RatingOptions : IRatingOptions
     /// <exception cref="Exceptions.ScoreNotFoundException">Thrown when the score is not found in the available options.</exception>
     public IRatingOptions WithSelectedScore(RatingScore score)
     {
-        var matchingOption = _options.FirstOrDefault(opt => opt.Matches(score)) ?? throw new Exceptions.ScoreNotFoundException(score);
-        return new RatingOptions(_options, matchingOption);
+        var matchingOption = _options.Where(opt => opt.Matches(score));
+        if (matchingOption.Count() != 1)
+        {
+            throw new Exceptions.ScoreNotFoundException(score);
+        }
+        return new RatingOptions(_options, score);
+    }
+
+    /// <summary>
+    /// Gets the currently selected rating option, if any.
+    /// </summary>
+    /// <returns></returns>
+    public Option<RatingScore> Score()
+    {
+        return _selectedOption;
     }
 
 }

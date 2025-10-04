@@ -1,3 +1,4 @@
+using CascVel.Modules.Evaluations.Management.Domain.Common;
 using CascVel.Modules.Evaluations.Management.Domain.ValueObjects;
 
 namespace CascVel.Modules.Evaluations.Management.Domain.Interfaces;

@@ -45,4 +45,14 @@ public sealed record Weight : IWeight
     {
         return _points.Percent();
     }
+
+    /// <summary>
+    /// Applies the weight to a criterion score.
+    /// </summary>
+    /// <param name="score">The criterion score to apply the weight to.</param>
+    /// <returns>A new criterion score with the weight applied.</returns>
+    public CriterionScore Weighted(CriterionScore score)
+    {
+        return new CriterionScore(_points.Apply(score.Value));
+    }
 }

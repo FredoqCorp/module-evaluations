@@ -13,4 +13,11 @@ public interface IWeight
     /// </summary>
     /// <returns>Percent equivalent of the weight.</returns>
     IPercent Percent();
+
+    /// <summary>
+    /// Applies the weight to a criterion score.
+    /// </summary>
+    /// <param name="score">The criterion score to apply the weight to.</param>
+    /// <returns>A new criterion score with the weight applied.</returns>
+    CriterionScore Weighted(CriterionScore score);
 }

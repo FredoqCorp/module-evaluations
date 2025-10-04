@@ -29,4 +29,14 @@ public sealed record BasisPoints : IBasisPoints
     {
         return new Percent(_value / 100m);
     }
+
+    /// <summary>
+    /// Applies the basis points value to the given decimal value.
+    /// </summary>
+    /// <param name="value">The value to apply the basis points to.</param>
+    /// <returns>The result of applying the basis points to the value.</returns>
+    public decimal Apply(decimal value)
+    {
+        return value * (_value / 10000m);
+    }
 }

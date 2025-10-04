@@ -1,3 +1,4 @@
+using CascVel.Modules.Evaluations.Management.Domain.Common;
 using CascVel.Modules.Evaluations.Management.Domain.ValueObjects;
 
 namespace CascVel.Modules.Evaluations.Management.Domain.Interfaces;
@@ -14,4 +15,10 @@ public interface IRatingOptions
     /// <returns>A new instance with the selected option.</returns>
     /// <exception cref="Exceptions.ScoreNotFoundException">Thrown when the score is not found in the available options.</exception>
     IRatingOptions WithSelectedScore(RatingScore score);
+
+    /// <summary>
+    /// Gets the currently selected rating score, if any.
+    /// </summary>
+    /// <returns></returns>
+    Option<RatingScore> Score();
 }
