@@ -21,7 +21,7 @@ classDiagram
     %% Form Metadata
     class FormCode {
         <<Value Object>>
-        +string Value
+        +string Token
     }
 
     class FormName {
@@ -34,20 +34,24 @@ classDiagram
         +string Value
     }
 
-    class Tags {
+    class OrderIndex {
         <<Value Object>>
-        +ImmutableHashSet~Tag~ Items
+        +int Value
     }
 
     class Tag {
         <<Value Object>>
-        +string Value
+        +string Text
+    }
+
+    class Tags {
+        <<Value Object>>
+        +ITags With(Tag tag)
     }
 
     class ITags {
         <<Interface>>
-        +Tags Add(Tag tag)
-        +Tags Remove(Tag tag)
+        +ITags With(Tag tag)
     }
 
     Tags ..|> ITags
@@ -56,31 +60,31 @@ classDiagram
     %% Validity Period
     class ValidityStart {
         <<Value Object>>
-        +DateTimeOffset Value
+        +DateTime Value
     }
 
     class ValidityEnd {
         <<Value Object>>
-        +DateTimeOffset Value
+        +DateTime Value
     }
 
     class ValidityPeriod {
         <<Value Object>>
-        +bool IsActiveAt(DateTimeOffset moment)
-        +bool IsExpiredAt(DateTimeOffset moment)
+        +IValidityPeriod Until(ValidityEnd end)
+        +bool Active(DateTime moment)
     }
 
     class IValidityPeriod {
         <<Interface>>
-        +bool IsActiveAt(DateTimeOffset moment)
-        +bool IsExpiredAt(DateTimeOffset moment)
+        +IValidityPeriod Until(ValidityEnd end)
+        +bool Active(DateTime moment)
     }
 
     ValidityPeriod ..|> IValidityPeriod
     ValidityPeriod *-- ValidityStart
-    ValidityPeriod *-- ValidityEnd
+    ValidityPeriod o-- ValidityEnd
 
-    %% Weight
+    %% Weighting
     class BasisPoints {
         <<Value Object>>
         +IPercent Percent()
@@ -95,7 +99,8 @@ classDiagram
     class Weight {
         <<Value Object>>
         +IPercent Percent()
-        +CriterionScore PercentOf(CriterionScore score)
+        +CriterionScore Weighted(CriterionScore score)
+        +IRatingContribution Weighted(IRatingContribution contribution)
     }
 
     class IBasisPoints {
@@ -113,12 +118,17 @@ classDiagram
         <<Interface>>
         +IPercent Percent()
         +CriterionScore Weighted(CriterionScore score)
+        +IRatingContribution Weighted(IRatingContribution contribution)
     }
 
     BasisPoints ..|> IBasisPoints
     Percent ..|> IPercent
     Weight ..|> IWeight
     Weight *-- IBasisPoints
+    BasisPoints --> Percent
+    Percent --> BasisPoints
+    Weight --> CriterionScore
+    Weight --> IRatingContribution
 
     %% Rating Components
     class RatingScore {
@@ -133,95 +143,143 @@ classDiagram
 
     class RatingAnnotation {
         <<Value Object>>
-        +string Value
+        +string Text
     }
 
     class RatingOption {
         <<Value Object>>
         +bool Matches(RatingScore score)
+        +IRatingContribution Contribution()
     }
 
     class IRatingOption {
         <<Interface>>
         +bool Matches(RatingScore score)
+        +IRatingContribution Contribution()
+    }
+
+    class RatingOptions {
+        <<Value Object>>
+        +IRatingContribution Contribution()
+    }
+
+    class IRatingOptions {
+        <<Interface>>
+        +IRatingContribution Contribution()
     }
 
     RatingOption ..|> IRatingOption
     RatingOption *-- RatingScore
     RatingOption *-- RatingLabel
     RatingOption *-- RatingAnnotation
-
-    class RatingOptions {
-        <<Value Object>>
-        +RatingOptions WithSelectedScore(RatingScore score)
-    }
-
-    class IRatingOptions {
-        <<Interface>>
-        +RatingOptions WithSelectedScore(RatingScore score)
-    }
-
+    RatingOption --> RatingContribution
     RatingOptions ..|> IRatingOptions
     RatingOptions o-- IRatingOption
+    RatingOptions --> RatingContribution
 
-    %% Criterion Score
+    %% Criterion Scores
     class CriterionScore {
         <<Value Object>>
         +decimal Value
     }
 
+    %% Contributions
+    class IRatingContribution {
+        <<Interface>>
+        +IRatingContribution Join(IRatingContribution contribution)
+        +Option~decimal~ Total()
+        +TR Accept~TR~(Func~decimal, ushort, TR~ projector)
+    }
+
+    class RatingContribution {
+        <<Value Object>>
+        +IRatingContribution Join(IRatingContribution contribution)
+        +Option~decimal~ Total()
+        +TR Accept~TR~(Func~decimal, ushort, TR~ projector)
+    }
+
+    RatingContribution ..|> IRatingContribution
+    RatingContribution o-- Option~T~
+
+    %% Option Monad
+    class Option~T~ {
+        <<Value Object>>
+        +Option~TR~ Map~TR~(Func~T,TR~ map)
+        +Option~TR~ Bind~TR~(Func~T,Option~TR~~ bind)
+        +T Reduce(T orElse)
+        +T Reduce(Func~T~ orElse)
+        +bool IsSome
+    }
+
     %% Criterion Components
     class CriterionTitle {
         <<Value Object>>
-        +string Value
+        +string Text
     }
 
     class CriterionText {
         <<Value Object>>
-        +string Value
+        +string Text
     }
 
     class GroupTitle {
         <<Value Object>>
-        +string Value
+        +string Text
     }
 
     class GroupDescription {
         <<Value Object>>
-        +string Value
-    }
-
-    class OrderIndex {
-        <<Value Object>>
-        +ushort Value
+        +string Text
     }
 
     %% Criterion Entities
     class Criterion {
         <<Entity>>
-        +Option~CriterionScore~ Score()
-    }
-
-    class ICriterion {
-        <<Interface>>
-        +Option~CriterionScore~ Score()
+        +IRatingContribution Contribution()
     }
 
     class WeightedCriterion {
         <<Entity>>
-        +Option~CriterionScore~ Score()
+        +IRatingContribution Contribution()
+    }
+
+    class CriterionGroup {
+        <<Entity>>
+        +IRatingContribution Contribution()
+    }
+
+    class WeightedCriterionGroup {
+        <<Entity>>
+        +IRatingContribution Contribution()
+    }
+
+    class ICriterion {
+        <<Interface>>
+        +IRatingContribution Contribution()
     }
 
     Criterion ..|> ICriterion
     WeightedCriterion ..|> ICriterion
+    CriterionGroup ..|> ICriterion
+    WeightedCriterionGroup ..|> ICriterion
     Criterion *-- CriterionId
     Criterion *-- CriterionText
     Criterion *-- CriterionTitle
     Criterion *-- IRatingOptions
+    Criterion --> IRatingContribution
     WeightedCriterion *-- ICriterion
     WeightedCriterion *-- IWeight
+    WeightedCriterion --> IRatingContribution
+    CriterionGroup *-- GroupId
+    CriterionGroup *-- GroupTitle
+    CriterionGroup *-- GroupDescription
+    CriterionGroup o-- ICriterion
+    CriterionGroup --> RatingContribution
+    WeightedCriterionGroup *-- ICriterion
+    WeightedCriterionGroup *-- IWeight
+    WeightedCriterionGroup --> IRatingContribution
 
-    %% Enums
+    %% Enumerations
     class FormStatus {
         <<Enumeration>>
         Draft
@@ -229,18 +287,10 @@ classDiagram
         Archived
     }
 
-    %% Common
-    class Option~T~ {
-        <<Value Object>>
-        +Map~TR~(Func~T,TR~ map) Option~TR~
-        +Bind~TR~(Func~T,Option~TR~~ bind) Option~TR~
-        +Reduce(T orElse) T
-    }
-
     %% Exceptions
     class ScoreNotFoundException {
         <<Exception>>
-        +RatingScore Score
+        +RatingScore? Score
     }
 
     ScoreNotFoundException --> RatingScore
