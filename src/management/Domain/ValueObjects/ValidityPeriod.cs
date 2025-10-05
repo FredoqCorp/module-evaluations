@@ -1,4 +1,5 @@
 using CascVel.Modules.Evaluations.Management.Domain.Common;
+using CascVel.Modules.Evaluations.Management.Domain.Exceptions;
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces;
 
 namespace CascVel.Modules.Evaluations.Management.Domain.ValueObjects;
@@ -11,15 +12,6 @@ public sealed record ValidityPeriod : IValidityPeriod
     private readonly ValidityStart _start;
 
     private readonly Option<ValidityEnd> _end = Option.None<ValidityEnd>();
-
-    /// <summary>
-    /// Initializes the validity period with required boundaries.
-    /// </summary>
-    /// <param name="start">Inclusive start moment.</param>
-    /// <param name="end">Inclusive finish.</param>
-    public ValidityPeriod(ValidityStart start, ValidityEnd end): this(start, Option.Of(end))
-    {
-    }
 
     /// <summary>
     /// Initializes the validity period with open end.
@@ -42,7 +34,12 @@ public sealed record ValidityPeriod : IValidityPeriod
     /// <returns>Validity period with updated boundary.</returns>
     public IValidityPeriod Until(ValidityEnd end)
     {
-        return new ValidityPeriod(_start, end);
+        if (end.Value < _start.Value)
+        {
+            throw new ValidityPeriodRangeException(_start, end);
+        }
+
+        return new ValidityPeriod(_start, Option.Of(end));
     }
 
     /// <summary>
