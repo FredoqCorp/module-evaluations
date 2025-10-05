@@ -11,9 +11,9 @@ public readonly record struct FormCode
     /// <param name="token">Plain code token supplied by the caller.</param>
     public FormCode(string token)
     {
-        ArgumentException.ThrowIfNullOrEmpty(token);
+        ArgumentException.ThrowIfNullOrWhiteSpace(token);
 
-        Token = token;
+        Token = token.Trim();
     }
 
     /// <summary>

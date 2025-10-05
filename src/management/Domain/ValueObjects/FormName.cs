@@ -11,9 +11,12 @@ public readonly record struct FormName
     /// <param name="value">Name text provided by the caller.</param>
     public FormName(string value)
     {
-        ArgumentException.ThrowIfNullOrEmpty(value);
+        ArgumentException.ThrowIfNullOrWhiteSpace(value);
 
-        Value = value.Trim();
+        var trimmed = value.Trim();
+        ArgumentOutOfRangeException.ThrowIfGreaterThan(trimmed.Length, 100);
+
+        Value = trimmed;
     }
 
     /// <summary>
@@ -21,4 +24,3 @@ public readonly record struct FormName
     /// </summary>
     public string Value { get; init; }
 }
-

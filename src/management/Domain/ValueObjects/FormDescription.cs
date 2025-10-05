@@ -13,7 +13,10 @@ public readonly record struct FormDescription
     {
         ArgumentNullException.ThrowIfNull(value);
 
-        Value = value.Trim();
+        var trimmed = value.Trim();
+        ArgumentOutOfRangeException.ThrowIfGreaterThan(trimmed.Length, 1000);
+
+        Value = trimmed;
     }
 
     /// <summary>
@@ -21,4 +24,3 @@ public readonly record struct FormDescription
     /// </summary>
     public string Value { get; init; }
 }
-

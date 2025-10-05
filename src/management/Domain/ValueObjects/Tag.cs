@@ -11,7 +11,7 @@ public readonly record struct Tag
     /// <param name="text">Keyword text provided by the caller.</param>
     public Tag(string text)
     {
-        ArgumentException.ThrowIfNullOrEmpty(text);
+        ArgumentException.ThrowIfNullOrWhiteSpace(text);
 
         Text = text.Trim();
     }
