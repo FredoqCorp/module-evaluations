@@ -1,6 +1,3 @@
-using CascVel.Modules.Evaluations.Management.Domain.Common;
-using CascVel.Modules.Evaluations.Management.Domain.ValueObjects;
-
 namespace CascVel.Modules.Evaluations.Management.Domain.Interfaces;
 
 /// <summary>
@@ -8,17 +5,10 @@ namespace CascVel.Modules.Evaluations.Management.Domain.Interfaces;
 /// </summary>
 public interface IRatingOptions
 {
-    /// <summary>
-    /// Selects a rating option by score from the available options.
-    /// </summary>
-    /// <param name="score">The score to select.</param>
-    /// <returns>A new instance with the selected option.</returns>
-    /// <exception cref="Exceptions.ScoreNotFoundException">Thrown when the score is not found in the available options.</exception>
-    IRatingOptions WithSelectedScore(RatingScore score);
 
     /// <summary>
-    /// Gets the currently selected rating score, if any.
+    /// Calculates the total contribution produced by the selected option, if any.
     /// </summary>
-    /// <returns></returns>
-    Option<RatingScore> Score();
+    /// <returns>The contribution that should participate in downstream scoring.</returns>
+    IRatingContribution Contribution();
 }

@@ -1,5 +1,3 @@
-using System.IO;
-
 namespace CascVel.Modules.Evaluations.Management.Domain.ValueObjects;
 
 /// <summary>

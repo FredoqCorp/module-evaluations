@@ -1,5 +1,4 @@
 using System.Collections.Immutable;
-using CascVel.Modules.Evaluations.Management.Domain.Common;
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces;
 
 namespace CascVel.Modules.Evaluations.Management.Domain.ValueObjects;
@@ -9,8 +8,7 @@ namespace CascVel.Modules.Evaluations.Management.Domain.ValueObjects;
 /// </summary>
 public sealed record RatingOptions : IRatingOptions
 {
-    private readonly ImmutableList<IRatingOption> _options;
-    private readonly Option<RatingScore> _selectedOption;
+    private readonly IImmutableList<IRatingOption> _options;
 
     /// <summary>
     /// Creates a collection of rating options from the provided enumerable without accepting null.
@@ -19,42 +17,22 @@ public sealed record RatingOptions : IRatingOptions
     public RatingOptions(IEnumerable<IRatingOption> options)
     {
         _options = [.. options];
-
-        _selectedOption = Option.None<RatingScore>();
     }
 
     /// <summary>
-    /// Private constructor for creating a new instance with a selected option.
+    /// Calculates the total contribution produced by the selected option, if any.
     /// </summary>
-    private RatingOptions(ImmutableList<IRatingOption> options, RatingScore selectedOption)
+    /// <returns>The contribution that should participate in downstream scoring.</returns>
+    public IRatingContribution Contribution()
     {
-        _options = options;
-        _selectedOption = Option.Of(selectedOption);
-    }
+        IRatingContribution total = new RatingContribution(decimal.Zero, 0);
 
-    /// <summary>
-    /// Selects a rating option by score from the available options.
-    /// </summary>
-    /// <param name="score">The score to select.</param>
-    /// <returns>A new instance with the selected option.</returns>
-    /// <exception cref="Exceptions.ScoreNotFoundException">Thrown when the score is not found in the available options.</exception>
-    public IRatingOptions WithSelectedScore(RatingScore score)
-    {
-        var matchingOption = _options.Where(opt => opt.Matches(score));
-        if (matchingOption.Count() != 1)
+        foreach (var option in _options)
         {
-            throw new Exceptions.ScoreNotFoundException(score);
+            total = total.Join(option.Contribution());
         }
-        return new RatingOptions(_options, score);
-    }
 
-    /// <summary>
-    /// Gets the currently selected rating option, if any.
-    /// </summary>
-    /// <returns></returns>
-    public Option<RatingScore> Score()
-    {
-        return _selectedOption;
+        return total;
     }
 
 }

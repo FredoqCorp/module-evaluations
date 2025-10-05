@@ -1,4 +1,3 @@
-using CascVel.Modules.Evaluations.Management.Domain.Common;
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces;
 using CascVel.Modules.Evaluations.Management.Domain.ValueObjects;
 
@@ -30,10 +29,12 @@ public sealed class Criterion : ICriterion
     }
 
     /// <summary>
-    /// Calculates the final score based on the selected rating.
+    /// Calculates the total contribution produced by the selected rating.
     /// </summary>
-    /// <returns>The criterion score if a rating is selected; otherwise, None.</returns>
-    public Option<CriterionScore> Score() => _ratingOptions
-            .Score()
-            .Map(score => new CriterionScore(score.Value));
+    /// <returns>The contribution that represents this criterion.</returns>
+    public IRatingContribution Contribution()
+    {
+        return _ratingOptions.Contribution();
+    }
+
 }

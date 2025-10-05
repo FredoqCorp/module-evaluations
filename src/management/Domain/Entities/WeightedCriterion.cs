@@ -1,6 +1,4 @@
-using CascVel.Modules.Evaluations.Management.Domain.Common;
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces;
-using CascVel.Modules.Evaluations.Management.Domain.ValueObjects;
 
 namespace CascVel.Modules.Evaluations.Management.Domain.Entities;
 
@@ -25,10 +23,12 @@ public sealed class WeightedCriterion : ICriterion
 
 
     /// <summary>
-    /// Calculates the weighted score based on the criterion's score and the weight.
+    /// Calculates the weighted contribution based on the criterion's contribution and the weight.
     /// </summary>
-    /// <returns>The weighted criterion score if the criterion has a score; otherwise, None.</returns>
-    public Option<CriterionScore> Score() => _criterion
-            .Score()
-            .Map(_weight.Weighted);
+    /// <returns>The weighted contribution that represents this criterion.</returns>
+    public IRatingContribution Contribution()
+    {
+        return _weight.Weighted(_criterion.Contribution());
+    }
+
 }

@@ -1,5 +1,3 @@
-using System;
-
 namespace CascVel.Modules.Evaluations.Management.Domain.Common;
 
 /// <summary>

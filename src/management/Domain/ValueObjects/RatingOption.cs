@@ -14,14 +14,14 @@ public sealed record RatingOption : IRatingOption
     /// <summary>
     /// Creates a rating option from the provided components without accepting null.
     /// </summary>
-    /// <param name="scoreValue">Numeric score value object.</param>
-    /// <param name="labelValue">Label value object.</param>
-    /// <param name="annotationValue">Annotation value object.</param>
-    public RatingOption(RatingScore scoreValue, RatingLabel labelValue, RatingAnnotation annotationValue)
+    /// <param name="score">Numeric score value object.</param>
+    /// <param name="label">Label value object.</param>
+    /// <param name="annotation">Annotation value object.</param>
+    public RatingOption(RatingScore score, RatingLabel label, RatingAnnotation annotation)
     {
-        _score = scoreValue;
-        _label = labelValue;
-        _annotation = annotationValue;
+        _score = score;
+        _label = label;
+        _annotation = annotation;
     }
 
     /// <summary>
@@ -32,5 +32,14 @@ public sealed record RatingOption : IRatingOption
     public bool Matches(RatingScore score)
     {
         return _score.Equals(score);
+    }
+
+    /// <summary>
+    /// Calculates the contribution of this option to the total form score.
+    /// </summary>
+    /// <returns>A contribution of zero because the option is not selected.</returns>
+    public IRatingContribution Contribution()
+    {
+        return new RatingContribution(decimal.Zero, 0);
     }
 }
