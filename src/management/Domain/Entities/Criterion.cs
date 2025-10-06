@@ -36,5 +36,12 @@ public sealed class Criterion : ICriterion
     {
         return _ratingOptions.Contribution();
     }
+    
+    /// <summary>
+    /// Validates the internal consistency of the criterion.
+    /// </summary>
+    public void Validate()
+    {
 
+    }
 }

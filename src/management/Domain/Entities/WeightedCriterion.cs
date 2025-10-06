@@ -5,7 +5,7 @@ namespace CascVel.Modules.Evaluations.Management.Domain.Entities;
 /// <summary>
 /// Decorator that applies a weight to a criterion score.
 /// </summary>
-public sealed class WeightedCriterion : ICriterion
+public sealed class WeightedCriterion : IRatingContributionSource
 {
     private readonly ICriterion _criterion;
     private readonly IWeight _weight;
