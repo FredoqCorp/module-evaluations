@@ -12,10 +12,10 @@ Preconditions
 Invariants
 - Groups may contain criteria and/or subgroups
 - Criteria may exist either at the root or inside any group
+- A synthetic root group encapsulates root-level criteria and groups without exposing itself to designers, ensuring that scoring strategies remain isolated
 
 Outcome
 - The system stores a hierarchical structure of groups and criteria
 
 Violation Handling
 - If the structure is malformed, the change is rejected
-

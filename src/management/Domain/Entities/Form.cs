@@ -1,4 +1,4 @@
-using System.Collections.Immutable;
+using CascVel.Modules.Evaluations.Management.Domain.Common;
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces;
 using CascVel.Modules.Evaluations.Management.Domain.ValueObjects;
 
@@ -11,25 +11,22 @@ public sealed class Form : IForm
 {
     private readonly FormId _id;
     private readonly FormMetadata _metadata;
-    private readonly ICriteria _criteria;
-    private readonly IGroups _groups;
+    private readonly IFormRootGroup _root;
+
     /// <summary>
-    /// Initializes the form aggregate with identifier, metadata, criteria, and groups.
+    /// Initializes the form aggregate with identifier, metadata, and root group.
     /// </summary>
     /// <param name="id">Unique identifier of the form.</param>
     /// <param name="metadata">Metadata associated with the form.</param>
-    /// <param name="criteria">Collection of criteria in the form.</param>
-    /// <param name="groups">Collection of groups in the form.</param>
-    public Form(FormId id, FormMetadata metadata, ICriteria criteria, IGroups groups)
+    /// <param name="root">Root group representing the form structure.</param>
+    public Form(FormId id, FormMetadata metadata, IFormRootGroup root)
     {
         ArgumentNullException.ThrowIfNull(metadata);
-        ArgumentNullException.ThrowIfNull(criteria);
-        ArgumentNullException.ThrowIfNull(groups);
+        ArgumentNullException.ThrowIfNull(root);
 
         _id = id;
         _metadata = metadata;
-        _criteria = criteria;
-        _groups = groups;
+        _root = root;
     }
 
     /// <summary>
@@ -37,5 +34,15 @@ public sealed class Form : IForm
     /// </summary>
     public void Validate()
     {
+        _root.Validate();
+    }
+
+    /// <summary>
+    /// Calculates the final normalized score produced by the form structure.
+    /// </summary>
+    /// <returns>An option containing the normalized score when participants exist; otherwise None.</returns>
+    public Option<decimal> Score()
+    {
+        return _root.Contribution().Total();
     }
 }

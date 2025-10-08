@@ -6,7 +6,7 @@ namespace CascVel.Modules.Evaluations.Management.Domain.Entities;
 /// <summary>
 /// Represents a criterion used for evaluations.
 /// </summary>
-public sealed class Criterion : ICriterion
+public sealed class Criterion : IAverageCriterion
 {
     private readonly CriterionId _id;
     private readonly CriterionText _text;
