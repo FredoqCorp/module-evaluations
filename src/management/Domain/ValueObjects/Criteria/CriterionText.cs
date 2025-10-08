@@ -1,4 +1,4 @@
-namespace CascVel.Modules.Evaluations.Management.Domain.ValueObjects;
+namespace CascVel.Modules.Evaluations.Management.Domain.ValueObjects.Criteria;
 
 /// <summary>
 /// Detailed explanation or question text for a criterion, limited to 1000 characters.

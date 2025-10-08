@@ -1,7 +1,8 @@
-using CascVel.Modules.Evaluations.Management.Domain.Interfaces;
-using CascVel.Modules.Evaluations.Management.Domain.ValueObjects;
+using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Criteria;
+using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Ratings;
+using CascVel.Modules.Evaluations.Management.Domain.ValueObjects.Criteria;
 
-namespace CascVel.Modules.Evaluations.Management.Domain.Entities;
+namespace CascVel.Modules.Evaluations.Management.Domain.Entities.Criteria.Average;
 
 /// <summary>
 /// Represents a criterion used for evaluations.

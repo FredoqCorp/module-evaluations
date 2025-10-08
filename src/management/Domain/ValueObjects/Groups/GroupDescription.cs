@@ -1,4 +1,4 @@
-namespace CascVel.Modules.Evaluations.Management.Domain.ValueObjects;
+namespace CascVel.Modules.Evaluations.Management.Domain.ValueObjects.Groups;
 
 /// <summary>
 /// Optional detailed description for a criterion group, limited to 1000 characters.

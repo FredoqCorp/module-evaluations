@@ -1,6 +1,6 @@
 using CascVel.Modules.Evaluations.Management.Domain.Common;
 
-namespace CascVel.Modules.Evaluations.Management.Domain.Interfaces;
+namespace CascVel.Modules.Evaluations.Management.Domain.Interfaces.Ratings;
 
 /// <summary>
 /// Behavioral contract for contribution values produced by rating selections.

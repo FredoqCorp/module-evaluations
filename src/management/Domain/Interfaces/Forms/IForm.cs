@@ -1,6 +1,6 @@
 using CascVel.Modules.Evaluations.Management.Domain.Common;
 
-namespace CascVel.Modules.Evaluations.Management.Domain.Interfaces;
+namespace CascVel.Modules.Evaluations.Management.Domain.Interfaces.Forms;
 
 /// <summary>
 /// Behavioral contract for a form aggregate that manages lifecycle and metadata.

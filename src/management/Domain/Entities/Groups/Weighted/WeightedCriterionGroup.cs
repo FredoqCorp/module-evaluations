@@ -1,8 +1,11 @@
-using System;
-using CascVel.Modules.Evaluations.Management.Domain.Interfaces;
-using CascVel.Modules.Evaluations.Management.Domain.ValueObjects;
+using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Criteria;
+using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Groups;
+using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Ratings;
+using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Shared;
+using CascVel.Modules.Evaluations.Management.Domain.ValueObjects.Groups;
+using CascVel.Modules.Evaluations.Management.Domain.ValueObjects.Ratings;
 
-namespace CascVel.Modules.Evaluations.Management.Domain.Entities;
+namespace CascVel.Modules.Evaluations.Management.Domain.Entities.Groups.Weighted;
 
 /// <summary>
 /// Immutable criterion group that aggregates weighted members and exposes its own weight.

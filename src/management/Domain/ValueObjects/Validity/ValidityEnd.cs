@@ -1,4 +1,4 @@
-namespace CascVel.Modules.Evaluations.Management.Domain.ValueObjects;
+namespace CascVel.Modules.Evaluations.Management.Domain.ValueObjects.Validity;
 
 /// <summary>
 /// Immutable value object representing the inclusive validity end moment.

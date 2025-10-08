@@ -1,7 +1,7 @@
 using System.Collections.Immutable;
-using CascVel.Modules.Evaluations.Management.Domain.Interfaces;
+using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Ratings;
 
-namespace CascVel.Modules.Evaluations.Management.Domain.ValueObjects;
+namespace CascVel.Modules.Evaluations.Management.Domain.ValueObjects.Ratings;
 
 /// <summary>
 /// Immutable collection of rating options.

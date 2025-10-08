@@ -1,10 +1,9 @@
-using System;
-using System.Collections.Generic;
 using System.Collections.Immutable;
-using CascVel.Modules.Evaluations.Management.Domain.Interfaces;
-using CascVel.Modules.Evaluations.Management.Domain.ValueObjects;
+using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Criteria;
+using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Ratings;
+using CascVel.Modules.Evaluations.Management.Domain.ValueObjects.Ratings;
 
-namespace CascVel.Modules.Evaluations.Management.Domain.Entities;
+namespace CascVel.Modules.Evaluations.Management.Domain.Entities.Criteria.Average;
 
 /// <summary>
 /// Immutable collection of unweighted criteria that participate in average scoring.

@@ -1,8 +1,8 @@
 using CascVel.Modules.Evaluations.Management.Domain.Common;
-using CascVel.Modules.Evaluations.Management.Domain.Interfaces;
-using CascVel.Modules.Evaluations.Management.Domain.ValueObjects;
+using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Forms;
+using CascVel.Modules.Evaluations.Management.Domain.ValueObjects.Forms;
 
-namespace CascVel.Modules.Evaluations.Management.Domain.Entities;
+namespace CascVel.Modules.Evaluations.Management.Domain.Entities.Forms;
 
 /// <summary>
 /// Immutable aggregate root that represents an evaluation form.

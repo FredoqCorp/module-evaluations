@@ -1,4 +1,4 @@
-namespace CascVel.Modules.Evaluations.Management.Domain.ValueObjects;
+namespace CascVel.Modules.Evaluations.Management.Domain.ValueObjects.Forms;
 
 /// <summary>
 /// Immutable value object that stores the human readable form name.

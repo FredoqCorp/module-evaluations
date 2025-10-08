@@ -1,6 +1,7 @@
 using CascVel.Modules.Evaluations.Management.Domain.ValueObjects;
+using CascVel.Modules.Evaluations.Management.Domain.ValueObjects.Validity;
 
-namespace CascVel.Modules.Evaluations.Management.Domain.Interfaces;
+namespace CascVel.Modules.Evaluations.Management.Domain.Interfaces.Validity;
 
 /// <summary>
 /// Behavioral contract for validity periods that evaluate availability and create constrained variants.

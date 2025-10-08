@@ -1,4 +1,4 @@
-namespace CascVel.Modules.Evaluations.Management.Domain.ValueObjects;
+namespace CascVel.Modules.Evaluations.Management.Domain.ValueObjects.Criteria;
 
 /// <summary>
 /// Immutable value object that represents the final score of a criterion used in calculating the overall form score.

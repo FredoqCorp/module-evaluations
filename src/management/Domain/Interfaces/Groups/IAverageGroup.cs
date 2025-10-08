@@ -1,4 +1,4 @@
-namespace CascVel.Modules.Evaluations.Management.Domain.Interfaces;
+namespace CascVel.Modules.Evaluations.Management.Domain.Interfaces.Groups;
 
 /// <summary>
 /// Behavioral contract for an unweighted group used within average scoring.

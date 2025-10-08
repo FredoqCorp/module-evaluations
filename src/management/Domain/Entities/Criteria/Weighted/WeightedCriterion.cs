@@ -1,7 +1,8 @@
-using System;
-using CascVel.Modules.Evaluations.Management.Domain.Interfaces;
+using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Criteria;
+using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Ratings;
+using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Shared;
 
-namespace CascVel.Modules.Evaluations.Management.Domain.Entities;
+namespace CascVel.Modules.Evaluations.Management.Domain.Entities.Criteria.Weighted;
 
 /// <summary>
 /// Immutable criterion that stores a weight together with the decorated criterion.

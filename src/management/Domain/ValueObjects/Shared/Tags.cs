@@ -1,7 +1,7 @@
 using System.Collections.Immutable;
-using CascVel.Modules.Evaluations.Management.Domain.Interfaces;
+using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Shared;
 
-namespace CascVel.Modules.Evaluations.Management.Domain.ValueObjects;
+namespace CascVel.Modules.Evaluations.Management.Domain.ValueObjects.Shared;
 
 /// <summary>
 /// Immutable collection of tags that preserves order and prevents case-insensitive duplicates.

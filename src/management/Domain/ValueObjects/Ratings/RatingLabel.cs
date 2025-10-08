@@ -1,4 +1,4 @@
-namespace CascVel.Modules.Evaluations.Management.Domain.ValueObjects;
+namespace CascVel.Modules.Evaluations.Management.Domain.ValueObjects.Ratings;
 
 /// <summary>
 /// Immutable value object that stores a mandatory label for a rating option.

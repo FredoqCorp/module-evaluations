@@ -1,4 +1,4 @@
-namespace CascVel.Modules.Evaluations.Management.Domain.Interfaces;
+namespace CascVel.Modules.Evaluations.Management.Domain.Interfaces.Ratings;
 
 /// <summary>
 /// Behavioral contract for a collection of rating options with selection capability.

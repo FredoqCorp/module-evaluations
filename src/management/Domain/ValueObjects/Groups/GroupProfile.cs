@@ -1,4 +1,4 @@
-namespace CascVel.Modules.Evaluations.Management.Domain.ValueObjects;
+namespace CascVel.Modules.Evaluations.Management.Domain.ValueObjects.Groups;
 
 /// <summary>
 /// Immutable value object that captures the identity and descriptive attributes of a group.

@@ -1,4 +1,4 @@
-namespace CascVel.Modules.Evaluations.Management.Domain.ValueObjects;
+namespace CascVel.Modules.Evaluations.Management.Domain.ValueObjects.Shared;
 
 /// <summary>
 /// Immutable value object that stores a single keyword preserving original text and a case-insensitive fingerprint.

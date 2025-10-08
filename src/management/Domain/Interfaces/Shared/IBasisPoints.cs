@@ -1,4 +1,4 @@
-namespace CascVel.Modules.Evaluations.Management.Domain.Interfaces;
+namespace CascVel.Modules.Evaluations.Management.Domain.Interfaces.Shared;
 
 /// <summary>
 /// Behavioral contract for basis points representation that exposes a percent view of the same weight.

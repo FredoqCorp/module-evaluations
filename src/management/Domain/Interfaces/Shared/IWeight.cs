@@ -1,6 +1,7 @@
-using CascVel.Modules.Evaluations.Management.Domain.ValueObjects;
+using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Ratings;
+using CascVel.Modules.Evaluations.Management.Domain.ValueObjects.Criteria;
 
-namespace CascVel.Modules.Evaluations.Management.Domain.Interfaces;
+namespace CascVel.Modules.Evaluations.Management.Domain.Interfaces.Shared;
 
 /// <summary>
 /// Behavioral contract for a weight that exposes both basis points and percent views.

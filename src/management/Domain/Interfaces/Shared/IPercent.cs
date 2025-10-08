@@ -1,4 +1,4 @@
-namespace CascVel.Modules.Evaluations.Management.Domain.Interfaces;
+namespace CascVel.Modules.Evaluations.Management.Domain.Interfaces.Shared;
 
 /// <summary>
 /// Behavioral contract for percentage representation that provides a basis points view with matching granularity.

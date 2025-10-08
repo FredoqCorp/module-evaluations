@@ -1,7 +1,10 @@
 using System.Diagnostics.CodeAnalysis;
-using CascVel.Modules.Evaluations.Management.Domain.Interfaces;
+using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Ratings;
+using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Shared;
+using CascVel.Modules.Evaluations.Management.Domain.ValueObjects.Criteria;
+using CascVel.Modules.Evaluations.Management.Domain.ValueObjects.Ratings;
 
-namespace CascVel.Modules.Evaluations.Management.Domain.ValueObjects;
+namespace CascVel.Modules.Evaluations.Management.Domain.ValueObjects.Shared;
 
 /// <summary>
 /// Immutable value object that stores a weight as basis points while supporting construction from percentages.

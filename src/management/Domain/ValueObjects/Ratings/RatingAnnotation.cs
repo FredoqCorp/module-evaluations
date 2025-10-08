@@ -1,4 +1,4 @@
-namespace CascVel.Modules.Evaluations.Management.Domain.ValueObjects;
+namespace CascVel.Modules.Evaluations.Management.Domain.ValueObjects.Ratings;
 
 /// <summary>
 /// Immutable value object that stores an optional annotation text for rating guidance.

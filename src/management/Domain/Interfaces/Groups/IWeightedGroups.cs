@@ -1,4 +1,6 @@
-namespace CascVel.Modules.Evaluations.Management.Domain.Interfaces;
+using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Shared;
+
+namespace CascVel.Modules.Evaluations.Management.Domain.Interfaces.Groups;
 
 /// <summary>
 /// Behavioral contract for a groups collection that enforces weighted siblings.

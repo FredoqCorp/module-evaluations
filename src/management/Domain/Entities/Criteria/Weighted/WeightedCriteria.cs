@@ -1,10 +1,11 @@
-using System;
-using System.Collections.Generic;
 using System.Collections.Immutable;
-using CascVel.Modules.Evaluations.Management.Domain.Interfaces;
-using CascVel.Modules.Evaluations.Management.Domain.ValueObjects;
+using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Criteria;
+using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Ratings;
+using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Shared;
+using CascVel.Modules.Evaluations.Management.Domain.ValueObjects.Ratings;
+using CascVel.Modules.Evaluations.Management.Domain.ValueObjects.Shared;
 
-namespace CascVel.Modules.Evaluations.Management.Domain.Entities;
+namespace CascVel.Modules.Evaluations.Management.Domain.Entities.Criteria.Weighted;
 
 /// <summary>
 /// Immutable collection of weighted criteria that aggregates their contributions and sibling weight.

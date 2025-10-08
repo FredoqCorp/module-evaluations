@@ -1,6 +1,6 @@
-using System;
+using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Ratings;
 
-namespace CascVel.Modules.Evaluations.Management.Domain.Interfaces;
+namespace CascVel.Modules.Evaluations.Management.Domain.Interfaces.Criteria;
 
 /// <summary>
 /// Behavioral contract for a criteria collection.

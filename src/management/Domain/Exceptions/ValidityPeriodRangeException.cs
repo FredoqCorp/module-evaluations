@@ -1,4 +1,5 @@
 using CascVel.Modules.Evaluations.Management.Domain.ValueObjects;
+using CascVel.Modules.Evaluations.Management.Domain.ValueObjects.Validity;
 
 namespace CascVel.Modules.Evaluations.Management.Domain.Exceptions;
 

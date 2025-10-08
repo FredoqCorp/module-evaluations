@@ -1,7 +1,7 @@
 using CascVel.Modules.Evaluations.Management.Domain.Common;
-using CascVel.Modules.Evaluations.Management.Domain.Interfaces;
+using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Ratings;
 
-namespace CascVel.Modules.Evaluations.Management.Domain.ValueObjects;
+namespace CascVel.Modules.Evaluations.Management.Domain.ValueObjects.Ratings;
 
 /// <summary>
 /// Immutable contribution value that captures the aggregated score amount alongside participant count.

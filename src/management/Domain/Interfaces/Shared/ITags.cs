@@ -1,6 +1,6 @@
-using CascVel.Modules.Evaluations.Management.Domain.ValueObjects;
+using CascVel.Modules.Evaluations.Management.Domain.ValueObjects.Shared;
 
-namespace CascVel.Modules.Evaluations.Management.Domain.Interfaces;
+namespace CascVel.Modules.Evaluations.Management.Domain.Interfaces.Shared;
 
 /// <summary>
 /// Behavioral contract for an immutable tags collection that prevents duplicates and returns new instances on change requests.

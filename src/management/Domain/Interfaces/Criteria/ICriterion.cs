@@ -1,4 +1,6 @@
-namespace CascVel.Modules.Evaluations.Management.Domain.Interfaces;
+using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Ratings;
+
+namespace CascVel.Modules.Evaluations.Management.Domain.Interfaces.Criteria;
 
 /// <summary>
 /// Behavioral contract for a single criterion.
