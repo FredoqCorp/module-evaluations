@@ -1,0 +1,20 @@
+# Override analyzers for generated EF Core migrations
+root = false
+
+[*.cs]
+# File name must match type name (migrations often break this)
+dotnet_diagnostic.MA0048.severity = none
+# Method is too long (generated Up/Down)
+dotnet_diagnostic.MA0051.severity = none
+
+dotnet_diagnostic.CA1515.severity = none
+dotnet_diagnostic.CA1707.severity = none
+dotnet_diagnostic.CA2007.severity = none
+dotnet_diagnostic.CA1848.severity = none
+# Keep other rules as-is
+
+# CA1716: Identifiers should not match keywords
+dotnet_diagnostic.CA1716.severity = none
+
+# S4487: Unread "private" fields should be removed
+dotnet_diagnostic.S4487.severity = none
