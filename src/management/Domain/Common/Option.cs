@@ -8,7 +8,13 @@ public readonly record struct Option<T>
 #pragma warning restore CA1716 // Identifiers should not match keywords
 {
     private readonly T? _content;
-    internal Option(T content) => _content = content;
+    private readonly bool _isSome;
+
+    internal Option(T content)
+    {
+        _content = content;
+        _isSome = true;
+    }
 
     /// <summary>
     /// Returns an Option containing the result of applying the provided mapping function to the contained value, or None if absent.
@@ -51,6 +57,11 @@ public readonly record struct Option<T>
         ArgumentNullException.ThrowIfNull(orElse);
         return _content ?? orElse();
     }
+
+    /// <summary>
+    /// Indicates whether the Option contains a value.
+    /// </summary>
+    public bool IsSome => _isSome;
 
     /// <inheritdoc/>
     public override string ToString() =>
