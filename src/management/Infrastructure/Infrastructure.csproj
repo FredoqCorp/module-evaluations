@@ -9,5 +9,10 @@
     <ItemGroup>
       <Folder Include="Migrations/scripts/" />
     </ItemGroup>
+    <ItemGroup>
+      <PackageReference Include="Dapper" />
+      <PackageReference Include="FluentMigrator" />
+      <PackageReference Include="Npgsql" />
+    </ItemGroup>
 
 </Project>
