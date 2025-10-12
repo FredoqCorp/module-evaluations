@@ -17,8 +17,13 @@
     <PackageReference Include="Shouldly" />
     <PackageReference Include="Testcontainers.PostgreSql" />
     <PackageReference Include="Respawn" />
+    <PackageReference Include="Dapper" />
+    <PackageReference Include="Npgsql" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="../../../src/management/Host/Host.csproj" />
+    <ProjectReference Include="../../../src/management/Application/Application.csproj" />
+    <ProjectReference Include="../../../src/management/Infrastructure/Infrastructure.csproj" />
   </ItemGroup>
 </Project>

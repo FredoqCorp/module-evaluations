@@ -10,6 +10,7 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 
 builder.Services.AddInfrastructure(connectionString);
 builder.Services.AddApplication();
+builder.Services.AddHealthChecks();
 
 builder.Services.ConfigureHttpJsonOptions(options =>
 {
@@ -24,3 +25,15 @@ app.MapGet("/ping", () => Results.Ok(new { ok = true, ts = DateTimeOffset.UtcNow
 app.MapFormsEndpoints();
 
 await app.RunAsync();
+
+
+/// <summary>
+/// Entry point for the application. Made accessible to WebApplicationFactory for E2E tests.
+/// </summary>
+public partial class Program
+{
+    /// <summary>
+    /// Required for WebApplicationFactory.
+    /// </summary>
+    protected Program() { }
+}
