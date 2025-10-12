@@ -1,29 +1,22 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net9.0</TargetFramework>
     <IsPackable>false</IsPackable>
-    <IsTestProject>true</IsTestProject>
-    <Nullable>enable</Nullable>
-    <NoWarn>NU1902;NU1903;NU1904;CS1591</NoWarn>
+    <GenerateDocumentationFile>false</GenerateDocumentationFile>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="coverlet.collector">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
     <PackageReference Include="Microsoft.NET.Test.Sdk" />
     <PackageReference Include="xunit" />
     <PackageReference Include="xunit.runner.visualstudio">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Testcontainers.PostgreSql" />
-    <PackageReference Include="Respawn" />
-    <PackageReference Include="Npgsql" />
+    <PackageReference Include="coverlet.collector">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
     <PackageReference Include="Shouldly" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="../../../src/management/Infrastructure/Infrastructure.csproj" />
     <ProjectReference Include="../../../src/management/Application/Application.csproj" />
     <ProjectReference Include="../../../src/management/Domain/Domain.csproj" />
   </ItemGroup>

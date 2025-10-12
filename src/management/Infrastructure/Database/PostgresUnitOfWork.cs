@@ -12,6 +12,10 @@ internal sealed class PostgresUnitOfWork : IUnitOfWork
 
     private NpgsqlTransaction? _transaction;
 
+    /// <summary>
+    /// Initializes the unit of work with the provided connection string.
+    /// </summary>
+    /// <param name="connectionString">PostgreSQL connection string.</param>
     public PostgresUnitOfWork(string connectionString)
     {
         ArgumentException.ThrowIfNullOrEmpty(connectionString);
@@ -19,6 +23,7 @@ internal sealed class PostgresUnitOfWork : IUnitOfWork
         _connection = new NpgsqlConnection(connectionString);
     }
 
+    /// <inheritdoc />
     public async Task<IDbConnection> ActiveConnection(CancellationToken ct = default)
     {
         if (_connection.State != ConnectionState.Open)

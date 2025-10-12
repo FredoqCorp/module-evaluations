@@ -9,9 +9,9 @@ namespace CascVel.Modules.Evaluations.Management.Application.Ports;
 public interface IForms
 {
     /// <summary>
-    /// Retrieves all evaluation forms.
+    /// Retrieves summary information for all evaluation forms.
     /// </summary>
     /// <param name="ct">Cancellation token.</param>
-    /// <returns>List of evaluation forms.</returns>
-    Task<IImmutableList<IForm>> List(CancellationToken ct = default);
+    /// <returns>List of form summaries.</returns>
+    Task<IImmutableList<IFormSummary>> List(CancellationToken ct = default);
 }

@@ -1,0 +1,39 @@
+namespace CascVel.Modules.Evaluations.Management.Domain.Interfaces.Media;
+
+/// <summary>
+/// Behavioral contract for a media that receives structured data via fluent API.
+/// </summary>
+public interface IMedia
+{
+    /// <summary>
+    /// Writes a string value associated with the specified key.
+    /// </summary>
+    /// <param name="key">Property name or key.</param>
+    /// <param name="value">String value to write.</param>
+    /// <returns>This media instance for fluent chaining.</returns>
+    IMedia WriteString(string key, string value);
+
+    /// <summary>
+    /// Writes a GUID value associated with the specified key.
+    /// </summary>
+    /// <param name="key">Property name or key.</param>
+    /// <param name="value">GUID value to write.</param>
+    /// <returns>This media instance for fluent chaining.</returns>
+    IMedia WriteGuid(string key, Guid value);
+
+    /// <summary>
+    /// Writes a 32-bit integer value associated with the specified key.
+    /// </summary>
+    /// <param name="key">Property name or key.</param>
+    /// <param name="value">Integer value to write.</param>
+    /// <returns>This media instance for fluent chaining.</returns>
+    IMedia WriteInt32(string key, int value);
+
+    /// <summary>
+    /// Writes an array of string values associated with the specified key.
+    /// </summary>
+    /// <param name="key">Property name or key.</param>
+    /// <param name="values">Collection of string values to write as an array.</param>
+    /// <returns>This media instance for fluent chaining.</returns>
+    IMedia WriteStringArray(string key, IEnumerable<string> values);
+}

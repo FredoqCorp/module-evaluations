@@ -1,3 +1,4 @@
+using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Media;
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Shared;
 
 namespace CascVel.Modules.Evaluations.Management.Domain.ValueObjects.Forms;
@@ -27,6 +28,22 @@ public sealed record FormMetadata
         _description = description;
         _code = code;
         _tags = tags;
+    }
+
+    /// <summary>
+    /// Prints the form metadata fields into the provided media.
+    /// </summary>
+    /// <param name="media">Target media that receives the printed representation.</param>
+    public void Print(IMedia media)
+    {
+        ArgumentNullException.ThrowIfNull(media);
+
+        media
+            .WriteString("name", _name.Value)
+            .WriteString("description", _description.Value)
+            .WriteString("code", _code.Token);
+
+        _tags.Print(media, "tags");
     }
 }
 
