@@ -8,8 +8,8 @@ namespace CascVel.Modules.Evaluations.Management.Domain.UnitTests.Interfaces.Tes
 /// </summary>
 internal static class ValidityPeriodTestData
 {
-    internal static IValidityPeriod OpenPeriod() =>
-        new TestValidityPeriod(DateTime.UtcNow, null);
+    internal static IValidityPeriod OpenPeriod(DateTime? start = null) =>
+        new TestValidityPeriod(start ?? DateTime.UtcNow, null);
 
     internal static IValidityPeriod ClosedPeriod() =>
         new TestValidityPeriod(

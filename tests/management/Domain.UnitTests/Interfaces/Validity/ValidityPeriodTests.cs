@@ -67,7 +67,7 @@ public sealed class ValidityPeriodTests
     public void Handles_moment_at_exact_boundary()
     {
         var now = DateTime.UtcNow;
-        var period = ValidityPeriodTestData.OpenPeriod().Until(new ValidityEnd(now));
+        var period = ValidityPeriodTestData.OpenPeriod(start: now).Until(new ValidityEnd(now));
 
         var isActive = period.Active(now);
 
