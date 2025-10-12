@@ -1,3 +1,5 @@
+using System.Data;
+
 namespace CascVel.Modules.Evaluations.Management.Infrastructure.Database;
 
 /// <summary>
@@ -6,17 +8,27 @@ namespace CascVel.Modules.Evaluations.Management.Infrastructure.Database;
 public interface IUnitOfWork : IAsyncDisposable
 {
     /// <summary>
-    /// Begins a new database transaction.
+    /// Returns the active database connection.
     /// </summary>
-    Task BeginAsync(CancellationToken cancellationToken = default);
+    /// <param name="ct"> Cancellation token.</param>
+    Task<IDbConnection> ActiveConnection(CancellationToken ct = default);
+
+    /// <summary>
+    /// Begins a new transaction.
+    /// </summary>
+    /// <param name="ct"> Cancellation token.</param>
+    Task BeginAsync(CancellationToken ct = default);
 
     /// <summary>
     /// Commits the current transaction.
     /// </summary>
-    Task CommitAsync(CancellationToken cancellationToken = default);
+    /// <param name="ct"> Cancellation token.</param>
+    Task CommitAsync(CancellationToken ct = default);
 
     /// <summary>
     /// Rolls back the current transaction.
     /// </summary>
-    Task RollbackAsync(CancellationToken cancellationToken = default);
+    /// <param name="ct"> Cancellation token.</param>
+    Task RollbackAsync(CancellationToken ct = default);
+
 }
