@@ -1,4 +1,5 @@
 using System.Collections.Immutable;
+using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Media;
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Shared;
 
 namespace CascVel.Modules.Evaluations.Management.Domain.ValueObjects.Shared;
@@ -32,6 +33,20 @@ public sealed record Tags : ITags
             return this;
         }
 
-        return new Tags(_tags.Add(tag));   
+        return new Tags(_tags.Add(tag));
+    }
+
+    /// <summary>
+    /// Prints the tags collection as a string array into the provided media.
+    /// </summary>
+    /// <param name="media">Target media that receives the printed representation.</param>
+    /// <param name="key">Property name or key for the array.</param>
+    public void Print(IMedia media, string key)
+    {
+        ArgumentNullException.ThrowIfNull(media);
+        ArgumentException.ThrowIfNullOrWhiteSpace(key);
+
+        var tagTexts = _tags.Select(tag => tag.Text);
+        media.WriteStringArray(key, tagTexts);
     }
 }

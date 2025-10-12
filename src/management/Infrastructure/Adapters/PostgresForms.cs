@@ -12,10 +12,14 @@ namespace CascVel.Modules.Evaluations.Management.Infrastructure.Adapters;
 /// <summary>
 /// PostgreSQL implementation for loading evaluation forms.
 /// </summary>
-internal sealed class PostgresForms : IForms
+public sealed class PostgresForms : IForms
 {
     private readonly IUnitOfWork _unitOfWork;
 
+    /// <summary>
+    /// Initializes the adapter with the database unit of work.
+    /// </summary>
+    /// <param name="unitOfWork">Unit of work for managing database connections and transactions.</param>
     public PostgresForms(IUnitOfWork unitOfWork)
     {
         ArgumentNullException.ThrowIfNull(unitOfWork);
@@ -24,34 +28,19 @@ internal sealed class PostgresForms : IForms
     }
 
     /// <inheritdoc />
-    public async Task<IImmutableList<IForm>> List(CancellationToken ct = default)
+    public async Task<IImmutableList<IFormSummary>> List(CancellationToken ct = default)
     {
         var connection = await _unitOfWork.ActiveConnection(ct);
-        var formRows = await connection.QueryAsync<FormRow>(
-            new CommandDefinition(FormQueries.LoadForms, cancellationToken: ct));
-        var groupRows = await connection.QueryAsync<GroupRow>(
-            new CommandDefinition(FormQueries.LoadGroups, cancellationToken: ct));
-        var criteriaRows = await connection.QueryAsync<CriterionRow>(
-            new CommandDefinition(FormQueries.LoadCriteria, cancellationToken: ct));
-        var ratingRows = await connection.QueryAsync<RatingOptionRow>(
-            new CommandDefinition(FormQueries.LoadRatings, cancellationToken: ct));
+        var formSummaryRows = await connection.QueryAsync<FormSummaryRow>(
+            new CommandDefinition(FormQueries.LoadFormSummaries, cancellationToken: ct));
 
-        var groupsByFormId = groupRows.GroupBy(g => g.FormId).ToDictionary(g => g.Key, g => g.ToList());
-        var criteriaByFormId = criteriaRows.GroupBy(c => c.FormId).ToDictionary(g => g.Key, g => g.ToList());
-        var ratingsByCriterionId = ratingRows.GroupBy(r => r.CriterionId).ToDictionary(g => g.Key, g => g.ToList());
-
-        var assembler = new FormAssembler(ratingsByCriterionId);
-
-        var forms = new List<IForm>();
-        foreach (var formRow in formRows)
+        var summaries = new List<IFormSummary>();
+        foreach (var row in formSummaryRows)
         {
-            var groups = groupsByFormId.GetValueOrDefault(formRow.Id, []);
-            var criteria = criteriaByFormId.GetValueOrDefault(formRow.Id, []);
-
-            var form = assembler.Assemble(formRow, groups, criteria);
-            forms.Add(form);
+            var summary = FormAssembler.AssembleSummaryFromRow(row);
+            summaries.Add(summary);
         }
 
-        return forms.ToImmutableList();
+        return summaries.ToImmutableList();
     }
 }

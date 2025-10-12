@@ -3,6 +3,7 @@ using CascVel.Modules.Evaluations.Management.Domain.Entities.Criteria.Weighted;
 using CascVel.Modules.Evaluations.Management.Domain.Entities.Forms;
 using CascVel.Modules.Evaluations.Management.Domain.Entities.Groups.Average;
 using CascVel.Modules.Evaluations.Management.Domain.Entities.Groups.Weighted;
+using CascVel.Modules.Evaluations.Management.Domain.Enums;
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Forms;
 using CascVel.Modules.Evaluations.Management.Domain.ValueObjects.Criteria;
 using CascVel.Modules.Evaluations.Management.Domain.ValueObjects.Forms;
@@ -26,6 +27,56 @@ internal sealed class FormAssembler
     }
 
     /// <summary>
+    /// Assembles form summary from optimized row with counts.
+    /// </summary>
+    public static FormSummary AssembleSummaryFromRow(FormSummaryRow row)
+    {
+        var id = new FormId(row.Id);
+        var name = new FormName(row.Name);
+        var description = new FormDescription(row.Description ?? string.Empty);
+        var code = new FormCode(row.Code);
+
+        var tagStrings = JsonSerializer.Deserialize<List<string>>(row.Tags) ?? [];
+        var tagObjects = tagStrings.Select(t => new Tag(t));
+        var tags = new Tags(tagObjects);
+
+        var metadata = new FormMetadata(name, description, code, tags);
+
+        var calculationType = row.RootGroupType.ToUpperInvariant() switch
+        {
+            "AVERAGE" => CalculationType.Average,
+            "WEIGHTED" => CalculationType.WeightedAverage,
+            _ => throw new InvalidOperationException($"Unknown root group type: {row.RootGroupType}")
+        };
+
+        return new FormSummary(id, metadata, calculationType, row.GroupsCount, row.CriteriaCount);
+    }
+
+    /// <summary>
+    /// Assembles form summary with metadata and structural statistics.
+    /// </summary>
+    public static FormSummary AssembleSummary(
+        FormRow formRow,
+        List<GroupRow> groupRows,
+        List<CriterionRow> criteriaRows)
+    {
+        var id = new FormId(formRow.Id);
+        var metadata = BuildMetadata(formRow);
+
+        var calculationType = formRow.RootGroupType.ToUpperInvariant() switch
+        {
+            "AVERAGE" => CalculationType.Average,
+            "WEIGHTED" => CalculationType.WeightedAverage,
+            _ => throw new InvalidOperationException($"Unknown root group type: {formRow.RootGroupType}")
+        };
+
+        var groupsCount = groupRows.Count;
+        var criteriaCount = criteriaRows.Count;
+
+        return new FormSummary(id, metadata, calculationType, groupsCount, criteriaCount);
+    }
+
+    /// <summary>
     /// Assembles complete form with all nested structures.
     /// </summary>
     public Form Assemble(
@@ -34,15 +85,7 @@ internal sealed class FormAssembler
         List<CriterionRow> criteriaRows)
     {
         var id = new FormId(formRow.Id);
-        var name = new FormName(formRow.Name);
-        var description = new FormDescription(formRow.Description ?? string.Empty);
-        var code = new FormCode(formRow.Code);
-
-        var tagStrings = JsonSerializer.Deserialize<List<string>>(formRow.Tags) ?? [];
-        var tagObjects = tagStrings.Select(t => new Tag(t));
-        var tags = new Tags(tagObjects);
-
-        var metadata = new FormMetadata(name, description, code, tags);
+        var metadata = BuildMetadata(formRow);
 
         IFormRootGroup rootGroup = formRow.RootGroupType.ToUpperInvariant() switch
         {
@@ -52,6 +95,19 @@ internal sealed class FormAssembler
         };
 
         return new Form(id, metadata, rootGroup);
+    }
+
+    private static FormMetadata BuildMetadata(FormRow formRow)
+    {
+        var name = new FormName(formRow.Name);
+        var description = new FormDescription(formRow.Description ?? string.Empty);
+        var code = new FormCode(formRow.Code);
+
+        var tagStrings = JsonSerializer.Deserialize<List<string>>(formRow.Tags) ?? [];
+        var tagObjects = tagStrings.Select(t => new Tag(t));
+        var tags = new Tags(tagObjects);
+
+        return new FormMetadata(name, description, code, tags);
     }
 
     private AverageRootGroup BuildAverageRoot(
