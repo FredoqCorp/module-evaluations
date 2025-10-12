@@ -3,20 +3,16 @@
     <InternalsVisibleTo Include="CascVel.Modules.Evaluations.Management.Infrastructure.IntegrationTests" />
   </ItemGroup>
     <ItemGroup>
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Analyzers" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Design">
-          <PrivateAssets>all</PrivateAssets>
-          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-        </PackageReference>
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" />
-        <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" />
-    </ItemGroup>
-    <ItemGroup>
       <ProjectReference Include="../Application/Application.csproj" />
       <ProjectReference Include="../Domain/Domain.csproj" />
     </ItemGroup>
     <ItemGroup>
-      <Folder Include="Migrations/scripts/" />
+      <EmbeddedResource Include="Database\Scripts\*.sql" />
+    </ItemGroup>
+    <ItemGroup>
+      <PackageReference Include="Dapper" />
+      <PackageReference Include="dbup-postgresql" />
+      <PackageReference Include="Npgsql" />
     </ItemGroup>
 
 </Project>

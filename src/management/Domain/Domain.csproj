@@ -5,7 +5,4 @@
   <ItemGroup>
     <InternalsVisibleTo Include="CascVel.Modules.Evaluations.Management.Infrastructure" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Identifiers/" />
-  </ItemGroup>
 </Project>

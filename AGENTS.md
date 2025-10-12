@@ -1,6 +1,6 @@
 ## General
 * **Language**: C# (version 13).
-* **Stack**: ASP.NET Core 9, EF Core 9, MassTransit (RabbitMQ), PostgreSQL 16, Redis 7, React 19.
+* **Stack**: ASP.NET Core 9, MassTransit (RabbitMQ), PostgreSQL 18, Redis 7, React 19.
 
 * The README.md file must explain the purpose of the repository.
 * The README.md file must be free of typos, grammar mistakes, and broken English.
@@ -11,7 +11,7 @@
 * Организация GitHub:  casc-vel.
 * Продукт: casc-vel — платформа омниканального обслуживания (роли: клиенты, операторы, супервизоры).
 * Ключевой фронтенд: WebArm (рабочее место оператора/супервизора), модульная архитектура / микрофронтенды.
-* Бэкенд: набор сервисов/модулей, Clean Architecture .
+* Бэкенд: набор сервисов/модулей, Clean/Hexagonal Architecture .
 * Цель: вынос и развитие компонентов в открытых репозиториях 
 * Бизнес правила модуля находятся в папке `docs/architecture/rules`. Всегда используй их для понимания контекста задачи
 * Архитектурные договоренности фиксируются в виде ADR в папке `docs/architecture/adr`
@@ -43,17 +43,8 @@
 
 ## Style Guide C#
 1. `file-scoped namespace`, `required`, `collection expressions`.
-2. Архитектура: SOLID  + Clean Architecture. Явно помечай слой: Domain / Application / Infrastructure. 
-3. Архитектура классов/рекордов должна соответствовать принципам Elegant Objects by Yegor Bugayenko
-4. Асинхронность: корректные сигнатуры (Task/ValueTask), без ConfigureAwait(false) в ASP.NET Core 9.
-
-## EF Core
-* Always `AsSplitQuery` when multiple includes involved, `NoTracking` for read only.
-* Configuration via Fluent API, not attributes.
-* Extensions: `UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery)`.
-* For N+1 ⇒ `Include`, `ThenInclude`, or `select` into an anonymous type.
-* Use ComplexType for Value Objects where applicable.
-* PostgreSQL: дели настройки на “горячие” vs “требующие перезапуска”; покрывай VACUUM/autovacuum, индексы, планирование.
+2. Архитектура: SOLID  + Clean/Hexagonal Architecture. Явно помечай слой: Domain / Application / Infrastructure. 
+3. Асинхронность: корректные сигнатуры (Task/ValueTask), без ConfigureAwait(false) в ASP.NET Core 9.
 
 
 ## Code Design
@@ -65,7 +56,6 @@
 * Method and function bodies may not contain comments.
 * Variable names must be single nouns, never compound or composite.
 * Method names must be single verbs, never compound or composite.
-* The principle of "Paired Brackets" suggested by Yegor Bugayenko must be respected.
 * Error and log messages should not end with a period.
 * Error and log messages must always be a single sentence, with no periods inside.
 * Favor "fail fast" paradigm over "fail safe": throw exception earlier.
@@ -90,10 +80,6 @@
 
   The exceptions are names such as: User, Computer.
 
-* Constructors may not contain any code except assignment statements.
-  Constructors must only create the object without processing the data passed to them.
-
-  Data processing will occur on demand by calling the object's methods.
 
 * Constructors can validate that the object passed as an argument is a valid object (not null, correct type, etc), nothing more
 
