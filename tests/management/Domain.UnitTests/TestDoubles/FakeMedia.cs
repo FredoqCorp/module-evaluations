@@ -1,0 +1,35 @@
+using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Media;
+
+namespace CascVel.Modules.Evaluations.Management.Domain.UnitTests.TestDoubles;
+
+/// <summary>
+/// Fake implementation of IMedia for testing printer pattern.
+/// </summary>
+internal sealed class FakeMedia : IMedia
+{
+    public List<(string Key, object Value)> Writes { get; } = [];
+
+    public IMedia WriteString(string key, string value)
+    {
+        Writes.Add((key, value));
+        return this;
+    }
+
+    public IMedia WriteGuid(string key, Guid value)
+    {
+        Writes.Add((key, value));
+        return this;
+    }
+
+    public IMedia WriteInt32(string key, int value)
+    {
+        Writes.Add((key, value));
+        return this;
+    }
+
+    public IMedia WriteStringArray(string key, IEnumerable<string> values)
+    {
+        Writes.Add((key, values.ToList()));
+        return this;
+    }
+}

@@ -1,3 +1,4 @@
+using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Media;
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Ratings;
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Shared;
 using CascVel.Modules.Evaluations.Management.Domain.ValueObjects.Criteria;
@@ -72,4 +73,10 @@ internal sealed record TestTags(IReadOnlyList<Tag> Items) : ITags
         Items.Any(t => string.Equals(t.Text, tag.Text, StringComparison.OrdinalIgnoreCase))
             ? this
             : new TestTags([.. Items, tag]);
+
+    public void Print(IMedia media, string key)
+    {
+        var tagTexts = Items.Select(tag => tag.Text);
+        media.WriteStringArray(key, tagTexts);
+    }
 }

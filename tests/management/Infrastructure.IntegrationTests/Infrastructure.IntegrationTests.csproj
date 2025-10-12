@@ -20,6 +20,7 @@
     <PackageReference Include="Testcontainers.PostgreSql" />
     <PackageReference Include="Respawn" />
     <PackageReference Include="Npgsql" />
+    <PackageReference Include="Shouldly" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="../../../src/management/Infrastructure/Infrastructure.csproj" />
