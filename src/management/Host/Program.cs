@@ -13,6 +13,12 @@ builder.Services.AddInfrastructure(connectionString);
 builder.Services.AddApplication();
 builder.Services.AddHealthChecks();
 
+// Configure ProblemDetails support
+builder.Services.AddProblemDetails();
+
+// Add global exception handler
+builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+
 // Configure OpenAPI with schema transformer for Printer Pattern types
 builder.Services.AddOpenApi(options =>
 {
@@ -26,14 +32,17 @@ builder.Services.ConfigureHttpJsonOptions(options =>
 
 WebApplication app = builder.Build();
 
+// Enable exception handling middleware
+app.UseExceptionHandler();
+
+// Enable status code pages for proper ProblemDetails responses
+app.UseStatusCodePages();
+
 app.MapHealthChecks("/health");
 app.MapGet("/ping", () => Results.Ok(new { ok = true, ts = DateTimeOffset.UtcNow }));
 
-if (app.Environment.IsDevelopment())
-{
-    app.MapOpenApi();
-    app.MapScalarApiReference();
-}
+app.MapOpenApi();
+app.MapScalarApiReference();
 
 app.MapFormsEndpoints();
 
