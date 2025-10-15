@@ -1,3 +1,5 @@
+using CascVel.Modules.Evaluations.Management.Domain.Common;
+
 namespace CascVel.Modules.Evaluations.Management.Domain.Interfaces.Media;
 
 /// <summary>
@@ -12,6 +14,15 @@ public interface IMedia
     /// <param name="value">String value to write.</param>
     /// <returns>This media instance for fluent chaining.</returns>
     IMedia WriteString(string key, string value);
+
+    /// <summary>
+    /// Writes an optional string value associated with the specified key.
+    /// If the option contains no value, the key is omitted from the output.
+    /// </summary>
+    /// <param name="key">Property name or key.</param>
+    /// <param name="value">Optional string value to write.</param>
+    /// <returns>This media instance for fluent chaining.</returns>
+    IMedia WriteOptionalString(string key, Option<string> value);
 
     /// <summary>
     /// Writes a GUID value associated with the specified key.

@@ -1,6 +1,8 @@
 using CascVel.Modules.Evaluations.Management.Application.Ports;
+using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Identity;
 using CascVel.Modules.Evaluations.Management.Infrastructure.Adapters;
 using CascVel.Modules.Evaluations.Management.Infrastructure.Database;
+using CascVel.Modules.Evaluations.Management.Infrastructure.Identity;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace CascVel.Modules.Evaluations.Management.Infrastructure;
@@ -27,6 +29,9 @@ public static class InfrastructureExtensions
 
         // Register adapters
         services.AddScoped<IForms, PostgresForms>();
+
+        // Register identity services
+        services.AddScoped<IModuleUser, HttpContextModuleUser>();
 
         return services;
     }

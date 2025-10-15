@@ -24,7 +24,10 @@ public static class FormsEndpoints
             .WithName("ListForms")
             .WithSummary("Retrieve all evaluation forms")
             .WithDescription("Returns a list of all evaluation forms with their metadata and structural statistics")
+            .RequireAuthorization("FormDesigner")
             .Produces<ListFormsResponse>(StatusCodes.Status200OK, "application/json")
+            .ProducesProblem(StatusCodes.Status401Unauthorized)
+            .ProducesProblem(StatusCodes.Status403Forbidden)
             .ProducesProblem(StatusCodes.Status500InternalServerError);
 
         return app;

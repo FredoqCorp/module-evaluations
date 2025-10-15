@@ -40,3 +40,18 @@ C4Context
   UpdateLayoutConfig($c4ShapeInRow="2")
 ```
 
+## Integration
+
+### Authentication & Authorization
+
+The module uses **JWT Bearer authentication** with role-based authorization. It supports integration with any OAuth2/OpenID Connect compliant identity provider (Azure AD, Keycloak, IdentityServer, etc.).
+
+**Quick Start:**
+1. Configure your identity provider to issue JWT tokens with `module_role` claim
+2. Update `appsettings.json` with your identity provider's `Authority` and `Audience`
+3. Assign users one of three roles: `FormDesigner`, `Supervisor`, or `Operator`
+
+**Detailed Instructions:**
+- [JWT Authentication Integration Guide](docs/integration/jwt-authentication.md) - Complete setup instructions with examples for Azure AD, Keycloak, and IdentityServer
+- [ADR: JWT-Based Authorization](docs/architecture/adr/20251014-jwt-based-authorization-with-module-roles.md) - Architecture decision and rationale
+

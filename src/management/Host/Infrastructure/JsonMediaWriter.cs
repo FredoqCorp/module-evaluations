@@ -1,4 +1,5 @@
 using System.Text.Json;
+using CascVel.Modules.Evaluations.Management.Domain.Common;
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Media;
 
 namespace CascVel.Modules.Evaluations.Management.Host.Infrastructure;
@@ -33,6 +34,28 @@ internal sealed class JsonMediaWriter : IMedia
         ArgumentNullException.ThrowIfNull(value);
 
         _writer.WriteString(key, value);
+        return this;
+    }
+
+    /// <summary>
+    /// Writes an optional string value associated with the specified key.
+    /// If the option contains no value, the key is omitted from the output.
+    /// </summary>
+    /// <param name="key">Property name or key.</param>
+    /// <param name="value">Optional string value to write.</param>
+    /// <returns>This media instance for fluent chaining.</returns>
+    public IMedia WriteOptionalString(string key, Option<string> value)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(key);
+        if (value.IsSome)
+        {
+            value.Map(v =>
+            {
+                _writer.WriteString(key, v);
+                return v;
+            });
+        }
+
         return this;
     }
 

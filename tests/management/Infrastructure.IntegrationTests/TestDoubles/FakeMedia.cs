@@ -1,3 +1,4 @@
+using CascVel.Modules.Evaluations.Management.Domain.Common;
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Media;
 
 namespace CascVel.Modules.Evaluations.Management.Infrastructure.IntegrationTests.TestDoubles;
@@ -9,6 +10,19 @@ internal sealed class FakeMedia : IMedia
     public IMedia WriteString(string key, string value)
     {
         Writes.Add((key, value));
+        return this;
+    }
+
+    public IMedia WriteOptionalString(string key, Option<string> value)
+    {
+        if (value.IsSome)
+        {
+            value.Map(v =>
+            {
+                Writes.Add((key, v));
+                return v;
+            });
+        }
         return this;
     }
 

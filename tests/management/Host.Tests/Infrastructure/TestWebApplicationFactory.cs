@@ -1,4 +1,6 @@
 using CascVel.Modules.Evaluations.Management.Infrastructure.Database;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authorization.Policy;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;
@@ -32,7 +34,8 @@ public sealed class TestWebApplicationFactory : WebApplicationFactory<Program>, 
 
         builder.ConfigureTestServices(services =>
         {
-            // Additional test service configuration if needed
+            // Disable authorization for tests - allow all requests through
+            services.AddSingleton<IPolicyEvaluator, AllowAnonymousPolicyEvaluator>();
         });
     }
 
