@@ -39,23 +39,22 @@ builder.Services
     });
 
 // Configure authorization policies for module roles
-builder.Services.AddAuthorization(options =>
-{
-    options.AddPolicy("FormDesigner", policy =>
+builder.Services.AddAuthorizationBuilder()
+                                                        // Configure authorization policies for module roles
+                                                        .AddPolicy("FormDesigner", policy =>
         policy.RequireAuthenticatedUser()
               .RequireAssertion(context =>
-                  context.User.HasClaim("module_role", ModuleRole.FormDesigner.ToString())));
-
-    options.AddPolicy("Supervisor", policy =>
+                  context.User.HasClaim("module_role", ModuleRole.FormDesigner.ToString())))
+                                                        // Configure authorization policies for module roles
+                                                        .AddPolicy("Supervisor", policy =>
         policy.RequireAuthenticatedUser()
               .RequireAssertion(context =>
-                  context.User.HasClaim("module_role", ModuleRole.Supervisor.ToString())));
-
-    options.AddPolicy("Operator", policy =>
+                  context.User.HasClaim("module_role", ModuleRole.Supervisor.ToString())))
+                                                        // Configure authorization policies for module roles
+                                                        .AddPolicy("Operator", policy =>
         policy.RequireAuthenticatedUser()
               .RequireAssertion(context =>
                   context.User.HasClaim("module_role", ModuleRole.Operator.ToString())));
-});
 
 // Configure ProblemDetails support
 builder.Services.AddProblemDetails();
