@@ -125,7 +125,7 @@ public sealed class HttpContextModuleUserTests
         var moduleUser = new HttpContextModuleUser(accessor);
 
         // Act
-        var userInfo = moduleUser.GetUserInfo();
+        var userInfo = moduleUser.UserInfo();
         var media = new FakeMedia();
         userInfo.Print(media);
 
@@ -151,7 +151,7 @@ public sealed class HttpContextModuleUserTests
         var moduleUser = new HttpContextModuleUser(accessor);
 
         // Act
-        var userInfo = moduleUser.GetUserInfo();
+        var userInfo = moduleUser.UserInfo();
         var media = new FakeMedia();
         userInfo.Print(media);
 
@@ -179,7 +179,7 @@ public sealed class HttpContextModuleUserTests
         var moduleUser = new HttpContextModuleUser(accessor);
 
         // Act
-        var userInfo = moduleUser.GetUserInfo();
+        var userInfo = moduleUser.UserInfo();
         var media = new FakeMedia();
         userInfo.Print(media);
 
@@ -204,7 +204,7 @@ public sealed class HttpContextModuleUserTests
         var moduleUser = new HttpContextModuleUser(accessor);
 
         // Act
-        var userInfo = moduleUser.GetUserInfo();
+        var userInfo = moduleUser.UserInfo();
         var media = new FakeMedia();
         userInfo.Print(media);
 
@@ -222,7 +222,7 @@ public sealed class HttpContextModuleUserTests
         var moduleUser = new HttpContextModuleUser(accessor);
 
         // Act & Assert
-        Assert.Throws<InvalidOperationException>(() => moduleUser.GetUserInfo());
+        Assert.Throws<InvalidOperationException>(() => moduleUser.UserInfo());
     }
 
     [Fact]
@@ -240,7 +240,7 @@ public sealed class HttpContextModuleUserTests
         var moduleUser = new HttpContextModuleUser(accessor);
 
         // Act & Assert
-        var exception = Assert.Throws<InvalidOperationException>(() => moduleUser.GetUserInfo());
+        var exception = Assert.Throws<InvalidOperationException>(() => moduleUser.UserInfo());
         Assert.Contains("sub", exception.Message, StringComparison.OrdinalIgnoreCase);
     }
 
@@ -301,8 +301,8 @@ public sealed class HttpContextModuleUserTests
         var moduleUser = new HttpContextModuleUser(accessor);
 
         // Act
-        var userInfo1 = moduleUser.GetUserInfo();
-        var userInfo2 = moduleUser.GetUserInfo();
+        var userInfo1 = moduleUser.UserInfo();
+        var userInfo2 = moduleUser.UserInfo();
 
         // Assert - Should return the same instance (Lazy<T> guarantees single evaluation)
         Assert.Same(userInfo1, userInfo2);

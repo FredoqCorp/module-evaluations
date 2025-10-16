@@ -51,7 +51,7 @@ internal sealed class HttpContextModuleUser : IModuleUser
     /// Gets the current user information.
     /// </summary>
     /// <returns>User information including identifier and metadata.</returns>
-    public IUserInfo GetUserInfo()
+    public IUserInfo UserInfo()
     {
         return _userInfo.Value;
     }

@@ -62,7 +62,7 @@ classDiagram
 
 The form now keeps a single structural root (`IFormRootGroup`). All other criteria and groups hang off this node, which simplifies validation and isolates distinct scoring strategies.
 
-## Общие интерфейсы
+## Intergaces
 
 ```mermaid
 classDiagram
@@ -372,6 +372,10 @@ classDiagram
 
     class UserInfo {
         <<Value Object>>
+        +UserId UserId
+        +Option~String~ Username
+        +Option~String~ Name
+        +Option~String~ Email
         +void Print(IMedia media)
     }
 
@@ -383,7 +387,7 @@ classDiagram
     class IModuleUser {
         <<Interface>>
         +bool IsInRole(ModuleRole role)
-        +IUserInfo GetUserInfo()
+        +IUserInfo UserInfo()
         +void Print(IMedia media)
     }
 
@@ -396,9 +400,6 @@ classDiagram
 
     UserInfo ..|> IUserInfo
     UserInfo *-- UserId
-    UserInfo o-- "Option~string~" : username
-    UserInfo o-- "Option~string~" : name
-    UserInfo o-- "Option~string~" : email
     IModuleUser ..> ModuleRole : uses
     IModuleUser ..> IUserInfo : returns
 ```

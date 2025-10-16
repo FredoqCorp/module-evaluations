@@ -19,7 +19,7 @@ public interface IModuleUser
     /// Gets the current user information.
     /// </summary>
     /// <returns>User information including identifier and metadata.</returns>
-    IUserInfo GetUserInfo();
+    IUserInfo UserInfo();
 
     /// <summary>
     /// Prints the current user information into the provided media.
