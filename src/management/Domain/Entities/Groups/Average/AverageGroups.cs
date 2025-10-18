@@ -24,22 +24,6 @@ public sealed class AverageGroups : IAverageGroups
     }
 
     /// <summary>
-    /// Calculates the total contribution produced by all unweighted groups.
-    /// </summary>
-    /// <returns>Total contribution from all unweighted groups.</returns>
-    public IRatingContribution Contribution()
-    {
-        IRatingContribution total = new RatingContribution(decimal.Zero, 0);
-
-        foreach (var item in _items)
-        {
-            total = total.Join(item.Contribution());
-        }
-
-        return total;
-    }
-
-    /// <summary>
     /// Validates the internal consistency of the unweighted groups collection.
     /// </summary>
     public void Validate()

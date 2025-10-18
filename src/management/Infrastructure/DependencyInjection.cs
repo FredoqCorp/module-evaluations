@@ -28,7 +28,7 @@ public static class InfrastructureExtensions
         services.AddScoped<IUnitOfWork>(sp => new PostgresUnitOfWork(connectionString));
 
         // Register adapters
-        services.AddScoped<IForms, PostgresForms>();
+        services.AddScoped<IForms, PgForms>();
 
         // Register identity services
         services.AddScoped<IModuleUser, HttpContextModuleUser>();

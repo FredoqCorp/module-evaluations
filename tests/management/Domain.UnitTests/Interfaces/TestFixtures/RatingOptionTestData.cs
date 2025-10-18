@@ -9,22 +9,18 @@ namespace CascVel.Modules.Evaluations.Management.Domain.UnitTests.Interfaces.Tes
 internal static class RatingOptionTestData
 {
     internal static IRatingOption OptionWithScore(ushort score) =>
-        new TestRatingOption(new RatingScore(score), RatingContributionTestData.SingleContribution());
+        new TestRatingOption(new RatingScore(score));
 
     internal static IRatingOption RandomOption() =>
         new TestRatingOption(
-            new RatingScore((ushort)Random.Shared.Next(1, 10)),
-            RatingContributionTestData.MultipleContributions());
+            new RatingScore((ushort)Random.Shared.Next(1, 10)));
 }
 
 /// <summary>
 /// Test double for rating option interface.
 /// </summary>
-internal sealed record TestRatingOption(RatingScore Score, IRatingContribution TestContribution) : IRatingOption
+internal sealed record TestRatingOption(RatingScore Score) : IRatingOption
 {
     public bool Matches(RatingScore score) =>
         Score.Value == score.Value;
-
-    public IRatingContribution Contribution() =>
-        TestContribution;
 }

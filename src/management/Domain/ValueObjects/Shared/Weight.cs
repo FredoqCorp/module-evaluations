@@ -58,16 +58,4 @@ public sealed record Weight : IWeight
     {
         return new CriterionScore(_points.Apply(score.Value));
     }
-
-    /// <summary>
-    /// Applies the weight to a contribution value while preserving the participant count.
-    /// </summary>
-    /// <param name="contribution">The contribution to scale.</param>
-    /// <returns>A new contribution with the weight applied.</returns>
-    public IRatingContribution Weighted(IRatingContribution contribution)
-    {
-        ArgumentNullException.ThrowIfNull(contribution);
-        return contribution.Accept((amount, participants) =>
-            new RatingContribution(_points.Apply(amount), participants));
-    }
 }

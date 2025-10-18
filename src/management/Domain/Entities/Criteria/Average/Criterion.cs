@@ -28,15 +28,6 @@ public sealed class Criterion : IAverageCriterion
         _title = title;
         _ratingOptions = ratingOptions;
     }
-
-    /// <summary>
-    /// Calculates the total contribution produced by the selected rating.
-    /// </summary>
-    /// <returns>The contribution that represents this criterion.</returns>
-    public IRatingContribution Contribution()
-    {
-        return _ratingOptions.Contribution();
-    }
     
     /// <summary>
     /// Validates the internal consistency of the criterion.

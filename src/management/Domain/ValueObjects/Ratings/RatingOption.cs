@@ -33,13 +33,4 @@ public sealed record RatingOption : IRatingOption
     {
         return _score.Equals(score);
     }
-
-    /// <summary>
-    /// Calculates the contribution of this option to the total form score.
-    /// </summary>
-    /// <returns>A contribution of zero because the option is not selected.</returns>
-    public IRatingContribution Contribution()
-    {
-        return new RatingContribution(decimal.Zero, 0);
-    }
 }

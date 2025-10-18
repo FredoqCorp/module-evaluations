@@ -29,20 +29,6 @@ public sealed class WeightedRootGroup : IFormRootGroup
     }
 
     /// <summary>
-    /// Calculates the contribution produced by root-level weighted members.
-    /// </summary>
-    /// <returns>Contribution represented by the root group.</returns>
-    public IRatingContribution Contribution()
-    {
-        IRatingContribution total = new RatingContribution(decimal.Zero, 0);
-
-        total = total.Join(_criteria.Contribution());
-        total = total.Join(_groups.Contribution());
-
-        return total;
-    }
-
-    /// <summary>
     /// Validates the internal consistency of the weighted root group.
     /// </summary>
     public void Validate()

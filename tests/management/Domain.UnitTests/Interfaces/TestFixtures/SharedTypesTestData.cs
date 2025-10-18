@@ -58,10 +58,6 @@ internal sealed record TestWeight(IPercent Percentage) : IWeight
 
     public CriterionScore Weighted(CriterionScore score) =>
         new(score.Value * Percentage.Basis().Apply(1m));
-
-    public IRatingContribution Weighted(IRatingContribution contribution) =>
-        contribution.Accept((amount, participants) =>
-            new TestRatingContribution(amount * Percentage.Basis().Apply(1m), participants));
 }
 
 /// <summary>

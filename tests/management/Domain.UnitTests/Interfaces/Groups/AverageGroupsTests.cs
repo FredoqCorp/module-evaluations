@@ -12,7 +12,7 @@ public sealed class AverageGroupsTests
     [Fact]
     public void Validates_as_groups_collection()
     {
-        var groups = new TestAverageGroups(RatingContributionTestData.SingleContribution(), true);
+        var groups = new TestAverageGroups(true);
 
         var exception = Record.Exception(() => groups.Validate());
 
@@ -20,30 +20,9 @@ public sealed class AverageGroupsTests
     }
 
     [Fact]
-    public void Produces_contribution_for_average_scoring()
-    {
-        var groups = new TestAverageGroups(RatingContributionTestData.MultipleContributions(), true);
-
-        var contribution = groups.Contribution();
-
-        Assert.NotNull(contribution);
-    }
-
-    [Fact]
-    public void Supports_empty_contribution_in_average_calculation()
-    {
-        var groups = new TestAverageGroups(RatingContributionTestData.EmptyContribution(), true);
-
-        var contribution = groups.Contribution();
-        var total = contribution.Total();
-
-        Assert.False(total.IsSome);
-    }
-
-    [Fact]
     public void Inherits_validation_behavior_from_groups()
     {
-        var groups = new TestAverageGroups(RatingContributionTestData.SingleContribution(), false);
+        var groups = new TestAverageGroups(false);
 
         Assert.Throws<InvalidOperationException>(() => groups.Validate());
     }
@@ -52,7 +31,7 @@ public sealed class AverageGroupsTests
 /// <summary>
 /// Test double for average groups interface.
 /// </summary>
-file sealed record TestAverageGroups(IRatingContribution TestContribution, bool IsValid) : IAverageGroups
+file sealed record TestAverageGroups(bool IsValid) : IAverageGroups
 {
     public void Validate()
     {
@@ -61,6 +40,4 @@ file sealed record TestAverageGroups(IRatingContribution TestContribution, bool 
             throw new InvalidOperationException("Validation failed");
         }
     }
-
-    public IRatingContribution Contribution() => TestContribution;
 }

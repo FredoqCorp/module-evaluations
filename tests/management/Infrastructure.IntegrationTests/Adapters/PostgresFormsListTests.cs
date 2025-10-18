@@ -25,7 +25,7 @@ public sealed class PostgresFormsListTests : IClassFixture<DatabaseFixture>
     {
         // Arrange
         await using var uow = new PostgresUnitOfWork(_fixture.ConnectionString);
-        var forms = new PostgresForms(uow);
+        var forms = new PgForms(uow);
 
         // Act
         var result = await forms.List();
@@ -109,7 +109,7 @@ public sealed class PostgresFormsListTests : IClassFixture<DatabaseFixture>
             });
 
         await using var uow = new PostgresUnitOfWork(_fixture.ConnectionString);
-        var formsAdapter = new PostgresForms(uow);
+        var formsAdapter = new PgForms(uow);
 
         // Act
         var result = await formsAdapter.List();
@@ -198,7 +198,7 @@ public sealed class PostgresFormsListTests : IClassFixture<DatabaseFixture>
             });
 
         await using var uow = new PostgresUnitOfWork(_fixture.ConnectionString);
-        var formsAdapter = new PostgresForms(uow);
+        var formsAdapter = new PgForms(uow);
 
         // Act
         var result = await formsAdapter.List();
@@ -247,7 +247,7 @@ public sealed class PostgresFormsListTests : IClassFixture<DatabaseFixture>
             });
 
         await using var uow = new PostgresUnitOfWork(_fixture.ConnectionString);
-        var formsAdapter = new PostgresForms(uow);
+        var formsAdapter = new PgForms(uow);
 
         // Act
         var result = await formsAdapter.List();
@@ -293,7 +293,7 @@ public sealed class PostgresFormsListTests : IClassFixture<DatabaseFixture>
             });
 
         await using var uow = new PostgresUnitOfWork(_fixture.ConnectionString);
-        var formsAdapter = new PostgresForms(uow);
+        var formsAdapter = new PgForms(uow);
 
         // Act
         var result = await formsAdapter.List();
@@ -423,7 +423,7 @@ public sealed class PostgresFormsListTests : IClassFixture<DatabaseFixture>
             });
 
         await using var uow = new PostgresUnitOfWork(_fixture.ConnectionString);
-        var formsAdapter = new PostgresForms(uow);
+        var formsAdapter = new PgForms(uow);
 
         // Act
         var result = await formsAdapter.List();

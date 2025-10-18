@@ -30,17 +30,6 @@ public sealed class WeightTests
     }
 
     [Fact]
-    public void Applies_weight_to_contribution()
-    {
-        var weight = SharedTypesTestData.RandomWeight();
-        var contribution = RatingContributionTestData.MultipleContributions();
-
-        var weighted = weight.Weighted(contribution);
-
-        Assert.NotNull(weighted);
-    }
-
-    [Fact]
     public void Preserves_zero_score_after_weighting()
     {
         var weight = SharedTypesTestData.RandomWeight();
@@ -49,19 +38,6 @@ public sealed class WeightTests
         var weighted = weight.Weighted(zeroScore);
 
         Assert.Equal(0m, weighted.Value);
-    }
-
-    [Fact]
-    public void Preserves_participant_count_when_weighting_contribution()
-    {
-        var weight = SharedTypesTestData.RandomWeight();
-        var contribution = RatingContributionTestData.MultipleContributions();
-        var originalParticipants = contribution.Accept((_, p) => p);
-
-        var weighted = weight.Weighted(contribution);
-        var weightedParticipants = weighted.Accept((_, p) => p);
-
-        Assert.Equal(originalParticipants, weightedParticipants);
     }
 
     [Fact]

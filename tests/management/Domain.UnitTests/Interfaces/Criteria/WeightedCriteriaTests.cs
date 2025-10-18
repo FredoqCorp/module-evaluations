@@ -14,7 +14,6 @@ public sealed class WeightedCriteriaTests
     public void Returns_combined_sibling_weight()
     {
         var criteria = new TestWeightedCriteria(
-            RatingContributionTestData.SingleContribution(),
             SharedTypesTestData.RandomBasisPoints(),
             true);
 
@@ -27,7 +26,6 @@ public sealed class WeightedCriteriaTests
     public void Validates_as_weighted_collection()
     {
         var criteria = new TestWeightedCriteria(
-            RatingContributionTestData.SingleContribution(),
             SharedTypesTestData.RandomBasisPoints(),
             true);
 
@@ -37,24 +35,10 @@ public sealed class WeightedCriteriaTests
     }
 
     [Fact]
-    public void Produces_contribution_with_weighting()
-    {
-        var criteria = new TestWeightedCriteria(
-            RatingContributionTestData.MultipleContributions(),
-            SharedTypesTestData.RandomBasisPoints(),
-            true);
-
-        var contribution = criteria.Contribution();
-
-        Assert.NotNull(contribution);
-    }
-
-    [Fact]
     public void Returns_consistent_weight_across_calls()
     {
         var expectedWeight = SharedTypesTestData.RandomBasisPoints();
         var criteria = new TestWeightedCriteria(
-            RatingContributionTestData.SingleContribution(),
             expectedWeight,
             true);
 
@@ -68,7 +52,6 @@ public sealed class WeightedCriteriaTests
     public void Inherits_validation_behavior_from_criteria()
     {
         var criteria = new TestWeightedCriteria(
-            RatingContributionTestData.SingleContribution(),
             SharedTypesTestData.RandomBasisPoints(),
             false);
 
@@ -80,7 +63,6 @@ public sealed class WeightedCriteriaTests
 /// Test double for weighted criteria interface.
 /// </summary>
 file sealed record TestWeightedCriteria(
-    IRatingContribution TestContribution,
     IBasisPoints BasisPoints,
     bool IsValid) : IWeightedCriteria
 {
@@ -93,6 +75,4 @@ file sealed record TestWeightedCriteria(
             throw new InvalidOperationException("Validation failed");
         }
     }
-
-    public IRatingContribution Contribution() => TestContribution;
 }

@@ -1,3 +1,5 @@
+using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Media;
+
 namespace CascVel.Modules.Evaluations.Management.Domain.Interfaces.Ratings;
 
 /// <summary>
@@ -5,10 +7,10 @@ namespace CascVel.Modules.Evaluations.Management.Domain.Interfaces.Ratings;
 /// </summary>
 public interface IRatingOptions
 {
-
     /// <summary>
-    /// Calculates the total contribution produced by the selected option, if any.
+    /// Prints the rating options to the provided media.
     /// </summary>
-    /// <returns>The contribution that should participate in downstream scoring.</returns>
-    IRatingContribution Contribution();
+    /// <param name="media">The media to print to.</param>
+    /// <returns>A task representing the asynchronous operation.</returns>
+    Task Print(IMedia media);
 }

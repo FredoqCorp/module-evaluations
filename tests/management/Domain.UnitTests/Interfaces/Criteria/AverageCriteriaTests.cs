@@ -1,6 +1,4 @@
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Criteria;
-using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Ratings;
-using CascVel.Modules.Evaluations.Management.Domain.UnitTests.Interfaces.TestFixtures;
 
 namespace CascVel.Modules.Evaluations.Management.Domain.UnitTests.Interfaces.Criteria;
 
@@ -12,7 +10,7 @@ public sealed class AverageCriteriaTests
     [Fact]
     public void Validates_as_criteria_collection()
     {
-        var criteria = new TestAverageCriteria(RatingContributionTestData.SingleContribution(), true);
+        var criteria = new TestAverageCriteria(true);
 
         var exception = Record.Exception(() => criteria.Validate());
 
@@ -20,30 +18,9 @@ public sealed class AverageCriteriaTests
     }
 
     [Fact]
-    public void Produces_contribution_for_average_scoring()
-    {
-        var criteria = new TestAverageCriteria(RatingContributionTestData.MultipleContributions(), true);
-
-        var contribution = criteria.Contribution();
-
-        Assert.NotNull(contribution);
-    }
-
-    [Fact]
-    public void Supports_empty_contribution_in_average_calculation()
-    {
-        var criteria = new TestAverageCriteria(RatingContributionTestData.EmptyContribution(), true);
-
-        var contribution = criteria.Contribution();
-        var total = contribution.Total();
-
-        Assert.False(total.IsSome);
-    }
-
-    [Fact]
     public void Inherits_validation_behavior_from_criteria()
     {
-        var criteria = new TestAverageCriteria(RatingContributionTestData.SingleContribution(), false);
+        var criteria = new TestAverageCriteria(false);
 
         Assert.Throws<InvalidOperationException>(() => criteria.Validate());
     }
@@ -52,7 +29,7 @@ public sealed class AverageCriteriaTests
 /// <summary>
 /// Test double for average criteria interface.
 /// </summary>
-file sealed record TestAverageCriteria(IRatingContribution TestContribution, bool IsValid) : IAverageCriteria
+file sealed record TestAverageCriteria(bool IsValid) : IAverageCriteria
 {
     public void Validate()
     {
@@ -61,6 +38,4 @@ file sealed record TestAverageCriteria(IRatingContribution TestContribution, boo
             throw new InvalidOperationException("Validation failed");
         }
     }
-
-    public IRatingContribution Contribution() => TestContribution;
 }

@@ -24,22 +24,6 @@ public sealed class AverageCriteria : IAverageCriteria
     }
 
     /// <summary>
-    /// Calculates the total contribution produced by all unweighted criteria.
-    /// </summary>
-    /// <returns>Total contribution from all unweighted criteria.</returns>
-    public IRatingContribution Contribution()
-    {
-        IRatingContribution total = new RatingContribution(decimal.Zero, 0);
-
-        foreach (var item in _items)
-        {
-            total = total.Join(item.Contribution());
-        }
-
-        return total;
-    }
-
-    /// <summary>
     /// Validates the internal consistency of the unweighted criteria collection.
     /// </summary>
     public void Validate()

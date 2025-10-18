@@ -12,59 +12,18 @@ public sealed class CriterionTests
     [Fact]
     public void Validates_internal_consistency()
     {
-        var criterion = new TestCriterion(RatingContributionTestData.SingleContribution(), true);
+        var criterion = new TestCriterion(true);
 
         var exception = Record.Exception(() => criterion.Validate());
 
         Assert.Null(exception);
-    }
-
-    [Fact]
-    public void Throws_when_validation_fails()
-    {
-        var criterion = new TestCriterion(RatingContributionTestData.SingleContribution(), false);
-
-        Assert.Throws<InvalidOperationException>(() => criterion.Validate());
-    }
-
-    [Fact]
-    public void Produces_contribution_for_scoring()
-    {
-        var criterion = new TestCriterion(RatingContributionTestData.MultipleContributions(), true);
-
-        var contribution = criterion.Contribution();
-
-        Assert.NotNull(contribution);
-    }
-
-    [Fact]
-    public void Supports_empty_contribution()
-    {
-        var criterion = new TestCriterion(RatingContributionTestData.EmptyContribution(), true);
-
-        var contribution = criterion.Contribution();
-        var total = contribution.Total();
-
-        Assert.False(total.IsSome);
-    }
-
-    [Fact]
-    public void Returns_consistent_contribution_across_calls()
-    {
-        var expected = RatingContributionTestData.SingleContribution();
-        var criterion = new TestCriterion(expected, true);
-
-        var first = criterion.Contribution();
-        var second = criterion.Contribution();
-
-        Assert.Equal(first, second);
     }
 }
 
 /// <summary>
 /// Test double for criterion interface.
 /// </summary>
-file sealed record TestCriterion(IRatingContribution TestContribution, bool IsValid) : ICriterion
+file sealed record TestCriterion(bool IsValid) : ICriterion
 {
     public void Validate()
     {
@@ -73,6 +32,4 @@ file sealed record TestCriterion(IRatingContribution TestContribution, bool IsVa
             throw new InvalidOperationException("Validation failed");
         }
     }
-
-    public IRatingContribution Contribution() => TestContribution;
 }

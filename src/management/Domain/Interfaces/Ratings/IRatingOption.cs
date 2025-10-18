@@ -13,10 +13,4 @@ public interface IRatingOption
     /// <param name="score">The score to compare against.</param>
     /// <returns>True if this option has the given score.</returns>
     bool Matches(RatingScore score);
-
-    /// <summary>
-    /// Calculates the contribution of this option to the total form score.
-    /// </summary>
-    /// <returns>The contribution produced by this option.</returns>
-    IRatingContribution Contribution();
 }

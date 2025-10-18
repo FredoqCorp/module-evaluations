@@ -29,25 +29,4 @@ public sealed class RatingOptionTests
 
         Assert.False(matches);
     }
-
-    [Fact]
-    public void Produces_contribution_for_scoring_calculations()
-    {
-        var option = RatingOptionTestData.RandomOption();
-
-        var contribution = option.Contribution();
-
-        Assert.NotNull(contribution);
-    }
-
-    [Fact]
-    public void Returns_consistent_contribution()
-    {
-        var option = RatingOptionTestData.RandomOption();
-
-        var first = option.Contribution();
-        var second = option.Contribution();
-
-        Assert.Equal(first, second);
-    }
 }

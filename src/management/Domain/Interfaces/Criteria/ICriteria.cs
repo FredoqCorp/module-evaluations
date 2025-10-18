@@ -5,7 +5,7 @@ namespace CascVel.Modules.Evaluations.Management.Domain.Interfaces.Criteria;
 /// <summary>
 /// Behavioral contract for a criteria collection.
 /// </summary>
-public interface ICriteria : IRatingContributionSource
+public interface ICriteria
 {
     /// <summary>
     /// Validates the internal consistency of the criteria collection.

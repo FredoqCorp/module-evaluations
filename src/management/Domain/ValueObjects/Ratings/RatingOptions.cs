@@ -1,4 +1,5 @@
 using System.Collections.Immutable;
+using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Media;
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Ratings;
 
 namespace CascVel.Modules.Evaluations.Management.Domain.ValueObjects.Ratings;
@@ -19,20 +20,9 @@ public sealed record RatingOptions : IRatingOptions
         _options = [.. options];
     }
 
-    /// <summary>
-    /// Calculates the total contribution produced by the selected option, if any.
-    /// </summary>
-    /// <returns>The contribution that should participate in downstream scoring.</returns>
-    public IRatingContribution Contribution()
+    /// <inheritdoc />
+    public Task Print(IMedia media)
     {
-        IRatingContribution total = new RatingContribution(decimal.Zero, 0);
-
-        foreach (var option in _options)
-        {
-            total = total.Join(option.Contribution());
-        }
-
-        return total;
+        throw new NotImplementedException();
     }
-
 }

@@ -27,15 +27,6 @@ public sealed class WeightedCriterion : IWeightedCriterion
     }
 
     /// <summary>
-    /// Calculates the weighted contribution based on the criterion's contribution and the weight.
-    /// </summary>
-    /// <returns>The weighted contribution that represents this criterion.</returns>
-    public IRatingContribution Contribution()
-    {
-        return _weight.Weighted(_criterion.Contribution());
-    }
-
-    /// <summary>
     /// Returns the weight associated with the criterion.
     /// </summary>
     /// <returns>Weight assigned to the criterion.</returns>
