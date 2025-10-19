@@ -62,53 +62,32 @@ classDiagram
 
 The form now keeps a single structural root (`IFormRootGroup`). All other criteria and groups hang off this node, which simplifies validation and isolates distinct scoring strategies.
 
-## Intergaces
+## Interfaces
 
 ```mermaid
 classDiagram
-    class IRatingContribution {
-        <<Interface>>
-        +IRatingContribution Join(IRatingContribution contribution)
-        +Option~decimal~ Total()
-        +T Accept~T~(Func~decimal, ushort, T~ projector)
-    }
-
-    class IRatingContributionSource {
-        <<Interface>>
-        +IRatingContribution Contribution()
-    }
-
     class ICriterion {
         <<Interface>>
-        +IRatingContribution Contribution()
         +void Validate()
     }
 
     class IGroup {
         <<Interface>>
-        +IRatingContribution Contribution()
         +void Validate()
     }
 
     class ICriteria {
         <<Interface>>
-        +IRatingContribution Contribution()
         +void Validate()
     }
 
     class IGroups {
         <<Interface>>
-        +IRatingContribution Contribution()
         +void Validate()
     }
-
-    ICriterion ..|> IRatingContributionSource
-    ICriteria ..|> IRatingContributionSource
-    IGroup ..|> IRatingContributionSource
-    IGroups ..|> IRatingContributionSource
 ```
 
-These interfaces remain the foundational contracts for both the Average and Weighted branches.
+These interfaces provide foundational contracts for validation across both Average and Weighted branches.
 
 ## Average Policy
 
@@ -132,37 +111,33 @@ classDiagram
 
     class AverageRootGroup {
         <<Entity>>
-        +IRatingContribution Contribution()
         +void Validate()
     }
 
     class AverageCriterionGroup {
         <<Entity>>
-        +IRatingContribution Contribution()
         +void Validate()
     }
 
     class AverageCriteria {
         <<Entity>>
-        +IRatingContribution Contribution()
+        +Task~IAverageCriterion~ Add(FormId, ...)
+        +Task~IAverageCriterion~ Add(GroupId, ...)
         +void Validate()
     }
 
     class AverageGroups {
         <<Entity>>
-        +IRatingContribution Contribution()
         +void Validate()
     }
 
     class Criterion {
         <<Entity>>
-        +IRatingContribution Contribution()
         +void Validate()
     }
 
     class IRatingOptions {
         <<Interface>>
-        +IRatingContribution Contribution()
     }
 
     class GroupProfile {
@@ -257,34 +232,31 @@ classDiagram
 
     class WeightedRootGroup {
         <<Entity>>
-        +IRatingContribution Contribution()
         +void Validate()
     }
 
     class WeightedCriterionGroup {
         <<Entity>>
-        +IRatingContribution Contribution()
         +void Validate()
         +IWeight Weight()
     }
 
     class WeightedCriteria {
         <<Entity>>
-        +IRatingContribution Contribution()
+        +Task~IWeightedCriterion~ Add(FormId, IWeight, ...)
+        +Task~IWeightedCriterion~ Add(GroupId, IWeight, ...)
         +IBasisPoints Weight()
         +void Validate()
     }
 
     class WeightedGroups {
         <<Entity>>
-        +IRatingContribution Contribution()
         +IBasisPoints Weight()
         +void Validate()
     }
 
     class WeightedCriterion {
         <<Entity>>
-        +IRatingContribution Contribution()
         +IWeight Weight()
         +void Validate()
     }
@@ -303,7 +275,6 @@ classDiagram
     class IWeight {
         <<Interface>>
         +IPercent Percent()
-        +IRatingContribution Weighted(IRatingContribution contribution)
     }
 
     class BasisPoints {
@@ -320,7 +291,6 @@ classDiagram
     class Weight {
         <<Value Object>>
         +IPercent Percent()
-        +IRatingContribution Weighted(IRatingContribution contribution)
     }
 
     IWeightedCriterion ..|> ICriterion

@@ -2,17 +2,21 @@ using System.Text.Json;
 using CascVel.Modules.Evaluations.Management.Domain.Common;
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Media;
 
-namespace CascVel.Modules.Evaluations.Management.Host.Infrastructure;
+namespace CascVel.Modules.Evaluations.Management.Infrastructure.Media;
 
 /// <summary>
 /// Implements media abstraction by writing to a UTF-8 JSON writer.
+/// Supports two modes: external writer (for streaming) or internal writer (for Output()).
 /// </summary>
-internal sealed class JsonMediaWriter : IMedia
+public sealed class JsonMediaWriter : IMedia<string>, IDisposable
 {
     private readonly Utf8JsonWriter _writer;
+    private readonly MemoryStream? _memoryStream;
+    private readonly bool _ownsWriter;
 
     /// <summary>
     /// Initializes the media with the provided JSON writer.
+    /// Use this constructor when writing to an external stream (e.g., HTTP response).
     /// </summary>
     /// <param name="writer">Underlying UTF-8 JSON writer for output.</param>
     public JsonMediaWriter(Utf8JsonWriter writer)
@@ -20,6 +24,19 @@ internal sealed class JsonMediaWriter : IMedia
         ArgumentNullException.ThrowIfNull(writer);
 
         _writer = writer;
+        _memoryStream = null;
+        _ownsWriter = false;
+    }
+
+    /// <summary>
+    /// Initializes the media with its own internal writer for JSON object generation.
+    /// Use this constructor when you need to call Output() to get the JSON string.
+    /// </summary>
+    public JsonMediaWriter()
+    {
+        _memoryStream = new MemoryStream();
+        _writer = new Utf8JsonWriter(_memoryStream, new JsonWriterOptions { Indented = false });
+        _ownsWriter = true;
     }
 
     /// <summary>
@@ -106,5 +123,68 @@ internal sealed class JsonMediaWriter : IMedia
         _writer.WriteEndArray();
 
         return this;
+    }
+
+    /// <summary>
+    /// Starts writing an object.
+    /// </summary>
+    public IMedia StartObject()
+    {
+        _writer.WriteStartObject();
+        return this;
+    }
+
+    /// <summary>
+    /// Starts writing a nested object with the specified key.
+    /// </summary>
+    /// <param name="key">Property name or key for the object.</param>
+    public IMedia StartObject(string key)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(key);
+
+        _writer.WriteStartObject(key);
+        return this;
+    }
+
+    /// <summary>
+    /// Ends writing the current nested object.
+    /// </summary>
+    public IMedia EndObject()
+    {
+        _writer.WriteEndObject();
+        return this;
+    }
+
+    /// <summary>
+    /// Finalizes the JSON writing and returns the complete JSON string.
+    /// Only supported when using the parameterless constructor.
+    /// </summary>
+    /// <returns>The complete JSON string.</returns>
+    /// <exception cref="InvalidOperationException">
+    /// Thrown when this method is called on an instance created with an external writer.
+    /// </exception>
+    public string Output()
+    {
+        if (!_ownsWriter || _memoryStream is null)
+        {
+            throw new InvalidOperationException(
+                "Output() is only supported when using the parameterless constructor. " +
+                "This instance was created with an external writer.");
+        }
+
+        _writer.Flush();
+        return System.Text.Encoding.UTF8.GetString(_memoryStream.ToArray());
+    }
+
+    /// <summary>
+    /// Disposes the internal writer and stream if owned by this instance.
+    /// </summary>
+    public void Dispose()
+    {
+        if (_ownsWriter)
+        {
+            _writer?.Dispose();
+            _memoryStream?.Dispose();
+        }
     }
 }

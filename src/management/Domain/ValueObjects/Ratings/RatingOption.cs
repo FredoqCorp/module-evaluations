@@ -1,3 +1,4 @@
+using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Media;
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Ratings;
 
 namespace CascVel.Modules.Evaluations.Management.Domain.ValueObjects.Ratings;
@@ -32,5 +33,15 @@ public sealed record RatingOption : IRatingOption
     public bool Matches(RatingScore score)
     {
         return _score.Equals(score);
+    }
+
+    /// <inheritdoc />
+    public void Print<TOutput>(IMedia<TOutput> media)
+    {
+        ArgumentNullException.ThrowIfNull(media);
+
+        media.WriteInt32("score", _score.Value);
+        media.WriteString("label", _label.Value);
+        media.WriteString("annotation", _annotation.Text);
     }
 }

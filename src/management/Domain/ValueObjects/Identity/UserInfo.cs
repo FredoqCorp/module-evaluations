@@ -33,7 +33,7 @@ public sealed record UserInfo : IUserInfo
     /// Prints the user information into the provided media.
     /// </summary>
     /// <param name="media">Target media that receives the printed representation.</param>
-    public void Print(IMedia media)
+    public void Print<TOutput>(IMedia<TOutput> media)
     {
         ArgumentNullException.ThrowIfNull(media);
 

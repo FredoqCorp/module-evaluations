@@ -47,4 +47,39 @@ public interface IMedia
     /// <param name="values">Collection of string values to write as an array.</param>
     /// <returns>This media instance for fluent chaining.</returns>
     IMedia WriteStringArray(string key, IEnumerable<string> values);
+
+    /// <summary>
+    /// Starts writing a nested object with the specified key.
+    /// Must be followed by property writes and then EndObject().
+    /// </summary>
+    /// <returns>This media instance for fluent chaining.</returns>
+    IMedia StartObject();
+
+    /// <summary>
+    /// Starts writing a nested object with the specified key.
+    /// Must be followed by property writes and then EndObject().
+    /// </summary>
+    /// <param name="key">Property name or key for the object.</param>
+    /// <returns>This media instance for fluent chaining.</returns>
+    IMedia StartObject(string key);
+
+    /// <summary>
+    /// Ends writing the current nested object.
+    /// Must be called after StartObject() and all property writes.
+    /// </summary>
+    /// <returns>This media instance for fluent chaining.</returns>
+    IMedia EndObject();
+}
+
+/// <summary>
+/// Behavioral contract for a media that receives structured data via fluent API and produces output.
+/// </summary>
+/// <typeparam name="TOutput">The type of output this media produces.</typeparam>
+public interface IMedia<out TOutput> : IMedia
+{
+    /// <summary>
+    /// Finalizes the media and returns the complete output.
+    /// </summary>
+    /// <returns>The final output representation.</returns>
+    TOutput Output();
 }

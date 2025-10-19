@@ -41,7 +41,7 @@ public sealed record Tags : ITags
     /// </summary>
     /// <param name="media">Target media that receives the printed representation.</param>
     /// <param name="key">Property name or key for the array.</param>
-    public void Print(IMedia media, string key)
+    public void Print<TOutput>(IMedia<TOutput> media, string key)
     {
         ArgumentNullException.ThrowIfNull(media);
         ArgumentException.ThrowIfNullOrWhiteSpace(key);

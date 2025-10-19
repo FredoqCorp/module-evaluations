@@ -1,7 +1,11 @@
 using System.Collections.Immutable;
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Criteria;
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Ratings;
+using CascVel.Modules.Evaluations.Management.Domain.ValueObjects.Criteria;
+using CascVel.Modules.Evaluations.Management.Domain.ValueObjects.Forms;
+using CascVel.Modules.Evaluations.Management.Domain.ValueObjects.Groups;
 using CascVel.Modules.Evaluations.Management.Domain.ValueObjects.Ratings;
+using CascVel.Modules.Evaluations.Management.Domain.ValueObjects.Shared;
 
 namespace CascVel.Modules.Evaluations.Management.Domain.Entities.Criteria.Average;
 
@@ -10,7 +14,7 @@ namespace CascVel.Modules.Evaluations.Management.Domain.Entities.Criteria.Averag
 /// </summary>
 public sealed class AverageCriteria : IAverageCriteria
 {
-    private readonly IImmutableList<IAverageCriterion> _items;
+    private IImmutableList<IAverageCriterion> _items;
 
     /// <summary>
     /// Initializes the unweighted criteria collection from the provided sequence.
@@ -21,6 +25,48 @@ public sealed class AverageCriteria : IAverageCriteria
         ArgumentNullException.ThrowIfNull(items);
 
         _items = [.. items];
+    }
+
+    /// <summary>
+    /// Adds a new unweighted criterion to the form root level.
+    /// </summary>
+    /// <param name="id">Identifier of the criterion.</param>
+    /// <param name="text">Text description of the criterion.</param>
+    /// <param name="title">Title of the criterion.</param>
+    /// <param name="ratingOptions">Rating options associated with the criterion.</param>
+    /// <param name="formId">Identifier of the parent form.</param>
+    /// <param name="orderIndex">Display order within the parent context.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>The added unweighted criterion.</returns>
+    public Task<IAverageCriterion> Add(CriterionId id, CriterionText text, CriterionTitle title, IRatingOptions ratingOptions, FormId formId, OrderIndex orderIndex, CancellationToken ct = default)
+    {
+        ArgumentNullException.ThrowIfNull(ratingOptions);
+
+        var criterion = new Criterion(id, text, title, ratingOptions);
+        _items = _items.Add(criterion);
+
+        return Task.FromResult<IAverageCriterion>(criterion);
+    }
+
+    /// <summary>
+    /// Adds a new unweighted criterion to a group.
+    /// </summary>
+    /// <param name="id">Identifier of the criterion.</param>
+    /// <param name="text">Text description of the criterion.</param>
+    /// <param name="title">Title of the criterion.</param>
+    /// <param name="ratingOptions">Rating options associated with the criterion.</param>
+    /// <param name="groupId">Identifier of the parent group.</param>
+    /// <param name="orderIndex">Display order within the parent context.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>The added unweighted criterion.</returns>
+    public Task<IAverageCriterion> Add(CriterionId id, CriterionText text, CriterionTitle title, IRatingOptions ratingOptions, GroupId groupId, OrderIndex orderIndex, CancellationToken ct = default)
+    {
+        ArgumentNullException.ThrowIfNull(ratingOptions);
+
+        var criterion = new Criterion(id, text, title, ratingOptions);
+        _items = _items.Add(criterion);
+
+        return Task.FromResult<IAverageCriterion>(criterion);
     }
 
     /// <summary>

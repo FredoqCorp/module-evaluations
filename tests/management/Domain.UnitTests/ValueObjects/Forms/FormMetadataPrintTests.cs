@@ -12,7 +12,7 @@ public sealed class FormMetadataPrintTests
         var metadata = CreateMetadata();
 
         var exception = Assert.Throws<ArgumentNullException>(() =>
-            metadata.Print(null!));
+            metadata.Print<object>(null!));
 
         Assert.Equal("media", exception.ParamName);
     }

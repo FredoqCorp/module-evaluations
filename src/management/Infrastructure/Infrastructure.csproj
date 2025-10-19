@@ -17,5 +17,8 @@
       <PackageReference Include="Microsoft.Extensions.Http" />
       <PackageReference Include="Npgsql" />
     </ItemGroup>
+    <ItemGroup>
+      <Folder Include="Media/" />
+    </ItemGroup>
 
 </Project>

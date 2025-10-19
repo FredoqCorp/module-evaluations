@@ -10,6 +10,7 @@ public interface IFormSummary
     /// <summary>
     /// Prints the form summary representation into the provided media.
     /// </summary>
+    /// <typeparam name="TOutput">The type of output the media produces.</typeparam>
     /// <param name="media">Target media that receives the printed representation.</param>
-    void Print(IMedia media);
+    void Print<TOutput>(IMedia<TOutput> media);
 }

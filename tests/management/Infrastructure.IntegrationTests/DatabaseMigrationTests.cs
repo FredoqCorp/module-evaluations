@@ -31,7 +31,7 @@ public sealed class DatabaseMigrationTests : IClassFixture<DatabaseFixture>
             SELECT table_name
             FROM information_schema.tables
             WHERE table_schema = 'public'
-              AND table_name IN ('forms', 'form_groups', 'form_criteria', 'rating_options', 'schemaversions')
+              AND table_name IN ('forms', 'form_groups', 'form_criteria', 'schemaversions')
             ORDER BY table_name", connection);
 
         var tables = new List<string>();
@@ -45,8 +45,10 @@ public sealed class DatabaseMigrationTests : IClassFixture<DatabaseFixture>
         Assert.Contains("forms", tables);
         Assert.Contains("form_groups", tables);
         Assert.Contains("form_criteria", tables);
-        Assert.Contains("rating_options", tables);
         Assert.Contains("schemaversions", tables); // DbUp tracking table
+
+        // rating_options table was removed in migration 0004 - data moved to JSONB column
+        Assert.DoesNotContain("rating_options", tables);
 
         _output.WriteLine($"Found tables: {string.Join(", ", tables)}");
     }
@@ -175,7 +177,7 @@ public sealed class DatabaseMigrationTests : IClassFixture<DatabaseFixture>
             SELECT tablename, indexname
             FROM pg_indexes
             WHERE schemaname = 'public'
-              AND tablename LIKE 'form%' OR tablename = 'rating_options'
+              AND tablename LIKE 'form%'
             ORDER BY tablename, indexname", connection);
 
         var indexes = new List<(string Table, string Index)>();
@@ -195,5 +197,30 @@ public sealed class DatabaseMigrationTests : IClassFixture<DatabaseFixture>
         {
             _output.WriteLine($"Table: {table}, Index: {index}");
         }
+    }
+
+    [Fact]
+    public async Task FormCriteria_ShouldHaveRatingOptionsJsonbColumn()
+    {
+        // Arrange
+        await using var connection = new NpgsqlConnection(_fixture.ConnectionString);
+        await connection.OpenAsync();
+
+        // Act - Check if rating_options column exists and is JSONB type
+        await using var cmd = new NpgsqlCommand(@"
+            SELECT column_name, data_type
+            FROM information_schema.columns
+            WHERE table_name = 'form_criteria'
+              AND column_name = 'rating_options'", connection);
+
+        await using var reader = await cmd.ExecuteReaderAsync();
+        var hasColumn = await reader.ReadAsync();
+
+        // Assert
+        Assert.True(hasColumn, "rating_options column should exist in form_criteria table");
+        Assert.Equal("rating_options", reader.GetString(0));
+        Assert.Equal("jsonb", reader.GetString(1));
+
+        _output.WriteLine("form_criteria.rating_options column exists with JSONB type");
     }
 }

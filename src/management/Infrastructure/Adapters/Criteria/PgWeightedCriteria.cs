@@ -1,6 +1,8 @@
 using CascVel.Modules.Evaluations.Management.Domain.Entities.Criteria.Average;
+using CascVel.Modules.Evaluations.Management.Domain.Entities.Criteria.Weighted;
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Criteria;
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Ratings;
+using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Shared;
 using CascVel.Modules.Evaluations.Management.Domain.ValueObjects.Criteria;
 using CascVel.Modules.Evaluations.Management.Domain.ValueObjects.Forms;
 using CascVel.Modules.Evaluations.Management.Domain.ValueObjects.Groups;
@@ -11,9 +13,9 @@ using Dapper;
 namespace CascVel.Modules.Evaluations.Management.Infrastructure.Adapters.Criteria;
 
 /// <summary>
-/// PostgreSQL implementation for criteria.
+/// PostgreSQL implementation for weighted criteria.
 /// </summary>
-internal sealed class PgAverageCriteria : IAverageCriteria
+internal sealed class PgWeightedCriteria : IWeightedCriteria
 {
     private readonly IUnitOfWork _unitOfWork;
 
@@ -21,18 +23,21 @@ internal sealed class PgAverageCriteria : IAverageCriteria
     /// Initializes the adapter with the database unit of work.
     /// </summary>
     /// <param name="unitOfWork">Unit of work for managing database connections and transactions.</param>
-    public PgAverageCriteria(IUnitOfWork unitOfWork)
+    public PgWeightedCriteria(IUnitOfWork unitOfWork)
     {
         ArgumentNullException.ThrowIfNull(unitOfWork);
         _unitOfWork = unitOfWork;
     }
 
     /// <inheritdoc />
-    public async Task<IAverageCriterion> Add(CriterionId id, CriterionText text, CriterionTitle title, IRatingOptions ratingOptions, FormId formId, OrderIndex orderIndex, CancellationToken ct = default)
+    public async Task<IWeightedCriterion> Add(CriterionId id, CriterionText text, CriterionTitle title, IRatingOptions ratingOptions, FormId formId, IWeight weight, OrderIndex orderIndex, CancellationToken ct = default)
     {
         ArgumentNullException.ThrowIfNull(ratingOptions);
+        ArgumentNullException.ThrowIfNull(weight);
 
         var connection = await _unitOfWork.ActiveConnection(ct);
+
+        var basisPoints = decimal.ToInt32(weight.Percent().Basis().Apply(10000m));
 
         // Serialize rating options to JSON using Print + Output pattern
         using var jsonMedia = new Infrastructure.Media.JsonMediaWriter();
@@ -52,23 +57,27 @@ internal sealed class PgAverageCriteria : IAverageCriteria
                     GroupId = (Guid?)null,
                     Title = title.Text,
                     Text = text.Text,
-                    CriterionType = "average",
-                    WeightBasisPoints = (int?)null,
+                    CriterionType = "weighted",
+                    WeightBasisPoints = basisPoints,
                     RatingOptions = ratingOptionsJson,
                     OrderIndex = orderIndex.Value,
                     CreatedAt = DateTimeOffset.UtcNow
                 },
                 cancellationToken: ct));
 
-        return new Criterion(id, text, title, ratingOptions);
+        var baseCriterion = new Criterion(id, text, title, ratingOptions);
+        return new WeightedCriterion(baseCriterion, weight);
     }
 
     /// <inheritdoc />
-    public async Task<IAverageCriterion> Add(CriterionId id, CriterionText text, CriterionTitle title, IRatingOptions ratingOptions, GroupId groupId, OrderIndex orderIndex, CancellationToken ct = default)
+    public async Task<IWeightedCriterion> Add(CriterionId id, CriterionText text, CriterionTitle title, IRatingOptions ratingOptions, GroupId groupId, IWeight weight, OrderIndex orderIndex, CancellationToken ct = default)
     {
         ArgumentNullException.ThrowIfNull(ratingOptions);
+        ArgumentNullException.ThrowIfNull(weight);
 
         var connection = await _unitOfWork.ActiveConnection(ct);
+
+        var basisPoints = decimal.ToInt32(weight.Percent().Basis().Apply(10000m));
 
         // Serialize rating options to JSON using Print + Output pattern
         using var jsonMedia = new Infrastructure.Media.JsonMediaWriter();
@@ -88,15 +97,22 @@ internal sealed class PgAverageCriteria : IAverageCriteria
                     GroupId = groupId.Value,
                     Title = title.Text,
                     Text = text.Text,
-                    CriterionType = "average",
-                    WeightBasisPoints = (int?)null,
+                    CriterionType = "weighted",
+                    WeightBasisPoints = basisPoints,
                     RatingOptions = ratingOptionsJson,
                     OrderIndex = orderIndex.Value,
                     CreatedAt = DateTimeOffset.UtcNow
                 },
                 cancellationToken: ct));
 
-        return new Criterion(id, text, title, ratingOptions);
+        var baseCriterion = new Criterion(id, text, title, ratingOptions);
+        return new WeightedCriterion(baseCriterion, weight);
+    }
+
+    /// <inheritdoc />
+    public IBasisPoints Weight()
+    {
+        throw new NotImplementedException("Weight calculation is not supported in the adapter");
     }
 
     /// <inheritdoc />

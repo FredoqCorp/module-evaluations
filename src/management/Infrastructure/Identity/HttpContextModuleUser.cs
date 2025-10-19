@@ -60,7 +60,7 @@ internal sealed class HttpContextModuleUser : IModuleUser
     /// Prints the current user information into the provided media.
     /// </summary>
     /// <param name="media">Target media that receives the printed user representation.</param>
-    public void Print(IMedia media)
+    public void Print<TOutput>(IMedia<TOutput> media)
     {
         ArgumentNullException.ThrowIfNull(media);
 

@@ -1,4 +1,5 @@
 using System.Collections.Immutable;
+using System.Globalization;
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Media;
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Ratings;
 
@@ -21,8 +22,17 @@ public sealed record RatingOptions : IRatingOptions
     }
 
     /// <inheritdoc />
-    public Task Print(IMedia media)
+    public void Print<TOutput>(IMedia<TOutput> media)
     {
-        throw new NotImplementedException();
+        ArgumentNullException.ThrowIfNull(media);
+
+        for (int i = 0; i < _options.Count; i++)
+        {
+            var option = _options[i];
+            var scoreKey = i.ToString(CultureInfo.InvariantCulture);
+            media.StartObject(scoreKey);
+            option.Print(media);
+            media.EndObject();
+        }
     }
 }

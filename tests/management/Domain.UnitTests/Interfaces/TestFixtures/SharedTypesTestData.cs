@@ -70,7 +70,7 @@ internal sealed record TestTags(IReadOnlyList<Tag> Items) : ITags
             ? this
             : new TestTags([.. Items, tag]);
 
-    public void Print(IMedia media, string key)
+    public void Print<TOutput>(IMedia<TOutput> media, string key)
     {
         var tagTexts = Items.Select(tag => tag.Text);
         media.WriteStringArray(key, tagTexts);
