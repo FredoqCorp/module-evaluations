@@ -73,6 +73,6 @@ internal sealed record TestTags(IReadOnlyList<Tag> Items) : ITags
     public void Print<TOutput>(IMedia<TOutput> media, string key)
     {
         var tagTexts = Items.Select(tag => tag.Text);
-        media.WriteStringArray(key, tagTexts);
+        media.With(key, tagTexts);
     }
 }

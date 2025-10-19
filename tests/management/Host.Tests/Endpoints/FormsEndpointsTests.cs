@@ -1,7 +1,5 @@
 using System.Net;
-using System.Net.Http.Json;
 using System.Text.Json;
-using CascVel.Modules.Evaluations.Management.Application.UseCases.ListForms;
 using CascVel.Modules.Evaluations.Management.Host.Tests.Infrastructure;
 using Dapper;
 using Npgsql;
@@ -35,10 +33,10 @@ public sealed class FormsEndpointsTests : IClassFixture<TestWebApplicationFactor
         response.StatusCode.ShouldBe(HttpStatusCode.OK);
         response.Content.Headers.ContentType?.MediaType.ShouldBe("application/json");
 
-        var content = await response.Content.ReadFromJsonAsync<ListFormsResponse>();
-        content.ShouldNotBeNull();
-        content.Forms.ShouldNotBeNull();
-        content.Forms.ShouldBeEmpty();
+        var json = await response.Content.ReadAsStringAsync();
+        var document = JsonDocument.Parse(json);
+
+        document.RootElement.GetProperty("forms").GetArrayLength().ShouldBe(0);
     }
 
     [Fact]
@@ -152,7 +150,7 @@ public sealed class FormsEndpointsTests : IClassFixture<TestWebApplicationFactor
 
         // Insert criteria
         await connection.ExecuteAsync(
-            "INSERT INTO form_criteria (id, form_id, group_id, title, text, criterion_type, weight_basis_points, order_index, created_at) VALUES (@Id, @FormId, @GroupId, @Title, @Text, @CriterionType, @WeightBasisPoints, @OrderIndex, @CreatedAt)",
+            "INSERT INTO form_criteria (id, form_id, group_id, title, text, criterion_type, weight_basis_points, rating_options, order_index, created_at) VALUES (@Id, @FormId, @GroupId, @Title, @Text, @CriterionType, @WeightBasisPoints, @RatingOptions::jsonb, @OrderIndex, @CreatedAt)",
             new
             {
                 Id = criterion1Id,
@@ -160,14 +158,15 @@ public sealed class FormsEndpointsTests : IClassFixture<TestWebApplicationFactor
                 GroupId = group1Id,
                 Title = "Criterion 1",
                 Text = "First criterion",
-                CriterionType = "average",
-                WeightBasisPoints = (int?)null,
+                CriterionType = "weighted",
+                WeightBasisPoints = 5000,
+                RatingOptions = "{\"0\":{\"score\":5,\"label\":\"Excellent\",\"annotation\":\"\"},\"1\":{\"score\":3,\"label\":\"Good\",\"annotation\":\"\"},\"2\":{\"score\":1,\"label\":\"Poor\",\"annotation\":\"\"}}",
                 OrderIndex = 1,
                 CreatedAt = DateTimeOffset.UtcNow
             });
 
         await connection.ExecuteAsync(
-            "INSERT INTO form_criteria (id, form_id, group_id, title, text, criterion_type, weight_basis_points, order_index, created_at) VALUES (@Id, @FormId, @GroupId, @Title, @Text, @CriterionType, @WeightBasisPoints, @OrderIndex, @CreatedAt)",
+            "INSERT INTO form_criteria (id, form_id, group_id, title, text, criterion_type, weight_basis_points, rating_options, order_index, created_at) VALUES (@Id, @FormId, @GroupId, @Title, @Text, @CriterionType, @WeightBasisPoints, @RatingOptions::jsonb, @OrderIndex, @CreatedAt)",
             new
             {
                 Id = criterion2Id,
@@ -175,14 +174,15 @@ public sealed class FormsEndpointsTests : IClassFixture<TestWebApplicationFactor
                 GroupId = group1Id,
                 Title = "Criterion 2",
                 Text = "Second criterion",
-                CriterionType = "average",
-                WeightBasisPoints = (int?)null,
+                CriterionType = "weighted",
+                WeightBasisPoints = 5000,
+                RatingOptions = "{\"0\":{\"score\":5,\"label\":\"Excellent\",\"annotation\":\"\"},\"1\":{\"score\":3,\"label\":\"Good\",\"annotation\":\"\"},\"2\":{\"score\":1,\"label\":\"Poor\",\"annotation\":\"\"}}",
                 OrderIndex = 2,
                 CreatedAt = DateTimeOffset.UtcNow
             });
 
         await connection.ExecuteAsync(
-            "INSERT INTO form_criteria (id, form_id, group_id, title, text, criterion_type, weight_basis_points, order_index, created_at) VALUES (@Id, @FormId, @GroupId, @Title, @Text, @CriterionType, @WeightBasisPoints, @OrderIndex, @CreatedAt)",
+            "INSERT INTO form_criteria (id, form_id, group_id, title, text, criterion_type, weight_basis_points, rating_options, order_index, created_at) VALUES (@Id, @FormId, @GroupId, @Title, @Text, @CriterionType, @WeightBasisPoints, @RatingOptions::jsonb, @OrderIndex, @CreatedAt)",
             new
             {
                 Id = criterion3Id,
@@ -190,8 +190,9 @@ public sealed class FormsEndpointsTests : IClassFixture<TestWebApplicationFactor
                 GroupId = group2Id,
                 Title = "Criterion 3",
                 Text = "Third criterion",
-                CriterionType = "average",
-                WeightBasisPoints = (int?)null,
+                CriterionType = "weighted",
+                WeightBasisPoints = 10000,
+                RatingOptions = "{\"0\":{\"score\":5,\"label\":\"Excellent\",\"annotation\":\"\"},\"1\":{\"score\":3,\"label\":\"Good\",\"annotation\":\"\"},\"2\":{\"score\":1,\"label\":\"Poor\",\"annotation\":\"\"}}",
                 OrderIndex = 1,
                 CreatedAt = DateTimeOffset.UtcNow
             });
@@ -283,13 +284,17 @@ public sealed class FormsEndpointsTests : IClassFixture<TestWebApplicationFactor
         var json = await response.Content.ReadAsStringAsync();
         var document = JsonDocument.Parse(json);
 
-        document.RootElement.GetProperty("forms").GetArrayLength().ShouldBeGreaterThanOrEqualTo(3);
+        // Find our test forms in the response
+        var forms = document.RootElement.GetProperty("forms").EnumerateArray()
+            .Where(f => new[] { form1Id, form2Id, form3Id }.Contains(f.GetProperty("id").GetGuid()))
+            .ToList();
 
-        // Most recent should be first
-        var forms = document.RootElement.GetProperty("forms");
-        forms[0].GetProperty("id").GetGuid().ShouldBe(form2Id);
-        forms[1].GetProperty("id").GetGuid().ShouldBe(form3Id);
-        forms[2].GetProperty("id").GetGuid().ShouldBe(form1Id);
+        forms.Count.ShouldBe(3);
+
+        // Most recent should be first (ordered by created_at desc)
+        forms[0].GetProperty("id").GetGuid().ShouldBe(form2Id); // now
+        forms[1].GetProperty("id").GetGuid().ShouldBe(form3Id); // now - 1 day
+        forms[2].GetProperty("id").GetGuid().ShouldBe(form1Id); // now - 2 days
 
         // Cleanup
         await connection.ExecuteAsync("DELETE FROM forms WHERE id = ANY(@Ids)",

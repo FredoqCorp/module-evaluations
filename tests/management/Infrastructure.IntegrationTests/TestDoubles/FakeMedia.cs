@@ -7,13 +7,13 @@ internal sealed class FakeMedia : IMedia<object>
 {
     public List<(string Key, object Value)> Writes { get; } = [];
 
-    public IMedia WriteString(string key, string value)
+    public IMedia With(string key, string value)
     {
         Writes.Add((key, value));
         return this;
     }
 
-    public IMedia WriteOptionalString(string key, Option<string> value)
+    public IMedia With(string key, Option<string> value)
     {
         if (value.IsSome)
         {
@@ -26,39 +26,29 @@ internal sealed class FakeMedia : IMedia<object>
         return this;
     }
 
-    public IMedia WriteGuid(string key, Guid value)
+    public IMedia With(string key, Guid value)
     {
         Writes.Add((key, value));
         return this;
     }
 
-    public IMedia WriteInt32(string key, int value)
+    public IMedia With(string key, int value)
     {
         Writes.Add((key, value));
         return this;
     }
 
-    public IMedia WriteStringArray(string key, IEnumerable<string> values)
+    public IMedia With(string key, IEnumerable<string> values)
     {
         Writes.Add((key, values.ToArray()));
         return this;
     }
 
-    public IMedia StartObject()
+    public IMedia WithObject(string key, Action<IMedia> configure)
     {
-        Writes.Add(("[START_OBJECT]", "[START_OBJECT]"));
-        return this;
-    }
-
-    public IMedia StartObject(string key)
-    {
-        Writes.Add((key, "[START_OBJECT]"));
-        return this;
-    }
-
-    public IMedia EndObject()
-    {
-        Writes.Add(("[END_OBJECT]", "[END_OBJECT]"));
+        var nestedMedia = new FakeMedia();
+        configure(nestedMedia);
+        Writes.Add((key, nestedMedia.Output()));
         return this;
     }
 

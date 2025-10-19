@@ -95,7 +95,7 @@ Individual evaluation criteria with rating options.
 - `group_id` - Foreign key to `form_groups` table (nullable)
 - `criterion_type` - Type: 'average' or 'weighted'
 - `weight_basis_points` - Weight in basis points (0-10000), required for weighted type
-- `rating_options` - JSONB array of rating options with score, label, and annotation
+- `rating_options` - JSONB object of rating options keyed by sequential order with score, label, and annotation
 - `order_index` - Display order within parent context
 
 **Indexes:**
@@ -108,31 +108,31 @@ Individual evaluation criteria with rating options.
 - `fk_form_criteria_group_id` → `form_groups(id)` ON DELETE CASCADE
 
 **Constraints:**
-- `chk_form_criteria_rating_options_not_empty` - Ensures `rating_options` array has at least one element
+- `chk_form_criteria_rating_options_not_empty` - Ensures `rating_options` object has at least one element
 - `trg_check_criterion_group_type_match` - Trigger ensuring criterion type matches group type
 
 ## rating_options JSONB Structure
 
-The `rating_options` column in `form_criteria` stores an array of objects with the following structure:
+The `rating_options` column in `form_criteria` stores an object where each property name is the stringified `order_index` and each value contains rating metadata:
 
 ```json
-[
-  {
+{
+  "0": {
     "score": 5.0,
     "label": "Excellent",
     "annotation": "Outstanding performance exceeding expectations"
   },
-  {
+  "1": {
     "score": 4.0,
     "label": "Good",
     "annotation": "Solid performance meeting expectations"
   },
-  {
+  "2": {
     "score": 3.0,
     "label": "Satisfactory",
     "annotation": "Acceptable performance with room for improvement"
   }
-]
+}
 ```
 
 **Fields:**

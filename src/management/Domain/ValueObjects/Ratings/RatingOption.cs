@@ -40,8 +40,8 @@ public sealed record RatingOption : IRatingOption
     {
         ArgumentNullException.ThrowIfNull(media);
 
-        media.WriteInt32("score", _score.Value);
-        media.WriteString("label", _label.Value);
-        media.WriteString("annotation", _annotation.Text);
+        media.With("score", _score.Value);
+        media.With("label", _label.Value);
+        media.With("annotation", _annotation.Text);
     }
 }

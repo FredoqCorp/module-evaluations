@@ -35,9 +35,6 @@ internal sealed class FormSummaryJsonConverter : JsonConverter<IFormSummary>
         ArgumentNullException.ThrowIfNull(value);
 
         using var media = new JsonMediaWriter(writer);
-        
-        media.StartObject();
         value.Print(media);
-        media.EndObject();
     }
 }

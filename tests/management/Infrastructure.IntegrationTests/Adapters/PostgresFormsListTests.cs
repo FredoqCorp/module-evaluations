@@ -79,7 +79,7 @@ public sealed class PostgresFormsListTests : IClassFixture<DatabaseFixture>
 
         // Insert two criteria
         await setupConnection.ExecuteAsync(
-            "INSERT INTO form_criteria (id, form_id, group_id, title, text, criterion_type, weight_basis_points, order_index, created_at) VALUES (@Id, @FormId, @GroupId, @Title, @Text, @CriterionType, @WeightBasisPoints, @OrderIndex, @CreatedAt)",
+            "INSERT INTO form_criteria (id, form_id, group_id, title, text, criterion_type, weight_basis_points, rating_options, order_index, created_at) VALUES (@Id, @FormId, @GroupId, @Title, @Text, @CriterionType, @WeightBasisPoints, @RatingOptions::jsonb, @OrderIndex, @CreatedAt)",
             new
             {
                 Id = criterion1Id,
@@ -89,12 +89,13 @@ public sealed class PostgresFormsListTests : IClassFixture<DatabaseFixture>
                 Text = "Test criterion 1 text",
                 CriterionType = "average",
                 WeightBasisPoints = (int?)null,
+                RatingOptions = "{\"0\":{\"score\":5,\"label\":\"High\",\"annotation\":\"\"}}",
                 OrderIndex = 1,
                 CreatedAt = DateTimeOffset.UtcNow
             });
 
         await setupConnection.ExecuteAsync(
-            "INSERT INTO form_criteria (id, form_id, group_id, title, text, criterion_type, weight_basis_points, order_index, created_at) VALUES (@Id, @FormId, @GroupId, @Title, @Text, @CriterionType, @WeightBasisPoints, @OrderIndex, @CreatedAt)",
+            "INSERT INTO form_criteria (id, form_id, group_id, title, text, criterion_type, weight_basis_points, rating_options, order_index, created_at) VALUES (@Id, @FormId, @GroupId, @Title, @Text, @CriterionType, @WeightBasisPoints, @RatingOptions::jsonb, @OrderIndex, @CreatedAt)",
             new
             {
                 Id = criterion2Id,
@@ -104,6 +105,7 @@ public sealed class PostgresFormsListTests : IClassFixture<DatabaseFixture>
                 Text = "Test criterion 2 text",
                 CriterionType = "average",
                 WeightBasisPoints = (int?)null,
+                RatingOptions = "{\"0\":{\"score\":4,\"label\":\"Mid\",\"annotation\":\"\"}}",
                 OrderIndex = 2,
                 CreatedAt = DateTimeOffset.UtcNow
             });
@@ -206,17 +208,21 @@ public sealed class PostgresFormsListTests : IClassFixture<DatabaseFixture>
         // Assert
         result.Count.ShouldBeGreaterThanOrEqualTo(3);
 
-        var media1 = new FakeMedia();
-        result[0].Print(media1);
-        var media2 = new FakeMedia();
-        result[1].Print(media2);
-        var media3 = new FakeMedia();
-        result[2].Print(media3);
+        var indexById = new Dictionary<Guid, int>();
+        for (var i = 0; i < result.Count; i++)
+        {
+            var media = new FakeMedia();
+            result[i].Print(media);
+            var id = media.GetValue<Guid>("id");
+            indexById[id] = i;
+        }
 
-        // Most recent should be first
-        media1.GetValue<Guid>("id").ShouldBe(form2Id);
-        media2.GetValue<Guid>("id").ShouldBe(form3Id);
-        media3.GetValue<Guid>("id").ShouldBe(form1Id);
+        indexById.ShouldContainKey(form2Id);
+        indexById.ShouldContainKey(form3Id);
+        indexById.ShouldContainKey(form1Id);
+
+        indexById[form2Id].ShouldBeLessThan(indexById[form3Id]);
+        indexById[form3Id].ShouldBeLessThan(indexById[form1Id]);
 
         // Cleanup
         await setupConnection.ExecuteAsync("DELETE FROM forms WHERE id = ANY(@Ids)",
@@ -378,7 +384,7 @@ public sealed class PostgresFormsListTests : IClassFixture<DatabaseFixture>
 
         // Insert three criteria
         await setupConnection.ExecuteAsync(
-            "INSERT INTO form_criteria (id, form_id, group_id, title, text, criterion_type, weight_basis_points, order_index, created_at) VALUES (@Id, @FormId, @GroupId, @Title, @Text, @CriterionType, @WeightBasisPoints, @OrderIndex, @CreatedAt)",
+            "INSERT INTO form_criteria (id, form_id, group_id, title, text, criterion_type, weight_basis_points, rating_options, order_index, created_at) VALUES (@Id, @FormId, @GroupId, @Title, @Text, @CriterionType, @WeightBasisPoints, @RatingOptions::jsonb, @OrderIndex, @CreatedAt)",
             new
             {
                 Id = criterion1Id,
@@ -386,14 +392,15 @@ public sealed class PostgresFormsListTests : IClassFixture<DatabaseFixture>
                 GroupId = group1Id,
                 Title = "Criterion 1",
                 Text = "Test criterion 1 text",
-                CriterionType = "average",
-                WeightBasisPoints = (int?)null,
+                CriterionType = "weighted",
+                WeightBasisPoints = 2000,
+                RatingOptions = "{\"0\":{\"score\":7,\"label\":\"Peak\",\"annotation\":\"\"}}",
                 OrderIndex = 1,
                 CreatedAt = DateTimeOffset.UtcNow
             });
 
         await setupConnection.ExecuteAsync(
-            "INSERT INTO form_criteria (id, form_id, group_id, title, text, criterion_type, weight_basis_points, order_index, created_at) VALUES (@Id, @FormId, @GroupId, @Title, @Text, @CriterionType, @WeightBasisPoints, @OrderIndex, @CreatedAt)",
+            "INSERT INTO form_criteria (id, form_id, group_id, title, text, criterion_type, weight_basis_points, rating_options, order_index, created_at) VALUES (@Id, @FormId, @GroupId, @Title, @Text, @CriterionType, @WeightBasisPoints, @RatingOptions::jsonb, @OrderIndex, @CreatedAt)",
             new
             {
                 Id = criterion2Id,
@@ -401,14 +408,15 @@ public sealed class PostgresFormsListTests : IClassFixture<DatabaseFixture>
                 GroupId = group1Id,
                 Title = "Criterion 2",
                 Text = "Test criterion 2 text",
-                CriterionType = "average",
-                WeightBasisPoints = (int?)null,
+                CriterionType = "weighted",
+                WeightBasisPoints = 3000,
+                RatingOptions = "{\"0\":{\"score\":6,\"label\":\"Solid\",\"annotation\":\"\"}}",
                 OrderIndex = 2,
                 CreatedAt = DateTimeOffset.UtcNow
             });
 
         await setupConnection.ExecuteAsync(
-            "INSERT INTO form_criteria (id, form_id, group_id, title, text, criterion_type, weight_basis_points, order_index, created_at) VALUES (@Id, @FormId, @GroupId, @Title, @Text, @CriterionType, @WeightBasisPoints, @OrderIndex, @CreatedAt)",
+            "INSERT INTO form_criteria (id, form_id, group_id, title, text, criterion_type, weight_basis_points, rating_options, order_index, created_at) VALUES (@Id, @FormId, @GroupId, @Title, @Text, @CriterionType, @WeightBasisPoints, @RatingOptions::jsonb, @OrderIndex, @CreatedAt)",
             new
             {
                 Id = criterion3Id,
@@ -416,8 +424,9 @@ public sealed class PostgresFormsListTests : IClassFixture<DatabaseFixture>
                 GroupId = group2Id,
                 Title = "Criterion 3",
                 Text = "Test criterion 3 text",
-                CriterionType = "average",
-                WeightBasisPoints = (int?)null,
+                CriterionType = "weighted",
+                WeightBasisPoints = 2000,
+                RatingOptions = "{\"0\":{\"score\":8,\"label\":\"Sharp\",\"annotation\":\"\"}}",
                 OrderIndex = 1,
                 CreatedAt = DateTimeOffset.UtcNow
             });

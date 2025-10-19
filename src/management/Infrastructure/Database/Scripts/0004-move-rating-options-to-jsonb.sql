@@ -18,11 +18,11 @@ BEGIN
         AND column_name = 'rating_options'
     ) THEN
         ALTER TABLE form_criteria
-        ADD COLUMN rating_options jsonb NOT NULL DEFAULT '[]'::jsonb;
+        ADD COLUMN rating_options jsonb NOT NULL DEFAULT '{}'::jsonb;
     END IF;
 END $$;
 
-COMMENT ON COLUMN form_criteria.rating_options IS 'JSONB array of rating options with score, label, and annotation';
+COMMENT ON COLUMN form_criteria.rating_options IS 'JSONB object of rating options keyed by sequential order index';
 
 -- =====================================================
 -- Step 2: Migrate existing data from rating_options table
@@ -37,12 +37,14 @@ BEGIN
         -- Migrate data
         UPDATE form_criteria fc
         SET rating_options = (
-            SELECT jsonb_agg(
+            SELECT jsonb_object_agg(
+                ro.order_index::text,
                 jsonb_build_object(
                     'score', ro.score,
                     'label', ro.label,
                     'annotation', COALESCE(ro.annotation, '')
-                ) ORDER BY ro.order_index
+                )
+                ORDER BY ro.order_index
             )
             FROM rating_options ro
             WHERE ro.criterion_id = fc.id
@@ -70,7 +72,10 @@ BEGIN
     ) THEN
         ALTER TABLE form_criteria
         ADD CONSTRAINT chk_form_criteria_rating_options_not_empty
-        CHECK (jsonb_array_length(rating_options) > 0);
+        CHECK (
+            jsonb_typeof(rating_options) = 'object'
+            AND rating_options <> '{}'::jsonb
+        );
     END IF;
 END $$;
 

@@ -39,9 +39,9 @@ public sealed record FormMetadata
         ArgumentNullException.ThrowIfNull(media);
 
         media
-            .WriteString("name", _name.Value)
-            .WriteString("description", _description.Value)
-            .WriteString("code", _code.Token);
+            .With("name", _name.Value)
+            .With("description", _description.Value)
+            .With("code", _code.Token);
 
         _tags.Print(media, "tags");
     }

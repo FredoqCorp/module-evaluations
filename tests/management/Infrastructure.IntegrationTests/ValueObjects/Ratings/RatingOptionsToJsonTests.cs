@@ -1,3 +1,4 @@
+using System.Linq;
 using System.Text.Json;
 using CascVel.Modules.Evaluations.Management.Infrastructure.Media;
 using CascVel.Modules.Evaluations.Management.Domain.ValueObjects.Ratings;
@@ -10,7 +11,7 @@ namespace CascVel.Modules.Evaluations.Management.Domain.UnitTests.ValueObjects.R
 public sealed class RatingOptionsToJsonTests
 {
     [Fact]
-    public void ToJson_ReturnsValidJsonArray()
+    public void ToJson_ReturnsValidJsonObject()
     {
         // Arrange
         var options = new[]
@@ -37,8 +38,9 @@ public sealed class RatingOptionsToJsonTests
 
         // Verify it's valid JSON
         var parsed = JsonDocument.Parse(json);
-        Assert.Equal(JsonValueKind.Array, parsed.RootElement.ValueKind);
-        Assert.Equal(2, parsed.RootElement.GetArrayLength());
+        Assert.Equal(JsonValueKind.Object, parsed.RootElement.ValueKind);
+        Assert.True(parsed.RootElement.TryGetProperty("0", out _));
+        Assert.True(parsed.RootElement.TryGetProperty("1", out _));
     }
 
     [Fact]
@@ -59,7 +61,7 @@ public sealed class RatingOptionsToJsonTests
         ratingOptions.Print(media);
         var json = media.Output();
         var parsed = JsonDocument.Parse(json);
-        var firstElement = parsed.RootElement[0];
+        var firstElement = parsed.RootElement.GetProperty("0");
 
         // Assert
         Assert.True(firstElement.TryGetProperty("score", out var scoreProperty));
@@ -90,7 +92,7 @@ public sealed class RatingOptionsToJsonTests
         ratingOptions.Print(media);
         var json = media.Output();
         var parsed = JsonDocument.Parse(json);
-        var firstElement = parsed.RootElement[0];
+        var firstElement = parsed.RootElement.GetProperty("0");
 
         // Assert
         Assert.True(firstElement.TryGetProperty("annotation", out var annotationProperty));
@@ -116,13 +118,19 @@ public sealed class RatingOptionsToJsonTests
         ratingOptions.Print(media);
         var json = media.Output();
         var parsed = JsonDocument.Parse(json);
+        var properties = parsed.RootElement.EnumerateObject().ToArray();
 
         // Assert
-        Assert.Equal(5, parsed.RootElement.GetArrayLength());
-        Assert.Equal(5, parsed.RootElement[0].GetProperty("score").GetInt32());
-        Assert.Equal(4, parsed.RootElement[1].GetProperty("score").GetInt32());
-        Assert.Equal(3, parsed.RootElement[2].GetProperty("score").GetInt32());
-        Assert.Equal(2, parsed.RootElement[3].GetProperty("score").GetInt32());
-        Assert.Equal(1, parsed.RootElement[4].GetProperty("score").GetInt32());
+        Assert.Equal(5, properties.Length);
+        Assert.Equal("0", properties[0].Name);
+        Assert.Equal(5, properties[0].Value.GetProperty("score").GetInt32());
+        Assert.Equal("1", properties[1].Name);
+        Assert.Equal(4, properties[1].Value.GetProperty("score").GetInt32());
+        Assert.Equal("2", properties[2].Name);
+        Assert.Equal(3, properties[2].Value.GetProperty("score").GetInt32());
+        Assert.Equal("3", properties[3].Name);
+        Assert.Equal(2, properties[3].Value.GetProperty("score").GetInt32());
+        Assert.Equal("4", properties[4].Name);
+        Assert.Equal(1, properties[4].Value.GetProperty("score").GetInt32());
     }
 }

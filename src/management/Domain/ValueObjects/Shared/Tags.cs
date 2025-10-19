@@ -47,6 +47,6 @@ public sealed record Tags : ITags
         ArgumentException.ThrowIfNullOrWhiteSpace(key);
 
         var tagTexts = _tags.Select(tag => tag.Text);
-        media.WriteStringArray(key, tagTexts);
+        media.With(key, tagTexts);
     }
 }

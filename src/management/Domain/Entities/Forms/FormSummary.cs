@@ -50,11 +50,11 @@ public sealed record FormSummary : IFormSummary
     {
         ArgumentNullException.ThrowIfNull(media);
 
-        media.WriteGuid("id", _id.Value);
+        media.With("id", _id.Value);
         _metadata.Print(media);
         media
-            .WriteInt32("groupsCount", _groupsCount)
-            .WriteInt32("criteriaCount", _criteriaCount)
-            .WriteString("calculationType", _calculationType.ToString());
+            .With("groupsCount", _groupsCount)
+            .With("criteriaCount", _criteriaCount)
+            .With("calculationType", _calculationType.ToString());
     }
 }

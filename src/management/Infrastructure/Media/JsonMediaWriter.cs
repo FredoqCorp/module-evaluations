@@ -26,6 +26,8 @@ public sealed class JsonMediaWriter : IMedia<string>, IDisposable
         _writer = writer;
         _memoryStream = null;
         _ownsWriter = false;
+
+        _writer.WriteStartObject();
     }
 
     /// <summary>
@@ -37,6 +39,8 @@ public sealed class JsonMediaWriter : IMedia<string>, IDisposable
         _memoryStream = new MemoryStream();
         _writer = new Utf8JsonWriter(_memoryStream, new JsonWriterOptions { Indented = false });
         _ownsWriter = true;
+
+        _writer.WriteStartObject();
     }
 
     /// <summary>
@@ -45,7 +49,7 @@ public sealed class JsonMediaWriter : IMedia<string>, IDisposable
     /// <param name="key">Property name or key.</param>
     /// <param name="value">String value to write.</param>
     /// <returns>This media instance for fluent chaining.</returns>
-    public IMedia WriteString(string key, string value)
+    public IMedia With(string key, string value)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(key);
         ArgumentNullException.ThrowIfNull(value);
@@ -61,7 +65,7 @@ public sealed class JsonMediaWriter : IMedia<string>, IDisposable
     /// <param name="key">Property name or key.</param>
     /// <param name="value">Optional string value to write.</param>
     /// <returns>This media instance for fluent chaining.</returns>
-    public IMedia WriteOptionalString(string key, Option<string> value)
+    public IMedia With(string key, Option<string> value)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(key);
         if (value.IsSome)
@@ -82,7 +86,7 @@ public sealed class JsonMediaWriter : IMedia<string>, IDisposable
     /// <param name="key">Property name or key.</param>
     /// <param name="value">GUID value to write.</param>
     /// <returns>This media instance for fluent chaining.</returns>
-    public IMedia WriteGuid(string key, Guid value)
+    public IMedia With(string key, Guid value)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(key);
 
@@ -96,7 +100,7 @@ public sealed class JsonMediaWriter : IMedia<string>, IDisposable
     /// <param name="key">Property name or key.</param>
     /// <param name="value">Integer value to write.</param>
     /// <returns>This media instance for fluent chaining.</returns>
-    public IMedia WriteInt32(string key, int value)
+    public IMedia With(string key, int value)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(key);
 
@@ -110,7 +114,7 @@ public sealed class JsonMediaWriter : IMedia<string>, IDisposable
     /// <param name="key">Property name or key.</param>
     /// <param name="values">Collection of string values to write as an array.</param>
     /// <returns>This media instance for fluent chaining.</returns>
-    public IMedia WriteStringArray(string key, IEnumerable<string> values)
+    public IMedia With(string key, IEnumerable<string> values)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(key);
         ArgumentNullException.ThrowIfNull(values);
@@ -126,23 +130,18 @@ public sealed class JsonMediaWriter : IMedia<string>, IDisposable
     }
 
     /// <summary>
-    /// Starts writing an object.
-    /// </summary>
-    public IMedia StartObject()
-    {
-        _writer.WriteStartObject();
-        return this;
-    }
-
-    /// <summary>
     /// Starts writing a nested object with the specified key.
     /// </summary>
     /// <param name="key">Property name or key for the object.</param>
-    public IMedia StartObject(string key)
+    /// <param name="configure">Configuration action for the nested object.</param>
+    public IMedia WithObject(string key, Action<IMedia> configure)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(key);
+        ArgumentNullException.ThrowIfNull(configure);
 
         _writer.WriteStartObject(key);
+        configure(this);
+        _writer.WriteEndObject();
         return this;
     }
 
@@ -172,6 +171,7 @@ public sealed class JsonMediaWriter : IMedia<string>, IDisposable
                 "This instance was created with an external writer.");
         }
 
+        _writer.WriteEndObject();
         _writer.Flush();
         return System.Text.Encoding.UTF8.GetString(_memoryStream.ToArray());
     }
@@ -185,6 +185,10 @@ public sealed class JsonMediaWriter : IMedia<string>, IDisposable
         {
             _writer?.Dispose();
             _memoryStream?.Dispose();
+        }
+        else
+        {
+            _writer?.WriteEndObject();
         }
     }
 }

@@ -30,9 +30,11 @@ public sealed record RatingOptions : IRatingOptions
         {
             var option = _options[i];
             var scoreKey = i.ToString(CultureInfo.InvariantCulture);
-            media.StartObject(scoreKey);
-            option.Print(media);
-            media.EndObject();
+
+            media.WithObject(scoreKey, c =>
+            {
+                option.Print(media);
+            });
         }
     }
 }

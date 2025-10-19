@@ -35,7 +35,7 @@ internal sealed class PgAverageCriteria : IAverageCriteria
         var connection = await _unitOfWork.ActiveConnection(ct);
 
         // Serialize rating options to JSON using Print + Output pattern
-        using var jsonMedia = new Infrastructure.Media.JsonMediaWriter();
+        using var jsonMedia = new Media.JsonMediaWriter();
         ratingOptions.Print(jsonMedia);
         var ratingOptionsJson = jsonMedia.Output();
 
