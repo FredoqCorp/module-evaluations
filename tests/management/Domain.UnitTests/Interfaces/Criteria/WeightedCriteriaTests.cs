@@ -2,6 +2,10 @@ using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Criteria;
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Ratings;
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Shared;
 using CascVel.Modules.Evaluations.Management.Domain.UnitTests.Interfaces.TestFixtures;
+using CascVel.Modules.Evaluations.Management.Domain.ValueObjects.Criteria;
+using CascVel.Modules.Evaluations.Management.Domain.ValueObjects.Forms;
+using CascVel.Modules.Evaluations.Management.Domain.ValueObjects.Groups;
+using CascVel.Modules.Evaluations.Management.Domain.ValueObjects.Shared;
 
 namespace CascVel.Modules.Evaluations.Management.Domain.UnitTests.Interfaces.Criteria;
 
@@ -14,7 +18,6 @@ public sealed class WeightedCriteriaTests
     public void Returns_combined_sibling_weight()
     {
         var criteria = new TestWeightedCriteria(
-            RatingContributionTestData.SingleContribution(),
             SharedTypesTestData.RandomBasisPoints(),
             true);
 
@@ -27,7 +30,6 @@ public sealed class WeightedCriteriaTests
     public void Validates_as_weighted_collection()
     {
         var criteria = new TestWeightedCriteria(
-            RatingContributionTestData.SingleContribution(),
             SharedTypesTestData.RandomBasisPoints(),
             true);
 
@@ -37,24 +39,10 @@ public sealed class WeightedCriteriaTests
     }
 
     [Fact]
-    public void Produces_contribution_with_weighting()
-    {
-        var criteria = new TestWeightedCriteria(
-            RatingContributionTestData.MultipleContributions(),
-            SharedTypesTestData.RandomBasisPoints(),
-            true);
-
-        var contribution = criteria.Contribution();
-
-        Assert.NotNull(contribution);
-    }
-
-    [Fact]
     public void Returns_consistent_weight_across_calls()
     {
         var expectedWeight = SharedTypesTestData.RandomBasisPoints();
         var criteria = new TestWeightedCriteria(
-            RatingContributionTestData.SingleContribution(),
             expectedWeight,
             true);
 
@@ -68,7 +56,6 @@ public sealed class WeightedCriteriaTests
     public void Inherits_validation_behavior_from_criteria()
     {
         var criteria = new TestWeightedCriteria(
-            RatingContributionTestData.SingleContribution(),
             SharedTypesTestData.RandomBasisPoints(),
             false);
 
@@ -80,10 +67,19 @@ public sealed class WeightedCriteriaTests
 /// Test double for weighted criteria interface.
 /// </summary>
 file sealed record TestWeightedCriteria(
-    IRatingContribution TestContribution,
     IBasisPoints BasisPoints,
     bool IsValid) : IWeightedCriteria
 {
+    public static Task<IWeightedCriterion> Add(CriterionId id, CriterionText text, CriterionTitle title, IRatingOptions ratingOptions, FormId formId, IWeight weight, OrderIndex orderIndex, CancellationToken ct = default)
+    {
+        throw new NotImplementedException();
+    }
+
+    public static Task<IWeightedCriterion> Add(CriterionId id, CriterionText text, CriterionTitle title, IRatingOptions ratingOptions, GroupId groupId, IWeight weight, OrderIndex orderIndex, CancellationToken ct = default)
+    {
+        throw new NotImplementedException();
+    }
+
     public IBasisPoints Weight() => BasisPoints;
 
     public void Validate()
@@ -93,6 +89,4 @@ file sealed record TestWeightedCriteria(
             throw new InvalidOperationException("Validation failed");
         }
     }
-
-    public IRatingContribution Contribution() => TestContribution;
 }

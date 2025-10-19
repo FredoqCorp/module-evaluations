@@ -1,4 +1,3 @@
-using CascVel.Modules.Evaluations.Management.Domain.Common;
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Forms;
 using CascVel.Modules.Evaluations.Management.Domain.ValueObjects.Forms;
 
@@ -35,14 +34,5 @@ public sealed class Form : IForm
     public void Validate()
     {
         _root.Validate();
-    }
-
-    /// <summary>
-    /// Calculates the final normalized score produced by the form structure.
-    /// </summary>
-    /// <returns>An option containing the normalized score when participants exist; otherwise None.</returns>
-    public Option<decimal> Score()
-    {
-        return _root.Contribution().Total();
     }
 }

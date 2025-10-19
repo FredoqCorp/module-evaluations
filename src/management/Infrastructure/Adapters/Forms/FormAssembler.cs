@@ -10,6 +10,7 @@ using CascVel.Modules.Evaluations.Management.Domain.ValueObjects.Forms;
 using CascVel.Modules.Evaluations.Management.Domain.ValueObjects.Groups;
 using CascVel.Modules.Evaluations.Management.Domain.ValueObjects.Ratings;
 using CascVel.Modules.Evaluations.Management.Domain.ValueObjects.Shared;
+using System.Globalization;
 using System.Text.Json;
 
 namespace CascVel.Modules.Evaluations.Management.Infrastructure.Adapters.Forms;
@@ -17,15 +18,8 @@ namespace CascVel.Modules.Evaluations.Management.Infrastructure.Adapters.Forms;
 /// <summary>
 /// Assembles domain form objects from database rows.
 /// </summary>
-internal sealed class FormAssembler
+internal static class FormAssembler
 {
-    private readonly Dictionary<Guid, List<RatingOptionRow>> _ratingsByCriterionId;
-
-    public FormAssembler(Dictionary<Guid, List<RatingOptionRow>> ratingsByCriterionId)
-    {
-        _ratingsByCriterionId = ratingsByCriterionId ?? throw new ArgumentNullException(nameof(ratingsByCriterionId));
-    }
-
     /// <summary>
     /// Assembles form summary from optimized row with counts.
     /// </summary>
@@ -79,7 +73,7 @@ internal sealed class FormAssembler
     /// <summary>
     /// Assembles complete form with all nested structures.
     /// </summary>
-    public Form Assemble(
+    public static Form Assemble(
         FormRow formRow,
         List<GroupRow> groupRows,
         List<CriterionRow> criteriaRows)
@@ -110,7 +104,7 @@ internal sealed class FormAssembler
         return new FormMetadata(name, description, code, tags);
     }
 
-    private AverageRootGroup BuildAverageRoot(
+    private static AverageRootGroup BuildAverageRoot(
         List<GroupRow> groupRows,
         List<CriterionRow> criteriaRows)
     {
@@ -132,7 +126,7 @@ internal sealed class FormAssembler
         );
     }
 
-    private WeightedRootGroup BuildWeightedRoot(
+    private static WeightedRootGroup BuildWeightedRoot(
         List<GroupRow> groupRows,
         List<CriterionRow> criteriaRows)
     {
@@ -154,19 +148,18 @@ internal sealed class FormAssembler
         );
     }
 
-    private Criterion BuildAverageCriterion(CriterionRow row)
+    private static Criterion BuildAverageCriterion(CriterionRow row)
     {
         var id = new CriterionId(row.Id);
         var text = new CriterionText(row.Text);
         var title = new CriterionTitle(row.Title);
 
-        var ratingRows = _ratingsByCriterionId.GetValueOrDefault(row.Id, []);
-        var ratingOptions = BuildRatings(ratingRows);
+        var ratingOptions = BuildRatings(row.RatingOptions);
 
         return new Criterion(id, text, title, ratingOptions);
     }
 
-    private WeightedCriterion BuildWeightedCriterion(CriterionRow row)
+    private static WeightedCriterion BuildWeightedCriterion(CriterionRow row)
     {
         var criterion = BuildAverageCriterion(row);
         var weight = new Weight(row.WeightBasisPoints ?? 0);
@@ -174,7 +167,7 @@ internal sealed class FormAssembler
         return new WeightedCriterion(criterion, weight);
     }
 
-    private AverageCriterionGroup BuildAverageGroup(
+    private static AverageCriterionGroup BuildAverageGroup(
         GroupRow groupRow,
         List<GroupRow> allGroups,
         List<CriterionRow> allCriteria)
@@ -200,7 +193,7 @@ internal sealed class FormAssembler
         );
     }
 
-    private WeightedCriterionGroup BuildWeightedGroup(
+    private static WeightedCriterionGroup BuildWeightedGroup(
         GroupRow groupRow,
         List<GroupRow> allGroups,
         List<CriterionRow> allCriteria)
@@ -237,17 +230,112 @@ internal sealed class FormAssembler
         return new GroupProfile(id, title, description);
     }
 
-    private static RatingOptions BuildRatings(List<RatingOptionRow> rows)
+    private static RatingOptions BuildRatings(string json)
     {
-        var options = rows
-            .OrderBy(r => r.OrderIndex)
-            .Select(r => new RatingOption(
-                new RatingScore((ushort)Math.Round(r.Score)),
-                new RatingLabel(r.Label),
-                new RatingAnnotation(r.Annotation ?? string.Empty)
-            ))
+        if (string.IsNullOrWhiteSpace(json))
+        {
+            throw new InvalidOperationException("Criterion rating options payload is missing");
+        }
+
+        using var document = JsonDocument.Parse(json);
+        var root = document.RootElement;
+        if (root.ValueKind != JsonValueKind.Object)
+        {
+            throw new InvalidOperationException("Criterion rating options payload must be a JSON object keyed by order index");
+        }
+
+        var indexedOptions = new List<(int Index, RatingOption Option)>();
+        foreach (var property in root.EnumerateObject())
+        {
+            var index = ParseIndex(property.Name);
+            var option = BuildRatingOption(property.Value);
+            indexedOptions.Add((index, option));
+        }
+
+        var orderedOptions = indexedOptions
+            .OrderBy(tuple => tuple.Index)
+            .Select(tuple => tuple.Option)
             .ToList();
 
-        return new RatingOptions(options);
+        return new RatingOptions(orderedOptions);
+    }
+
+    private static int ParseIndex(string key)
+    {
+        if (!int.TryParse(key, NumberStyles.Integer, CultureInfo.InvariantCulture, out var index))
+        {
+            throw new InvalidOperationException($"Criterion rating option index {key} must be an integer");
+        }
+
+        return index;
+    }
+
+    private static RatingOption BuildRatingOption(JsonElement element)
+    {
+        if (element.ValueKind != JsonValueKind.Object)
+        {
+            throw new InvalidOperationException("Criterion rating option must be described by a JSON object");
+        }
+
+        if (!element.TryGetProperty("score", out var scoreElement))
+        {
+            throw new InvalidOperationException("Criterion rating option must contain score");
+        }
+
+        var scoreValue = ParseScore(scoreElement);
+
+        if (!element.TryGetProperty("label", out var labelElement))
+        {
+            throw new InvalidOperationException("Criterion rating option must contain label");
+        }
+
+        var labelValue = labelElement.GetString();
+        if (string.IsNullOrWhiteSpace(labelValue))
+        {
+            throw new InvalidOperationException("Criterion rating option label cannot be empty");
+        }
+
+        var annotationValue = string.Empty;
+        if (element.TryGetProperty("annotation", out var annotationElement) && annotationElement.ValueKind == JsonValueKind.String)
+        {
+            annotationValue = annotationElement.GetString() ?? string.Empty;
+        }
+
+        return new RatingOption(
+            new RatingScore(scoreValue),
+            new RatingLabel(labelValue),
+            new RatingAnnotation(annotationValue));
+    }
+
+    private static ushort ParseScore(JsonElement scoreElement)
+    {
+        if (scoreElement.ValueKind == JsonValueKind.Number)
+        {
+            if (scoreElement.TryGetUInt16(out var direct))
+            {
+                return direct;
+            }
+
+            var decimalScore = scoreElement.GetDecimal();
+            return Convert.ToUInt16(decimalScore);
+        }
+
+        if (scoreElement.ValueKind == JsonValueKind.String)
+        {
+            var text = scoreElement.GetString();
+            if (string.IsNullOrWhiteSpace(text))
+            {
+                throw new InvalidOperationException("Criterion rating option score cannot be empty");
+            }
+
+            if (!ushort.TryParse(text, NumberStyles.Integer, CultureInfo.InvariantCulture, out var parsed))
+            {
+                throw new InvalidOperationException($"Criterion rating option score {text} is not a valid positive integer");
+            }
+
+            return parsed;
+        }
+
+        throw new InvalidOperationException("Criterion rating option score must be numeric");
     }
 }

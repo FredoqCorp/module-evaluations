@@ -114,7 +114,7 @@ public sealed class UserInfoTests
             Option.None<string>());
 
         // Act & Assert
-        Assert.Throws<ArgumentNullException>(() => userInfo.Print(null!));
+        Assert.Throws<ArgumentNullException>(() => userInfo.Print<object>(null!));
     }
 
     [Fact]

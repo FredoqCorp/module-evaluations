@@ -1,6 +1,7 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Forms;
+using CascVel.Modules.Evaluations.Management.Infrastructure.Media;
 
 namespace CascVel.Modules.Evaluations.Management.Host.Infrastructure;
 
@@ -33,11 +34,7 @@ internal sealed class FormSummaryJsonConverter : JsonConverter<IFormSummary>
         ArgumentNullException.ThrowIfNull(writer);
         ArgumentNullException.ThrowIfNull(value);
 
-        writer.WriteStartObject();
-
-        var media = new JsonMediaWriter(writer);
+        using var media = new JsonMediaWriter(writer);
         value.Print(media);
-
-        writer.WriteEndObject();
     }
 }

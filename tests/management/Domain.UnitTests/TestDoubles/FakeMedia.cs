@@ -6,17 +6,17 @@ namespace CascVel.Modules.Evaluations.Management.Domain.UnitTests.TestDoubles;
 /// <summary>
 /// Fake implementation of IMedia for testing printer pattern.
 /// </summary>
-internal sealed class FakeMedia : IMedia
+internal sealed class FakeMedia : IMedia<object>
 {
     public List<(string Key, object Value)> Writes { get; } = [];
 
-    public IMedia WriteString(string key, string value)
+    public IMedia With(string key, string value)
     {
         Writes.Add((key, value));
         return this;
     }
 
-    public IMedia WriteOptionalString(string key, Option<string> value)
+    public IMedia With(string key, Option<string> value)
     {
         if (value.IsSome)
         {
@@ -29,21 +29,34 @@ internal sealed class FakeMedia : IMedia
         return this;
     }
 
-    public IMedia WriteGuid(string key, Guid value)
+    public IMedia With(string key, Guid value)
     {
         Writes.Add((key, value));
         return this;
     }
 
-    public IMedia WriteInt32(string key, int value)
+    public IMedia With(string key, int value)
     {
         Writes.Add((key, value));
         return this;
     }
 
-    public IMedia WriteStringArray(string key, IEnumerable<string> values)
+    public IMedia With(string key, IEnumerable<string> values)
     {
         Writes.Add((key, values.ToList()));
         return this;
+    }
+
+    public IMedia WithObject(string key, Action<IMedia> configure)
+    {
+        var nestedMedia = new FakeMedia();
+        configure(nestedMedia);
+        Writes.Add((key, nestedMedia.Output()));
+        return this;
+    }
+
+    public object Output()
+    {
+        return Writes;
     }
 }

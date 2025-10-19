@@ -107,6 +107,8 @@
 
 * Do not use static methods to implement business logic in classes or records
 
+* Use conception of "SQL Speaking objects" when working with database
+
 ## Tests
 
 Every test case may contain only one assertion.

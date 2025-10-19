@@ -41,20 +41,6 @@ public sealed class WeightedCriterionGroup : IWeightedGroup
     }
 
     /// <summary>
-    /// Calculates the weighted contribution based on the members' contributions and the group weight.
-    /// </summary>
-    /// <returns>The weighted contribution that represents this group.</returns>
-    public IRatingContribution Contribution()
-    {
-        IRatingContribution total = new RatingContribution(decimal.Zero, 0);
-
-        total = total.Join(_criteria.Contribution());
-        total = total.Join(_groups.Contribution());
-
-        return _weight.Weighted(total);
-    }
-
-    /// <summary>
     /// Returns the weight associated with the group.
     /// </summary>
     /// <returns>Weight assigned to the group.</returns>

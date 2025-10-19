@@ -14,5 +14,6 @@ internal sealed class CriterionRow
     public required string CriterionType { get; init; }
     public int? WeightBasisPoints { get; init; }
     public required int OrderIndex { get; init; }
+    public required string RatingOptions { get; init; }
 #pragma warning restore S1144, S3459
 }

@@ -14,7 +14,6 @@ public sealed class WeightedGroupsTests
     public void Returns_combined_sibling_weight()
     {
         var groups = new TestWeightedGroups(
-            RatingContributionTestData.SingleContribution(),
             SharedTypesTestData.RandomBasisPoints(),
             true);
 
@@ -27,7 +26,6 @@ public sealed class WeightedGroupsTests
     public void Validates_as_weighted_collection()
     {
         var groups = new TestWeightedGroups(
-            RatingContributionTestData.SingleContribution(),
             SharedTypesTestData.RandomBasisPoints(),
             true);
 
@@ -37,24 +35,10 @@ public sealed class WeightedGroupsTests
     }
 
     [Fact]
-    public void Produces_contribution_with_weighting()
-    {
-        var groups = new TestWeightedGroups(
-            RatingContributionTestData.MultipleContributions(),
-            SharedTypesTestData.RandomBasisPoints(),
-            true);
-
-        var contribution = groups.Contribution();
-
-        Assert.NotNull(contribution);
-    }
-
-    [Fact]
     public void Returns_consistent_weight_across_calls()
     {
         var expectedWeight = SharedTypesTestData.RandomBasisPoints();
         var groups = new TestWeightedGroups(
-            RatingContributionTestData.SingleContribution(),
             expectedWeight,
             true);
 
@@ -68,7 +52,6 @@ public sealed class WeightedGroupsTests
     public void Inherits_validation_behavior_from_groups()
     {
         var groups = new TestWeightedGroups(
-            RatingContributionTestData.SingleContribution(),
             SharedTypesTestData.RandomBasisPoints(),
             false);
 
@@ -80,7 +63,6 @@ public sealed class WeightedGroupsTests
 /// Test double for weighted groups interface.
 /// </summary>
 file sealed record TestWeightedGroups(
-    IRatingContribution TestContribution,
     IBasisPoints BasisPoints,
     bool IsValid) : IWeightedGroups
 {
@@ -93,6 +75,4 @@ file sealed record TestWeightedGroups(
             throw new InvalidOperationException("Validation failed");
         }
     }
-
-    public IRatingContribution Contribution() => TestContribution;
 }

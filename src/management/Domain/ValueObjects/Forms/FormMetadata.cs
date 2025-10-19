@@ -34,14 +34,14 @@ public sealed record FormMetadata
     /// Prints the form metadata fields into the provided media.
     /// </summary>
     /// <param name="media">Target media that receives the printed representation.</param>
-    public void Print(IMedia media)
+    public void Print<TOutput>(IMedia<TOutput> media)
     {
         ArgumentNullException.ThrowIfNull(media);
 
         media
-            .WriteString("name", _name.Value)
-            .WriteString("description", _description.Value)
-            .WriteString("code", _code.Token);
+            .With("name", _name.Value)
+            .With("description", _description.Value)
+            .With("code", _code.Token);
 
         _tags.Print(media, "tags");
     }

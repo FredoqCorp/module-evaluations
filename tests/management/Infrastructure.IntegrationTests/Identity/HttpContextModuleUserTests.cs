@@ -283,7 +283,7 @@ public sealed class HttpContextModuleUserTests
         var moduleUser = new HttpContextModuleUser(accessor);
 
         // Act & Assert
-        Assert.Throws<ArgumentNullException>(() => moduleUser.Print(null!));
+        Assert.Throws<ArgumentNullException>(() => moduleUser.Print<object>(null!));
     }
 
     [Fact]

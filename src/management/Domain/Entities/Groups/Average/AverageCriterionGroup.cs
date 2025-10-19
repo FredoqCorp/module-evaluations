@@ -32,20 +32,6 @@ public sealed class AverageCriterionGroup : IAverageGroup
     }
 
     /// <summary>
-    /// Calculates the contribution produced by unweighted members of the group.
-    /// </summary>
-    /// <returns>Contribution represented by the group.</returns>
-    public IRatingContribution Contribution()
-    {
-        IRatingContribution total = new RatingContribution(decimal.Zero, 0);
-
-        total = total.Join(_criteria.Contribution());
-        total = total.Join(_groups.Contribution());
-
-        return total;
-    }
-
-    /// <summary>
     /// Validates the internal consistency of the unweighted group.
     /// </summary>
     public void Validate()

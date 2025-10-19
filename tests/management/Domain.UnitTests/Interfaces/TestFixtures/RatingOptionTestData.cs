@@ -1,3 +1,4 @@
+using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Media;
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Ratings;
 using CascVel.Modules.Evaluations.Management.Domain.ValueObjects.Ratings;
 
@@ -9,22 +10,32 @@ namespace CascVel.Modules.Evaluations.Management.Domain.UnitTests.Interfaces.Tes
 internal static class RatingOptionTestData
 {
     internal static IRatingOption OptionWithScore(ushort score) =>
-        new TestRatingOption(new RatingScore(score), RatingContributionTestData.SingleContribution());
+        new TestRatingOption(new RatingScore(score));
 
     internal static IRatingOption RandomOption() =>
         new TestRatingOption(
-            new RatingScore((ushort)Random.Shared.Next(1, 10)),
-            RatingContributionTestData.MultipleContributions());
+            new RatingScore((ushort)Random.Shared.Next(1, 10)));
 }
 
 /// <summary>
 /// Test double for rating option interface.
 /// </summary>
-internal sealed record TestRatingOption(RatingScore Score, IRatingContribution TestContribution) : IRatingOption
+internal sealed record TestRatingOption(RatingScore ScoreValue) : IRatingOption
 {
-    public bool Matches(RatingScore score) =>
-        Score.Value == score.Value;
+    public RatingLabel Label { get; init; } = new RatingLabel("Test Label");
+    public RatingAnnotation Annotation { get; init; } = new RatingAnnotation("Test Annotation");
 
-    public IRatingContribution Contribution() =>
-        TestContribution;
+    public int Score => ScoreValue.Value;
+
+    public bool Matches(RatingScore score) =>
+        ScoreValue.Value == score.Value;
+
+    public void Print<TOutput>(IMedia<TOutput> media)
+    {
+        ArgumentNullException.ThrowIfNull(media);
+        
+        media.With("score", ScoreValue.Value);
+        media.With("label", Label.Value);
+        media.With("annotation", Annotation.Text);
+    }
 }

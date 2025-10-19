@@ -13,7 +13,7 @@ public interface IMedia
     /// <param name="key">Property name or key.</param>
     /// <param name="value">String value to write.</param>
     /// <returns>This media instance for fluent chaining.</returns>
-    IMedia WriteString(string key, string value);
+    IMedia With(string key, string value);
 
     /// <summary>
     /// Writes an optional string value associated with the specified key.
@@ -22,7 +22,7 @@ public interface IMedia
     /// <param name="key">Property name or key.</param>
     /// <param name="value">Optional string value to write.</param>
     /// <returns>This media instance for fluent chaining.</returns>
-    IMedia WriteOptionalString(string key, Option<string> value);
+    IMedia With(string key, Option<string> value);
 
     /// <summary>
     /// Writes a GUID value associated with the specified key.
@@ -30,7 +30,7 @@ public interface IMedia
     /// <param name="key">Property name or key.</param>
     /// <param name="value">GUID value to write.</param>
     /// <returns>This media instance for fluent chaining.</returns>
-    IMedia WriteGuid(string key, Guid value);
+    IMedia With(string key, Guid value);
 
     /// <summary>
     /// Writes a 32-bit integer value associated with the specified key.
@@ -38,7 +38,7 @@ public interface IMedia
     /// <param name="key">Property name or key.</param>
     /// <param name="value">Integer value to write.</param>
     /// <returns>This media instance for fluent chaining.</returns>
-    IMedia WriteInt32(string key, int value);
+    IMedia With(string key, int value);
 
     /// <summary>
     /// Writes an array of string values associated with the specified key.
@@ -46,5 +46,25 @@ public interface IMedia
     /// <param name="key">Property name or key.</param>
     /// <param name="values">Collection of string values to write as an array.</param>
     /// <returns>This media instance for fluent chaining.</returns>
-    IMedia WriteStringArray(string key, IEnumerable<string> values);
+    IMedia With(string key, IEnumerable<string> values);
+
+    /// <summary>
+    /// Writing a nested object with the specified key.
+    /// </summary>
+    /// <param name="key">Property name or key for the object.</param>
+    /// <param name="configure">Configuration action for the nested object.</param>
+    IMedia WithObject(string key, Action<IMedia> configure);
+}
+
+/// <summary>
+/// Behavioral contract for a media that receives structured data via fluent API and produces output.
+/// </summary>
+/// <typeparam name="TOutput">The type of output this media produces.</typeparam>
+public interface IMedia<out TOutput> : IMedia
+{
+    /// <summary>
+    /// Finalizes the media and returns the complete output.
+    /// </summary>
+    /// <returns>The final output representation.</returns>
+    TOutput Output();
 }

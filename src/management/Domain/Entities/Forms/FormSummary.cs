@@ -46,15 +46,15 @@ public sealed record FormSummary : IFormSummary
     /// Prints the form summary representation into the provided media.
     /// </summary>
     /// <param name="media">Target media that receives the printed representation.</param>
-    public void Print(IMedia media)
+    public void Print<TOutput>(IMedia<TOutput> media)
     {
         ArgumentNullException.ThrowIfNull(media);
 
-        media.WriteGuid("id", _id.Value);
+        media.With("id", _id.Value);
         _metadata.Print(media);
         media
-            .WriteInt32("groupsCount", _groupsCount)
-            .WriteInt32("criteriaCount", _criteriaCount)
-            .WriteString("calculationType", _calculationType.ToString());
+            .With("groupsCount", _groupsCount)
+            .With("criteriaCount", _criteriaCount)
+            .With("calculationType", _calculationType.ToString());
     }
 }

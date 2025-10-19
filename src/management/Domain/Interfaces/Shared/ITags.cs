@@ -18,7 +18,8 @@ public interface ITags
     /// <summary>
     /// Prints the tags collection as a string array into the provided media.
     /// </summary>
+    /// <typeparam name="TOutput">The type of output the media produces.</typeparam>
     /// <param name="media">Target media that receives the printed representation.</param>
     /// <param name="key">Property name or key for the array.</param>
-    void Print(IMedia media, string key);
+    void Print<TOutput>(IMedia<TOutput> media, string key);
 }

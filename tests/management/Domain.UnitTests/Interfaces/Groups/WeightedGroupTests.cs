@@ -14,7 +14,6 @@ public sealed class WeightedGroupTests
     public void Returns_associated_weight()
     {
         var group = new TestWeightedGroup(
-            RatingContributionTestData.SingleContribution(),
             SharedTypesTestData.RandomWeight(),
             true);
 
@@ -27,7 +26,6 @@ public sealed class WeightedGroupTests
     public void Validates_as_weighted_group()
     {
         var group = new TestWeightedGroup(
-            RatingContributionTestData.SingleContribution(),
             SharedTypesTestData.RandomWeight(),
             true);
 
@@ -37,24 +35,10 @@ public sealed class WeightedGroupTests
     }
 
     [Fact]
-    public void Produces_contribution_with_weighting()
-    {
-        var group = new TestWeightedGroup(
-            RatingContributionTestData.MultipleContributions(),
-            SharedTypesTestData.RandomWeight(),
-            true);
-
-        var contribution = group.Contribution();
-
-        Assert.NotNull(contribution);
-    }
-
-    [Fact]
     public void Returns_consistent_weight_across_calls()
     {
         var expectedWeight = SharedTypesTestData.RandomWeight();
         var group = new TestWeightedGroup(
-            RatingContributionTestData.SingleContribution(),
             expectedWeight,
             true);
 
@@ -68,7 +52,6 @@ public sealed class WeightedGroupTests
     public void Inherits_validation_behavior_from_group()
     {
         var group = new TestWeightedGroup(
-            RatingContributionTestData.SingleContribution(),
             SharedTypesTestData.RandomWeight(),
             false);
 
@@ -80,7 +63,6 @@ public sealed class WeightedGroupTests
 /// Test double for weighted group interface.
 /// </summary>
 file sealed record TestWeightedGroup(
-    IRatingContribution TestContribution,
     IWeight GroupWeight,
     bool IsValid) : IWeightedGroup
 {
@@ -93,6 +75,4 @@ file sealed record TestWeightedGroup(
             throw new InvalidOperationException("Validation failed");
         }
     }
-
-    public IRatingContribution Contribution() => TestContribution;
 }

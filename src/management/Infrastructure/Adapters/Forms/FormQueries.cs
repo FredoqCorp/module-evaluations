@@ -47,23 +47,10 @@ internal static class FormQueries
             text AS Text,
             criterion_type AS CriterionType,
             weight_basis_points AS WeightBasisPoints,
-            order_index AS OrderIndex
+            order_index AS OrderIndex,
+            rating_options AS RatingOptions
         FROM form_criteria
         ORDER BY form_id, order_index";
-
-    /// <summary>
-    /// Query to load all rating options for criteria.
-    /// </summary>
-    internal const string LoadRatings = @"
-        SELECT
-            id AS Id,
-            criterion_id AS CriterionId,
-            score AS Score,
-            label AS Label,
-            annotation AS Annotation,
-            order_index AS OrderIndex
-        FROM rating_options
-        ORDER BY criterion_id, order_index";
 
     /// <summary>
     /// Optimized query to load form summaries with counts.

@@ -1,7 +1,11 @@
 using System.Collections.Immutable;
+using CascVel.Modules.Evaluations.Management.Domain.Entities.Criteria.Average;
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Criteria;
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Ratings;
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Shared;
+using CascVel.Modules.Evaluations.Management.Domain.ValueObjects.Criteria;
+using CascVel.Modules.Evaluations.Management.Domain.ValueObjects.Forms;
+using CascVel.Modules.Evaluations.Management.Domain.ValueObjects.Groups;
 using CascVel.Modules.Evaluations.Management.Domain.ValueObjects.Ratings;
 using CascVel.Modules.Evaluations.Management.Domain.ValueObjects.Shared;
 
@@ -12,7 +16,7 @@ namespace CascVel.Modules.Evaluations.Management.Domain.Entities.Criteria.Weight
 /// </summary>
 public sealed class WeightedCriteria : IWeightedCriteria
 {
-    private readonly IImmutableList<IWeightedCriterion> _items;
+    private IImmutableList<IWeightedCriterion> _items;
 
     /// <summary>
     /// Initializes the weighted criteria collection from the provided sequence.
@@ -26,19 +30,51 @@ public sealed class WeightedCriteria : IWeightedCriteria
     }
 
     /// <summary>
-    /// Calculates the total contribution produced by all weighted criteria.
+    /// Adds a new weighted criterion to the form root level.
     /// </summary>
-    /// <returns>Total contribution from all weighted criteria.</returns>
-    public IRatingContribution Contribution()
+    /// <param name="id">Identifier of the criterion.</param>
+    /// <param name="text">Text description of the criterion.</param>
+    /// <param name="title">Title of the criterion.</param>
+    /// <param name="ratingOptions">Rating options associated with the criterion.</param>
+    /// <param name="formId">Identifier of the parent form.</param>
+    /// <param name="weight">Weight of the criterion.</param>
+    /// <param name="orderIndex">Display order within the parent context.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>The added weighted criterion.</returns>
+    public Task<IWeightedCriterion> Add(CriterionId id, CriterionText text, CriterionTitle title, IRatingOptions ratingOptions, FormId formId, IWeight weight, OrderIndex orderIndex, CancellationToken ct = default)
     {
-        IRatingContribution total = new RatingContribution(decimal.Zero, 0);
+        ArgumentNullException.ThrowIfNull(ratingOptions);
+        ArgumentNullException.ThrowIfNull(weight);
 
-        foreach (var item in _items)
-        {
-            total = total.Join(item.Contribution());
-        }
+        var baseCriterion = new Criterion(id, text, title, ratingOptions);
+        var criterion = new WeightedCriterion(baseCriterion, weight);
+        _items = _items.Add(criterion);
 
-        return total;
+        return Task.FromResult<IWeightedCriterion>(criterion);
+    }
+
+    /// <summary>
+    /// Adds a new weighted criterion to a group.
+    /// </summary>
+    /// <param name="id">Identifier of the criterion.</param>
+    /// <param name="text">Text description of the criterion.</param>
+    /// <param name="title">Title of the criterion.</param>
+    /// <param name="ratingOptions">Rating options associated with the criterion.</param>
+    /// <param name="groupId">Identifier of the parent group.</param>
+    /// <param name="weight">Weight of the criterion.</param>
+    /// <param name="orderIndex">Display order within the parent context.</param>
+    /// <param name="ct">Cancellation token.</param>
+    /// <returns>The added weighted criterion.</returns>
+    public Task<IWeightedCriterion> Add(CriterionId id, CriterionText text, CriterionTitle title, IRatingOptions ratingOptions, GroupId groupId, IWeight weight, OrderIndex orderIndex, CancellationToken ct = default)
+    {
+        ArgumentNullException.ThrowIfNull(ratingOptions);
+        ArgumentNullException.ThrowIfNull(weight);
+
+        var baseCriterion = new Criterion(id, text, title, ratingOptions);
+        var criterion = new WeightedCriterion(baseCriterion, weight);
+        _items = _items.Add(criterion);
+
+        return Task.FromResult<IWeightedCriterion>(criterion);
     }
 
     /// <summary>

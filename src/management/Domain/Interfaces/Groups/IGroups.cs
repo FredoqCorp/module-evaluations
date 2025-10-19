@@ -5,7 +5,7 @@ namespace CascVel.Modules.Evaluations.Management.Domain.Interfaces.Groups;
 /// <summary>
 /// Interface for Groups
 /// </summary>
-public interface IGroups : IRatingContributionSource
+public interface IGroups
 {
     /// <summary>
     /// Validates the internal consistency of the groups aggregate.

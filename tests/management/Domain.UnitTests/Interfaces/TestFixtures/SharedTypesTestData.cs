@@ -58,10 +58,6 @@ internal sealed record TestWeight(IPercent Percentage) : IWeight
 
     public CriterionScore Weighted(CriterionScore score) =>
         new(score.Value * Percentage.Basis().Apply(1m));
-
-    public IRatingContribution Weighted(IRatingContribution contribution) =>
-        contribution.Accept((amount, participants) =>
-            new TestRatingContribution(amount * Percentage.Basis().Apply(1m), participants));
 }
 
 /// <summary>
@@ -74,9 +70,9 @@ internal sealed record TestTags(IReadOnlyList<Tag> Items) : ITags
             ? this
             : new TestTags([.. Items, tag]);
 
-    public void Print(IMedia media, string key)
+    public void Print<TOutput>(IMedia<TOutput> media, string key)
     {
         var tagTexts = Items.Select(tag => tag.Text);
-        media.WriteStringArray(key, tagTexts);
+        media.With(key, tagTexts);
     }
 }

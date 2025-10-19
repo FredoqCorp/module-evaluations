@@ -11,7 +11,7 @@ public sealed class TagsPrintTests
         var tags = new Tags([new Tag("test")]);
 
         var exception = Assert.Throws<ArgumentNullException>(() =>
-            tags.Print(null!, "tags"));
+            tags.Print<object>(null!, "tags"));
 
         Assert.Equal("media", exception.ParamName);
     }

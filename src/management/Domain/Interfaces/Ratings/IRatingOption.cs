@@ -1,3 +1,4 @@
+using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Media;
 using CascVel.Modules.Evaluations.Management.Domain.ValueObjects.Ratings;
 
 namespace CascVel.Modules.Evaluations.Management.Domain.Interfaces.Ratings;
@@ -8,15 +9,9 @@ namespace CascVel.Modules.Evaluations.Management.Domain.Interfaces.Ratings;
 public interface IRatingOption
 {
     /// <summary>
-    /// Determines if this rating option matches the given score.
+    /// Prints the rating option to the provided media.
     /// </summary>
-    /// <param name="score">The score to compare against.</param>
-    /// <returns>True if this option has the given score.</returns>
-    bool Matches(RatingScore score);
-
-    /// <summary>
-    /// Calculates the contribution of this option to the total form score.
-    /// </summary>
-    /// <returns>The contribution produced by this option.</returns>
-    IRatingContribution Contribution();
+    /// <typeparam name="TOutput">The type of output the media produces.</typeparam>
+    /// <param name="media">The media to print to.</param>
+    void Print<TOutput>(IMedia<TOutput> media);
 }

@@ -4,5 +4,6 @@
   </ItemGroup>
   <ItemGroup>
     <InternalsVisibleTo Include="CascVel.Modules.Evaluations.Management.Infrastructure" />
+    <InternalsVisibleTo Include="CascVel.Modules.Evaluations.Management.Domain.UnitTests" />
   </ItemGroup>
 </Project>

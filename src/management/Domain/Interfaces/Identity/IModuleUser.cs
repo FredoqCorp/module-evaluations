@@ -24,6 +24,7 @@ public interface IModuleUser
     /// <summary>
     /// Prints the current user information into the provided media.
     /// </summary>
+    /// <typeparam name="TOutput">The type of output the media produces.</typeparam>
     /// <param name="media">Target media that receives the printed user representation.</param>
-    void Print(IMedia media);
+    void Print<TOutput>(IMedia<TOutput> media);
 }

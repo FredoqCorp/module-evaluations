@@ -12,7 +12,7 @@ namespace CascVel.Modules.Evaluations.Management.Infrastructure.Adapters;
 /// <summary>
 /// PostgreSQL implementation for loading evaluation forms.
 /// </summary>
-public sealed class PostgresForms : IForms
+internal sealed class PgForms : IForms
 {
     private readonly IUnitOfWork _unitOfWork;
 
@@ -20,7 +20,7 @@ public sealed class PostgresForms : IForms
     /// Initializes the adapter with the database unit of work.
     /// </summary>
     /// <param name="unitOfWork">Unit of work for managing database connections and transactions.</param>
-    public PostgresForms(IUnitOfWork unitOfWork)
+    public PgForms(IUnitOfWork unitOfWork)
     {
         ArgumentNullException.ThrowIfNull(unitOfWork);
 

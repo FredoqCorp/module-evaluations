@@ -60,7 +60,7 @@ public sealed class FormSummaryTests
         var summary = CreateValidSummary();
 
         var exception = Assert.Throws<ArgumentNullException>(() =>
-            summary.Print(null!));
+            summary.Print<object>(null!));
 
         Assert.Equal("media", exception.ParamName);
     }

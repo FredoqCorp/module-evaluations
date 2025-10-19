@@ -1,3 +1,4 @@
+using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Media;
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Ratings;
 
 namespace CascVel.Modules.Evaluations.Management.Domain.ValueObjects.Ratings;
@@ -34,12 +35,13 @@ public sealed record RatingOption : IRatingOption
         return _score.Equals(score);
     }
 
-    /// <summary>
-    /// Calculates the contribution of this option to the total form score.
-    /// </summary>
-    /// <returns>A contribution of zero because the option is not selected.</returns>
-    public IRatingContribution Contribution()
+    /// <inheritdoc />
+    public void Print<TOutput>(IMedia<TOutput> media)
     {
-        return new RatingContribution(decimal.Zero, 0);
+        ArgumentNullException.ThrowIfNull(media);
+
+        media.With("score", _score.Value);
+        media.With("label", _label.Value);
+        media.With("annotation", _annotation.Text);
     }
 }
