@@ -36,16 +36,16 @@ internal sealed class PgForms : IForms
     {
         var connection = await _unitOfWork.ActiveConnection(ct);
         var command = new CommandDefinition(FormQueries.LoadFormSummaries, cancellationToken: ct);
-        var rows = await connection.QueryAsync(command);
+        var rows = await connection.QueryAsync<(Guid Id, string Name, string? Description, string Code, string Tags, string RootGroupType, long GroupsCount, long CriteriaCount)>(command);
         var summaries = new List<IFormSummary>();
         foreach (var row in rows)
         {
-            Guid guid = row.Id;
-            string title = row.Name;
-            string narrative = row.Description ?? string.Empty;
-            string token = row.Code;
-            string payload = row.Tags;
-            string root = row.RootGroupType;
+            var guid = row.Id;
+            var title = row.Name;
+            var narrative = row.Description ?? string.Empty;
+            var token = row.Code;
+            var payload = row.Tags;
+            var root = row.RootGroupType;
             var id = new FormId(guid);
             var name = new FormName(title);
             var description = new FormDescription(narrative);
