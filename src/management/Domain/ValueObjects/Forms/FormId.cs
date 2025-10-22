@@ -16,7 +16,7 @@ public readonly record struct FormId
 
         Value = value;
     }
-    
+
     /// <summary>
     /// Creates a new form identifier with a newly generated GUID.
     /// </summary>

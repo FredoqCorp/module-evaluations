@@ -32,10 +32,10 @@ internal sealed class FakeHttpContext : HttpContext
     public override HttpResponse Response => throw new NotImplementedException();
     public override ConnectionInfo Connection => throw new NotImplementedException();
     public override WebSocketManager WebSockets => throw new NotImplementedException();
-    #pragma warning disable S1133 // Deprecated code should be removed
+#pragma warning disable S1133 // Deprecated code should be removed
     [Obsolete("Required to implement obsolete HttpContext.Authentication property")]
     public override AuthenticationManager Authentication => throw new NotImplementedException();
-    #pragma warning restore S1133
+#pragma warning restore S1133
     public override ClaimsPrincipal User { get; set; } = new();
     public override IDictionary<object, object?> Items { get; set; } = new Dictionary<object, object?>();
     public override IServiceProvider RequestServices { get; set; } = null!;

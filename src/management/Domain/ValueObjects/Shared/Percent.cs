@@ -5,7 +5,7 @@ namespace CascVel.Modules.Evaluations.Management.Domain.ValueObjects.Shared;
 /// <summary>
 /// Immutable value object that stores a percentage with basis points precision.
 /// </summary>
-public sealed record Percent: IPercent
+public sealed record Percent : IPercent
 {
     private readonly decimal _value;
 

@@ -28,7 +28,7 @@ public sealed class Criterion : IAverageCriterion
         _title = title;
         _ratingOptions = ratingOptions;
     }
-    
+
     /// <summary>
     /// Validates the internal consistency of the criterion.
     /// </summary>

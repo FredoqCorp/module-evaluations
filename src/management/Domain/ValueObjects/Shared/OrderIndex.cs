@@ -12,7 +12,7 @@ public readonly record struct OrderIndex
     public OrderIndex(int value)
     {
         ArgumentOutOfRangeException.ThrowIfLessThan(value, 0);
-        
+
         Value = value;
     }
 

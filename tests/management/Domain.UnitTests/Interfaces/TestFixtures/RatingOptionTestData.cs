@@ -33,7 +33,7 @@ internal sealed record TestRatingOption(RatingScore ScoreValue) : IRatingOption
     public void Print<TOutput>(IMedia<TOutput> media)
     {
         ArgumentNullException.ThrowIfNull(media);
-        
+
         media.With("score", ScoreValue.Value);
         media.With("label", Label.Value);
         media.With("annotation", Annotation.Text);

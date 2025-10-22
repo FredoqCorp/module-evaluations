@@ -1,7 +1,13 @@
+using System;
+using System.Threading;
+using System.Threading.Tasks;
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Groups;
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Ratings;
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Shared;
 using CascVel.Modules.Evaluations.Management.Domain.UnitTests.Interfaces.TestFixtures;
+using CascVel.Modules.Evaluations.Management.Domain.ValueObjects.Forms;
+using CascVel.Modules.Evaluations.Management.Domain.ValueObjects.Groups;
+using CascVel.Modules.Evaluations.Management.Domain.ValueObjects.Shared;
 
 namespace CascVel.Modules.Evaluations.Management.Domain.UnitTests.Interfaces.Groups;
 
@@ -66,13 +72,59 @@ file sealed record TestWeightedGroups(
     IBasisPoints BasisPoints,
     bool IsValid) : IWeightedGroups
 {
+    /// <summary>
+    /// Adds a new weighted group under a form.
+    /// </summary>
+    public Task<IWeightedGroup> Add(GroupProfile profile, FormId formId, IWeight weight, OrderIndex orderIndex, CancellationToken ct = default)
+    {
+        ArgumentNullException.ThrowIfNull(weight);
+
+        IWeightedGroup group = new TestWeightedGroup(weight);
+        return Task.FromResult(group);
+    }
+
+    /// <summary>
+    /// Adds a new weighted group under another group.
+    /// </summary>
+    public Task<IWeightedGroup> Add(GroupProfile profile, GroupId parentId, IWeight weight, OrderIndex orderIndex, CancellationToken ct = default)
+    {
+        ArgumentNullException.ThrowIfNull(weight);
+
+        IWeightedGroup group = new TestWeightedGroup(weight);
+        return Task.FromResult(group);
+    }
+
+    /// <summary>
+    /// Returns the combined sibling weight.
+    /// </summary>
     public IBasisPoints Weight() => BasisPoints;
 
+    /// <summary>
+    /// Validates the test group collection.
+    /// </summary>
     public void Validate()
     {
         if (!IsValid)
         {
             throw new InvalidOperationException("Validation failed");
+        }
+    }
+
+    /// <summary>
+    /// Test double for weighted group interface.
+    /// </summary>
+    private sealed record TestWeightedGroup(IWeight WeightValue) : IWeightedGroup
+    {
+        /// <summary>
+        /// Returns the test weight.
+        /// </summary>
+        public IWeight Weight() => WeightValue;
+
+        /// <summary>
+        /// Validates the test weighted group.
+        /// </summary>
+        public void Validate()
+        {
         }
     }
 }

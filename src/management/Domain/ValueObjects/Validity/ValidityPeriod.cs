@@ -17,7 +17,7 @@ public sealed record ValidityPeriod : IValidityPeriod
     /// Initializes the validity period with open end.
     /// </summary>
     /// <param name="start">Inclusive start moment.</param>
-    public ValidityPeriod(ValidityStart start): this(start, Option.None<ValidityEnd>())
+    public ValidityPeriod(ValidityStart start) : this(start, Option.None<ValidityEnd>())
     {
     }
 

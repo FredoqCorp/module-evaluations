@@ -19,5 +19,5 @@ public readonly record struct CriterionScore
         ArgumentOutOfRangeException.ThrowIfNegative(value);
 
         Value = value;
-    }    
+    }
 }

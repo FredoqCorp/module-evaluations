@@ -21,5 +21,5 @@ public readonly record struct CriterionTitle
     /// <summary>
     /// The title text of the criterion.
     /// </summary>
-    public string Text { get; init; }    
+    public string Text { get; init; }
 }
