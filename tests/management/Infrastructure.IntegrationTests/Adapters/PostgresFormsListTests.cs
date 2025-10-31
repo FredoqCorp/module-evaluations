@@ -118,7 +118,7 @@ public sealed class PostgresFormsListTests : IClassFixture<DatabaseFixture>
         result.Count.ShouldBe(1);
         var summary = result[0];
 
-        var media = new FakeMedia();
+        using var media = new FakeMedia();
         summary.Print(media);
 
         media.GetValue<Guid>("id").ShouldBe(formId);
@@ -209,7 +209,7 @@ public sealed class PostgresFormsListTests : IClassFixture<DatabaseFixture>
         var indexById = new Dictionary<Guid, int>();
         for (var i = 0; i < result.Count; i++)
         {
-            var media = new FakeMedia();
+            using var media = new FakeMedia();
             result[i].Print(media);
             var id = media.GetValue<Guid>("id");
             indexById[id] = i;
@@ -260,12 +260,12 @@ public sealed class PostgresFormsListTests : IClassFixture<DatabaseFixture>
         result.Count.ShouldBeGreaterThanOrEqualTo(1);
         var summary = result.First(s =>
         {
-            var m = new FakeMedia();
+            using var m = new FakeMedia();
             s.Print(m);
             return m.GetValue<Guid>("id") == formId;
         });
 
-        var media = new FakeMedia();
+        using var media = new FakeMedia();
         summary.Print(media);
         media.GetValue<string>("description").ShouldBe(string.Empty);
 
@@ -306,12 +306,12 @@ public sealed class PostgresFormsListTests : IClassFixture<DatabaseFixture>
         result.Count.ShouldBeGreaterThanOrEqualTo(1);
         var summary = result.First(s =>
         {
-            var m = new FakeMedia();
+            using var m = new FakeMedia();
             s.Print(m);
             return m.GetValue<Guid>("id") == formId;
         });
 
-        var media = new FakeMedia();
+        using var media = new FakeMedia();
         summary.Print(media);
         media.GetValue<int>("groupsCount").ShouldBe(0);
         media.GetValue<int>("criteriaCount").ShouldBe(0);
@@ -439,12 +439,12 @@ public sealed class PostgresFormsListTests : IClassFixture<DatabaseFixture>
         result.Count.ShouldBeGreaterThanOrEqualTo(1);
         var summary = result.First(s =>
         {
-            var m = new FakeMedia();
+            using var m = new FakeMedia();
             s.Print(m);
             return m.GetValue<Guid>("id") == formId;
         });
 
-        var media = new FakeMedia();
+        using var media = new FakeMedia();
         summary.Print(media);
         media.GetValue<int>("groupsCount").ShouldBe(2);
         media.GetValue<int>("criteriaCount").ShouldBe(3);

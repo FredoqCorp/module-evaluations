@@ -48,7 +48,7 @@ public sealed class UserInfoTests
         var name = Option.Of("John Doe");
         var email = Option.Of("john.doe@example.com");
         var userInfo = new UserInfo(userId, username, name, email);
-        var media = new FakeMedia();
+        using var media = new FakeMedia();
 
         // Act
         userInfo.Print(media);
@@ -70,7 +70,7 @@ public sealed class UserInfoTests
         var name = Option.None<string>();
         var email = Option.None<string>();
         var userInfo = new UserInfo(userId, username, name, email);
-        var media = new FakeMedia();
+        using var media = new FakeMedia();
 
         // Act
         userInfo.Print(media);
@@ -89,7 +89,7 @@ public sealed class UserInfoTests
         var name = Option.None<string>();
         var email = Option.Of("alice@example.com");
         var userInfo = new UserInfo(userId, username, name, email);
-        var media = new FakeMedia();
+        using var media = new FakeMedia();
 
         // Act
         userInfo.Print(media);

@@ -8,7 +8,7 @@ namespace CascVel.Modules.Evaluations.Management.Infrastructure.Media;
 /// Implements media abstraction by writing to a UTF-8 JSON writer.
 /// Supports two modes: external writer (for streaming) or internal writer (for Output()).
 /// </summary>
-public sealed class JsonMediaWriter : IMedia<string>, IDisposable
+public sealed class JsonMediaWriter : IMedia<string>
 {
     private readonly Utf8JsonWriter _writer;
     private readonly MemoryStream? _memoryStream;

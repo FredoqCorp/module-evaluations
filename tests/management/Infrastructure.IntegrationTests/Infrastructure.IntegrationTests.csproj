@@ -26,5 +26,6 @@
     <ProjectReference Include="../../../src/management/Infrastructure/Infrastructure.csproj" />
     <ProjectReference Include="../../../src/management/Application/Application.csproj" />
     <ProjectReference Include="../../../src/management/Domain/Domain.csproj" />
+    <ProjectReference Include="../../../src/management/Host/Host.csproj" />
   </ItemGroup>
 </Project>

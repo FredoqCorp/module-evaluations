@@ -28,7 +28,7 @@ public sealed class PgInsertFormMediaTests
         const int expectedGroupWeight = 3200;
         const int expectedCriterionWeight = 6800;
 
-        var media = new PgInsertFormMedia(stamp);
+        using var media = new PgInsertFormMedia(stamp);
         media.With("formId", formId);
         media.With("name", name);
         media.With("description", description);
@@ -80,7 +80,7 @@ public sealed class PgInsertFormMediaTests
         var criterionText = $"Texto-{Guid.NewGuid():N}";
         var ratingOptions = "{\"0\":{\"score\":3,\"label\":\"средне\",\"annotation\":\"ø\"}}";
 
-        var media = new PgInsertFormMedia(stamp);
+        using var media = new PgInsertFormMedia(stamp);
         media.With("formId", formId);
         media.With("name", name);
         media.With("description", description);

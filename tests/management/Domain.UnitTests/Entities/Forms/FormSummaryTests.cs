@@ -76,7 +76,7 @@ public sealed class FormSummaryTests
             3,
             7);
 
-        var media = new FakeMedia();
+        using var media = new FakeMedia();
         summary.Print(media);
 
         Assert.Contains(media.Writes, w => w.Key == "id" && w.Value.ToString() == id.Value.ToString());
@@ -92,7 +92,7 @@ public sealed class FormSummaryTests
             12,
             25);
 
-        var media = new FakeMedia();
+        using var media = new FakeMedia();
         summary.Print(media);
 
         Assert.Contains(media.Writes, w => w.Key == "groupsCount" && (int)w.Value == 12);
@@ -108,7 +108,7 @@ public sealed class FormSummaryTests
             8,
             42);
 
-        var media = new FakeMedia();
+        using var media = new FakeMedia();
         summary.Print(media);
 
         Assert.Contains(media.Writes, w => w.Key == "criteriaCount" && (int)w.Value == 42);
@@ -124,7 +124,7 @@ public sealed class FormSummaryTests
             5,
             15);
 
-        var media = new FakeMedia();
+        using var media = new FakeMedia();
         summary.Print(media);
 
         Assert.Contains(media.Writes, w => w.Key == "calculationType" && w.Value.ToString() == "WeightedAverage");

@@ -126,7 +126,7 @@ public sealed class HttpContextModuleUserTests
 
         // Act
         var userInfo = moduleUser.UserInfo();
-        var media = new FakeMedia();
+        using var media = new FakeMedia();
         userInfo.Print(media);
 
         // Assert
@@ -152,7 +152,7 @@ public sealed class HttpContextModuleUserTests
 
         // Act
         var userInfo = moduleUser.UserInfo();
-        var media = new FakeMedia();
+        using var media = new FakeMedia();
         userInfo.Print(media);
 
         // Assert
@@ -180,7 +180,7 @@ public sealed class HttpContextModuleUserTests
 
         // Act
         var userInfo = moduleUser.UserInfo();
-        var media = new FakeMedia();
+        using var media = new FakeMedia();
         userInfo.Print(media);
 
         // Assert
@@ -205,7 +205,7 @@ public sealed class HttpContextModuleUserTests
 
         // Act
         var userInfo = moduleUser.UserInfo();
-        var media = new FakeMedia();
+        using var media = new FakeMedia();
         userInfo.Print(media);
 
         // Assert
@@ -258,7 +258,7 @@ public sealed class HttpContextModuleUserTests
         var principal = new ClaimsPrincipal(identity);
         var accessor = FakeHttpContextAccessor.Create(principal);
         var moduleUser = new HttpContextModuleUser(accessor);
-        var media = new FakeMedia();
+        using var media = new FakeMedia();
 
         // Act
         moduleUser.Print(media);

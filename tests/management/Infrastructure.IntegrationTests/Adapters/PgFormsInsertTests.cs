@@ -1,5 +1,5 @@
 using System.Text.Json;
-using CascVel.Modules.Evaluations.Management.Domain.Entities.Forms;
+using CascVel.Modules.Evaluations.Management.Host.Models;
 using CascVel.Modules.Evaluations.Management.Infrastructure.Adapters.Forms;
 using CascVel.Modules.Evaluations.Management.Infrastructure.Database;
 using Dapper;

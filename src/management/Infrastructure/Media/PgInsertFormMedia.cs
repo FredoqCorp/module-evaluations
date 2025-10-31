@@ -74,7 +74,7 @@ internal sealed class PgInsertFormMedia : IMedia<string>
         ArgumentException.ThrowIfNullOrWhiteSpace(key);
         ArgumentNullException.ThrowIfNull(configure);
 
-        var recorder = new ObjectMedia();
+        using var recorder = new ObjectMedia();
         configure(recorder);
 
         var snapshot = recorder.Snapshot();
@@ -109,6 +109,14 @@ internal sealed class PgInsertFormMedia : IMedia<string>
         }
 
         return builder.ToString().TrimEnd();
+    }
+
+    /// <inheritdoc />
+    public void Dispose()
+    {
+        _form.Clear();
+        _groups.Clear();
+        _criteria.Clear();
     }
 
     /// <summary>
@@ -249,6 +257,12 @@ internal sealed class PgInsertFormMedia : IMedia<string>
         public Dictionary<string, object> Snapshot()
         {
             return _values;
+        }
+
+        /// <inheritdoc />
+        public void Dispose()
+        {
+            _values.Clear();
         }
 
         /// <inheritdoc />

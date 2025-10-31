@@ -10,6 +10,14 @@ internal sealed class FakeMedia : IMedia<object>
 {
     public List<(string Key, object Value)> Writes { get; } = [];
 
+    /// <summary>
+    /// Releases resources held by the fake media.
+    /// </summary>
+    public void Dispose()
+    {
+        Writes.Clear();
+    }
+
     public IMedia With(string key, string value)
     {
         Writes.Add((key, value));

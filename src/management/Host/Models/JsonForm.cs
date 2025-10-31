@@ -1,18 +1,18 @@
 using System.Globalization;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using CascVel.Modules.Evaluations.Management.Domain.Enums;
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Forms;
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Media;
 using CascVel.Modules.Evaluations.Management.Domain.ValueObjects.Forms;
 using CascVel.Modules.Evaluations.Management.Domain.ValueObjects.Shared;
-using System.Text.Json.Serialization;
 
 namespace CascVel.Modules.Evaluations.Management.Host.Models;
 
 /// <summary>
 /// Form aggregate backed by raw JSON payload that can be printed for persistence without exposing getters.
 /// </summary>
-public sealed class JsonForm : IForm
+internal sealed class JsonForm : IForm
 {
     private static readonly JsonSerializerOptions RatingSerialization = new()
     {
