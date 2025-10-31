@@ -3,7 +3,7 @@ using CascVel.Modules.Evaluations.Management.Application.Ports;
 using CascVel.Modules.Evaluations.Management.Application.UseCases.ListForms;
 using CascVel.Modules.Evaluations.Management.Domain.Entities.Forms;
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Forms;
-using CascVel.Modules.Evaluations.Management.Infrastructure.Media;
+using CascVel.Modules.Evaluations.Management.Host.Infrastructure;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 
@@ -95,7 +95,7 @@ public static class FormsEndpoints
     ///   }
     /// }
     /// </summary>
-    private static async Task<Results<FormCreatedContentResult, ProblemHttpResult>> PostFormEndpoint(
+    private static async Task<IResult> PostFormEndpoint(
         IForms forms,
         HttpRequest request,
         CancellationToken ct)
@@ -105,8 +105,7 @@ public static class FormsEndpoints
             using var document = await JsonDocument.ParseAsync(request.Body, cancellationToken: ct);
             var form = new JsonForm(document);
             var created = await forms.Add(form, ct);
-            var id = form.Identity().Value;
-            return Create(created, id);
+            return Create(created);
         }
         catch (JsonException ex)
         {
@@ -131,46 +130,13 @@ public static class FormsEndpoints
     /// Builds the HTTP result that returns the created form JSON payload.
     /// </summary>
     /// <param name="form">Persisted form aggregate.</param>
-    /// <param name="id">Unique identifier of the created form.</param>
     /// <returns>HTTP result that writes JSON payload.</returns>
-    private static FormCreatedContentResult Create(IForm form, Guid id)
+    private static IResult Create(IForm form)
     {
         ArgumentNullException.ThrowIfNull(form);
 
-        using var media = new JsonMediaWriter();
+        using var media = new FormCreatedResponseMedia();
         form.Print(media);
-        var payload = media.Output();
-        return new FormCreatedContentResult(id, payload);
-    }
-
-    /// <summary>
-    /// HTTP 201 result that writes the created form JSON representation.
-    /// </summary>
-    private sealed class FormCreatedContentResult : IResult
-    {
-        private readonly Guid _id;
-        private readonly string _payload;
-
-        /// <summary>
-        /// Initializes the result with identifier and serialized payload.
-        /// </summary>
-        /// <param name="id">Identifier of the created form.</param>
-        /// <param name="payload">Serialized JSON payload.</param>
-        public FormCreatedContentResult(Guid id, string payload)
-        {
-            _id = id;
-            _payload = payload;
-        }
-
-        /// <inheritdoc />
-        public async Task ExecuteAsync(HttpContext httpContext)
-        {
-            ArgumentNullException.ThrowIfNull(httpContext);
-
-            httpContext.Response.StatusCode = StatusCodes.Status201Created;
-            httpContext.Response.ContentType = "application/json";
-            httpContext.Response.Headers.Location = $"/forms/{_id}";
-            await httpContext.Response.WriteAsync(_payload);
-        }
+        return media.Output();
     }
 }
