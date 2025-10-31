@@ -262,7 +262,6 @@ internal sealed class PgInsertFormMedia : IMedia<string>
         /// <inheritdoc />
         public void Dispose()
         {
-            _values.Clear();
         }
 
         /// <inheritdoc />
