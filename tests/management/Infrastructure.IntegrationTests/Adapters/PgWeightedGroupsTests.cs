@@ -1,6 +1,4 @@
-using System;
 using System.Security.Cryptography;
-using System.Threading.Tasks;
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Shared;
 using CascVel.Modules.Evaluations.Management.Domain.ValueObjects.Criteria;
 using CascVel.Modules.Evaluations.Management.Domain.ValueObjects.Forms;
@@ -10,7 +8,6 @@ using CascVel.Modules.Evaluations.Management.Infrastructure.Adapters.Groups;
 using CascVel.Modules.Evaluations.Management.Infrastructure.Database;
 using Dapper;
 using Shouldly;
-using Xunit;
 
 namespace CascVel.Modules.Evaluations.Management.Infrastructure.IntegrationTests.Adapters;
 

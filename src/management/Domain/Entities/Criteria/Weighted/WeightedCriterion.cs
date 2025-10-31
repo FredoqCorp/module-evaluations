@@ -1,5 +1,4 @@
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Criteria;
-using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Ratings;
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Shared;
 
 namespace CascVel.Modules.Evaluations.Management.Domain.Entities.Criteria.Weighted;

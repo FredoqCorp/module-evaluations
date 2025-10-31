@@ -1,9 +1,7 @@
 using System.Globalization;
 using System.Security.Cryptography;
-using System.Threading.Tasks;
 using CascVel.Modules.Evaluations.Management.Infrastructure.Media;
 using Shouldly;
-using Xunit;
 
 namespace CascVel.Modules.Evaluations.Management.Infrastructure.IntegrationTests.Media;
 

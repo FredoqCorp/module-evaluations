@@ -1,6 +1,4 @@
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Forms;
-using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Ratings;
-using CascVel.Modules.Evaluations.Management.Domain.UnitTests.Interfaces.TestFixtures;
 
 namespace CascVel.Modules.Evaluations.Management.Domain.UnitTests.Interfaces.Forms;
 

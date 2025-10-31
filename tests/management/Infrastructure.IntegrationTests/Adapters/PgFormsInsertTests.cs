@@ -1,14 +1,10 @@
-using System;
 using System.Text.Json;
-using System.Threading.Tasks;
 using CascVel.Modules.Evaluations.Management.Domain.Entities.Forms;
 using CascVel.Modules.Evaluations.Management.Infrastructure.Adapters.Forms;
 using CascVel.Modules.Evaluations.Management.Infrastructure.Database;
-using CascVel.Modules.Evaluations.Management.Infrastructure.IntegrationTests;
 using Dapper;
 using Npgsql;
 using Shouldly;
-using Xunit;
 
 namespace CascVel.Modules.Evaluations.Management.Infrastructure.IntegrationTests.Adapters;
 

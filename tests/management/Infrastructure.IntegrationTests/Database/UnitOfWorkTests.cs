@@ -1,6 +1,5 @@
 using CascVel.Modules.Evaluations.Management.Infrastructure.Database;
 using Dapper;
-using Xunit;
 
 namespace CascVel.Modules.Evaluations.Management.Infrastructure.IntegrationTests.Database;
 

@@ -1,4 +1,3 @@
-using System.Linq;
 using System.Text.Json;
 using CascVel.Modules.Evaluations.Management.Infrastructure.Media;
 using CascVel.Modules.Evaluations.Management.Domain.ValueObjects.Ratings;

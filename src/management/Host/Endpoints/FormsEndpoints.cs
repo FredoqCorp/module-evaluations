@@ -2,8 +2,7 @@ using System.Text.Json;
 using CascVel.Modules.Evaluations.Management.Application.Ports;
 using CascVel.Modules.Evaluations.Management.Application.UseCases.ListForms;
 using CascVel.Modules.Evaluations.Management.Domain.Entities.Forms;
-using CascVel.Modules.Evaluations.Management.Host.Contracts;
-using Microsoft.AspNetCore.Http;
+using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Forms;
 using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace CascVel.Modules.Evaluations.Management.Host.Endpoints;
@@ -41,7 +40,7 @@ public static class FormsEndpoints
             .WithDescription("Creates a new evaluation form; body must contain metadata, calculation rule, groups, and criteria")
             .RequireAuthorization("FormDesigner")
             .Accepts<JsonElement>("application/json")
-            .Produces<FormCreatedResponse>(StatusCodes.Status201Created, "application/json")
+            .Produces<IForm>(StatusCodes.Status201Created, "application/json")
             .ProducesProblem(StatusCodes.Status400BadRequest)
             .ProducesProblem(StatusCodes.Status401Unauthorized)
             .ProducesProblem(StatusCodes.Status403Forbidden)
@@ -94,7 +93,7 @@ public static class FormsEndpoints
     ///   }
     /// }
     /// </summary>
-    private static async Task<Results<Created<FormCreatedResponse>, ProblemHttpResult>> PostFormEndpoint(
+    private static async Task<Results<Created<IForm>, ProblemHttpResult>> PostFormEndpoint(
         IForms forms,
         HttpRequest request,
         CancellationToken ct)
@@ -103,9 +102,9 @@ public static class FormsEndpoints
         {
             using var document = await JsonDocument.ParseAsync(request.Body, cancellationToken: ct);
             var form = new JsonForm(document);
-            await forms.Add(form, ct);
-            var response = new FormCreatedResponse(form.Identity().Value);
-            return TypedResults.Created($"/forms/{response.Id}", response);
+            var created = await forms.Add(form, ct);
+            var id = form.Identity().Value;
+            return TypedResults.Created($"/forms/{id}", created);
         }
         catch (JsonException ex)
         {

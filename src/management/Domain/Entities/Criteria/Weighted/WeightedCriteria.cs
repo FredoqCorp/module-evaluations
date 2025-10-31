@@ -6,7 +6,6 @@ using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Shared;
 using CascVel.Modules.Evaluations.Management.Domain.ValueObjects.Criteria;
 using CascVel.Modules.Evaluations.Management.Domain.ValueObjects.Forms;
 using CascVel.Modules.Evaluations.Management.Domain.ValueObjects.Groups;
-using CascVel.Modules.Evaluations.Management.Domain.ValueObjects.Ratings;
 using CascVel.Modules.Evaluations.Management.Domain.ValueObjects.Shared;
 
 namespace CascVel.Modules.Evaluations.Management.Domain.Entities.Criteria.Weighted;

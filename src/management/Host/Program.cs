@@ -66,10 +66,12 @@ builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 builder.Services.AddOpenApi(options =>
 {
     options.AddSchemaTransformer<ListFormsResponseSchemaTransformer>();
+    options.AddSchemaTransformer<FormSchemaTransformer>();
 });
 
 builder.Services.ConfigureHttpJsonOptions(options =>
 {
+    options.SerializerOptions.Converters.Add(new FormJsonConverter());
     options.SerializerOptions.Converters.Add(new FormSummaryJsonConverter());
 });
 

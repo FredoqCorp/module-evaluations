@@ -1,4 +1,3 @@
-using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Ratings;
 using CascVel.Modules.Evaluations.Management.Domain.ValueObjects.Criteria;
 
 namespace CascVel.Modules.Evaluations.Management.Domain.Interfaces.Shared;

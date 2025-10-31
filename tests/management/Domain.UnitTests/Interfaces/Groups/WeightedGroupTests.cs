@@ -1,5 +1,4 @@
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Groups;
-using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Ratings;
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Shared;
 using CascVel.Modules.Evaluations.Management.Domain.UnitTests.Interfaces.TestFixtures;
 

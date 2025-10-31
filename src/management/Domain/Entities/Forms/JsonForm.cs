@@ -1,6 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Globalization;
 using System.Text.Json;
 using CascVel.Modules.Evaluations.Management.Domain.Enums;

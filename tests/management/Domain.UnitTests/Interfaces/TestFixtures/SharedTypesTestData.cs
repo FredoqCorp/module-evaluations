@@ -1,5 +1,4 @@
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Media;
-using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Ratings;
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Shared;
 using CascVel.Modules.Evaluations.Management.Domain.ValueObjects.Criteria;
 using CascVel.Modules.Evaluations.Management.Domain.ValueObjects.Shared;

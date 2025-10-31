@@ -1,9 +1,5 @@
-using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
 using System.Security.Cryptography;
-using System.Threading.Tasks;
 using System.Text.Json;
 using CascVel.Modules.Evaluations.Management.Domain.ValueObjects.Criteria;
 using CascVel.Modules.Evaluations.Management.Domain.ValueObjects.Forms;
@@ -16,7 +12,6 @@ using CascVel.Modules.Evaluations.Management.Infrastructure.Media;
 using Dapper;
 using Npgsql;
 using Shouldly;
-using Xunit;
 
 namespace CascVel.Modules.Evaluations.Management.Infrastructure.IntegrationTests.Adapters;
 

@@ -1,14 +1,9 @@
-using System;
 using System.Collections.Immutable;
-using System.Threading;
-using System.Threading.Tasks;
 using CascVel.Modules.Evaluations.Management.Domain.Entities.Criteria.Average;
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Criteria;
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Groups;
-using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Ratings;
 using CascVel.Modules.Evaluations.Management.Domain.ValueObjects.Forms;
 using CascVel.Modules.Evaluations.Management.Domain.ValueObjects.Groups;
-using CascVel.Modules.Evaluations.Management.Domain.ValueObjects.Ratings;
 using CascVel.Modules.Evaluations.Management.Domain.ValueObjects.Shared;
 
 namespace CascVel.Modules.Evaluations.Management.Domain.Entities.Groups.Average;

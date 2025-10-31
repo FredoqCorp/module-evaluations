@@ -1,6 +1,3 @@
-using System;
-using System.Threading;
-using System.Threading.Tasks;
 using Npgsql;
 using CascVel.Modules.Evaluations.Management.Domain.Entities.Criteria.Average;
 using CascVel.Modules.Evaluations.Management.Domain.Entities.Groups.Average;

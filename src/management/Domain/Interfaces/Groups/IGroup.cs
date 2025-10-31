@@ -1,5 +1,3 @@
-using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Ratings;
-
 namespace CascVel.Modules.Evaluations.Management.Domain.Interfaces.Groups;
 
 /// <summary>
