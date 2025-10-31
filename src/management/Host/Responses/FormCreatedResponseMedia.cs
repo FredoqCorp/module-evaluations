@@ -1,24 +1,33 @@
 using CascVel.Modules.Evaluations.Management.Domain.Common;
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Media;
 using CascVel.Modules.Evaluations.Management.Infrastructure.Media;
-using Microsoft.AspNetCore.Http;
 
 namespace CascVel.Modules.Evaluations.Management.Host.Infrastructure;
 
 /// <summary>
 /// Decorates JsonMediaWriter to emit HTTP results for created form responses.
 /// </summary>
-internal sealed class FormCreatedResponseMedia : IMedia<IResult>, IDisposable
+internal sealed class FormCreatedResponseMedia : IMedia<IResult>
 {
-    private readonly JsonMediaWriter _inner;
+    private readonly IMedia<string> _inner;
+    private readonly HttpResponse _response;
     private Guid? _id;
 
     /// <summary>
     /// Initializes the media for capturing created form responses.
     /// </summary>
-    public FormCreatedResponseMedia()
+    /// <param name="response">HTTP response used to set headers.</param>
+    public FormCreatedResponseMedia(HttpResponse response): this(response, new JsonMediaWriter())
     {
-        _inner = new JsonMediaWriter();
+    }
+
+    public FormCreatedResponseMedia(HttpResponse response, IMedia<string> media)
+    {
+        ArgumentNullException.ThrowIfNull(response);
+        ArgumentNullException.ThrowIfNull(media);
+
+        _response = response;
+        _inner = media;
     }
 
     /// <summary>
@@ -91,7 +100,8 @@ internal sealed class FormCreatedResponseMedia : IMedia<IResult>, IDisposable
         }
 
         var payload = _inner.Output();
-        return new FormCreatedContentResult(_id.Value, payload);
+        _response.Headers.Location = $"/forms/{_id.Value}";
+        return TypedResults.Content(payload, "application/json", statusCode: StatusCodes.Status201Created);
     }
 
     /// <summary>
@@ -102,34 +112,4 @@ internal sealed class FormCreatedResponseMedia : IMedia<IResult>, IDisposable
         _inner.Dispose();
     }
 
-    /// <summary>
-    /// HTTP result that writes the created form payload.
-    /// </summary>
-    private sealed class FormCreatedContentResult : IResult
-    {
-        private readonly Guid _identifier;
-        private readonly string _payload;
-
-        /// <summary>
-        /// Initializes the result with identifier and serialized payload.
-        /// </summary>
-        /// <param name="identifier">Identifier of the created form.</param>
-        /// <param name="payload">Serialized JSON payload.</param>
-        public FormCreatedContentResult(Guid identifier, string payload)
-        {
-            _identifier = identifier;
-            _payload = payload;
-        }
-
-        /// <inheritdoc />
-        public async Task ExecuteAsync(HttpContext httpContext)
-        {
-            ArgumentNullException.ThrowIfNull(httpContext);
-
-            httpContext.Response.StatusCode = StatusCodes.Status201Created;
-            httpContext.Response.ContentType = "application/json";
-            httpContext.Response.Headers.Location = $"/forms/{_identifier}";
-            await httpContext.Response.WriteAsync(_payload);
-        }
-    }
 }

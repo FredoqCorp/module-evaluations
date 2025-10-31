@@ -4,6 +4,7 @@ using CascVel.Modules.Evaluations.Management.Application.UseCases.ListForms;
 using CascVel.Modules.Evaluations.Management.Domain.Entities.Forms;
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Forms;
 using CascVel.Modules.Evaluations.Management.Host.Infrastructure;
+using CascVel.Modules.Evaluations.Management.Host.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 
@@ -105,7 +106,9 @@ public static class FormsEndpoints
             using var document = await JsonDocument.ParseAsync(request.Body, cancellationToken: ct);
             var form = new JsonForm(document);
             var created = await forms.Add(form, ct);
-            return Create(created);
+            using var media = new FormCreatedResponseMedia(request.HttpContext.Response);
+            created.Print(media);
+            return media.Output();
         }
         catch (JsonException ex)
         {
@@ -124,19 +127,5 @@ public static class FormsEndpoints
     private static ProblemHttpResult Failure(int status, string title, string detail)
     {
         return TypedResults.Problem(statusCode: status, title: title, detail: detail);
-    }
-
-    /// <summary>
-    /// Builds the HTTP result that returns the created form JSON payload.
-    /// </summary>
-    /// <param name="form">Persisted form aggregate.</param>
-    /// <returns>HTTP result that writes JSON payload.</returns>
-    private static IResult Create(IForm form)
-    {
-        ArgumentNullException.ThrowIfNull(form);
-
-        using var media = new FormCreatedResponseMedia();
-        form.Print(media);
-        return media.Output();
     }
 }

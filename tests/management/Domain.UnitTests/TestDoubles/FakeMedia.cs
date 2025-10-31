@@ -49,7 +49,7 @@ internal sealed class FakeMedia : IMedia<object>
 
     public IMedia WithObject(string key, Action<IMedia> configure)
     {
-        var nestedMedia = new FakeMedia();
+        using var nestedMedia = new FakeMedia();
         configure(nestedMedia);
         Writes.Add((key, nestedMedia.Output()));
         return this;

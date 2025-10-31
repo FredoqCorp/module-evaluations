@@ -7,7 +7,7 @@ using CascVel.Modules.Evaluations.Management.Domain.ValueObjects.Forms;
 using CascVel.Modules.Evaluations.Management.Domain.ValueObjects.Shared;
 using System.Text.Json.Serialization;
 
-namespace CascVel.Modules.Evaluations.Management.Domain.Entities.Forms;
+namespace CascVel.Modules.Evaluations.Management.Host.Models;
 
 /// <summary>
 /// Form aggregate backed by raw JSON payload that can be printed for persistence without exposing getters.

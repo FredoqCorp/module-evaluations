@@ -5,7 +5,7 @@ namespace CascVel.Modules.Evaluations.Management.Domain.Interfaces.Media;
 /// <summary>
 /// Behavioral contract for a media that receives structured data via fluent API.
 /// </summary>
-public interface IMedia
+public interface IMedia : IDisposable
 {
     /// <summary>
     /// Writes a string value associated with the specified key.

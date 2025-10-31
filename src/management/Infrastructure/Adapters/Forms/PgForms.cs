@@ -39,7 +39,7 @@ internal sealed class PgForms : IForms
 
         var connection = await _unitOfWork.ActiveConnection(ct);
         var stamp = DateTimeOffset.UtcNow;
-        var media = new PgInsertFormMedia(stamp);
+        using var media = new PgInsertFormMedia(stamp);
         form.Validate();
         form.Print(media);
         var script = media.Output();
