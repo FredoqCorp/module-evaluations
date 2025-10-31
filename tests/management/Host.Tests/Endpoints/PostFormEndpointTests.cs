@@ -1,3 +1,4 @@
+using System.Linq;
 using System.Net;
 using System.Text;
 using System.Text.Json;
@@ -114,9 +115,19 @@ public sealed class PostFormEndpointTests : IClassFixture<TestWebApplicationFact
         var response = await responseTask;
         var body = await response.Content.ReadAsStringAsync();
         using var responseDocument = JsonDocument.Parse(body);
-        var createdId = responseDocument.RootElement.GetProperty("id").GetGuid();
+        var hasFormId = responseDocument.RootElement.TryGetProperty("formId", out var formIdNode);
+        var createdId = hasFormId ? formIdNode.GetGuid() : Guid.Empty;
+        var locationValue = response.Headers.Location?.OriginalString ?? string.Empty;
+        var locationId = Guid.TryParse(locationValue.Split('/', StringSplitOptions.RemoveEmptyEntries).LastOrDefault(), out var headerId)
+            ? headerId
+            : Guid.Empty;
         var (persisted, formId) = await verificationTask;
-        var success = response.StatusCode == HttpStatusCode.Created && persisted && formId == createdId;
-        success.ShouldBeTrue("Post endpoint failed to persist weighted form");
+        var success = response.StatusCode == HttpStatusCode.Created
+            && hasFormId
+            && persisted
+            && formId == createdId
+            && locationId == createdId
+            && !string.IsNullOrWhiteSpace(body);
+        success.ShouldBeTrue("Post endpoint did not persist weighted form");
     }
 }

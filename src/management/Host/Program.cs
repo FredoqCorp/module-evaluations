@@ -71,7 +71,6 @@ builder.Services.AddOpenApi(options =>
 
 builder.Services.ConfigureHttpJsonOptions(options =>
 {
-    options.SerializerOptions.Converters.Add(new FormJsonConverter());
     options.SerializerOptions.Converters.Add(new FormSummaryJsonConverter());
 });
 

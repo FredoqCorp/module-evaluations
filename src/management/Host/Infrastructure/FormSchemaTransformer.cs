@@ -1,3 +1,4 @@
+using CascVel.Modules.Evaluations.Management.Domain.Entities.Forms;
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Forms;
 using Microsoft.AspNetCore.OpenApi;
 using Microsoft.OpenApi.Models;
@@ -24,7 +25,8 @@ internal sealed class FormSchemaTransformer : IOpenApiSchemaTransformer
         ArgumentNullException.ThrowIfNull(schema);
         ArgumentNullException.ThrowIfNull(context);
 
-        if (context.JsonTypeInfo.Type != typeof(IForm))
+        var type = context.JsonTypeInfo.Type;
+        if (type != typeof(IForm) && type != typeof(JsonForm))
         {
             return Task.CompletedTask;
         }

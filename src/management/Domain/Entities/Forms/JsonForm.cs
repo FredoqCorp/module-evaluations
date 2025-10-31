@@ -35,8 +35,8 @@ public sealed class JsonForm : IForm
     {
         ArgumentNullException.ThrowIfNull(document);
 
-        _document = document;
-        var root = document.RootElement;
+        _document = JsonDocument.Parse(document.RootElement.GetRawText());
+        var root = _document.RootElement;
         _calculation = Calculation(root);
 
         var metadataNode = Node(root, "metadata");
