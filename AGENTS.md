@@ -121,7 +121,7 @@ Tests must use irregular inputs, such as non-ASCII strings.
 Tests may not share object attributes.
 Tests may not use setUp() or tearDown() idioms.
 Tests may not use static literals or other shared constants.
-Tests must be named as full English sentences, stating what the object under test does.
+Tests must be named as full English sentences, stating what the object under test does. Choose BDD style with underscore instead of spaces
 Tests may not test functionality irrelevant to their stated purpose.
 Tests must close resources they use, such as file handlers, sockets, and database connections.
 Objects must not provide functionality used only by tests.

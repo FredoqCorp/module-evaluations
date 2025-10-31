@@ -1,4 +1,9 @@
+using System.Text.Json;
+using CascVel.Modules.Evaluations.Management.Application.Ports;
 using CascVel.Modules.Evaluations.Management.Application.UseCases.ListForms;
+using CascVel.Modules.Evaluations.Management.Domain.Entities.Forms;
+using CascVel.Modules.Evaluations.Management.Host.Contracts;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace CascVel.Modules.Evaluations.Management.Host.Endpoints;
@@ -30,6 +35,18 @@ public static class FormsEndpoints
             .ProducesProblem(StatusCodes.Status403Forbidden)
             .ProducesProblem(StatusCodes.Status500InternalServerError);
 
+        group.MapPost("/", PostFormEndpoint)
+            .WithName("PostForm")
+            .WithSummary("Create a new evaluation form")
+            .WithDescription("Creates a new evaluation form; body must contain metadata, calculation rule, groups, and criteria")
+            .RequireAuthorization("FormDesigner")
+            .Accepts<JsonElement>("application/json")
+            .Produces<FormCreatedResponse>(StatusCodes.Status201Created, "application/json")
+            .ProducesProblem(StatusCodes.Status400BadRequest)
+            .ProducesProblem(StatusCodes.Status401Unauthorized)
+            .ProducesProblem(StatusCodes.Status403Forbidden)
+            .ProducesProblem(StatusCodes.Status500InternalServerError);
+
         return app;
     }
 
@@ -40,5 +57,72 @@ public static class FormsEndpoints
         var response = await useCase.Execute(ct);
 
         return TypedResults.Ok(response);
+    }
+
+    /// <summary>
+    /// Expected JSON body (example):
+    /// {
+    ///   "metadata": {
+    ///     "name": "Customer Satisfaction",
+    ///     "description": "Post-support survey",
+    ///     "code": "csat-ops",
+    ///     "tags": ["voice", "β-test"]
+    ///   },
+    ///   "calculation": "weighted",
+    ///   "root": {
+    ///     "criteria": [
+    ///       {
+    ///         "title": "Empathy",
+    ///         "text": "Сотрудник проявил эмпатию",
+    ///         "order": 0,
+    ///         "weight": 60,
+    ///         "ratingOptions": [
+    ///           { "order": 0, "score": 5, "label": "High", "annotation": "Δ" }
+    ///         ]
+    ///       }
+    ///     ],
+    ///     "groups": [
+    ///       {
+    ///         "title": "Resolution",
+    ///         "description": "Скорость реакции",
+    ///         "order": 0,
+    ///         "weight": 40,
+    ///         "criteria": [],
+    ///         "groups": []
+    ///       }
+    ///     ]
+    ///   }
+    /// }
+    /// </summary>
+    private static async Task<Results<Created<FormCreatedResponse>, ProblemHttpResult>> PostFormEndpoint(
+        IForms forms,
+        HttpRequest request,
+        CancellationToken ct)
+    {
+        try
+        {
+            using var document = await JsonDocument.ParseAsync(request.Body, cancellationToken: ct);
+            var form = new JsonForm(document);
+            await forms.Add(form, ct);
+            var response = new FormCreatedResponse(form.Identity().Value);
+            return TypedResults.Created($"/forms/{response.Id}", response);
+        }
+        catch (JsonException ex)
+        {
+            return Failure(StatusCodes.Status400BadRequest, "Malformed form payload", ex.Message);
+        }
+        catch (ArgumentException ex)
+        {
+            return Failure(StatusCodes.Status400BadRequest, "Form validation failed", ex.Message);
+        }
+        catch (InvalidOperationException ex)
+        {
+            return Failure(StatusCodes.Status400BadRequest, "Form validation failed", ex.Message);
+        }
+    }
+
+    private static ProblemHttpResult Failure(int status, string title, string detail)
+    {
+        return TypedResults.Problem(statusCode: status, title: title, detail: detail);
     }
 }

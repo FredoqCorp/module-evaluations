@@ -1,4 +1,5 @@
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Forms;
+using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Media;
 using CascVel.Modules.Evaluations.Management.Domain.ValueObjects.Forms;
 
 namespace CascVel.Modules.Evaluations.Management.Domain.Entities.Forms;
@@ -34,5 +35,15 @@ public sealed class Form : IForm
     public void Validate()
     {
         _root.Validate();
+    }
+
+    /// <summary>
+    /// Printing immutable form aggregates is not supported because they are not designed for persistence serialization.
+    /// </summary>
+    /// <param name="media">Media that would receive the representation.</param>
+    /// <exception cref="NotSupportedException">Always thrown to indicate unsupported operation.</exception>
+    public void Print(IMedia media)
+    {
+        throw new NotSupportedException("Runtime form aggregate cannot print internal structure");
     }
 }

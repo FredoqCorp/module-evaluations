@@ -1,17 +1,27 @@
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.Linq;
+using System.Text.Json;
 using CascVel.Modules.Evaluations.Management.Application.Ports;
+using CascVel.Modules.Evaluations.Management.Domain.Entities.Criteria.Average;
 using CascVel.Modules.Evaluations.Management.Domain.Entities.Forms;
+using CascVel.Modules.Evaluations.Management.Domain.Entities.Groups.Average;
+using CascVel.Modules.Evaluations.Management.Domain.Entities.Criteria.Weighted;
+using CascVel.Modules.Evaluations.Management.Domain.Entities.Groups.Weighted;
 using CascVel.Modules.Evaluations.Management.Domain.Enums;
+using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Criteria;
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Forms;
+using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Groups;
+using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Shared;
 using CascVel.Modules.Evaluations.Management.Domain.ValueObjects.Forms;
 using CascVel.Modules.Evaluations.Management.Domain.ValueObjects.Shared;
 using CascVel.Modules.Evaluations.Management.Infrastructure.Database;
+using CascVel.Modules.Evaluations.Management.Infrastructure.Media;
 using CascVel.Modules.Evaluations.Management.Infrastructure.Queries;
 using Dapper;
-using System.Text.Json;
+using Npgsql;
 
-namespace CascVel.Modules.Evaluations.Management.Infrastructure.Adapters;
+namespace CascVel.Modules.Evaluations.Management.Infrastructure.Adapters.Forms;
 
 /// <summary>
 /// PostgreSQL implementation for loading evaluation forms.
@@ -29,6 +39,41 @@ internal sealed class PgForms : IForms
         ArgumentNullException.ThrowIfNull(unitOfWork);
 
         _unitOfWork = unitOfWork;
+    }
+
+    /// <inheritdoc />
+    public async Task<IForm> Add(IForm form, CancellationToken ct = default)
+    {
+        ArgumentNullException.ThrowIfNull(form);
+
+        var connection = await _unitOfWork.ActiveConnection(ct);
+        var stamp = DateTimeOffset.UtcNow;
+        var media = new PgInsertFormMedia(stamp);
+        form.Validate();
+        form.Print(media);
+        var script = media.Output();
+
+        await _unitOfWork.BeginAsync(ct);
+        try
+        {
+            await connection.ExecuteAsync(
+                new CommandDefinition(
+                    commandText: script,
+                    cancellationToken: ct));
+            await _unitOfWork.CommitAsync(ct);
+        }
+        catch (PostgresException ex)
+        {
+            await _unitOfWork.RollbackAsync(ct);
+            throw MapPersistenceException(ex);
+        }
+        catch
+        {
+            await _unitOfWork.RollbackAsync(ct);
+            throw;
+        }
+
+        return form;
     }
 
     /// <inheritdoc />
@@ -75,6 +120,8 @@ internal sealed class PgForms : IForms
         return summaries.ToImmutableList();
     }
 
+    
+    
     /// <summary>
     /// Provides calculation type for a database root group discriminator.
     /// </summary>
@@ -95,5 +142,30 @@ internal sealed class PgForms : IForms
         }
 
         throw new InvalidOperationException("Unknown root group type value");
+    }
+
+    /// <summary>
+    /// Maps database errors to descriptive exceptions.
+    /// </summary>
+    /// <param name="exception">Underlying PostgreSQL exception.</param>
+    /// <returns>Translated exception.</returns>
+    private static Exception MapPersistenceException(PostgresException exception)
+    {
+        if (exception.SqlState == PostgresErrorCodes.UniqueViolation)
+        {
+            return new InvalidOperationException("Database rejected form because code already exists", exception);
+        }
+
+        if (exception.SqlState == PostgresErrorCodes.ForeignKeyViolation)
+        {
+            return new InvalidOperationException("Database rejected form because referenced parents are missing", exception);
+        }
+
+        if (exception.SqlState == PostgresErrorCodes.CheckViolation)
+        {
+            return new InvalidOperationException("Database rejected form because structural constraints failed", exception);
+        }
+
+        return exception;
     }
 }
