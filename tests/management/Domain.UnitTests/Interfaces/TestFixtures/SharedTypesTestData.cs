@@ -15,10 +15,6 @@ internal static class SharedTypesTestData
 
     internal static IPercent RandomPercent() =>
         new TestPercent((decimal)Random.Shared.NextDouble() * 100);
-
-    internal static IWeight RandomWeight() =>
-        new TestWeight(RandomPercent());
-
     internal static ITags EmptyTags() =>
         new TestTags([]);
 
@@ -45,18 +41,6 @@ internal sealed record TestPercent(decimal Value) : IPercent
 {
     public IBasisPoints Basis() =>
         new TestBasisPoints((ushort)(Value * 100));
-}
-
-/// <summary>
-/// Test double for weight interface.
-/// </summary>
-internal sealed record TestWeight(IPercent Percentage) : IWeight
-{
-    public IPercent Percent() =>
-        Percentage;
-
-    public CriterionScore Weighted(CriterionScore score) =>
-        new(score.Value * Percentage.Basis().Apply(1m));
 }
 
 /// <summary>

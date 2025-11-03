@@ -12,27 +12,20 @@ internal sealed record JsonFormMetadata : IFormMetadata
 {
     private readonly JsonElement _metadata;
 
-    internal JsonFormMetadata(JsonDocument document)
+    internal JsonFormMetadata(JsonElement element)
     {
-        _metadata = document.RootElement.GetProperty("metadata");
+        _metadata = element;
     }
 
     /// <inheritdoc />
     public IMedia<TOutput> Print<TOutput>(IMedia<TOutput> media)
     {
         ArgumentNullException.ThrowIfNull(media);
-
-        var name = new ValidFormName(new TrimmedFormName(new JsonFormName(_metadata))).Text();
-        var description = new ValidFormDescription(new TrimmedFormDescription(new JsonFormDescription(_metadata))).Text();
-        var code = new ValidFormCode(new TrimmedFormCode(new JsonFormCode(_metadata))).Text();
-        var tags = new JsonFormTags(_metadata);
-
         media
-            .With("name", name)
-            .With("description", description)
-            .With("code", code);
-
-        tags.Print(media, "tags");
+            .With("name", new ValidFormName(new TrimmedFormName(new JsonFormName(_metadata))).Text())
+            .With("description", new ValidFormDescription(new TrimmedFormDescription(new JsonFormDescription(_metadata))).Text())
+            .With("code", new ValidFormCode(new TrimmedFormCode(new JsonFormCode(_metadata))).Text());
+        new JsonFormTags(_metadata).Print(media, "tags");
         return media;
     }
 }

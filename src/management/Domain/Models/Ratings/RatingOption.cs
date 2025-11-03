@@ -36,12 +36,13 @@ public sealed record RatingOption : IRatingOption
     }
 
     /// <inheritdoc />
-    public void Print<TOutput>(IMedia<TOutput> media)
+    public IMedia<TOutput> Print<TOutput>(IMedia<TOutput> media)
     {
         ArgumentNullException.ThrowIfNull(media);
 
         media.With("score", _score.Value);
         media.With("label", _label.Value);
         media.With("annotation", _annotation.Text);
+        return media;
     }
 }

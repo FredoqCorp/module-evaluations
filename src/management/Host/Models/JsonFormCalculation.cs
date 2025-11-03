@@ -9,21 +9,21 @@ namespace CascVel.Modules.Evaluations.Management.Host.Models;
 /// </summary>
 internal sealed record JsonFormCalculation : IFormCalculation
 {
-    private readonly JsonDocument _document;
+    private readonly JsonElement _element;
     
     /// <summary>
-    /// Initializes the form calculation from the provided JSON document.
+    /// Initializes the form calculation from the provided JSON element.
     /// </summary>
-    /// <param name="document"></param>
-    public JsonFormCalculation(JsonDocument document)
+    /// <param name="element"></param>
+    public JsonFormCalculation(JsonElement element)
     {
-        _document = document;
+        _element = element;
     }
 
     /// <inheritdoc />
     public CalculationType Type()
     {
-        var token = Text(_document.RootElement, "calculation");
+        var token = Text(_element, "calculation");
         if (string.Equals(token, "average", StringComparison.OrdinalIgnoreCase))
         {
             return CalculationType.Average;

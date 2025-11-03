@@ -63,6 +63,19 @@ internal sealed class FakeMedia : IMedia<object>
         return write.Key is not null ? (T?)write.Value : default;
     }
 
+    public IMedia WithArray(string key, IEnumerable<Action<IMedia>> items)
+    {
+        var arrayItems = new List<object>();
+        foreach (var configure in items)
+        {
+            using var itemMedia = new FakeMedia();
+            configure(itemMedia);
+            arrayItems.Add(itemMedia.Output());
+        }
+        Writes.Add((key, arrayItems));
+        return this;
+    }
+
     public object Output()
     {
         return Writes;

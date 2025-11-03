@@ -30,12 +30,13 @@ internal sealed record TestRatingOption(RatingScore ScoreValue) : IRatingOption
     public bool Matches(RatingScore score) =>
         ScoreValue.Value == score.Value;
 
-    public void Print<TOutput>(IMedia<TOutput> media)
+    public IMedia<TOutput> Print<TOutput>(IMedia<TOutput> media)
     {
         ArgumentNullException.ThrowIfNull(media);
 
         media.With("score", ScoreValue.Value);
         media.With("label", Label.Value);
         media.With("annotation", Annotation.Text);
+        return media;
     }
 }

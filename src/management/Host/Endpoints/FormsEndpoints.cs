@@ -72,8 +72,7 @@ public static class FormsEndpoints
     ///     "tags": ["voice", "β-test"]
     ///   },
     ///   "calculation": "weighted",
-    ///   "root": {
-    ///     "criteria": [
+    ///   "criteria": [
     ///       {
     ///         "title": "Empathy",
     ///         "text": "Сотрудник проявил эмпатию",
@@ -83,8 +82,8 @@ public static class FormsEndpoints
     ///           { "order": 0, "score": 5, "label": "High", "annotation": "Δ" }
     ///         ]
     ///       }
-    ///     ],
-    ///     "groups": [
+    ///   ],
+    ///   "groups": [
     ///       {
     ///         "title": "Resolution",
     ///         "description": "Скорость реакции",
@@ -93,8 +92,7 @@ public static class FormsEndpoints
     ///         "criteria": [],
     ///         "groups": []
     ///       }
-    ///     ]
-    ///   }
+    ///   ]
     /// }
     /// </summary>
     private static async Task<IResult> PostFormEndpoint(

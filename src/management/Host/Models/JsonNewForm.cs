@@ -12,9 +12,7 @@ namespace CascVel.Modules.Evaluations.Management.Host.Models;
 internal sealed record JsonNewForm : IForm
 {
     private readonly FormId _identity;
-    private readonly JsonFormMetadata _metadata;
-    private readonly JsonFormCalculation _calculation;
-    private readonly JsonFormStructure _structure;
+    private readonly JsonDocument _document;
 
     /// <summary>
     /// Creates a printable form aggregate from a JSON document.
@@ -23,32 +21,28 @@ internal sealed record JsonNewForm : IForm
     public JsonNewForm(JsonDocument document)
     {
         ArgumentNullException.ThrowIfNull(document);
-
-        using var snapshot = JsonDocument.Parse(document.RootElement.GetRawText());
-        var root = snapshot.RootElement;
-        _calculation = new JsonFormCalculation(document);
-        _metadata = new JsonFormMetadata(document);
+        _document = document;
         _identity = new FormId();
-
-        var layout = JsonFormNodes.Section(root, "root").Clone();
-        var groups = new JsonGroups(layout, _calculation);
-        var criteria = new JsonCriteria(layout, _calculation);
-        _structure = new JsonFormStructure(groups, criteria);
     }
 
     /// <inheritdoc />
     public IMedia<TOutput> Print<TOutput>(IMedia<TOutput> media)
     {
         ArgumentNullException.ThrowIfNull(media);
-
-        var token = JsonFormNodes.CalculationToken(_calculation);
+        var calculation = new JsonFormCalculation(_document.RootElement);
+        var metadata = new JsonFormMetadata(_document.RootElement.GetProperty("metadata"));
+        var groups = new JsonGroups(_document.RootElement, calculation.Type());
+        var criteria = new JsonCriteria(_document.RootElement, calculation.Type());
         media.With("formId", _identity.Value);
-        _metadata.Print(media);
-        media.With("calculation", token);
-
-        var form = _identity.Value;
-        _structure.Criteria.Print(media, form, null);
-        _structure.Groups.Print(media, form, null);
+        metadata.Print(media);
+        media.With("calculation", calculation.Type() switch
+        {
+            CalculationType.Average => "average",
+            CalculationType.WeightedAverage => "weighted",
+            _ => throw new InvalidOperationException("Unsupported calculation type.")
+        });
+        groups.Print(media);
+        criteria.Print(media);
         return media;
     }
 }

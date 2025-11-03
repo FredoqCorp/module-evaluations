@@ -16,34 +16,46 @@ internal sealed record JsonGroups : IGroups
     /// <summary>
     /// Creates a JSON-backed groups collection.
     /// </summary>
-    /// <param name="document">JSON document containing the groups array.</param>
+    /// <param name="container">JSON element containing the groups array.</param>
     /// <param name="calculation">Calculation strategy used by the parent form.</param>
-    public JsonGroups(JsonDocument document, CalculationType calculation)
+    public JsonGroups(JsonElement container, CalculationType calculation)
     {
-        _container = document.RootElement.GetProperty("root");
+        _container = container;
         _calculation = calculation;
     }
 
     /// <inheritdoc />
-    public IMedia<TOutput> Print<TOutput>(IMedia<TOutput> media, Guid formId, Guid? parentGroupId)
+    public IMedia<TOutput> Print<TOutput>(IMedia<TOutput> media)
     {
         ArgumentNullException.ThrowIfNull(media);
-
-        foreach (var node in Collection(_container, "groups"))
+        var array = Array.Empty<JsonElement>();
+        if (_container.TryGetProperty("groups", out var value) && value.ValueKind == JsonValueKind.Array)
         {
-            var group = new JsonGroup(node, _calculation);
-            group.Print(media);
+            array = [.. value.EnumerateArray()];
         }
+        var groups = new List<IGroup>();
+        foreach (var node in array)
+        {
+            if (_calculation == CalculationType.WeightedAverage)
+            {
+                var group = new JsonNewWeightedGroup(node);
+                groups.Add(group);
+            }
+            else
+            {
+                var group = new JsonNewAverageGroup(node);
+                groups.Add(group);
+            }
+        }
+        media.WithArray("groups", Items(groups, media));
         return media;
     }
 
-    private static IEnumerable<JsonElement> Collection(JsonElement owner, string name)
+    private static IEnumerable<Action<IMedia>> Items<TOutput>(IEnumerable<IGroup> options, IMedia<TOutput> media)
     {
-        if (!owner.TryGetProperty(name, out var value) || value.ValueKind != JsonValueKind.Array)
+        foreach (var option in options)
         {
-            return Array.Empty<JsonElement>();
+            yield return _ => option.Print(media);
         }
-
-        return value.EnumerateArray();
     }
 }
