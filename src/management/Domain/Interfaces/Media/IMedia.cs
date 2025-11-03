@@ -1,3 +1,4 @@
+using System;
 using CascVel.Modules.Evaluations.Management.Domain.Common;
 
 namespace CascVel.Modules.Evaluations.Management.Domain.Interfaces.Media;
@@ -47,6 +48,14 @@ public interface IMedia : IDisposable
     /// <param name="values">Collection of string values to write as an array.</param>
     /// <returns>This media instance for fluent chaining.</returns>
     IMedia With(string key, IEnumerable<string> values);
+
+    /// <summary>
+    /// Writes an array of objects associated with the specified key.
+    /// </summary>
+    /// <param name="key">Property name or key.</param>
+    /// <param name="items">Collection of object writers that populate each array element.</param>
+    /// <returns>This media instance for fluent chaining.</returns>
+    IMedia WithArray(string key, IEnumerable<Action<IMedia>> items);
 
     /// <summary>
     /// Writing a nested object with the specified key.

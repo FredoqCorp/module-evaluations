@@ -1,3 +1,4 @@
+using System;
 using System.Text.Json;
 using CascVel.Modules.Evaluations.Management.Domain.Common;
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Media;
@@ -126,6 +127,30 @@ public sealed class JsonMediaWriter : IMedia<string>
         }
         _writer.WriteEndArray();
 
+        return this;
+    }
+
+    /// <summary>
+    /// Writes an array of objects associated with the specified key.
+    /// </summary>
+    /// <param name="key">Property name or key.</param>
+    /// <param name="items">Collection of object writers that populate each array element.</param>
+    /// <returns>This media instance for fluent chaining.</returns>
+    public IMedia WithArray(string key, IEnumerable<Action<IMedia>> items)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(key);
+        ArgumentNullException.ThrowIfNull(items);
+
+        _writer.WriteStartArray(key);
+        foreach (var item in items)
+        {
+            ArgumentNullException.ThrowIfNull(item);
+            _writer.WriteStartObject();
+            item(this);
+            _writer.WriteEndObject();
+        }
+
+        _writer.WriteEndArray();
         return this;
     }
 

@@ -12,5 +12,5 @@ public interface IRatingOption
     /// </summary>
     /// <typeparam name="TOutput">The type of output the media produces.</typeparam>
     /// <param name="media">The media to print to.</param>
-    void Print<TOutput>(IMedia<TOutput> media);
+    IMedia<TOutput> Print<TOutput>(IMedia<TOutput> media);
 }

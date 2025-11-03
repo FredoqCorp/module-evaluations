@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Text;
 using System.Text.Json;
@@ -65,6 +67,26 @@ internal sealed class PgInsertFormMedia : IMedia<string>
     public IMedia With(string key, IEnumerable<string> values)
     {
         _form[key] = values.ToArray();
+        return this;
+    }
+
+    /// <inheritdoc />
+    public IMedia WithArray(string key, IEnumerable<Action<IMedia>> items)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(key);
+        ArgumentNullException.ThrowIfNull(items);
+
+        var snapshots = new List<Dictionary<string, object>>();
+        foreach (var item in items)
+        {
+            ArgumentNullException.ThrowIfNull(item);
+            using var recorder = new ObjectMedia();
+            item(recorder);
+            snapshots.Add(recorder.Snapshot());
+        }
+
+        var payload = JsonSerializer.Serialize(snapshots);
+        _form[key] = payload;
         return this;
     }
 
@@ -302,6 +324,25 @@ internal sealed class PgInsertFormMedia : IMedia<string>
         public IMedia With(string key, IEnumerable<string> values)
         {
             _values[key] = values.ToArray();
+            return this;
+        }
+
+        /// <inheritdoc />
+        public IMedia WithArray(string key, IEnumerable<Action<IMedia>> items)
+        {
+            ArgumentException.ThrowIfNullOrWhiteSpace(key);
+            ArgumentNullException.ThrowIfNull(items);
+
+            var snapshots = new List<Dictionary<string, object>>();
+            foreach (var item in items)
+            {
+                ArgumentNullException.ThrowIfNull(item);
+                using var recorder = new ObjectMedia();
+                item(recorder);
+                snapshots.Add(recorder.Snapshot());
+            }
+
+            _values[key] = JsonSerializer.Serialize(snapshots);
             return this;
         }
 

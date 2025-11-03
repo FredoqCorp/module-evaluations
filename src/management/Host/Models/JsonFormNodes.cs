@@ -156,66 +156,6 @@ internal static class JsonFormNodes
     }
 
     /// <summary>
-    /// Returns serialized rating options ensuring unique ordering.
-    /// </summary>
-    /// <param name="node">Node that defines rating options.</param>
-    /// <param name="options">Serializer options used for deterministic output.</param>
-    /// <returns>Serialized rating options.</returns>
-    public static string Ratings(JsonElement node, JsonSerializerOptions options)
-    {
-        if (!node.TryGetProperty("ratingOptions", out var value) || value.ValueKind != JsonValueKind.Array)
-        {
-            throw new InvalidOperationException("Criterion requires 'ratingOptions' array");
-        }
-
-        var ratings = new Dictionary<string, RatingOption>();
-        JsonElement element;
-        foreach (var option in value.EnumerateArray())
-        {
-            var order = ratings.Count;
-            if (option.TryGetProperty("order", out element))
-            {
-                order = element.GetInt32();
-            }
-
-            if (!option.TryGetProperty("label", out element))
-            {
-                throw new InvalidOperationException("Rating option requires 'label'");
-            }
-
-            var label = element.GetString() ?? string.Empty;
-
-            if (!option.TryGetProperty("score", out element))
-            {
-                throw new InvalidOperationException("Rating option requires 'score'");
-            }
-
-            var score = element.GetDecimal();
-
-            var annotation = string.Empty;
-            if (option.TryGetProperty("annotation", out element))
-            {
-                annotation = element.GetString() ?? string.Empty;
-            }
-
-            var key = order.ToString(CultureInfo.InvariantCulture);
-            if (ratings.ContainsKey(key))
-            {
-                throw new InvalidOperationException("Duplicate rating option order detected");
-            }
-
-            ratings[key] = new RatingOption(score, label, annotation);
-        }
-
-        if (ratings.Count == 0)
-        {
-            throw new InvalidOperationException("Criterion requires at least one rating option");
-        }
-
-        return JsonSerializer.Serialize(ratings, options);
-    }
-
-    /// <summary>
     /// Returns calculation type token parsed from the root node.
     /// </summary>
     /// <param name="root">Root node that defines the calculation field.</param>
@@ -306,8 +246,4 @@ internal static class JsonFormNodes
         return Guid.CreateVersion7();
     }
 
-    /// <summary>
-    /// Represents a serializable rating option entry used for deterministic output.
-    /// </summary>
-    private sealed record RatingOption(decimal Score, string Label, string Annotation);
 }

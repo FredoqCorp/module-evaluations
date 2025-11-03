@@ -11,11 +11,6 @@ namespace CascVel.Modules.Evaluations.Management.Host.Models;
 /// </summary>
 internal sealed class JsonNewCriterion : ICriterion
 {
-    private static readonly JsonSerializerOptions RatingSerialization = new()
-    {
-        PropertyNamingPolicy = JsonNamingPolicy.CamelCase
-    };
-
     private readonly JsonElement _node;
     private readonly CalculationType _calculation;
     private readonly CriterionId _identifier;
@@ -39,14 +34,11 @@ internal sealed class JsonNewCriterion : ICriterion
         ArgumentNullException.ThrowIfNull(media);
 
         var weight = JsonFormNodes.Weight(_node, _calculation, "criterion");
-        var ratings = JsonFormNodes.Ratings(_node, RatingSerialization);
-
         media.With("id", _identifier.Value);
-
         media.With("title", new ValidCriterionTitle(new TrimmedCriterionTitle(new JsonCriterionTitle(_node))).Text());
         media.With("text", new ValidCriterionText(new TrimmedCriterionText(new JsonCriterionText(_node))).Text());
         media.With("orderIndex", JsonFormNodes.Order(_node));
-        media.With("ratingOptions", ratings);
+        new JsonRatingOptions(_node).Print(media);
 
         if (weight.HasValue)
         {
