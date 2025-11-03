@@ -2,7 +2,7 @@ using CascVel.Modules.Evaluations.Management.Domain.Common;
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Media;
 using CascVel.Modules.Evaluations.Management.Infrastructure.Media;
 
-namespace CascVel.Modules.Evaluations.Management.Host.Infrastructure;
+namespace CascVel.Modules.Evaluations.Management.Host.Responses;
 
 /// <summary>
 /// Decorates JsonMediaWriter to emit HTTP results for created form responses.

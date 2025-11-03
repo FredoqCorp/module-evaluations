@@ -19,14 +19,14 @@ BEGIN
         ALTER TABLE form_groups
         ADD CONSTRAINT chk_form_groups_weight_by_type
         CHECK (
-            (group_type = 'weighted' AND weight_basis_points IS NOT NULL AND weight_basis_points BETWEEN 0 AND 10000) OR
-            (group_type = 'average' AND weight_basis_points IS NULL)
+            weight_basis_points IS NULL
+            OR weight_basis_points BETWEEN 0 AND 10000
         );
     END IF;
 END $$;
 
 COMMENT ON CONSTRAINT chk_form_groups_weight_by_type ON form_groups IS
-'Ensures weighted groups have weight in valid range (0-10000) and average groups have no weight';
+'Ensures group weight is either null or between 0 and 10000';
 
 -- =====================================================
 -- Constraint: Weighted criteria must have weight
@@ -40,50 +40,14 @@ BEGIN
         ALTER TABLE form_criteria
         ADD CONSTRAINT chk_form_criteria_weight_by_type
         CHECK (
-            (criterion_type = 'weighted' AND weight_basis_points IS NOT NULL AND weight_basis_points BETWEEN 0 AND 10000) OR
-            (criterion_type = 'average' AND weight_basis_points IS NULL)
+            weight_basis_points IS NULL
+            OR weight_basis_points BETWEEN 0 AND 10000
         );
     END IF;
 END $$;
 
 COMMENT ON CONSTRAINT chk_form_criteria_weight_by_type ON form_criteria IS
-'Ensures weighted criteria have weight in valid range (0-10000) and average criteria have no weight';
-
--- =====================================================
--- Constraint: Valid group types
--- =====================================================
-DO $$
-BEGIN
-    IF NOT EXISTS (
-        SELECT 1 FROM pg_constraint
-        WHERE conname = 'chk_form_groups_valid_type'
-    ) THEN
-        ALTER TABLE form_groups
-        ADD CONSTRAINT chk_form_groups_valid_type
-        CHECK (group_type IN ('average', 'weighted'));
-    END IF;
-END $$;
-
-COMMENT ON CONSTRAINT chk_form_groups_valid_type ON form_groups IS
-'Ensures group_type has valid discriminator value';
-
--- =====================================================
--- Constraint: Valid criterion types
--- =====================================================
-DO $$
-BEGIN
-    IF NOT EXISTS (
-        SELECT 1 FROM pg_constraint
-        WHERE conname = 'chk_form_criteria_valid_type'
-    ) THEN
-        ALTER TABLE form_criteria
-        ADD CONSTRAINT chk_form_criteria_valid_type
-        CHECK (criterion_type IN ('average', 'weighted'));
-    END IF;
-END $$;
-
-COMMENT ON CONSTRAINT chk_form_criteria_valid_type ON form_criteria IS
-'Ensures criterion_type has valid discriminator value';
+'Ensures criterion weight is either null or between 0 and 10000';
 
 -- =====================================================
 -- Constraint: Valid root group types

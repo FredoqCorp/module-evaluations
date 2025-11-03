@@ -3,7 +3,7 @@ using CascVel.Modules.Evaluations.Management.Domain.Common;
 using CascVel.Modules.Evaluations.Management.Domain.Enums;
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Identity;
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Media;
-using CascVel.Modules.Evaluations.Management.Domain.ValueObjects.Identity;
+using CascVel.Modules.Evaluations.Management.Domain.Models.Identity;
 using Microsoft.AspNetCore.Http;
 
 namespace CascVel.Modules.Evaluations.Management.Infrastructure.Identity;

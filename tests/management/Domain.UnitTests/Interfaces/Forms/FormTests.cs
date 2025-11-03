@@ -1,3 +1,4 @@
+using System;
 using CascVel.Modules.Evaluations.Management.Domain.Common;
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Forms;
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Media;
@@ -76,8 +77,9 @@ file sealed record TestForm(Option<decimal> TestScore, bool IsValid) : IForm
 
     public Option<decimal> Score() => TestScore;
 
-    public void Print(IMedia media)
+    public IMedia<TOutput> Print<TOutput>(IMedia<TOutput> media)
     {
+        ArgumentNullException.ThrowIfNull(media);
         throw new NotSupportedException("Test form double does not print structure");
     }
 }

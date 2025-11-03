@@ -8,13 +8,10 @@ namespace CascVel.Modules.Evaluations.Management.Domain.Interfaces.Forms;
 public interface IForm
 {
     /// <summary>
-    /// Validates the internal consistency of the form aggregate.
-    /// </summary>
-    void Validate();
-
-    /// <summary>
     /// Prints the form aggregate into the provided media for serialization or persistence.
     /// </summary>
+    /// <typeparam name="TOutput">The type of output produced by the media.</typeparam>
     /// <param name="media">Media that receives the structured representation.</param>
-    void Print(IMedia media);
+    /// <returns>The media instance that received the printed representation.</returns>
+    IMedia<TOutput> Print<TOutput>(IMedia<TOutput> media);
 }

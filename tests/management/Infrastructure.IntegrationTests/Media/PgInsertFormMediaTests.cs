@@ -41,7 +41,6 @@ public sealed class PgInsertFormMediaTests
             inner.With("formId", formId);
             inner.With("title", groupTitle);
             inner.With("description", groupDescription);
-            inner.With("groupType", "weighted");
             inner.With("orderIndex", 0);
             inner.With("weightBasisPoints", expectedGroupWeight);
         });
@@ -51,7 +50,6 @@ public sealed class PgInsertFormMediaTests
             inner.With("groupId", groupId);
             inner.With("title", criterionTitle);
             inner.With("text", criterionText);
-            inner.With("criterionType", "weighted");
             inner.With("orderIndex", 0);
             inner.With("ratingOptions", ratingOptions);
             inner.With("weightBasisPoints", expectedCriterionWeight);
@@ -93,7 +91,6 @@ public sealed class PgInsertFormMediaTests
             inner.With("formId", formId);
             inner.With("title", criterionTitle);
             inner.With("text", criterionText);
-            inner.With("criterionType", "average");
             inner.With("orderIndex", 0);
             inner.With("ratingOptions", ratingOptions);
         });

@@ -1,5 +1,5 @@
+using CascVel.Modules.Evaluations.Management.Domain.Models.Criteria;
 using CascVel.Modules.Evaluations.Management.Domain.UnitTests.Interfaces.TestFixtures;
-using CascVel.Modules.Evaluations.Management.Domain.ValueObjects.Criteria;
 
 namespace CascVel.Modules.Evaluations.Management.Domain.UnitTests.Interfaces.Shared;
 

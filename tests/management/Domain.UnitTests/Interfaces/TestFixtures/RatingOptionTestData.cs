@@ -1,6 +1,6 @@
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Media;
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Ratings;
-using CascVel.Modules.Evaluations.Management.Domain.ValueObjects.Ratings;
+using CascVel.Modules.Evaluations.Management.Domain.Models.Ratings;
 
 namespace CascVel.Modules.Evaluations.Management.Domain.UnitTests.Interfaces.TestFixtures;
 

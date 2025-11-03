@@ -1,7 +1,7 @@
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Media;
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Shared;
-using CascVel.Modules.Evaluations.Management.Domain.ValueObjects.Criteria;
-using CascVel.Modules.Evaluations.Management.Domain.ValueObjects.Shared;
+using CascVel.Modules.Evaluations.Management.Domain.Models.Criteria;
+using CascVel.Modules.Evaluations.Management.Domain.Models.Shared;
 
 namespace CascVel.Modules.Evaluations.Management.Domain.UnitTests.Interfaces.TestFixtures;
 
@@ -62,16 +62,17 @@ internal sealed record TestWeight(IPercent Percentage) : IWeight
 /// <summary>
 /// Test double for tags interface.
 /// </summary>
-internal sealed record TestTags(IReadOnlyList<Tag> Items) : ITags
+internal sealed record TestTags(IReadOnlyList<ITag> Items) : ITags
 {
-    public ITags With(Tag tag) =>
-        Items.Any(t => string.Equals(t.Text, tag.Text, StringComparison.OrdinalIgnoreCase))
+    public ITags With(ITag tag) =>
+        Items.Any(t => string.Equals(t.Text(), tag.Text(), StringComparison.OrdinalIgnoreCase))
             ? this
             : new TestTags([.. Items, tag]);
 
-    public void Print<TOutput>(IMedia<TOutput> media, string key)
+    public IMedia<TOutput> Print<TOutput>(IMedia<TOutput> media, string key)
     {
-        var tagTexts = Items.Select(tag => tag.Text);
+        var tagTexts = Items.Select(tag => tag.Text());
         media.With(key, tagTexts);
+        return media;
     }
 }

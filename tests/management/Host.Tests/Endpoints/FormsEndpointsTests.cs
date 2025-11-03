@@ -119,7 +119,7 @@ public sealed class FormsEndpointsTests : IClassFixture<TestWebApplicationFactor
 
         // Insert groups
         await connection.ExecuteAsync(
-            "INSERT INTO form_groups (id, form_id, parent_id, title, description, group_type, weight_basis_points, order_index, created_at) VALUES (@Id, @FormId, @ParentId, @Title, @Description, @GroupType, @WeightBasisPoints, @OrderIndex, @CreatedAt)",
+            "INSERT INTO form_groups (id, form_id, parent_id, title, description, weight_basis_points, order_index, created_at) VALUES (@Id, @FormId, @ParentId, @Title, @Description, @WeightBasisPoints, @OrderIndex, @CreatedAt)",
             new
             {
                 Id = group1Id,
@@ -127,14 +127,13 @@ public sealed class FormsEndpointsTests : IClassFixture<TestWebApplicationFactor
                 ParentId = (Guid?)null,
                 Title = "Group 1",
                 Description = "First group",
-                GroupType = "weighted",
                 WeightBasisPoints = 6000,
                 OrderIndex = 1,
                 CreatedAt = DateTimeOffset.UtcNow
             });
 
         await connection.ExecuteAsync(
-            "INSERT INTO form_groups (id, form_id, parent_id, title, description, group_type, weight_basis_points, order_index, created_at) VALUES (@Id, @FormId, @ParentId, @Title, @Description, @GroupType, @WeightBasisPoints, @OrderIndex, @CreatedAt)",
+            "INSERT INTO form_groups (id, form_id, parent_id, title, description, weight_basis_points, order_index, created_at) VALUES (@Id, @FormId, @ParentId, @Title, @Description, @WeightBasisPoints, @OrderIndex, @CreatedAt)",
             new
             {
                 Id = group2Id,
@@ -142,7 +141,6 @@ public sealed class FormsEndpointsTests : IClassFixture<TestWebApplicationFactor
                 ParentId = (Guid?)null,
                 Title = "Group 2",
                 Description = "Second group",
-                GroupType = "weighted",
                 WeightBasisPoints = 4000,
                 OrderIndex = 2,
                 CreatedAt = DateTimeOffset.UtcNow
@@ -150,7 +148,7 @@ public sealed class FormsEndpointsTests : IClassFixture<TestWebApplicationFactor
 
         // Insert criteria
         await connection.ExecuteAsync(
-            "INSERT INTO form_criteria (id, form_id, group_id, title, text, criterion_type, weight_basis_points, rating_options, order_index, created_at) VALUES (@Id, @FormId, @GroupId, @Title, @Text, @CriterionType, @WeightBasisPoints, @RatingOptions::jsonb, @OrderIndex, @CreatedAt)",
+            "INSERT INTO form_criteria (id, form_id, group_id, title, text, weight_basis_points, rating_options, order_index, created_at) VALUES (@Id, @FormId, @GroupId, @Title, @Text, @WeightBasisPoints, @RatingOptions::jsonb, @OrderIndex, @CreatedAt)",
             new
             {
                 Id = criterion1Id,
@@ -158,15 +156,14 @@ public sealed class FormsEndpointsTests : IClassFixture<TestWebApplicationFactor
                 GroupId = group1Id,
                 Title = "Criterion 1",
                 Text = "First criterion",
-                CriterionType = "weighted",
                 WeightBasisPoints = 5000,
-                RatingOptions = "{\"0\":{\"score\":5,\"label\":\"Excellent\",\"annotation\":\"\"},\"1\":{\"score\":3,\"label\":\"Good\",\"annotation\":\"\"},\"2\":{\"score\":1,\"label\":\"Poor\",\"annotation\":\"\"}}",
+                RatingOptions = "{\"0\":{\"score\":5,\"label\":\"Excellent\",\"annotation\":\"\"},\"1\":{\"score\":3\",\"label\":\"Good\",\"annotation\":\"\"},\"2\":{\"score\":1,\"label\":\"Poor\",\"annotation\":\"\"}}",
                 OrderIndex = 1,
                 CreatedAt = DateTimeOffset.UtcNow
             });
 
         await connection.ExecuteAsync(
-            "INSERT INTO form_criteria (id, form_id, group_id, title, text, criterion_type, weight_basis_points, rating_options, order_index, created_at) VALUES (@Id, @FormId, @GroupId, @Title, @Text, @CriterionType, @WeightBasisPoints, @RatingOptions::jsonb, @OrderIndex, @CreatedAt)",
+            "INSERT INTO form_criteria (id, form_id, group_id, title, text, weight_basis_points, rating_options, order_index, created_at) VALUES (@Id, @FormId, @GroupId, @Title, @Text, @WeightBasisPoints, @RatingOptions::jsonb, @OrderIndex, @CreatedAt)",
             new
             {
                 Id = criterion2Id,
@@ -174,15 +171,14 @@ public sealed class FormsEndpointsTests : IClassFixture<TestWebApplicationFactor
                 GroupId = group1Id,
                 Title = "Criterion 2",
                 Text = "Second criterion",
-                CriterionType = "weighted",
                 WeightBasisPoints = 5000,
-                RatingOptions = "{\"0\":{\"score\":5,\"label\":\"Excellent\",\"annotation\":\"\"},\"1\":{\"score\":3,\"label\":\"Good\",\"annotation\":\"\"},\"2\":{\"score\":1,\"label\":\"Poor\",\"annotation\":\"\"}}",
+                RatingOptions = "{\"0\":{\"score\":5,\"label\":\"Excellent\",\"annotation\":\"\"},\"1\":{\"score\":3,\"label\":\"Good\",\"annotation\":\"\"},\"2\":{\"score\":1\",\"label\":\"Poor\",\"annotation\":\"\"}}",
                 OrderIndex = 2,
                 CreatedAt = DateTimeOffset.UtcNow
             });
 
         await connection.ExecuteAsync(
-            "INSERT INTO form_criteria (id, form_id, group_id, title, text, criterion_type, weight_basis_points, rating_options, order_index, created_at) VALUES (@Id, @FormId, @GroupId, @Title, @Text, @CriterionType, @WeightBasisPoints, @RatingOptions::jsonb, @OrderIndex, @CreatedAt)",
+            "INSERT INTO form_criteria (id, form_id, group_id, title, text, weight_basis_points, rating_options, order_index, created_at) VALUES (@Id, @FormId, @GroupId, @Title, @Text, @WeightBasisPoints, @RatingOptions::jsonb, @OrderIndex, @CreatedAt)",
             new
             {
                 Id = criterion3Id,
@@ -190,7 +186,6 @@ public sealed class FormsEndpointsTests : IClassFixture<TestWebApplicationFactor
                 GroupId = group2Id,
                 Title = "Criterion 3",
                 Text = "Third criterion",
-                CriterionType = "weighted",
                 WeightBasisPoints = 10000,
                 RatingOptions = "{\"0\":{\"score\":5,\"label\":\"Excellent\",\"annotation\":\"\"},\"1\":{\"score\":3,\"label\":\"Good\",\"annotation\":\"\"},\"2\":{\"score\":1,\"label\":\"Poor\",\"annotation\":\"\"}}",
                 OrderIndex = 1,

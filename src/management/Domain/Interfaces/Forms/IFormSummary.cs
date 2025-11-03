@@ -12,5 +12,6 @@ public interface IFormSummary
     /// </summary>
     /// <typeparam name="TOutput">The type of output the media produces.</typeparam>
     /// <param name="media">Target media that receives the printed representation.</param>
-    void Print<TOutput>(IMedia<TOutput> media);
+    /// <returns>The media instance that received the printed representation.</returns>
+    IMedia<TOutput> Print<TOutput>(IMedia<TOutput> media);
 }

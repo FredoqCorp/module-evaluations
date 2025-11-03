@@ -5,6 +5,7 @@ using CascVel.Modules.Evaluations.Management.Domain.Entities.Forms;
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Forms;
 using CascVel.Modules.Evaluations.Management.Host.Infrastructure;
 using CascVel.Modules.Evaluations.Management.Host.Models;
+using CascVel.Modules.Evaluations.Management.Host.Responses;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 
@@ -104,7 +105,7 @@ public static class FormsEndpoints
         try
         {
             using var document = await JsonDocument.ParseAsync(request.Body, cancellationToken: ct);
-            var form = new JsonForm(document);
+            var form = new JsonNewForm(document);
             var created = await forms.Add(form, ct);
             using var media = new FormCreatedResponseMedia(request.HttpContext.Response);
             created.Print(media);

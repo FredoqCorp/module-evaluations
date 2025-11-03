@@ -1,7 +1,7 @@
 using CascVel.Modules.Evaluations.Management.Domain.Common;
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Identity;
+using CascVel.Modules.Evaluations.Management.Domain.Models.Identity;
 using CascVel.Modules.Evaluations.Management.Domain.UnitTests.TestDoubles;
-using CascVel.Modules.Evaluations.Management.Domain.ValueObjects.Identity;
 
 namespace CascVel.Modules.Evaluations.Management.Domain.UnitTests.ValueObjects.Identity;
 

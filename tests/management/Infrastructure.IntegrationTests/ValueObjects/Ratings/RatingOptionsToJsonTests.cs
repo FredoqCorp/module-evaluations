@@ -1,8 +1,8 @@
 using System.Text.Json;
+using CascVel.Modules.Evaluations.Management.Domain.Models.Ratings;
 using CascVel.Modules.Evaluations.Management.Infrastructure.Media;
-using CascVel.Modules.Evaluations.Management.Domain.ValueObjects.Ratings;
 
-namespace CascVel.Modules.Evaluations.Management.Domain.UnitTests.ValueObjects.Ratings;
+namespace CascVel.Modules.Evaluations.Management.Infrastructure.IntegrationTests.ValueObjects.Ratings;
 
 /// <summary>
 /// Tests for RatingOptions Print method with JSON output.

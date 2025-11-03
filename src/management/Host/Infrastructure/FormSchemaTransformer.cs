@@ -26,7 +26,7 @@ internal sealed class FormSchemaTransformer : IOpenApiSchemaTransformer
         ArgumentNullException.ThrowIfNull(context);
 
         var type = context.JsonTypeInfo.Type;
-        if (type != typeof(IForm) && type != typeof(JsonForm))
+        if (type != typeof(IForm) && type != typeof(JsonNewForm))
         {
             return Task.CompletedTask;
         }
@@ -110,16 +110,6 @@ internal sealed class FormSchemaTransformer : IOpenApiSchemaTransformer
                             Type = "string",
                             Description = "Optional group description"
                         },
-                        ["groupType"] = new()
-                        {
-                            Type = "string",
-                            Description = "Group calculation mode aligning with the form",
-                            Enum = new List<Microsoft.OpenApi.Any.IOpenApiAny>
-                            {
-                                new Microsoft.OpenApi.Any.OpenApiString("average"),
-                                new Microsoft.OpenApi.Any.OpenApiString("weighted")
-                            }
-                        },
                         ["orderIndex"] = new()
                         {
                             Type = "integer",
@@ -136,7 +126,7 @@ internal sealed class FormSchemaTransformer : IOpenApiSchemaTransformer
                     },
                     Required = new HashSet<string>
                     {
-                        "id", "formId", "title", "description", "groupType", "orderIndex"
+                        "id", "formId", "title", "description", "orderIndex"
                     }
                 }
             },
@@ -179,16 +169,6 @@ internal sealed class FormSchemaTransformer : IOpenApiSchemaTransformer
                             Type = "string",
                             Description = "Detailed text shown to the evaluator"
                         },
-                        ["criterionType"] = new()
-                        {
-                            Type = "string",
-                            Description = "Criterion calculation mode aligning with the form",
-                            Enum = new List<Microsoft.OpenApi.Any.IOpenApiAny>
-                            {
-                                new Microsoft.OpenApi.Any.OpenApiString("average"),
-                                new Microsoft.OpenApi.Any.OpenApiString("weighted")
-                            }
-                        },
                         ["orderIndex"] = new()
                         {
                             Type = "integer",
@@ -210,7 +190,7 @@ internal sealed class FormSchemaTransformer : IOpenApiSchemaTransformer
                     },
                     Required = new HashSet<string>
                     {
-                        "id", "title", "text", "criterionType", "orderIndex", "ratingOptions"
+                        "id", "title", "text", "orderIndex", "ratingOptions"
                     }
                 }
             }

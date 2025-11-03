@@ -1,7 +1,7 @@
 using CascVel.Modules.Evaluations.Management.Domain.Enums;
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Forms;
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Media;
-using CascVel.Modules.Evaluations.Management.Domain.ValueObjects.Forms;
+using CascVel.Modules.Evaluations.Management.Domain.Models.Forms;
 
 namespace CascVel.Modules.Evaluations.Management.Domain.Entities.Forms;
 
@@ -46,7 +46,7 @@ public sealed record FormSummary : IFormSummary
     /// Prints the form summary representation into the provided media.
     /// </summary>
     /// <param name="media">Target media that receives the printed representation.</param>
-    public void Print<TOutput>(IMedia<TOutput> media)
+    public IMedia<TOutput> Print<TOutput>(IMedia<TOutput> media)
     {
         ArgumentNullException.ThrowIfNull(media);
 
@@ -56,5 +56,6 @@ public sealed record FormSummary : IFormSummary
             .With("groupsCount", _groupsCount)
             .With("criteriaCount", _criteriaCount)
             .With("calculationType", _calculationType.ToString());
+        return media;
     }
 }

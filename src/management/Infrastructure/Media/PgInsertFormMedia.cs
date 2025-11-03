@@ -150,13 +150,12 @@ internal sealed class PgInsertFormMedia : IMedia<string>
         var parentId = parentValue is Guid parent ? parent : (Guid?)null;
         var title = (string)snapshot["title"];
         var description = (string)snapshot["description"];
-        var groupType = (string)snapshot["groupType"];
         var orderIndex = (int)snapshot["orderIndex"];
         snapshot.TryGetValue("weightBasisPoints", out var weightValue);
         var weight = weightValue is int basis ? basis : (int?)null;
         var stamp = TimestampLiteral();
 
-        return $"INSERT INTO form_groups (id, form_id, parent_id, title, description, group_type, weight_basis_points, order_index, created_at) VALUES ({GuidLiteral(id)}, {GuidLiteral(formId)}, {NullableGuidLiteral(parentId)}, {TextLiteral(title)}, {TextLiteral(description)}, {TextLiteral(groupType)}, {NullableIntLiteral(weight)}, {orderIndex.ToString(CultureInfo.InvariantCulture)}, {stamp});";
+        return $"INSERT INTO form_groups (id, form_id, parent_id, title, description, weight_basis_points, order_index, created_at) VALUES ({GuidLiteral(id)}, {GuidLiteral(formId)}, {NullableGuidLiteral(parentId)}, {TextLiteral(title)}, {TextLiteral(description)}, {NullableIntLiteral(weight)}, {orderIndex.ToString(CultureInfo.InvariantCulture)}, {stamp});";
     }
 
     /// <summary>
@@ -173,14 +172,13 @@ internal sealed class PgInsertFormMedia : IMedia<string>
         var groupId = groupValue is Guid group ? group : (Guid?)null;
         var title = (string)snapshot["title"];
         var text = (string)snapshot["text"];
-        var criterionType = (string)snapshot["criterionType"];
         var orderIndex = (int)snapshot["orderIndex"];
         var ratingOptions = (string)snapshot["ratingOptions"];
         snapshot.TryGetValue("weightBasisPoints", out var weightValue);
         var weight = weightValue is int basis ? basis : (int?)null;
         var stamp = TimestampLiteral();
 
-        return $"INSERT INTO form_criteria (id, form_id, group_id, title, text, criterion_type, weight_basis_points, rating_options, order_index, created_at) VALUES ({GuidLiteral(id)}, {NullableGuidLiteral(formId)}, {NullableGuidLiteral(groupId)}, {TextLiteral(title)}, {TextLiteral(text)}, {TextLiteral(criterionType)}, {NullableIntLiteral(weight)}, {JsonLiteral(ratingOptions)}, {orderIndex.ToString(CultureInfo.InvariantCulture)}, {stamp});";
+        return $"INSERT INTO form_criteria (id, form_id, group_id, title, text, weight_basis_points, rating_options, order_index, created_at) VALUES ({GuidLiteral(id)}, {NullableGuidLiteral(formId)}, {NullableGuidLiteral(groupId)}, {TextLiteral(title)}, {TextLiteral(text)}, {NullableIntLiteral(weight)}, {JsonLiteral(ratingOptions)}, {orderIndex.ToString(CultureInfo.InvariantCulture)}, {stamp});";
     }
 
     /// <summary>

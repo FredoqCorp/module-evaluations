@@ -1,5 +1,5 @@
+using CascVel.Modules.Evaluations.Management.Domain.Models.Shared;
 using CascVel.Modules.Evaluations.Management.Domain.UnitTests.TestDoubles;
-using CascVel.Modules.Evaluations.Management.Domain.ValueObjects.Shared;
 
 namespace CascVel.Modules.Evaluations.Management.Domain.UnitTests.ValueObjects.Shared;
 

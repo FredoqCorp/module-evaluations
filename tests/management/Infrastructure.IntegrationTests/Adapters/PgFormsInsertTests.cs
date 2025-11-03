@@ -85,7 +85,7 @@ public sealed class PgFormsInsertTests : IClassFixture<DatabaseFixture>
         using var document = JsonDocument.Parse(payload);
         await using var uow = new PostgresUnitOfWork(_fixture.ConnectionString);
         var adapter = new PgForms(uow);
-        var form = new JsonForm(document);
+        var form = new JsonNewForm(document);
 
         var verificationTask = Task.Run(async () =>
         {
@@ -163,7 +163,7 @@ public sealed class PgFormsInsertTests : IClassFixture<DatabaseFixture>
         using var document = JsonDocument.Parse(payload);
         await using var uow = new PostgresUnitOfWork(_fixture.ConnectionString);
         var adapter = new PgForms(uow);
-        var form = new JsonForm(document);
+        var form = new JsonNewForm(document);
 
         var verificationTask = Task.Run(async () =>
         {

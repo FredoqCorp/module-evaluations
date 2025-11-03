@@ -4,8 +4,8 @@ using CascVel.Modules.Evaluations.Management.Application.Ports;
 using CascVel.Modules.Evaluations.Management.Domain.Entities.Forms;
 using CascVel.Modules.Evaluations.Management.Domain.Enums;
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Forms;
-using CascVel.Modules.Evaluations.Management.Domain.ValueObjects.Forms;
-using CascVel.Modules.Evaluations.Management.Domain.ValueObjects.Shared;
+using CascVel.Modules.Evaluations.Management.Domain.Models.Forms;
+using CascVel.Modules.Evaluations.Management.Domain.Models.Shared;
 using CascVel.Modules.Evaluations.Management.Infrastructure.Database;
 using CascVel.Modules.Evaluations.Management.Infrastructure.Media;
 using CascVel.Modules.Evaluations.Management.Infrastructure.Queries;
@@ -40,7 +40,6 @@ internal sealed class PgForms : IForms
         var connection = await _unitOfWork.ActiveConnection(ct);
         var stamp = DateTimeOffset.UtcNow;
         using var media = new PgInsertFormMedia(stamp);
-        form.Validate();
         form.Print(media);
         var script = media.Output();
 

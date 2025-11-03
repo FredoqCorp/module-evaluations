@@ -97,13 +97,16 @@ app.MapFormsEndpoints();
 await app.RunAsync();
 
 
-/// <summary>
-/// Entry point for the application. Made accessible to WebApplicationFactory for E2E tests.
-/// </summary>
-public partial class Program
+namespace CascVel.Modules.Evaluations.Management.Host
 {
     /// <summary>
-    /// Required for WebApplicationFactory.
+    /// Entry point for the application. Made accessible to WebApplicationFactory for E2E tests.
     /// </summary>
-    protected Program() { }
+    public partial class Program
+    {
+        /// <summary>
+        /// Required for WebApplicationFactory.
+        /// </summary>
+        protected Program() { }
+    }
 }
