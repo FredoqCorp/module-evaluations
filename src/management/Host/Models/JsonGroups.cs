@@ -8,7 +8,7 @@ namespace CascVel.Modules.Evaluations.Management.Host.Models;
 /// <summary>
 /// Represents a groups collection backed by JSON.
 /// </summary>
-internal sealed class JsonGroups : IGroups
+internal sealed record JsonGroups : IGroups
 {
     private readonly JsonElement _container;
     private readonly CalculationType _calculation;

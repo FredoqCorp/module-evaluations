@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using System.Text.Json;
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Media;
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Ratings;
@@ -7,12 +9,12 @@ namespace CascVel.Modules.Evaluations.Management.Host.Models;
 /// <summary>
 /// JSON-backed collection of rating options that validates ordering and delegates printing.
 /// </summary>
-public sealed class JsonRatingOptions : IRatingOptions
+internal sealed record JsonRatingOptions : IRatingOptions
 {
     private readonly JsonElement _node;
 
     /// <summary>
-    /// Initializes the collection from the provided json node
+    /// Initializes the collection from the provided JSON node.
     /// </summary>
     /// <param name="node">JSON element containing the rating options.</param>
     public JsonRatingOptions(JsonElement node)
@@ -28,15 +30,12 @@ public sealed class JsonRatingOptions : IRatingOptions
         {
             throw new InvalidOperationException("Criterion requires 'ratingOptions' array");
         }
+
         var options = ToArray(optionsNode.EnumerateArray());
-        media.WithArray("ratingOptions", Items(media, options));
+        media.WithArray("ratingOptions", Items(options, media));
     }
 
-    /// <summary>
-    /// Produces media writers for every rating option.
-    /// </summary>
-    /// <returns>Enumerable of actions that write option objects.</returns>
-    private static IEnumerable<Action<IMedia>> Items<TOutput>(IMedia<TOutput> media, JsonRatingOption[] options)
+    private static IEnumerable<Action<IMedia>> Items<TOutput>(IEnumerable<JsonRatingOption> options, IMedia<TOutput> media)
     {
         foreach (var option in options)
         {
@@ -66,6 +65,6 @@ public sealed class JsonRatingOptions : IRatingOptions
         }
 
         options.Sort(static (left, right) => left.Score.CompareTo(right.Score));
-        return [.. options];
+        return options.ToArray();
     }
 }

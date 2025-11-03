@@ -6,7 +6,7 @@ namespace CascVel.Modules.Evaluations.Management.Host.Models;
 /// <summary>
 /// JSON-backed rating annotation that reads the optional annotation field.
 /// </summary>
-public sealed record JsonRatingAnnotation : IRatingAnnotation
+internal sealed record JsonRatingAnnotation : IRatingAnnotation
 {
     private readonly JsonElement _node;
 

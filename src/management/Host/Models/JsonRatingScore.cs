@@ -6,7 +6,7 @@ namespace CascVel.Modules.Evaluations.Management.Host.Models;
 /// <summary>
 /// JSON-backed rating score that reads the numeric score field.
 /// </summary>
-public sealed record JsonRatingScore : IRatingScore
+internal sealed record JsonRatingScore : IRatingScore
 {
     private readonly JsonElement _node;
 

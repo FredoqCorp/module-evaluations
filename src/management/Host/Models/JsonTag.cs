@@ -6,7 +6,7 @@ namespace CascVel.Modules.Evaluations.Management.Host.Models;
 /// <summary>
 /// JSON-backed tag that reads the tag text from the underlying JSON value.
 /// </summary>
-public sealed record JsonTag : ITag
+internal sealed record JsonTag : ITag
 {
     private readonly JsonElement _element;
 

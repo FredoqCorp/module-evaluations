@@ -25,15 +25,37 @@ internal sealed class JsonCriteria : ICriteria
     }
 
     /// <inheritdoc />
-    public IMedia<TOutput> Print<TOutput>(IMedia<TOutput> media, Guid formId, Guid? groupId)
+    public IMedia<TOutput> Print<TOutput>(IMedia<TOutput> media)
     {
         ArgumentNullException.ThrowIfNull(media);
-
-        foreach (var node in JsonFormNodes.Collection(_container, "criteria"))
+        var array = Array.Empty<JsonElement>();
+        if (_container.TryGetProperty("criteria", out var value) && value.ValueKind == JsonValueKind.Array)
         {
-            var criterion = new JsonNewCriterion(node, _calculation);
-            criterion.Print(media, formId, groupId);
+            array = [.. value.EnumerateArray()];
         }
+        var criteria = new List<ICriterion>();
+        foreach (var node in array)
+        {
+            if (_calculation == CalculationType.WeightedAverage)
+            {
+                var criterion = new JsonNewWeightedCriterion(node, new JsonNewAverageCriterion(node));
+                criteria.Add(criterion);
+            }
+            else
+            {
+                var criterion = new JsonNewAverageCriterion(node);
+                criteria.Add(criterion);
+            }
+        }
+        media.WithArray("criteria", Items(criteria, media));
         return media;
+    }
+
+    private static IEnumerable<Action<IMedia>> Items<TOutput>(IEnumerable<ICriterion> options, IMedia<TOutput> media)
+    {
+        foreach (var option in options)
+        {
+            yield return _ => option.Print(media);
+        }
     }
 }

@@ -6,7 +6,7 @@ namespace CascVel.Modules.Evaluations.Management.Host.Models;
 /// <summary>
 /// JSON-backed form name that reads the name from the underlying JSON element.
 /// </summary>
-public record JsonFormName : IFormName
+internal sealed record JsonFormName : IFormName
 {
     private readonly JsonElement _element;
 

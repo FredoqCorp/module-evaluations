@@ -6,7 +6,7 @@ namespace CascVel.Modules.Evaluations.Management.Host.Models;
 /// <summary>
 /// JSON-backed rating label that reads the label field from an option node.
 /// </summary>
-public sealed record JsonRatingLabel : IRatingLabel
+internal sealed record JsonRatingLabel : IRatingLabel
 {
     private readonly JsonElement _node;
 

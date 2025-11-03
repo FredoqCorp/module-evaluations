@@ -6,7 +6,7 @@ namespace CascVel.Modules.Evaluations.Management.Host.Models;
 /// <summary>
 /// JSON-backed form description that reads the description from the underlying JSON element.
 /// </summary>
-public sealed class JsonFormDescription : IFormDescription
+internal sealed record JsonFormDescription : IFormDescription
 {
     private readonly JsonElement _element;
 

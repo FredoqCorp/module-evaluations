@@ -6,7 +6,7 @@ namespace CascVel.Modules.Evaluations.Management.Host.Models;
 /// <summary>
 /// JSON-backed criterion text that extracts the textual body from a JSON element.
 /// </summary>
-public sealed record JsonCriterionText : ICriterionText
+internal sealed record JsonCriterionText : ICriterionText
 {
     private readonly JsonElement _node;
 

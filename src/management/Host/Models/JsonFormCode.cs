@@ -6,7 +6,7 @@ namespace CascVel.Modules.Evaluations.Management.Host.Models;
 /// <summary>
 /// JSON-backed form code that reads the code token from the underlying JSON element.
 /// </summary>
-public sealed class JsonFormCode : IFormCode
+internal sealed record JsonFormCode : IFormCode
 {
     private readonly JsonElement _element;
 

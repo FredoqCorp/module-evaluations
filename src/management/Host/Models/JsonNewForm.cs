@@ -9,7 +9,7 @@ namespace CascVel.Modules.Evaluations.Management.Host.Models;
 /// <summary>
 /// Form aggregate backed by raw JSON payload that coordinates metadata, groups and criteria components.
 /// </summary>
-internal sealed class JsonNewForm : IForm
+internal sealed record JsonNewForm : IForm
 {
     private readonly FormId _identity;
     private readonly JsonFormMetadata _metadata;

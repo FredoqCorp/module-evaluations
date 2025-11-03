@@ -8,7 +8,7 @@ namespace CascVel.Modules.Evaluations.Management.Host.Models;
 /// <summary>
 /// JSON-backed rating option composed of score, label, and annotation.
 /// </summary>
-public sealed class JsonRatingOption : IRatingOption
+internal sealed record JsonRatingOption : IRatingOption
 {
     private readonly int _score;
     private readonly string _label;

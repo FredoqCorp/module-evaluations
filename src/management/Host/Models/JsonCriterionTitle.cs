@@ -6,7 +6,7 @@ namespace CascVel.Modules.Evaluations.Management.Host.Models;
 /// <summary>
 /// JSON-backed criterion title that reads the title token from a JSON node.
 /// </summary>
-public sealed record JsonCriterionTitle : ICriterionTitle
+internal sealed record JsonCriterionTitle : ICriterionTitle
 {
     private readonly JsonElement _node;
 

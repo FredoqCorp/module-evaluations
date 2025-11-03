@@ -7,7 +7,7 @@ namespace CascVel.Modules.Evaluations.Management.Host.Models;
 /// <summary>
 /// JSON-backed form calculation that reads the calculation type from the underlying JSON element.
 /// </summary>
-public record JsonFormCalculation : IFormCalculation
+internal sealed record JsonFormCalculation : IFormCalculation
 {
     private readonly JsonDocument _document;
     

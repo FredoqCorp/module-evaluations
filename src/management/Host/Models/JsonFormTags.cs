@@ -9,7 +9,7 @@ namespace CascVel.Modules.Evaluations.Management.Host.Models;
 /// <summary>
 /// JSON-backed tags collection that implements the immutable tags contract.
 /// </summary>
-public sealed class JsonFormTags : ITags
+internal sealed record JsonFormTags : ITags
 {
     private readonly Lazy<ImmutableList<ITag>> _tags;
 

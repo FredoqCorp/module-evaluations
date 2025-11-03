@@ -8,7 +8,7 @@ namespace CascVel.Modules.Evaluations.Management.Host.Models;
 /// <summary>
 /// JSON-backed metadata that projects raw payload into domain value objects and prints them when required.
 /// </summary>
-internal sealed class JsonFormMetadata : IFormMetadata
+internal sealed record JsonFormMetadata : IFormMetadata
 {
     private readonly JsonElement _metadata;
 
