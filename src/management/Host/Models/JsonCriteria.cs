@@ -31,7 +31,7 @@ internal sealed class JsonCriteria : ICriteria
 
         foreach (var node in JsonFormNodes.Collection(_container, "criteria"))
         {
-            var criterion = new JsonCriterion(node, _calculation);
+            var criterion = new JsonNewCriterion(node, _calculation);
             criterion.Print(media, formId, groupId);
         }
         return media;
