@@ -13,7 +13,7 @@ public interface IForms
     /// <param name="ct">Cancellation token.</param>
     /// <returns>Printable collection of form summaries.</returns>
     Task<IFormSummaries> List(CancellationToken ct = default);
-    
+
     /// <summary>
     /// Persists a fully described form aggregate.
     /// </summary>

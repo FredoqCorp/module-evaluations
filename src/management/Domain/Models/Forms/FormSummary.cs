@@ -1,9 +1,8 @@
 using CascVel.Modules.Evaluations.Management.Domain.Enums;
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Forms;
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Media;
-using CascVel.Modules.Evaluations.Management.Domain.Models.Forms;
 
-namespace CascVel.Modules.Evaluations.Management.Domain.Entities.Forms;
+namespace CascVel.Modules.Evaluations.Management.Domain.Models.Forms;
 
 /// <summary>
 /// Immutable entity that represents a summarized view of an evaluation form with essential information.

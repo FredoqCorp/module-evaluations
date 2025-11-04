@@ -1,4 +1,3 @@
-using System.Linq;
 using CascVel.Modules.Evaluations.Management.Infrastructure.Adapters.Forms;
 using CascVel.Modules.Evaluations.Management.Infrastructure.IntegrationTests.TestDoubles;
 using CascVel.Modules.Evaluations.Management.Infrastructure.Database;

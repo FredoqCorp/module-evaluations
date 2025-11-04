@@ -1,4 +1,3 @@
-using System;
 using System.Text.Json;
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Shared;
 

@@ -1,4 +1,3 @@
-using System;
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Shared;
 
 namespace CascVel.Modules.Evaluations.Management.Domain.Models.Shared;

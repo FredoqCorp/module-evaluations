@@ -1,10 +1,7 @@
-using System;
-using System.Collections.Generic;
 using System.Text;
 using CascVel.Modules.Evaluations.Management.Domain.Common;
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Media;
 using CascVel.Modules.Evaluations.Management.Infrastructure.Media;
-using Microsoft.AspNetCore.Http;
 
 namespace CascVel.Modules.Evaluations.Management.Host.Responses;
 

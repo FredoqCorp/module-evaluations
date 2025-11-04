@@ -1,7 +1,5 @@
-using System.Collections.Immutable;
 using System.Text.Json;
 using CascVel.Modules.Evaluations.Management.Application.Ports;
-using CascVel.Modules.Evaluations.Management.Domain.Entities.Forms;
 using CascVel.Modules.Evaluations.Management.Domain.Enums;
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Forms;
 using CascVel.Modules.Evaluations.Management.Domain.Models.Forms;
@@ -110,8 +108,8 @@ internal sealed class PgForms : IForms
         return new FormSummaries([.. summaries]);
     }
 
-    
-    
+
+
     /// <summary>
     /// Provides calculation type for a database root group discriminator.
     /// </summary>

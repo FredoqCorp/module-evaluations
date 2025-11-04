@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Media;
 
 namespace CascVel.Modules.Evaluations.Management.Domain.Interfaces.Forms;

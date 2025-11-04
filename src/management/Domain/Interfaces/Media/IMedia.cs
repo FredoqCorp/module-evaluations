@@ -1,4 +1,3 @@
-using System;
 using CascVel.Modules.Evaluations.Management.Domain.Common;
 
 namespace CascVel.Modules.Evaluations.Management.Domain.Interfaces.Media;

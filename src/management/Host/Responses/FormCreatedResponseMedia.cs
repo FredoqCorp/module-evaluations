@@ -1,4 +1,3 @@
-using System;
 using CascVel.Modules.Evaluations.Management.Domain.Common;
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Media;
 using CascVel.Modules.Evaluations.Management.Infrastructure.Media;
@@ -18,7 +17,7 @@ internal sealed class FormCreatedResponseMedia : IMedia<IResult>
     /// Initializes the media for capturing created form responses.
     /// </summary>
     /// <param name="response">HTTP response used to set headers.</param>
-    public FormCreatedResponseMedia(HttpResponse response): this(response, new JsonMediaWriter())
+    public FormCreatedResponseMedia(HttpResponse response) : this(response, new JsonMediaWriter())
     {
     }
 

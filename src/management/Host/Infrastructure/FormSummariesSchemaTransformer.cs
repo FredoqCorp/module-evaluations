@@ -1,5 +1,3 @@
-using System;
-using System.Collections.Generic;
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Forms;
 using Microsoft.AspNetCore.OpenApi;
 using Microsoft.OpenApi.Models;

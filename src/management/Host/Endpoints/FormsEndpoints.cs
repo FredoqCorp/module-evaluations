@@ -1,10 +1,8 @@
 using System.Text.Json;
 using CascVel.Modules.Evaluations.Management.Application.Ports;
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Forms;
-using CascVel.Modules.Evaluations.Management.Host.Infrastructure;
 using CascVel.Modules.Evaluations.Management.Host.Models.Forms;
 using CascVel.Modules.Evaluations.Management.Host.Responses;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace CascVel.Modules.Evaluations.Management.Host.Endpoints;

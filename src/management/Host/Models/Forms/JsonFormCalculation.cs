@@ -10,7 +10,7 @@ namespace CascVel.Modules.Evaluations.Management.Host.Models.Forms;
 internal sealed record JsonFormCalculation : IFormCalculation
 {
     private readonly JsonElement _element;
-    
+
     /// <summary>
     /// Initializes the form calculation from the provided JSON element.
     /// </summary>

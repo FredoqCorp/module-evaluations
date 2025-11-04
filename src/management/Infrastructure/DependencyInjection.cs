@@ -1,5 +1,4 @@
 using CascVel.Modules.Evaluations.Management.Application.Ports;
-using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Groups;
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Identity;
 using CascVel.Modules.Evaluations.Management.Infrastructure.Adapters.Forms;
 using CascVel.Modules.Evaluations.Management.Infrastructure.Database;

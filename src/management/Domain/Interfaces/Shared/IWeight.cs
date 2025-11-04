@@ -1,5 +1,3 @@
-using CascVel.Modules.Evaluations.Management.Domain.Models.Criteria;
-
 namespace CascVel.Modules.Evaluations.Management.Domain.Interfaces.Shared;
 
 /// <summary>
