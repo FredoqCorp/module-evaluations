@@ -1,7 +1,7 @@
 using System.Text.Json;
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Shared;
 
-namespace CascVel.Modules.Evaluations.Management.Host.Models;
+namespace CascVel.Modules.Evaluations.Management.Host.Models.Shared;
 
 /// <summary>
 /// JSON-backed tag that reads the tag text from the underlying JSON value.

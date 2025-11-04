@@ -1,7 +1,7 @@
 using System.Text.Json;
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Forms;
 
-namespace CascVel.Modules.Evaluations.Management.Host.Models;
+namespace CascVel.Modules.Evaluations.Management.Host.Models.Forms;
 
 /// <summary>
 /// JSON-backed form name that reads the name from the underlying JSON element.

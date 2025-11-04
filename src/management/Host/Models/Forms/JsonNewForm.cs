@@ -3,8 +3,10 @@ using CascVel.Modules.Evaluations.Management.Domain.Enums;
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Forms;
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Media;
 using CascVel.Modules.Evaluations.Management.Domain.Models.Forms;
+using CascVel.Modules.Evaluations.Management.Host.Models.Criteria;
+using CascVel.Modules.Evaluations.Management.Host.Models.Groups;
 
-namespace CascVel.Modules.Evaluations.Management.Host.Models;
+namespace CascVel.Modules.Evaluations.Management.Host.Models.Forms;
 
 /// <summary>
 /// Form aggregate backed by raw JSON payload that coordinates metadata, groups and criteria components.
@@ -39,7 +41,7 @@ internal sealed record JsonNewForm : IForm
         {
             CalculationType.Average => "average",
             CalculationType.WeightedAverage => "weighted",
-            _ => throw new InvalidOperationException("Unsupported calculation type.")
+            _ => throw new InvalidOperationException("Unsupported calculation type")
         });
         groups.Print(media);
         criteria.Print(media);

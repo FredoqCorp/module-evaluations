@@ -1,7 +1,7 @@
 using System.Text.Json;
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Ratings;
 
-namespace CascVel.Modules.Evaluations.Management.Host.Models;
+namespace CascVel.Modules.Evaluations.Management.Host.Models.Ratings;
 
 /// <summary>
 /// JSON-backed rating label that reads the label field from an option node.

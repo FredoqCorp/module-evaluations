@@ -4,13 +4,15 @@ using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Groups;
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Media;
 using CascVel.Modules.Evaluations.Management.Domain.Models.Groups;
 using CascVel.Modules.Evaluations.Management.Domain.Models.Shared;
+using CascVel.Modules.Evaluations.Management.Host.Models.Criteria;
+using CascVel.Modules.Evaluations.Management.Host.Models.Shared;
 
-namespace CascVel.Modules.Evaluations.Management.Host.Models;
+namespace CascVel.Modules.Evaluations.Management.Host.Models.Groups;
 
 /// <summary>
 /// Represents a group backed by JSON.
 /// </summary>
-internal sealed record JsonNewWeightedGroup : IGroup
+internal sealed record JsonNewAverageGroup : IGroup
 {
     private readonly JsonElement _node;
     private readonly GroupId _identifier;
@@ -19,7 +21,7 @@ internal sealed record JsonNewWeightedGroup : IGroup
     /// Creates a JSON-backed group.
     /// </summary>
     /// <param name="node">JSON element describing the group.</param>
-    public JsonNewWeightedGroup(JsonElement node)
+    public JsonNewAverageGroup(JsonElement node)
     {
         _node = node;
         _identifier = new GroupId();
@@ -33,9 +35,8 @@ internal sealed record JsonNewWeightedGroup : IGroup
         media.With("title", new ValidGroupTitle(new TrimmedGroupTitle(new JsonGroupTitle(_node))).Text());
         media.With("description", new ValidGroupDescription(new TrimmedGroupDescription(new JsonGroupDescription(_node))).Text());
         media.With("orderIndex", new ValidOrderIndex(new JsonOrderIndex(_node)).Value());
-        media.With("weightBasisPoints", new JsonWeight(_node).BasisPoints());
-        new JsonCriteria(_node, CalculationType.WeightedAverage).Print(media);
-        new JsonGroups(_node, CalculationType.WeightedAverage).Print(media);
+        new JsonCriteria(_node, CalculationType.Average).Print(media);
+        new JsonGroups(_node, CalculationType.Average).Print(media);
         return media;
     }
 }

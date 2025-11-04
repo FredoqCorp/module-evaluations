@@ -3,7 +3,7 @@ using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Media;
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Ratings;
 using CascVel.Modules.Evaluations.Management.Domain.Models.Ratings;
 
-namespace CascVel.Modules.Evaluations.Management.Host.Models;
+namespace CascVel.Modules.Evaluations.Management.Host.Models.Ratings;
 
 /// <summary>
 /// JSON-backed rating option composed of score, label, and annotation.

@@ -4,7 +4,7 @@ using CascVel.Modules.Evaluations.Management.Application.UseCases.ListForms;
 using CascVel.Modules.Evaluations.Management.Domain.Entities.Forms;
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Forms;
 using CascVel.Modules.Evaluations.Management.Host.Infrastructure;
-using CascVel.Modules.Evaluations.Management.Host.Models;
+using CascVel.Modules.Evaluations.Management.Host.Models.Forms;
 using CascVel.Modules.Evaluations.Management.Host.Responses;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;

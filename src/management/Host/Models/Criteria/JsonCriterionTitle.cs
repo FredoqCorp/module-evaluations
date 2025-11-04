@@ -1,7 +1,7 @@
 using System.Text.Json;
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Criteria;
 
-namespace CascVel.Modules.Evaluations.Management.Host.Models;
+namespace CascVel.Modules.Evaluations.Management.Host.Models.Criteria;
 
 /// <summary>
 /// JSON-backed criterion title that reads the title token from a JSON node.

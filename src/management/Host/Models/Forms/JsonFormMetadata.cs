@@ -3,7 +3,7 @@ using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Forms;
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Media;
 using CascVel.Modules.Evaluations.Management.Domain.Models.Forms;
 
-namespace CascVel.Modules.Evaluations.Management.Host.Models;
+namespace CascVel.Modules.Evaluations.Management.Host.Models.Forms;
 
 /// <summary>
 /// JSON-backed metadata that projects raw payload into domain value objects and prints them when required.

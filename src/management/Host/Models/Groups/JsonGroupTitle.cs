@@ -1,7 +1,7 @@
 using System.Text.Json;
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Groups;
 
-namespace CascVel.Modules.Evaluations.Management.Host.Models;
+namespace CascVel.Modules.Evaluations.Management.Host.Models.Groups;
 
 /// <summary>
 /// JSON-backed group title that reads the title token from a JSON node.

@@ -1,5 +1,5 @@
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Forms;
-using CascVel.Modules.Evaluations.Management.Host.Models;
+using CascVel.Modules.Evaluations.Management.Host.Models.Forms;
 using Microsoft.AspNetCore.OpenApi;
 using Microsoft.OpenApi.Models;
 

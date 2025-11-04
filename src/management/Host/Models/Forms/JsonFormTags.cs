@@ -3,8 +3,9 @@ using System.Text.Json;
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Media;
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Shared;
 using CascVel.Modules.Evaluations.Management.Domain.Models.Shared;
+using CascVel.Modules.Evaluations.Management.Host.Models.Shared;
 
-namespace CascVel.Modules.Evaluations.Management.Host.Models;
+namespace CascVel.Modules.Evaluations.Management.Host.Models.Forms;
 
 /// <summary>
 /// JSON-backed tags collection that implements the immutable tags contract.

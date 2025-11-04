@@ -5,8 +5,10 @@ using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Criteria;
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Media;
 using CascVel.Modules.Evaluations.Management.Domain.Models.Criteria;
 using CascVel.Modules.Evaluations.Management.Domain.Models.Shared;
+using CascVel.Modules.Evaluations.Management.Host.Models.Ratings;
+using CascVel.Modules.Evaluations.Management.Host.Models.Shared;
 
-namespace CascVel.Modules.Evaluations.Management.Host.Models;
+namespace CascVel.Modules.Evaluations.Management.Host.Models.Criteria;
 
 /// <summary>
 /// Represents a criterion backed by JSON.

@@ -4,7 +4,7 @@ using System.Text.Json;
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Media;
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Ratings;
 
-namespace CascVel.Modules.Evaluations.Management.Host.Models;
+namespace CascVel.Modules.Evaluations.Management.Host.Models.Ratings;
 
 /// <summary>
 /// JSON-backed collection of rating options that validates ordering and delegates printing.
