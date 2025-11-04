@@ -62,7 +62,6 @@ public sealed class PostFormEndpointTests : IClassFixture<TestWebApplicationFact
     ""tags"": [""тест-{Guid.NewGuid():N}"", ""标签-{Guid.NewGuid():N}""]
   }},
   ""calculation"": ""weighted"",
-  ""root"": {{
     ""criteria"": [
       {{
         ""title"": ""{criterionTitle}"",
@@ -84,7 +83,6 @@ public sealed class PostFormEndpointTests : IClassFixture<TestWebApplicationFact
         ""groups"": []
       }}
     ]
-  }}
 }}";
 
         using var content = new StringContent(payload, Encoding.UTF8, "application/json");

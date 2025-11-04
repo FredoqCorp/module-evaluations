@@ -157,7 +157,7 @@ public sealed class FormsEndpointsTests : IClassFixture<TestWebApplicationFactor
                 Title = "Criterion 1",
                 Text = "First criterion",
                 WeightBasisPoints = 5000,
-                RatingOptions = "{\"0\":{\"score\":5,\"label\":\"Excellent\",\"annotation\":\"\"},\"1\":{\"score\":3\",\"label\":\"Good\",\"annotation\":\"\"},\"2\":{\"score\":1,\"label\":\"Poor\",\"annotation\":\"\"}}",
+                RatingOptions = "{\"0\":{\"score\":5,\"label\":\"Excellent\",\"annotation\":\"\"},\"1\":{\"score\":3,\"label\":\"Good\",\"annotation\":\"\"},\"2\":{\"score\":1,\"label\":\"Poor\",\"annotation\":\"\"}}",
                 OrderIndex = 1,
                 CreatedAt = DateTimeOffset.UtcNow
             });
@@ -172,7 +172,7 @@ public sealed class FormsEndpointsTests : IClassFixture<TestWebApplicationFactor
                 Title = "Criterion 2",
                 Text = "Second criterion",
                 WeightBasisPoints = 5000,
-                RatingOptions = "{\"0\":{\"score\":5,\"label\":\"Excellent\",\"annotation\":\"\"},\"1\":{\"score\":3,\"label\":\"Good\",\"annotation\":\"\"},\"2\":{\"score\":1\",\"label\":\"Poor\",\"annotation\":\"\"}}",
+                RatingOptions = "{\"0\":{\"score\":5,\"label\":\"Excellent\",\"annotation\":\"\"},\"1\":{\"score\":3,\"label\":\"Good\",\"annotation\":\"\"},\"2\":{\"score\":1,\"label\":\"Poor\",\"annotation\":\"\"}}",
                 OrderIndex = 2,
                 CreatedAt = DateTimeOffset.UtcNow
             });
