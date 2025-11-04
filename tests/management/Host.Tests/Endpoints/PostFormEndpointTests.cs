@@ -32,13 +32,9 @@ public sealed class PostFormEndpointTests : IClassFixture<TestWebApplicationFact
     [Fact]
     public async Task Given_weighted_payload_When_post_forms_invoked_Then_persist_weights()
     {
+        await _factory.Reset();
         var randomness = Guid.NewGuid();
         var code = $"pst-{randomness:N}";
-        await using var setupConnection = new NpgsqlConnection(_factory.ConnectionString);
-        await setupConnection.OpenAsync();
-        await setupConnection.ExecuteAsync("DELETE FROM form_criteria WHERE form_id IN (SELECT id FROM forms WHERE code = @Code)", new { Code = code });
-        await setupConnection.ExecuteAsync("DELETE FROM form_groups WHERE form_id IN (SELECT id FROM forms WHERE code = @Code)", new { Code = code });
-        await setupConnection.ExecuteAsync("DELETE FROM forms WHERE code = @Code", new { Code = code });
 
         var name = $"Имя-{Guid.NewGuid():N}";
         var description = $"説明-{Guid.NewGuid():N}";

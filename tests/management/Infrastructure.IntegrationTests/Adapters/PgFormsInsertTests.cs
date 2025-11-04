@@ -27,13 +27,9 @@ public sealed class PgFormsInsertTests : IClassFixture<DatabaseFixture>
     [Fact]
     public async Task Given_weighted_payload_When_pg_forms_add_executes_Then_persist_basis_points()
     {
+        await _fixture.Reset();
         var randomness = Guid.NewGuid();
         var code = $"code-{randomness:N}";
-        await using var setupConnection = new NpgsqlConnection(_fixture.ConnectionString);
-        await setupConnection.OpenAsync();
-        await setupConnection.ExecuteAsync("DELETE FROM form_criteria WHERE form_id IN (SELECT id FROM forms WHERE code = @Code)", new { Code = code });
-        await setupConnection.ExecuteAsync("DELETE FROM form_groups WHERE form_id IN (SELECT id FROM forms WHERE code = @Code)", new { Code = code });
-        await setupConnection.ExecuteAsync("DELETE FROM forms WHERE code = @Code", new { Code = code });
 
         var name = $"Форма-{Guid.NewGuid():N}";
         var description = $"説明-{Guid.NewGuid():N}";
@@ -110,13 +106,9 @@ public sealed class PgFormsInsertTests : IClassFixture<DatabaseFixture>
     [Fact]
     public async Task Given_average_payload_When_pg_forms_add_executes_Then_skip_weights()
     {
+        await _fixture.Reset();
         var randomness = Guid.NewGuid();
         var code = $"avg-{randomness:N}";
-        await using var setupConnection = new NpgsqlConnection(_fixture.ConnectionString);
-        await setupConnection.OpenAsync();
-        await setupConnection.ExecuteAsync("DELETE FROM form_criteria WHERE form_id IN (SELECT id FROM forms WHERE code = @Code)", new { Code = code });
-        await setupConnection.ExecuteAsync("DELETE FROM form_groups WHERE form_id IN (SELECT id FROM forms WHERE code = @Code)", new { Code = code });
-        await setupConnection.ExecuteAsync("DELETE FROM forms WHERE code = @Code", new { Code = code });
 
         var name = $"Оценка-{Guid.NewGuid():N}";
         var description = $"descr-{Guid.NewGuid():N}";

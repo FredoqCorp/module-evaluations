@@ -23,20 +23,10 @@ public sealed class FormsEndpointsTests : IClassFixture<TestWebApplicationFactor
         _client = factory.CreateClient();
     }
 
-    /// <summary>
-    /// Clears persisted form records to isolate each test run.
-    /// </summary>
-    private async Task Clear()
-    {
-        await using var connection = new NpgsqlConnection(_factory.ConnectionString);
-        await connection.OpenAsync();
-        await connection.ExecuteAsync("TRUNCATE TABLE form_criteria, form_groups, forms RESTART IDENTITY CASCADE");
-    }
-
     [Fact]
     public async Task GET_api_forms_returns_empty_list_when_no_forms_exist()
     {
-        await Clear();
+        await _factory.Reset();
 
         // Act
         var response = await _client.GetAsync(new Uri("/forms", UriKind.Relative));
@@ -54,7 +44,7 @@ public sealed class FormsEndpointsTests : IClassFixture<TestWebApplicationFactor
     [Fact]
     public async Task GET_api_forms_returns_single_form_with_correct_structure()
     {
-        await Clear();
+        await _factory.Reset();
 
         // Arrange
         var formId = Guid.NewGuid();
@@ -102,7 +92,7 @@ public sealed class FormsEndpointsTests : IClassFixture<TestWebApplicationFactor
     [Fact]
     public async Task GET_api_forms_returns_form_with_groups_and_criteria_counts()
     {
-        await Clear();
+        await _factory.Reset();
 
         // Arrange
         var formId = Guid.NewGuid();
@@ -226,7 +216,7 @@ public sealed class FormsEndpointsTests : IClassFixture<TestWebApplicationFactor
     [Fact]
     public async Task GET_api_forms_returns_multiple_forms_ordered_by_created_at_desc()
     {
-        await Clear();
+        await _factory.Reset();
 
         // Arrange
         var form1Id = Guid.NewGuid();
@@ -305,7 +295,7 @@ public sealed class FormsEndpointsTests : IClassFixture<TestWebApplicationFactor
     [Fact]
     public async Task GET_api_forms_handles_null_description()
     {
-        await Clear();
+        await _factory.Reset();
 
         // Arrange
         var formId = Guid.NewGuid();
@@ -344,7 +334,7 @@ public sealed class FormsEndpointsTests : IClassFixture<TestWebApplicationFactor
     [Fact]
     public async Task GET_api_forms_returns_correct_content_type_header()
     {
-        await Clear();
+        await _factory.Reset();
 
         // Act
         var response = await _client.GetAsync(new Uri("/forms", UriKind.Relative));
