@@ -7,6 +7,11 @@ internal sealed class FakeMedia : IMedia<object>
 {
     public List<(string Key, object Value)> Writes { get; } = [];
 
+    public void Dispose()
+    {
+        Writes.Clear();
+    }
+
     public IMedia With(string key, string value)
     {
         Writes.Add((key, value));
@@ -46,7 +51,7 @@ internal sealed class FakeMedia : IMedia<object>
 
     public IMedia WithObject(string key, Action<IMedia> configure)
     {
-        var nestedMedia = new FakeMedia();
+        using var nestedMedia = new FakeMedia();
         configure(nestedMedia);
         Writes.Add((key, nestedMedia.Output()));
         return this;
@@ -56,6 +61,19 @@ internal sealed class FakeMedia : IMedia<object>
     {
         var write = Writes.FirstOrDefault(w => w.Key == key);
         return write.Key is not null ? (T?)write.Value : default;
+    }
+
+    public IMedia WithArray(string key, IEnumerable<Action<IMedia>> items)
+    {
+        var arrayItems = new List<object>();
+        foreach (var configure in items)
+        {
+            using var itemMedia = new FakeMedia();
+            configure(itemMedia);
+            arrayItems.Add(itemMedia.Output());
+        }
+        Writes.Add((key, arrayItems));
+        return this;
     }
 
     public object Output()

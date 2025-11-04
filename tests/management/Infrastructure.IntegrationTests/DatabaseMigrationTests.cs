@@ -1,6 +1,5 @@
 using CascVel.Modules.Evaluations.Management.Infrastructure.Database;
 using Npgsql;
-using Xunit;
 using Xunit.Abstractions;
 
 namespace CascVel.Modules.Evaluations.Management.Infrastructure.IntegrationTests;

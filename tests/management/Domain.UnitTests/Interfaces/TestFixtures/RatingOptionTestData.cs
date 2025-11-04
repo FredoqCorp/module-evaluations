@@ -1,6 +1,6 @@
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Media;
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Ratings;
-using CascVel.Modules.Evaluations.Management.Domain.ValueObjects.Ratings;
+using CascVel.Modules.Evaluations.Management.Domain.Models.Ratings;
 
 namespace CascVel.Modules.Evaluations.Management.Domain.UnitTests.Interfaces.TestFixtures;
 
@@ -30,12 +30,13 @@ internal sealed record TestRatingOption(RatingScore ScoreValue) : IRatingOption
     public bool Matches(RatingScore score) =>
         ScoreValue.Value == score.Value;
 
-    public void Print<TOutput>(IMedia<TOutput> media)
+    public IMedia<TOutput> Print<TOutput>(IMedia<TOutput> media)
     {
         ArgumentNullException.ThrowIfNull(media);
 
         media.With("score", ScoreValue.Value);
         media.With("label", Label.Value);
         media.With("annotation", Annotation.Text);
+        return media;
     }
 }

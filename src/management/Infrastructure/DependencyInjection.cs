@@ -1,8 +1,6 @@
 using CascVel.Modules.Evaluations.Management.Application.Ports;
-using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Groups;
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Identity;
-using CascVel.Modules.Evaluations.Management.Infrastructure.Adapters;
-using CascVel.Modules.Evaluations.Management.Infrastructure.Adapters.Groups;
+using CascVel.Modules.Evaluations.Management.Infrastructure.Adapters.Forms;
 using CascVel.Modules.Evaluations.Management.Infrastructure.Database;
 using CascVel.Modules.Evaluations.Management.Infrastructure.Identity;
 using Microsoft.Extensions.DependencyInjection;
@@ -31,8 +29,6 @@ public static class InfrastructureExtensions
 
         // Register adapters
         services.AddScoped<IForms, PgForms>();
-        services.AddScoped<IAverageGroups, PgAverageGroups>();
-        services.AddScoped<IWeightedGroups, PgWeightedGroups>();
 
         // Register identity services
         services.AddScoped<IModuleUser, HttpContextModuleUser>();

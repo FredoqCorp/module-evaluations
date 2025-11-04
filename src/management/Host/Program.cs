@@ -65,12 +65,8 @@ builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 // Configure OpenAPI with schema transformer for Printer Pattern types
 builder.Services.AddOpenApi(options =>
 {
-    options.AddSchemaTransformer<ListFormsResponseSchemaTransformer>();
-});
-
-builder.Services.ConfigureHttpJsonOptions(options =>
-{
-    options.SerializerOptions.Converters.Add(new FormSummaryJsonConverter());
+    options.AddSchemaTransformer<FormSummariesSchemaTransformer>();
+    options.AddSchemaTransformer<FormSchemaTransformer>();
 });
 
 WebApplication app = builder.Build();
@@ -96,13 +92,16 @@ app.MapFormsEndpoints();
 await app.RunAsync();
 
 
-/// <summary>
-/// Entry point for the application. Made accessible to WebApplicationFactory for E2E tests.
-/// </summary>
-public partial class Program
+namespace CascVel.Modules.Evaluations.Management.Host
 {
     /// <summary>
-    /// Required for WebApplicationFactory.
+    /// Entry point for the application. Made accessible to WebApplicationFactory for E2E tests.
     /// </summary>
-    protected Program() { }
+    public partial class Program
+    {
+        /// <summary>
+        /// Required for WebApplicationFactory.
+        /// </summary>
+        protected Program() { }
+    }
 }

@@ -1,5 +1,4 @@
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Media;
-using CascVel.Modules.Evaluations.Management.Domain.ValueObjects.Ratings;
 
 namespace CascVel.Modules.Evaluations.Management.Domain.Interfaces.Ratings;
 
@@ -13,5 +12,5 @@ public interface IRatingOption
     /// </summary>
     /// <typeparam name="TOutput">The type of output the media produces.</typeparam>
     /// <param name="media">The media to print to.</param>
-    void Print<TOutput>(IMedia<TOutput> media);
+    IMedia<TOutput> Print<TOutput>(IMedia<TOutput> media);
 }

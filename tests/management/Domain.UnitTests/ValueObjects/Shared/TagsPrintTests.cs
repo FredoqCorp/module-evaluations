@@ -1,5 +1,5 @@
+using CascVel.Modules.Evaluations.Management.Domain.Models.Shared;
 using CascVel.Modules.Evaluations.Management.Domain.UnitTests.TestDoubles;
-using CascVel.Modules.Evaluations.Management.Domain.ValueObjects.Shared;
 
 namespace CascVel.Modules.Evaluations.Management.Domain.UnitTests.ValueObjects.Shared;
 
@@ -20,7 +20,7 @@ public sealed class TagsPrintTests
     public void Print_throws_when_key_is_null()
     {
         var tags = new Tags([new Tag("test")]);
-        var media = new FakeMedia();
+        using var media = new FakeMedia();
 
         var exception = Assert.Throws<ArgumentNullException>(() =>
             tags.Print(media, null!));
@@ -32,7 +32,7 @@ public sealed class TagsPrintTests
     public void Print_throws_when_key_is_empty()
     {
         var tags = new Tags([new Tag("test")]);
-        var media = new FakeMedia();
+        using var media = new FakeMedia();
 
         var exception = Assert.Throws<ArgumentException>(() =>
             tags.Print(media, string.Empty));
@@ -44,7 +44,7 @@ public sealed class TagsPrintTests
     public void Print_throws_when_key_is_whitespace()
     {
         var tags = new Tags([new Tag("test")]);
-        var media = new FakeMedia();
+        using var media = new FakeMedia();
 
         var exception = Assert.Throws<ArgumentException>(() =>
             tags.Print(media, "   "));
@@ -56,7 +56,7 @@ public sealed class TagsPrintTests
     public void Print_writes_empty_array_when_no_tags()
     {
         var tags = new Tags([]);
-        var media = new FakeMedia();
+        using var media = new FakeMedia();
 
         tags.Print(media, "tags");
 
@@ -69,7 +69,7 @@ public sealed class TagsPrintTests
     public void Print_writes_single_tag_to_array()
     {
         var tags = new Tags([new Tag("important")]);
-        var media = new FakeMedia();
+        using var media = new FakeMedia();
 
         tags.Print(media, "tags");
 
@@ -86,7 +86,7 @@ public sealed class TagsPrintTests
             new Tag("reviewed"),
             new Tag("approved")
         ]);
-        var media = new FakeMedia();
+        using var media = new FakeMedia();
 
         tags.Print(media, "labels");
 
@@ -106,7 +106,7 @@ public sealed class TagsPrintTests
             new Tag("second"),
             new Tag("third")
         ]);
-        var media = new FakeMedia();
+        using var media = new FakeMedia();
 
         tags.Print(media, "tags");
 
@@ -123,7 +123,7 @@ public sealed class TagsPrintTests
             new Tag("tag_with_underscore"),
             new Tag("tag.with.dots")
         ]);
-        var media = new FakeMedia();
+        using var media = new FakeMedia();
 
         tags.Print(media, "tags");
 

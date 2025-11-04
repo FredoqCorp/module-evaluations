@@ -1,5 +1,5 @@
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Validity;
-using CascVel.Modules.Evaluations.Management.Domain.ValueObjects.Validity;
+using CascVel.Modules.Evaluations.Management.Domain.Models.Validity;
 
 namespace CascVel.Modules.Evaluations.Management.Domain.UnitTests.Interfaces.TestFixtures;
 

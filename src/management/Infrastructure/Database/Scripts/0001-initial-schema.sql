@@ -60,7 +60,6 @@ CREATE TABLE IF NOT EXISTS form_groups
     parent_id            uuid,
     title                varchar(255) NOT NULL,
     description          varchar(1000),
-    group_type           varchar(20)  NOT NULL,
     weight_basis_points  int,
     order_index          int          NOT NULL,
     created_at           timestamptz  NOT NULL DEFAULT NOW()
@@ -109,8 +108,7 @@ BEGIN
 END $$;
 
 COMMENT ON TABLE form_groups IS 'Hierarchical groups organizing criteria within forms';
-COMMENT ON COLUMN form_groups.group_type IS 'Type of group: average or weighted';
-COMMENT ON COLUMN form_groups.weight_basis_points IS 'Weight in basis points (0-10000, only for weighted type)';
+COMMENT ON COLUMN form_groups.weight_basis_points IS 'Weight in basis points (0-10000, only for weighted root forms)';
 COMMENT ON COLUMN form_groups.order_index IS 'Display order within parent context';
 
 -- =====================================================
@@ -124,7 +122,6 @@ CREATE TABLE IF NOT EXISTS form_criteria
     group_id             uuid,
     title                varchar(255)  NOT NULL,
     text                 varchar(2000) NOT NULL,
-    criterion_type       varchar(20)   NOT NULL,
     weight_basis_points  int,
     order_index          int           NOT NULL,
     created_at           timestamptz   NOT NULL DEFAULT NOW()
@@ -173,8 +170,7 @@ BEGIN
 END $$;
 
 COMMENT ON TABLE form_criteria IS 'Individual evaluation criteria with rating options';
-COMMENT ON COLUMN form_criteria.criterion_type IS 'Type of criterion: average or weighted';
-COMMENT ON COLUMN form_criteria.weight_basis_points IS 'Weight in basis points (0-10000, only for weighted type)';
+COMMENT ON COLUMN form_criteria.weight_basis_points IS 'Weight in basis points (0-10000, only for weighted root forms)';
 
 -- =====================================================
 -- Table: rating_options

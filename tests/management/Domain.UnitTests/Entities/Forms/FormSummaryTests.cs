@@ -1,8 +1,7 @@
-using CascVel.Modules.Evaluations.Management.Domain.Entities.Forms;
 using CascVel.Modules.Evaluations.Management.Domain.Enums;
+using CascVel.Modules.Evaluations.Management.Domain.Models.Forms;
+using CascVel.Modules.Evaluations.Management.Domain.Models.Shared;
 using CascVel.Modules.Evaluations.Management.Domain.UnitTests.TestDoubles;
-using CascVel.Modules.Evaluations.Management.Domain.ValueObjects.Forms;
-using CascVel.Modules.Evaluations.Management.Domain.ValueObjects.Shared;
 
 namespace CascVel.Modules.Evaluations.Management.Domain.UnitTests.Entities.Forms;
 
@@ -76,7 +75,7 @@ public sealed class FormSummaryTests
             3,
             7);
 
-        var media = new FakeMedia();
+        using var media = new FakeMedia();
         summary.Print(media);
 
         Assert.Contains(media.Writes, w => w.Key == "id" && w.Value.ToString() == id.Value.ToString());
@@ -92,7 +91,7 @@ public sealed class FormSummaryTests
             12,
             25);
 
-        var media = new FakeMedia();
+        using var media = new FakeMedia();
         summary.Print(media);
 
         Assert.Contains(media.Writes, w => w.Key == "groupsCount" && (int)w.Value == 12);
@@ -108,7 +107,7 @@ public sealed class FormSummaryTests
             8,
             42);
 
-        var media = new FakeMedia();
+        using var media = new FakeMedia();
         summary.Print(media);
 
         Assert.Contains(media.Writes, w => w.Key == "criteriaCount" && (int)w.Value == 42);
@@ -124,10 +123,10 @@ public sealed class FormSummaryTests
             5,
             15);
 
-        var media = new FakeMedia();
+        using var media = new FakeMedia();
         summary.Print(media);
 
-        Assert.Contains(media.Writes, w => w.Key == "calculationType" && w.Value.ToString() == "WeightedAverage");
+        Assert.Contains(media.Writes, w => w.Key == "calculation" && w.Value.ToString() == "weighted");
     }
 
     [Fact]

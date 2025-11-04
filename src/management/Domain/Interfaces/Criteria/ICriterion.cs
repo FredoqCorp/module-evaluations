@@ -1,4 +1,4 @@
-using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Ratings;
+using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Media;
 
 namespace CascVel.Modules.Evaluations.Management.Domain.Interfaces.Criteria;
 
@@ -8,8 +8,10 @@ namespace CascVel.Modules.Evaluations.Management.Domain.Interfaces.Criteria;
 public interface ICriterion
 {
     /// <summary>
-    /// Validates the internal consistency of the criterion.
+    /// Prints the criterion into the provided media within its parent context.
     /// </summary>
-    void Validate();
-
+    /// <typeparam name="TOutput">The type of output produced by the media.</typeparam>
+    /// <param name="media">Target media that receives the printed representation.</param>
+    /// <returns>The media instance that received the printed representation.</returns>
+    IMedia<TOutput> Print<TOutput>(IMedia<TOutput> media);
 }

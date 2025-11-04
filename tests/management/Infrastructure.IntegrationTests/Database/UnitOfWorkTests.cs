@@ -1,6 +1,5 @@
 using CascVel.Modules.Evaluations.Management.Infrastructure.Database;
 using Dapper;
-using Xunit;
 
 namespace CascVel.Modules.Evaluations.Management.Infrastructure.IntegrationTests.Database;
 
@@ -129,6 +128,7 @@ public sealed class UnitOfWorkTests : IClassFixture<DatabaseFixture>
     [Fact]
     public async Task Transaction_commits_changes_to_database()
     {
+        await _fixture.Reset();
         var testId = Guid.NewGuid();
 
         await using var uow = new PostgresUnitOfWork(_fixture.ConnectionString);
@@ -158,14 +158,12 @@ public sealed class UnitOfWorkTests : IClassFixture<DatabaseFixture>
             new { Id = testId });
 
         Assert.Equal(1, count);
-
-        // Cleanup
-        await verifyConnection.ExecuteAsync("DELETE FROM forms WHERE id = @Id", new { Id = testId });
     }
 
     [Fact]
     public async Task Transaction_rollback_discards_changes()
     {
+        await _fixture.Reset();
         var testId = Guid.NewGuid();
 
         await using var uow = new PostgresUnitOfWork(_fixture.ConnectionString);

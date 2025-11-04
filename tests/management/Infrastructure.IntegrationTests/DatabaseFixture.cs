@@ -1,6 +1,8 @@
 using CascVel.Modules.Evaluations.Management.Infrastructure.Database;
+using Npgsql;
+using Respawn;
+using Respawn.Graph;
 using Testcontainers.PostgreSql;
-using Xunit;
 
 namespace CascVel.Modules.Evaluations.Management.Infrastructure.IntegrationTests;
 
@@ -9,7 +11,12 @@ namespace CascVel.Modules.Evaluations.Management.Infrastructure.IntegrationTests
 /// </summary>
 public sealed class DatabaseFixture : IAsyncLifetime
 {
+    private static readonly string[] Schemas = ["public"];
+    private static readonly Table[] IgnoredTables = [new("schemaversions")];
+
     private PostgreSqlContainer? _container;
+    private NpgsqlDataSource? _source;
+    private Respawner? _respawner;
 
     /// <summary>
     /// Gets the PostgreSQL connection string.
@@ -31,6 +38,7 @@ public sealed class DatabaseFixture : IAsyncLifetime
         await _container.StartAsync();
 
         ConnectionString = _container.GetConnectionString();
+        _source = NpgsqlDataSource.Create(ConnectionString);
 
         // Run DbUp migrations
         var result = DatabaseMigrator.MigrateDatabase(ConnectionString);
@@ -41,6 +49,46 @@ public sealed class DatabaseFixture : IAsyncLifetime
                 $"Database migration failed: {result.Error}",
                 result.Error);
         }
+
+        await PrepareRespawner();
+    }
+
+    /// <summary>
+    /// Resets all mutable tables to provide clean state between tests.
+    /// </summary>
+    /// <returns>Asynchronous operation.</returns>
+    public async Task Reset()
+    {
+        if (_source is null || _respawner is null)
+        {
+            throw new InvalidOperationException("Database fixture is not initialized");
+        }
+
+        await using var connection = await _source.OpenConnectionAsync();
+        await _respawner.ResetAsync(connection);
+    }
+
+    /// <summary>
+    /// Configures Respawn to truncate tables while preserving schema history.
+    /// </summary>
+    /// <returns>Asynchronous operation.</returns>
+    private async Task PrepareRespawner()
+    {
+        if (_source is null)
+        {
+            throw new InvalidOperationException("Database source is not initialized");
+        }
+
+        await using var connection = await _source.OpenConnectionAsync();
+        _respawner = await Respawner.CreateAsync(
+            connection,
+            new RespawnerOptions
+            {
+                DbAdapter = DbAdapter.Postgres,
+                SchemasToInclude = Schemas,
+                WithReseed = true,
+                TablesToIgnore = IgnoredTables
+            });
     }
 
     /// <summary>
@@ -48,6 +96,11 @@ public sealed class DatabaseFixture : IAsyncLifetime
     /// </summary>
     public async Task DisposeAsync()
     {
+        if (_source is not null)
+        {
+            await _source.DisposeAsync();
+        }
+
         if (_container is not null)
         {
             await _container.DisposeAsync();

@@ -1,6 +1,6 @@
+using CascVel.Modules.Evaluations.Management.Domain.Models.Forms;
+using CascVel.Modules.Evaluations.Management.Domain.Models.Shared;
 using CascVel.Modules.Evaluations.Management.Domain.UnitTests.TestDoubles;
-using CascVel.Modules.Evaluations.Management.Domain.ValueObjects.Forms;
-using CascVel.Modules.Evaluations.Management.Domain.ValueObjects.Shared;
 
 namespace CascVel.Modules.Evaluations.Management.Domain.UnitTests.ValueObjects.Forms;
 
@@ -26,7 +26,7 @@ public sealed class FormMetadataPrintTests
             new FormCode("PR-2024"),
             new Tags([]));
 
-        var media = new FakeMedia();
+        using var media = new FakeMedia();
         metadata.Print(media);
 
         Assert.Contains(media.Writes, w => w.Key == "name" && (string)w.Value == "Performance Review");
@@ -41,7 +41,7 @@ public sealed class FormMetadataPrintTests
             new FormCode("TEST-001"),
             new Tags([]));
 
-        var media = new FakeMedia();
+        using var media = new FakeMedia();
         metadata.Print(media);
 
         Assert.Contains(media.Writes, w => w.Key == "description" && (string)w.Value == "Detailed description here");
@@ -56,7 +56,7 @@ public sealed class FormMetadataPrintTests
             new FormCode("UNIQUE-CODE-123"),
             new Tags([]));
 
-        var media = new FakeMedia();
+        using var media = new FakeMedia();
         metadata.Print(media);
 
         Assert.Contains(media.Writes, w => w.Key == "code" && (string)w.Value == "UNIQUE-CODE-123");
@@ -71,7 +71,7 @@ public sealed class FormMetadataPrintTests
             new FormCode("CODE-001"),
             new Tags([]));
 
-        var media = new FakeMedia();
+        using var media = new FakeMedia();
         metadata.Print(media);
 
         Assert.Contains(media.Writes, w => w.Key == "description" && ((string)w.Value).Length == 0);
@@ -86,7 +86,7 @@ public sealed class FormMetadataPrintTests
             new FormCode("CODE-001"),
             new Tags([new Tag("important"), new Tag("urgent")]));
 
-        var media = new FakeMedia();
+        using var media = new FakeMedia();
         metadata.Print(media);
 
         var tagsWrite = Assert.Single(media.Writes, w => w.Key == "tags");
@@ -105,7 +105,7 @@ public sealed class FormMetadataPrintTests
             new FormCode("FULL-001"),
             new Tags([new Tag("tag1")]));
 
-        var media = new FakeMedia();
+        using var media = new FakeMedia();
         metadata.Print(media);
 
         Assert.Equal(4, media.Writes.Count);
@@ -124,7 +124,7 @@ public sealed class FormMetadataPrintTests
             new FormCode("CODE-001"),
             new Tags([]));
 
-        var media = new FakeMedia();
+        using var media = new FakeMedia();
         metadata.Print(media);
 
         Assert.Contains(media.Writes, w => w.Key == "name" && (string)w.Value == "Форма оценки 评估表");

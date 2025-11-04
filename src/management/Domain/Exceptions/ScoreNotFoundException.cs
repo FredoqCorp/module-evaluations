@@ -1,5 +1,4 @@
-using CascVel.Modules.Evaluations.Management.Domain.ValueObjects;
-using CascVel.Modules.Evaluations.Management.Domain.ValueObjects.Ratings;
+using CascVel.Modules.Evaluations.Management.Domain.Models.Ratings;
 
 namespace CascVel.Modules.Evaluations.Management.Domain.Exceptions;
 

@@ -1,8 +1,6 @@
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Media;
-using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Ratings;
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Shared;
-using CascVel.Modules.Evaluations.Management.Domain.ValueObjects.Criteria;
-using CascVel.Modules.Evaluations.Management.Domain.ValueObjects.Shared;
+using CascVel.Modules.Evaluations.Management.Domain.Models.Shared;
 
 namespace CascVel.Modules.Evaluations.Management.Domain.UnitTests.Interfaces.TestFixtures;
 
@@ -16,10 +14,6 @@ internal static class SharedTypesTestData
 
     internal static IPercent RandomPercent() =>
         new TestPercent((decimal)Random.Shared.NextDouble() * 100);
-
-    internal static IWeight RandomWeight() =>
-        new TestWeight(RandomPercent());
-
     internal static ITags EmptyTags() =>
         new TestTags([]);
 
@@ -49,30 +43,19 @@ internal sealed record TestPercent(decimal Value) : IPercent
 }
 
 /// <summary>
-/// Test double for weight interface.
-/// </summary>
-internal sealed record TestWeight(IPercent Percentage) : IWeight
-{
-    public IPercent Percent() =>
-        Percentage;
-
-    public CriterionScore Weighted(CriterionScore score) =>
-        new(score.Value * Percentage.Basis().Apply(1m));
-}
-
-/// <summary>
 /// Test double for tags interface.
 /// </summary>
-internal sealed record TestTags(IReadOnlyList<Tag> Items) : ITags
+internal sealed record TestTags(IReadOnlyList<ITag> Items) : ITags
 {
-    public ITags With(Tag tag) =>
-        Items.Any(t => string.Equals(t.Text, tag.Text, StringComparison.OrdinalIgnoreCase))
+    public ITags With(ITag tag) =>
+        Items.Any(t => string.Equals(t.Text(), tag.Text(), StringComparison.OrdinalIgnoreCase))
             ? this
             : new TestTags([.. Items, tag]);
 
-    public void Print<TOutput>(IMedia<TOutput> media, string key)
+    public IMedia<TOutput> Print<TOutput>(IMedia<TOutput> media, string key)
     {
-        var tagTexts = Items.Select(tag => tag.Text);
+        var tagTexts = Items.Select(tag => tag.Text());
         media.With(key, tagTexts);
+        return media;
     }
 }

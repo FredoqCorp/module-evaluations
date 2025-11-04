@@ -1,4 +1,4 @@
-using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Ratings;
+using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Media;
 
 namespace CascVel.Modules.Evaluations.Management.Domain.Interfaces.Criteria;
 
@@ -8,7 +8,10 @@ namespace CascVel.Modules.Evaluations.Management.Domain.Interfaces.Criteria;
 public interface ICriteria
 {
     /// <summary>
-    /// Validates the internal consistency of the criteria collection.
+    /// Prints the criteria contained in the collection into the provided media.
     /// </summary>
-    void Validate();
+    /// <typeparam name="TOutput">The type of output produced by the media.</typeparam>
+    /// <param name="media">Target media that receives the printed representation.</param>
+    /// <returns>The media instance that received the printed representation.</returns>
+    IMedia<TOutput> Print<TOutput>(IMedia<TOutput> media);
 }

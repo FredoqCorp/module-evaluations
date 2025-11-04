@@ -8,7 +8,7 @@ namespace CascVel.Modules.Evaluations.Management.Infrastructure.Media;
 /// Implements media abstraction by writing to a UTF-8 JSON writer.
 /// Supports two modes: external writer (for streaming) or internal writer (for Output()).
 /// </summary>
-public sealed class JsonMediaWriter : IMedia<string>, IDisposable
+public sealed class JsonMediaWriter : IMedia<string>
 {
     private readonly Utf8JsonWriter _writer;
     private readonly MemoryStream? _memoryStream;
@@ -126,6 +126,30 @@ public sealed class JsonMediaWriter : IMedia<string>, IDisposable
         }
         _writer.WriteEndArray();
 
+        return this;
+    }
+
+    /// <summary>
+    /// Writes an array of objects associated with the specified key.
+    /// </summary>
+    /// <param name="key">Property name or key.</param>
+    /// <param name="items">Collection of object writers that populate each array element.</param>
+    /// <returns>This media instance for fluent chaining.</returns>
+    public IMedia WithArray(string key, IEnumerable<Action<IMedia>> items)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(key);
+        ArgumentNullException.ThrowIfNull(items);
+
+        _writer.WriteStartArray(key);
+        foreach (var item in items)
+        {
+            ArgumentNullException.ThrowIfNull(item);
+            _writer.WriteStartObject();
+            item(this);
+            _writer.WriteEndObject();
+        }
+
+        _writer.WriteEndArray();
         return this;
     }
 

@@ -1,6 +1,3 @@
-using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Ratings;
-using CascVel.Modules.Evaluations.Management.Domain.ValueObjects.Criteria;
-
 namespace CascVel.Modules.Evaluations.Management.Domain.Interfaces.Shared;
 
 /// <summary>
@@ -13,12 +10,11 @@ public interface IWeight
     /// Returns the percent representation of the weight.
     /// </summary>
     /// <returns>Percent equivalent of the weight.</returns>
-    IPercent Percent();
+    decimal Percent();
 
     /// <summary>
-    /// Applies the weight to a criterion score.
+    /// Returns the basis points representation of the weight.
     /// </summary>
-    /// <param name="score">The criterion score to apply the weight to.</param>
-    /// <returns>A new criterion score with the weight applied.</returns>
-    CriterionScore Weighted(CriterionScore score);
+    /// <returns>Basis points equivalent of the weight.</returns>
+    ushort BasisPoints();
 }

@@ -28,7 +28,6 @@ erDiagram
         uuid parent_id FK "nullable"
         varchar_255 title
         varchar_1000 description
-        varchar_20 group_type
         int weight_basis_points "nullable,0-10000"
         int order_index
         timestamptz created_at
@@ -40,7 +39,6 @@ erDiagram
         uuid group_id FK "nullable"
         varchar_255 title
         varchar_2000 text
-        varchar_20 criterion_type
         int weight_basis_points "nullable,0-10000"
         jsonb rating_options
         int order_index
@@ -72,7 +70,6 @@ Hierarchical groups organizing criteria within forms. Supports both average and 
 - `id` - Primary key (UUID)
 - `form_id` - Foreign key to `forms` table
 - `parent_id` - Self-referential FK for hierarchy (nullable)
-- `group_type` - Type: 'average' or 'weighted'
 - `weight_basis_points` - Weight in basis points (0-10000), required for weighted type
 - `order_index` - Display order within parent context
 
@@ -93,7 +90,6 @@ Individual evaluation criteria with rating options.
 - `id` - Primary key (UUID)
 - `form_id` - Foreign key to `forms` table
 - `group_id` - Foreign key to `form_groups` table (nullable)
-- `criterion_type` - Type: 'average' or 'weighted'
 - `weight_basis_points` - Weight in basis points (0-10000), required for weighted type
 - `rating_options` - JSONB object of rating options keyed by sequential order with score, label, and annotation
 - `order_index` - Display order within parent context
@@ -109,7 +105,6 @@ Individual evaluation criteria with rating options.
 
 **Constraints:**
 - `chk_form_criteria_rating_options_not_empty` - Ensures `rating_options` object has at least one element
-- `trg_check_criterion_group_type_match` - Trigger ensuring criterion type matches group type
 
 ## rating_options JSONB Structure
 
@@ -142,13 +137,6 @@ The `rating_options` column in `form_criteria` stores an object where each prope
 
 ## Data Integrity Rules
 
-### Type Matching (Migration 0003)
-
-A database trigger (`trg_check_criterion_group_type_match`) enforces that:
-- Average criteria can only be added to average groups
-- Weighted criteria can only be added to weighted groups
-- This is enforced at the database level, independent of application logic
-
 ### Weight Validation
 
 For weighted scoring:
@@ -167,7 +155,7 @@ The schema is managed through SQL migration scripts:
 
 1. **0001-initial-schema.sql** - Initial table structure
 2. **0002-add-type-constraints.sql** - Additional type constraints
-3. **0003-add-criterion-group-type-match-constraint.sql** - Type matching trigger
+3. **0003-cleanup-redundant-type-columns.sql** - Removes legacy type columns and related triggers
 4. **0004-move-rating-options-to-jsonb.sql** - Refactored rating_options to JSONB
 
 All migrations are idempotent and safe to run multiple times.
