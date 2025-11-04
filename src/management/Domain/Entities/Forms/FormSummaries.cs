@@ -1,15 +1,12 @@
-using System;
-using System.Collections.Generic;
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Forms;
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Media;
-using CascVel.Modules.Evaluations.Management.Domain.Common;
 
 namespace CascVel.Modules.Evaluations.Management.Domain.Entities.Forms;
 
 /// <summary>
 /// Immutable entity that encapsulates a printable collection of form summaries.
 /// </summary>
-public sealed record FormSummaries : IFormSummaries
+internal sealed record FormSummaries : IFormSummaries
 {
     private readonly IReadOnlyCollection<IFormSummary> _items;
 
@@ -52,92 +49,6 @@ public sealed record FormSummaries : IFormSummaries
         foreach (var option in options)
         {
             yield return _ => option.Print(media);
-        }
-    }
-
-    private sealed class NestedMedia<TOutput> : IMedia<TOutput>
-    {
-        private readonly IMedia _inner;
-
-        public NestedMedia(IMedia inner)
-        {
-            ArgumentNullException.ThrowIfNull(inner);
-
-            _inner = inner;
-        }
-
-        public IMedia With(string key, string value)
-        {
-            _inner.With(key, value);
-            return this;
-        }
-
-        public IMedia With(string key, Option<string> value)
-        {
-            _inner.With(key, value);
-            return this;
-        }
-
-        public IMedia With(string key, Guid value)
-        {
-            _inner.With(key, value);
-            return this;
-        }
-
-        public IMedia With(string key, int value)
-        {
-            _inner.With(key, value);
-            return this;
-        }
-
-        public IMedia With(string key, IEnumerable<string> values)
-        {
-            _inner.With(key, values);
-            return this;
-        }
-
-        public IMedia WithArray(string key, IEnumerable<Action<IMedia>> items)
-        {
-            ArgumentNullException.ThrowIfNull(items);
-
-            IEnumerable<Action<IMedia>> Wrap()
-            {
-                foreach (var item in items)
-                {
-                    yield return inner =>
-                    {
-                        ArgumentNullException.ThrowIfNull(item);
-                        var adapter = new NestedMedia<TOutput>(inner);
-                        item(adapter);
-                    };
-                }
-            }
-
-            _inner.WithArray(key, Wrap());
-            return this;
-        }
-
-        public IMedia WithObject(string key, Action<IMedia> configure)
-        {
-            ArgumentNullException.ThrowIfNull(configure);
-
-            _inner.WithObject(
-                key,
-                inner =>
-                {
-                    var adapter = new NestedMedia<TOutput>(inner);
-                    configure(adapter);
-                });
-            return this;
-        }
-
-        public TOutput Output()
-        {
-            throw new InvalidOperationException("Output is not available for nested media");
-        }
-
-        public void Dispose()
-        {
         }
     }
 }

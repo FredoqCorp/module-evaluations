@@ -8,7 +8,7 @@ namespace CascVel.Modules.Evaluations.Management.Domain.Entities.Forms;
 /// <summary>
 /// Immutable entity that represents a summarized view of an evaluation form with essential information.
 /// </summary>
-public sealed record FormSummary : IFormSummary
+internal sealed record FormSummary : IFormSummary
 {
     private readonly FormId _id;
     private readonly FormMetadata _metadata;
@@ -49,7 +49,6 @@ public sealed record FormSummary : IFormSummary
     public IMedia<TOutput> Print<TOutput>(IMedia<TOutput> media)
     {
         ArgumentNullException.ThrowIfNull(media);
-
         media.With("id", _id.Value);
         _metadata.Print(media);
         media
