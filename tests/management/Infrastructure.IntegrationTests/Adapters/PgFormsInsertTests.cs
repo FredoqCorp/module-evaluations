@@ -57,7 +57,6 @@ public sealed class PgFormsInsertTests : IClassFixture<DatabaseFixture>
     ""tags"": [""тег-{Guid.NewGuid():N}"", ""β-{Guid.NewGuid():N}""]
   }},
   ""calculation"": ""weighted"",
-  ""root"": {{
     ""criteria"": [
       {{
         ""title"": ""{criterionTitle}"",
@@ -79,7 +78,6 @@ public sealed class PgFormsInsertTests : IClassFixture<DatabaseFixture>
         ""groups"": []
       }}
     ]
-  }}
 }}";
 
         using var document = JsonDocument.Parse(payload);
@@ -137,7 +135,6 @@ public sealed class PgFormsInsertTests : IClassFixture<DatabaseFixture>
     ""tags"": [""ξενικό-{Guid.NewGuid():N}""]
   }},
   ""calculation"": ""average"",
-  ""root"": {{
     ""criteria"": [],
     ""groups"": [
       {{
@@ -157,7 +154,6 @@ public sealed class PgFormsInsertTests : IClassFixture<DatabaseFixture>
         ""groups"": []
       }}
     ]
-  }}
 }}";
 
         using var document = JsonDocument.Parse(payload);

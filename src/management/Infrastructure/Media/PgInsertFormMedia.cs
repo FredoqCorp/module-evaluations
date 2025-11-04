@@ -14,8 +14,12 @@ namespace CascVel.Modules.Evaluations.Management.Infrastructure.Media;
 internal sealed class PgInsertFormMedia : IMedia<string>
 {
     private readonly Dictionary<string, object> _form = [];
-    private readonly List<Dictionary<string, object>> _groups = [];
-    private readonly List<Dictionary<string, object>> _criteria = [];
+    private readonly Dictionary<string, List<Dictionary<string, object>>> _collections = new(StringComparer.OrdinalIgnoreCase)
+    {
+        ["group"] = [],
+        ["criterion"] = []
+    };
+    private readonly Stack<Scope> _scopes = new();
     private readonly DateTimeOffset _stamp;
 
     /// <summary>
@@ -25,12 +29,13 @@ internal sealed class PgInsertFormMedia : IMedia<string>
     public PgInsertFormMedia(DateTimeOffset stamp)
     {
         _stamp = stamp;
+        _scopes.Push(new Scope("form", _form));
     }
 
     /// <inheritdoc />
     public IMedia With(string key, string value)
     {
-        _form[key] = value;
+        Context()[key] = value;
         return this;
     }
 
@@ -41,7 +46,7 @@ internal sealed class PgInsertFormMedia : IMedia<string>
         {
             value.Map(text =>
             {
-                _form[key] = text;
+                Context()[key] = text;
                 return text;
             });
         }
@@ -52,21 +57,21 @@ internal sealed class PgInsertFormMedia : IMedia<string>
     /// <inheritdoc />
     public IMedia With(string key, Guid value)
     {
-        _form[key] = value;
+        Context()[key] = value;
         return this;
     }
 
     /// <inheritdoc />
     public IMedia With(string key, int value)
     {
-        _form[key] = value;
+        Context()[key] = value;
         return this;
     }
 
     /// <inheritdoc />
     public IMedia With(string key, IEnumerable<string> values)
     {
-        _form[key] = values.ToArray();
+        Context()[key] = values.ToArray();
         return this;
     }
 
@@ -76,17 +81,36 @@ internal sealed class PgInsertFormMedia : IMedia<string>
         ArgumentException.ThrowIfNullOrWhiteSpace(key);
         ArgumentNullException.ThrowIfNull(items);
 
-        var snapshots = new List<Dictionary<string, object>>();
-        foreach (var item in items)
+        if (string.Equals(key, "groups", StringComparison.OrdinalIgnoreCase))
         {
-            ArgumentNullException.ThrowIfNull(item);
-            using var recorder = new ObjectMedia();
-            item(recorder);
-            snapshots.Add(recorder.Snapshot());
+            var snapshots = CaptureArray("group", items, StoreGroup);
+            Context()[key] = JsonSerializer.Serialize(snapshots);
+            return this;
         }
 
-        var payload = JsonSerializer.Serialize(snapshots);
-        _form[key] = payload;
+        if (string.Equals(key, "criteria", StringComparison.OrdinalIgnoreCase))
+        {
+            var snapshots = CaptureArray("criterion", items, StoreCriterion);
+            Context()[key] = JsonSerializer.Serialize(snapshots);
+            return this;
+        }
+
+        if (string.Equals(key, "ratingOptions", StringComparison.OrdinalIgnoreCase))
+        {
+            var snapshots = CaptureArray("ratingOption", items, null);
+            var mapped = new Dictionary<string, Dictionary<string, object>>();
+            for (var index = 0; index < snapshots.Count; index++)
+            {
+                var name = index.ToString(CultureInfo.InvariantCulture);
+                mapped[name] = snapshots[index];
+            }
+
+            Context()[key] = JsonSerializer.Serialize(mapped);
+            return this;
+        }
+
+        var genericSnapshots = CaptureArray("object", items, null);
+        Context()[key] = JsonSerializer.Serialize(genericSnapshots);
         return this;
     }
 
@@ -96,19 +120,15 @@ internal sealed class PgInsertFormMedia : IMedia<string>
         ArgumentException.ThrowIfNullOrWhiteSpace(key);
         ArgumentNullException.ThrowIfNull(configure);
 
-        using var recorder = new ObjectMedia();
-        configure(recorder);
-
-        var snapshot = recorder.Snapshot();
         if (string.Equals(key, "group", StringComparison.OrdinalIgnoreCase))
         {
-            _groups.Add(snapshot);
+            CaptureObject("group", configure, StoreGroup);
             return this;
         }
 
         if (string.Equals(key, "criterion", StringComparison.OrdinalIgnoreCase))
         {
-            _criteria.Add(snapshot);
+            CaptureObject("criterion", configure, StoreCriterion);
             return this;
         }
 
@@ -120,12 +140,12 @@ internal sealed class PgInsertFormMedia : IMedia<string>
     {
         var builder = new StringBuilder();
         builder.AppendLine(FormStatement());
-        foreach (var snapshot in _groups)
+        foreach (var snapshot in Collection("group"))
         {
             builder.AppendLine(GroupStatement(snapshot));
         }
 
-        foreach (var snapshot in _criteria)
+        foreach (var snapshot in Collection("criterion"))
         {
             builder.AppendLine(CriterionStatement(snapshot));
         }
@@ -137,8 +157,12 @@ internal sealed class PgInsertFormMedia : IMedia<string>
     public void Dispose()
     {
         _form.Clear();
-        _groups.Clear();
-        _criteria.Clear();
+        foreach (var collection in _collections.Values)
+        {
+            collection.Clear();
+        }
+
+        _scopes.Clear();
     }
 
     /// <summary>
@@ -202,6 +226,148 @@ internal sealed class PgInsertFormMedia : IMedia<string>
 
         return $"INSERT INTO form_criteria (id, form_id, group_id, title, text, weight_basis_points, rating_options, order_index, created_at) VALUES ({GuidLiteral(id)}, {NullableGuidLiteral(formId)}, {NullableGuidLiteral(groupId)}, {TextLiteral(title)}, {TextLiteral(text)}, {NullableIntLiteral(weight)}, {JsonLiteral(ratingOptions)}, {orderIndex.ToString(CultureInfo.InvariantCulture)}, {stamp});";
     }
+
+    /// <summary>
+    /// Provides access to the active context dictionary used for writing values.
+    /// </summary>
+    /// <returns>Dictionary representing the current media scope.</returns>
+    private Dictionary<string, object> Context()
+    {
+        return _scopes.TryPeek(out var scope) ? scope.Values : _form;
+    }
+
+    /// <summary>
+    /// Resolves the form identifier required for relational records.
+    /// </summary>
+    /// <returns>Form identifier.</returns>
+    private Guid FormId()
+    {
+        if (_form.TryGetValue("formId", out var value) && value is Guid identifier)
+        {
+            return identifier;
+        }
+
+        throw new InvalidOperationException("Form identifier is missing from the printable payload");
+    }
+
+    /// <summary>
+    /// Captures array items into snapshots and optionally stores relational representations.
+    /// </summary>
+    /// <param name="kind">Logical kind of items being captured.</param>
+    /// <param name="items">Enumeration of item printers.</param>
+    /// <param name="store">Optional storage callback that enriches and stores relational data.</param>
+    /// <returns>Snapshots captured from the printers.</returns>
+    private List<Dictionary<string, object>> CaptureArray(string kind, IEnumerable<Action<IMedia>> items, Action<Dictionary<string, object>, Scope>? store)
+    {
+        var parent = _scopes.Peek();
+        var snapshots = new List<Dictionary<string, object>>();
+        foreach (var item in items)
+        {
+            ArgumentNullException.ThrowIfNull(item);
+            var values = new Dictionary<string, object>();
+            _scopes.Push(new Scope(kind, values));
+            try
+            {
+                item(this);
+            }
+            finally
+            {
+                _scopes.Pop();
+            }
+
+            snapshots.Add(new Dictionary<string, object>(values));
+
+            if (store is not null)
+            {
+                var record = new Dictionary<string, object>(values);
+                store(record, parent);
+            }
+        }
+
+        return snapshots;
+    }
+
+    /// <summary>
+    /// Captures a nested object and persists it using the provided storage callback.
+    /// </summary>
+    /// <param name="kind">Logical kind of the nested object.</param>
+    /// <param name="configure">Printer that populates the object.</param>
+    /// <param name="store">Storage callback that enriches and stores relational data.</param>
+    private void CaptureObject(string kind, Action<IMedia> configure, Action<Dictionary<string, object>, Scope> store)
+    {
+        var parent = _scopes.Peek();
+        var values = new Dictionary<string, object>();
+        _scopes.Push(new Scope(kind, values));
+        try
+        {
+            configure(this);
+        }
+        finally
+        {
+            _scopes.Pop();
+        }
+
+        var record = new Dictionary<string, object>(values);
+        store(record, parent);
+    }
+
+    /// <summary>
+    /// Stores group data enriched with relational identifiers.
+    /// </summary>
+    /// <param name="record">Group values to persist.</param>
+    /// <param name="parent">Parent scope describing the caller context.</param>
+    private void StoreGroup(Dictionary<string, object> record, Scope parent)
+    {
+        record["formId"] = FormId();
+        if (string.Equals(parent.Kind, "group", StringComparison.OrdinalIgnoreCase) &&
+            parent.Values.TryGetValue("id", out var parentValue) &&
+            parentValue is Guid parentId)
+        {
+            record["parentId"] = parentId;
+        }
+
+        Collection("group").Add(record);
+    }
+
+    /// <summary>
+    /// Stores criterion data enriched with relational identifiers.
+    /// </summary>
+    /// <param name="record">Criterion values to persist.</param>
+    /// <param name="parent">Parent scope describing the caller context.</param>
+    private void StoreCriterion(Dictionary<string, object> record, Scope parent)
+    {
+        record["formId"] = FormId();
+        if (string.Equals(parent.Kind, "group", StringComparison.OrdinalIgnoreCase) &&
+            parent.Values.TryGetValue("id", out var groupValue) &&
+            groupValue is Guid groupId)
+        {
+            record["groupId"] = groupId;
+        }
+
+        Collection("criterion").Add(record);
+    }
+
+    /// <summary>
+    /// Returns the mutable collection that aggregates relational snapshots.
+    /// </summary>
+    /// <param name="kind">Logical kind of collection requested.</param>
+    /// <returns>Collection associated with the requested kind.</returns>
+    private List<Dictionary<string, object>> Collection(string kind)
+    {
+        if (_collections.TryGetValue(kind, out var entries))
+        {
+            return entries;
+        }
+
+        var created = new List<Dictionary<string, object>>();
+        _collections[kind] = created;
+        return created;
+    }
+
+    /// <summary>
+    /// Describes the active writing scope in the media pipeline.
+    /// </summary>
+    private sealed record Scope(string Kind, Dictionary<string, object> Values);
 
     /// <summary>
     /// Produces SQL literal for GUID values.
