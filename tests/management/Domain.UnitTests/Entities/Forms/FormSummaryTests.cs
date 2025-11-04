@@ -127,7 +127,7 @@ public sealed class FormSummaryTests
         using var media = new FakeMedia();
         summary.Print(media);
 
-        Assert.Contains(media.Writes, w => w.Key == "calculationType" && w.Value.ToString() == "WeightedAverage");
+        Assert.Contains(media.Writes, w => w.Key == "calculation" && w.Value.ToString() == "weighted");
     }
 
     [Fact]

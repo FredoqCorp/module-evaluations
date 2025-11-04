@@ -67,7 +67,7 @@ internal sealed class PgForms : IForms
     }
 
     /// <inheritdoc />
-    public async Task<IImmutableList<IFormSummary>> List(CancellationToken ct = default)
+    public async Task<IFormSummaries> List(CancellationToken ct = default)
     {
         var connection = await _unitOfWork.ActiveConnection(ct);
         var command = new CommandDefinition(FormQueries.LoadFormSummaries, cancellationToken: ct);
@@ -107,7 +107,7 @@ internal sealed class PgForms : IForms
             summaries.Add(summary);
         }
 
-        return summaries.ToImmutableList();
+        return new FormSummaries([.. summaries]);
     }
 
     

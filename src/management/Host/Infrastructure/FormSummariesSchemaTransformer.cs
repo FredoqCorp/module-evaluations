@@ -1,17 +1,19 @@
-using CascVel.Modules.Evaluations.Management.Application.UseCases.ListForms;
+using System;
+using System.Collections.Generic;
+using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Forms;
 using Microsoft.AspNetCore.OpenApi;
 using Microsoft.OpenApi.Models;
 
 namespace CascVel.Modules.Evaluations.Management.Host.Infrastructure;
 
 /// <summary>
-/// Transforms OpenAPI schema for ListFormsResponse to describe the response structure
-/// without requiring separate DTO classes.
+/// Transforms OpenAPI schema for the form summaries contract to describe the response structure
+/// without additional DTO classes.
 /// </summary>
-internal sealed class ListFormsResponseSchemaTransformer : IOpenApiSchemaTransformer
+internal sealed class FormSummariesSchemaTransformer : IOpenApiSchemaTransformer
 {
     /// <summary>
-    /// Transforms the schema for ListFormsResponse type to provide proper OpenAPI documentation.
+    /// Transforms the schema for the form summaries contract to provide proper OpenAPI documentation.
     /// </summary>
     /// <param name="schema">The schema to transform.</param>
     /// <param name="context">Context containing type information.</param>
@@ -25,8 +27,8 @@ internal sealed class ListFormsResponseSchemaTransformer : IOpenApiSchemaTransfo
         ArgumentNullException.ThrowIfNull(schema);
         ArgumentNullException.ThrowIfNull(context);
 
-        // Only transform ListFormsResponse
-        if (context.JsonTypeInfo.Type != typeof(ListFormsResponse))
+        // Only transform IFormSummaries
+        if (context.JsonTypeInfo.Type != typeof(IFormSummaries))
         {
             return Task.CompletedTask;
         }
@@ -86,7 +88,7 @@ internal sealed class ListFormsResponseSchemaTransformer : IOpenApiSchemaTransfo
                             Format = "int32",
                             Description = "Number of evaluation criteria in the form"
                         },
-                        ["calculationType"] = new()
+                        ["calculation"] = new()
                         {
                             Type = "string",
                             Description = "Calculation method for aggregating scores",
@@ -100,7 +102,7 @@ internal sealed class ListFormsResponseSchemaTransformer : IOpenApiSchemaTransfo
                     Required = new HashSet<string>
                     {
                         "id", "name", "description", "code", "tags",
-                        "groupsCount", "criteriaCount", "calculationType"
+                        "groupsCount", "criteriaCount", "calculation"
                     }
                 }
             }

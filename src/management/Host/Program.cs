@@ -65,13 +65,8 @@ builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 // Configure OpenAPI with schema transformer for Printer Pattern types
 builder.Services.AddOpenApi(options =>
 {
-    options.AddSchemaTransformer<ListFormsResponseSchemaTransformer>();
+    options.AddSchemaTransformer<FormSummariesSchemaTransformer>();
     options.AddSchemaTransformer<FormSchemaTransformer>();
-});
-
-builder.Services.ConfigureHttpJsonOptions(options =>
-{
-    options.SerializerOptions.Converters.Add(new FormSummaryJsonConverter());
 });
 
 WebApplication app = builder.Build();

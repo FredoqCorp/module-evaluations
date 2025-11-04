@@ -1,4 +1,3 @@
-using CascVel.Modules.Evaluations.Management.Application.UseCases.ListForms;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace CascVel.Modules.Evaluations.Management.Application;
@@ -15,8 +14,6 @@ public static class ApplicationExtensions
     /// <returns>The service collection for chaining.</returns>
     public static IServiceCollection AddApplication(this IServiceCollection services)
     {
-        services.AddScoped<IListForms, ListForms>();
-
         return services;
     }
 }

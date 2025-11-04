@@ -55,7 +55,12 @@ public sealed record FormSummary : IFormSummary
         media
             .With("groupsCount", _groupsCount)
             .With("criteriaCount", _criteriaCount)
-            .With("calculationType", _calculationType.ToString());
+            .With("calculation", _calculationType switch
+            {
+                CalculationType.Average => "average",
+                CalculationType.WeightedAverage => "weighted",
+                _ => throw new InvalidOperationException("Unsupported calculation type")
+            });
         return media;
     }
 }

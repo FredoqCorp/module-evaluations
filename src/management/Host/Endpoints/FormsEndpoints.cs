@@ -1,7 +1,5 @@
 using System.Text.Json;
 using CascVel.Modules.Evaluations.Management.Application.Ports;
-using CascVel.Modules.Evaluations.Management.Application.UseCases.ListForms;
-using CascVel.Modules.Evaluations.Management.Domain.Entities.Forms;
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Forms;
 using CascVel.Modules.Evaluations.Management.Host.Infrastructure;
 using CascVel.Modules.Evaluations.Management.Host.Models.Forms;
@@ -33,7 +31,7 @@ public static class FormsEndpoints
             .WithSummary("Retrieve all evaluation forms")
             .WithDescription("Returns a list of all evaluation forms with their metadata and structural statistics")
             .RequireAuthorization("FormDesigner")
-            .Produces<ListFormsResponse>(StatusCodes.Status200OK, "application/json")
+            .Produces<IFormSummaries>(StatusCodes.Status200OK, "application/json")
             .ProducesProblem(StatusCodes.Status401Unauthorized)
             .ProducesProblem(StatusCodes.Status403Forbidden)
             .ProducesProblem(StatusCodes.Status500InternalServerError);
@@ -53,13 +51,19 @@ public static class FormsEndpoints
         return app;
     }
 
-    private static async Task<Results<Ok<ListFormsResponse>, ProblemHttpResult>> ListFormsEndpoint(
-        IListForms useCase,
+    private static async Task<IResult> ListFormsEndpoint(
+        IForms forms,
+        HttpResponse response,
         CancellationToken ct)
     {
-        var response = await useCase.Execute(ct);
+        ArgumentNullException.ThrowIfNull(forms);
+        ArgumentNullException.ThrowIfNull(response);
 
-        return TypedResults.Ok(response);
+        var summaries = await forms.List(ct);
+
+        using var media = new FormSummariesResponseMedia(response);
+        summaries.Print(media);
+        return media.Output();
     }
 
     /// <summary>

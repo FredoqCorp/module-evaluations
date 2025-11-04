@@ -23,9 +23,21 @@ public sealed class FormsEndpointsTests : IClassFixture<TestWebApplicationFactor
         _client = factory.CreateClient();
     }
 
+    /// <summary>
+    /// Clears persisted form records to isolate each test run.
+    /// </summary>
+    private async Task Clear()
+    {
+        await using var connection = new NpgsqlConnection(_factory.ConnectionString);
+        await connection.OpenAsync();
+        await connection.ExecuteAsync("TRUNCATE TABLE form_criteria, form_groups, forms RESTART IDENTITY CASCADE");
+    }
+
     [Fact]
     public async Task GET_api_forms_returns_empty_list_when_no_forms_exist()
     {
+        await Clear();
+
         // Act
         var response = await _client.GetAsync(new Uri("/forms", UriKind.Relative));
 
@@ -42,6 +54,8 @@ public sealed class FormsEndpointsTests : IClassFixture<TestWebApplicationFactor
     [Fact]
     public async Task GET_api_forms_returns_single_form_with_correct_structure()
     {
+        await Clear();
+
         // Arrange
         var formId = Guid.NewGuid();
         await using var connection = new NpgsqlConnection(_factory.ConnectionString);
@@ -82,15 +96,14 @@ public sealed class FormsEndpointsTests : IClassFixture<TestWebApplicationFactor
         form.GetProperty("tags")[1].GetString().ShouldBe("e2e");
         form.GetProperty("groupsCount").GetInt32().ShouldBe(0);
         form.GetProperty("criteriaCount").GetInt32().ShouldBe(0);
-        form.GetProperty("calculationType").GetString().ShouldBe("Average");
-
-        // Cleanup
-        await connection.ExecuteAsync("DELETE FROM forms WHERE id = @Id", new { Id = formId });
+        form.GetProperty("calculation").GetString().ShouldBe("average");
     }
 
     [Fact]
     public async Task GET_api_forms_returns_form_with_groups_and_criteria_counts()
     {
+        await Clear();
+
         // Arrange
         var formId = Guid.NewGuid();
         var group1Id = Guid.NewGuid();
@@ -207,17 +220,14 @@ public sealed class FormsEndpointsTests : IClassFixture<TestWebApplicationFactor
         form.GetProperty("id").GetGuid().ShouldBe(formId);
         form.GetProperty("groupsCount").GetInt32().ShouldBe(2);
         form.GetProperty("criteriaCount").GetInt32().ShouldBe(3);
-        form.GetProperty("calculationType").GetString().ShouldBe("WeightedAverage");
-
-        // Cleanup
-        await connection.ExecuteAsync("DELETE FROM form_criteria WHERE form_id = @Id", new { Id = formId });
-        await connection.ExecuteAsync("DELETE FROM form_groups WHERE form_id = @Id", new { Id = formId });
-        await connection.ExecuteAsync("DELETE FROM forms WHERE id = @Id", new { Id = formId });
+        form.GetProperty("calculation").GetString().ShouldBe("weighted");
     }
 
     [Fact]
     public async Task GET_api_forms_returns_multiple_forms_ordered_by_created_at_desc()
     {
+        await Clear();
+
         // Arrange
         var form1Id = Guid.NewGuid();
         var form2Id = Guid.NewGuid();
@@ -290,15 +300,13 @@ public sealed class FormsEndpointsTests : IClassFixture<TestWebApplicationFactor
         forms[0].GetProperty("id").GetGuid().ShouldBe(form2Id); // now
         forms[1].GetProperty("id").GetGuid().ShouldBe(form3Id); // now - 1 day
         forms[2].GetProperty("id").GetGuid().ShouldBe(form1Id); // now - 2 days
-
-        // Cleanup
-        await connection.ExecuteAsync("DELETE FROM forms WHERE id = ANY(@Ids)",
-            new { Ids = new[] { form1Id, form2Id, form3Id } });
     }
 
     [Fact]
     public async Task GET_api_forms_handles_null_description()
     {
+        await Clear();
+
         // Arrange
         var formId = Guid.NewGuid();
         await using var connection = new NpgsqlConnection(_factory.ConnectionString);
@@ -331,14 +339,13 @@ public sealed class FormsEndpointsTests : IClassFixture<TestWebApplicationFactor
         var form = forms.EnumerateArray().First(f => f.GetProperty("id").GetGuid() == formId);
 
         form.GetProperty("description").GetString().ShouldBe(string.Empty);
-
-        // Cleanup
-        await connection.ExecuteAsync("DELETE FROM forms WHERE id = @Id", new { Id = formId });
     }
 
     [Fact]
     public async Task GET_api_forms_returns_correct_content_type_header()
     {
+        await Clear();
+
         // Act
         var response = await _client.GetAsync(new Uri("/forms", UriKind.Relative));
 

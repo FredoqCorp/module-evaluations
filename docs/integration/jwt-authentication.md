@@ -334,7 +334,9 @@ else if (response.StatusCode == HttpStatusCode.Forbidden)
 }
 else if (response.IsSuccessStatusCode)
 {
-    var forms = await response.Content.ReadFromJsonAsync<ListFormsResponse>();
+    using var stream = await response.Content.ReadAsStreamAsync();
+    using var document = await JsonDocument.ParseAsync(stream);
+    var forms = document.RootElement.GetProperty("forms");
 }
 ```
 
