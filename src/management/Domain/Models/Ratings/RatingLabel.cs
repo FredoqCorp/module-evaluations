@@ -1,10 +1,14 @@
+using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Ratings;
+
 namespace CascVel.Modules.Evaluations.Management.Domain.Models.Ratings;
 
 /// <summary>
 /// Immutable value object that stores a mandatory label for a rating option.
 /// </summary>
-public readonly record struct RatingLabel
+public sealed record RatingLabel : IRatingLabel
 {
+    private readonly string _value;
+
     /// <summary>
     /// Creates a label while ensuring that it is not blank.
     /// </summary>
@@ -13,11 +17,12 @@ public readonly record struct RatingLabel
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(value);
 
-        Value = value.Trim();
+        _value = value;
     }
 
     /// <summary>
-    /// Normalized label text.
+    /// Reads the label text.
     /// </summary>
-    public string Value { get; init; }
+    /// <returns>Rating label string.</returns>
+    public string Text() => _value;
 }

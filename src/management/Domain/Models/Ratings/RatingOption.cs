@@ -40,9 +40,9 @@ public sealed record RatingOption : IRatingOption
     {
         ArgumentNullException.ThrowIfNull(media);
 
-        media.With("score", _score.Value);
-        media.With("label", _label.Value);
-        media.With("annotation", _annotation.Text);
+        media.With("score", _score.Value());
+        media.With("label", _label.Text());
+        media.With("annotation", _annotation.Text());
         return media;
     }
 }

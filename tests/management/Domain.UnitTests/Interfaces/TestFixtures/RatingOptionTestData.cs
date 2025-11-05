@@ -25,18 +25,18 @@ internal sealed record TestRatingOption(RatingScore ScoreValue) : IRatingOption
     public RatingLabel Label { get; init; } = new RatingLabel("Test Label");
     public RatingAnnotation Annotation { get; init; } = new RatingAnnotation("Test Annotation");
 
-    public int Score => ScoreValue.Value;
+    public int Score => ScoreValue.Value();
 
     public bool Matches(RatingScore score) =>
-        ScoreValue.Value == score.Value;
+        ScoreValue.Value() == score.Value();
 
     public IMedia<TOutput> Print<TOutput>(IMedia<TOutput> media)
     {
         ArgumentNullException.ThrowIfNull(media);
 
-        media.With("score", ScoreValue.Value);
-        media.With("label", Label.Value);
-        media.With("annotation", Annotation.Text);
+        media.With("score", ScoreValue.Value());
+        media.With("label", Label.Text());
+        media.With("annotation", Annotation.Text());
         return media;
     }
 }

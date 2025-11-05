@@ -1,10 +1,14 @@
+using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Groups;
+
 namespace CascVel.Modules.Evaluations.Management.Domain.Models.Groups;
 
 /// <summary>
 /// Short human-readable title for a criterion group, limited to 100 characters.
 /// </summary>
-public readonly record struct GroupTitle
+public sealed record GroupTitle : IGroupTitle
 {
+    private readonly string _value;
+
     /// <summary>
     /// Creates group title ensuring it is non-empty and within the 100 character limit.
     /// </summary>
@@ -14,13 +18,12 @@ public readonly record struct GroupTitle
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(text);
 
-        ArgumentOutOfRangeException.ThrowIfGreaterThan(text.Length, 100);
-
-        Text = text;
+        _value = text;
     }
 
     /// <summary>
-    /// Underlying string value representing the group title.
+    /// Reads the group title string.
     /// </summary>
-    public string Text { get; init; }
+    /// <returns>Group title string.</returns>
+    public string Text() => _value;
 }

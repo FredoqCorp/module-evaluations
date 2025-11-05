@@ -1,3 +1,4 @@
+using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Forms;
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Media;
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Shared;
 
@@ -6,11 +7,11 @@ namespace CascVel.Modules.Evaluations.Management.Domain.Models.Forms;
 /// <summary>
 /// Immutable value object that aggregates form metadata fields.
 /// </summary>
-public sealed record FormMetadata
+public sealed record FormMetadata : IFormMetadata
 {
-    private readonly FormName _name;
-    private readonly FormDescription _description;
-    private readonly FormCode _code;
+    private readonly IFormName _name;
+    private readonly IFormDescription _description;
+    private readonly IFormCode _code;
     private readonly ITags _tags;
 
     /// <summary>
@@ -20,7 +21,7 @@ public sealed record FormMetadata
     /// <param name="description">Optional form description.</param>
     /// <param name="code">Form code value object.</param>
     /// <param name="tags">Tags associated with the form.</param>
-    public FormMetadata(FormName name, FormDescription description, FormCode code, ITags tags)
+    public FormMetadata(IFormName name, IFormDescription description, IFormCode code, ITags tags)
     {
         ArgumentNullException.ThrowIfNull(tags);
 
@@ -34,16 +35,17 @@ public sealed record FormMetadata
     /// Prints the form metadata fields into the provided media.
     /// </summary>
     /// <param name="media">Target media that receives the printed representation.</param>
-    public void Print<TOutput>(IMedia<TOutput> media)
+    public IMedia<TOutput> Print<TOutput>(IMedia<TOutput> media)
     {
         ArgumentNullException.ThrowIfNull(media);
 
         media
-            .With("name", _name.Value)
-            .With("description", _description.Value)
-            .With("code", _code.Token);
+            .With("name", _name.Text())
+            .With("description", _description.Text())
+            .With("code", _code.Text());
 
         _tags.Print(media, "tags");
+
+        return media;
     }
 }
-
