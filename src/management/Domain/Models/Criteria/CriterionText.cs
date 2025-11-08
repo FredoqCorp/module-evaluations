@@ -1,10 +1,14 @@
+using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Criteria;
+
 namespace CascVel.Modules.Evaluations.Management.Domain.Models.Criteria;
 
 /// <summary>
 /// Detailed explanation or question text for a criterion, limited to 1000 characters.
 /// </summary>
-public readonly record struct CriterionText
+public sealed record CriterionText : ICriterionText
 {
+    private readonly string _value;
+
     /// <summary>
     /// Creates criterion text ensuring it is non-empty and within the 1000 character limit.
     /// </summary>
@@ -13,13 +17,13 @@ public readonly record struct CriterionText
     public CriterionText(string text)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(text);
-        ArgumentOutOfRangeException.ThrowIfGreaterThan(text.Length, 1000);
 
-        Text = text;
+        _value = text;
     }
 
     /// <summary>
-    /// The text content of the criterion.
+    /// Reads the text content of the criterion.
     /// </summary>
-    public string Text { get; init; }
+    /// <returns>Criterion body string.</returns>
+    public string Text() => _value;
 }

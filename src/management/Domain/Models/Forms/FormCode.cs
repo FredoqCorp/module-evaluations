@@ -1,10 +1,14 @@
+using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Forms;
+
 namespace CascVel.Modules.Evaluations.Management.Domain.Models.Forms;
 
 /// <summary>
 /// Immutable value object that preserves the textual code of a form.
 /// </summary>
-public readonly record struct FormCode
+public sealed record FormCode : IFormCode
 {
+    private readonly string _token;
+
     /// <summary>
     /// Initializes the value object with the provided token after validating basic integrity.
     /// </summary>
@@ -13,11 +17,12 @@ public readonly record struct FormCode
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(token);
 
-        Token = token.Trim();
+        _token = token;
     }
 
     /// <summary>
-    /// Textual representation of the form code.
+    /// Reads the textual form code.
     /// </summary>
-    public string Token { get; init; }
+    /// <returns>Form code token.</returns>
+    public string Text() => _token;
 }

@@ -1,23 +1,26 @@
+using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Ratings;
+
 namespace CascVel.Modules.Evaluations.Management.Domain.Models.Ratings;
 
 /// <summary>
 /// Immutable value object that stores the numeric value associated with a rating option.
 /// </summary>
-public readonly record struct RatingScore
+public sealed record RatingScore : IRatingScore
 {
+    private readonly ushort _amount;
+
     /// <summary>
     /// Creates a numeric score while enforcing a positive domain.
     /// </summary>
     /// <param name="value">Numeric value defined by the scale type.</param>
     public RatingScore(ushort value)
     {
-        ArgumentOutOfRangeException.ThrowIfLessThan(value, 1);
-
-        Value = value;
+        _amount = value;
     }
 
     /// <summary>
-    /// Numeric score stored for downstream calculations.
+    /// Reads the numeric score.
     /// </summary>
-    public ushort Value { get; init; }
+    /// <returns>Rating score value.</returns>
+    public int Value() => _amount;
 }

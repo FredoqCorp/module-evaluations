@@ -1,10 +1,14 @@
+using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Ratings;
+
 namespace CascVel.Modules.Evaluations.Management.Domain.Models.Ratings;
 
 /// <summary>
 /// Immutable value object that stores an optional annotation text for rating guidance.
 /// </summary>
-public readonly record struct RatingAnnotation
+public sealed record RatingAnnotation : IRatingAnnotation
 {
+    private readonly string _value;
+
     /// <summary>
     /// Creates an annotation, accepting empty strings as a signal of absence.
     /// </summary>
@@ -13,11 +17,12 @@ public readonly record struct RatingAnnotation
     {
         ArgumentNullException.ThrowIfNull(value);
 
-        Text = value.Trim();
+        _value = value;
     }
 
     /// <summary>
-    /// Normalized annotation text that may be empty when no annotation is provided.
+    /// Reads the annotation text.
     /// </summary>
-    public string Text { get; init; }
+    /// <returns>Rating annotation string.</returns>
+    public string Text() => _value;
 }

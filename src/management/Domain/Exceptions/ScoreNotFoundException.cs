@@ -19,7 +19,7 @@ public sealed class ScoreNotFoundException : Exception
     /// </summary>
     /// <param name="score">The score that was not found.</param>
     public ScoreNotFoundException(RatingScore score)
-        : base($"Rating score {score.Value} was not found in the available options.")
+        : base(MissingScoreMessage(score))
     {
         Score = score;
     }
@@ -45,4 +45,15 @@ public sealed class ScoreNotFoundException : Exception
     /// The score that was not found.
     /// </summary>
     public RatingScore? Score { get; }
+
+    /// <summary>
+    /// Builds a descriptive message for missing score scenarios.
+    /// </summary>
+    /// <param name="score">The score that was not found.</param>
+    /// <returns>Formatted exception message.</returns>
+    private static string MissingScoreMessage(RatingScore score)
+    {
+        ArgumentNullException.ThrowIfNull(score);
+        return $"Rating score {score.Value()} was not found in the available options";
+    }
 }

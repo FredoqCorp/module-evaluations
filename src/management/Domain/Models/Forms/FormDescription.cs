@@ -1,10 +1,14 @@
+using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Forms;
+
 namespace CascVel.Modules.Evaluations.Management.Domain.Models.Forms;
 
 /// <summary>
 /// Immutable value object that stores the optional form description text.
 /// </summary>
-public readonly record struct FormDescription
+public sealed record FormDescription : IFormDescription
 {
+    private readonly string _text;
+
     /// <summary>
     /// Creates a description from provided text while preventing null.
     /// </summary>
@@ -13,14 +17,12 @@ public readonly record struct FormDescription
     {
         ArgumentNullException.ThrowIfNull(value);
 
-        var trimmed = value.Trim();
-        ArgumentOutOfRangeException.ThrowIfGreaterThan(trimmed.Length, 1000);
-
-        Value = trimmed;
+        _text = value;
     }
 
     /// <summary>
-    /// Original description text value.
+    /// Reads the form description text.
     /// </summary>
-    public string Value { get; init; }
+    /// <returns>Form description string.</returns>
+    public string Text() => _text;
 }

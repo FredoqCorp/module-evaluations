@@ -1,420 +1,186 @@
 # Form Domain Model
 
-## Aggregate Overview
+## Scope
+- `CascVel.Modules.Evaluations.Management.Domain` hosts immutable value objects and thin printable aggregates for the evaluation form bounded context; every type is compiled from `Domain.csproj`.
+- Interfaces under `Domain.Interfaces.*` expose application-facing contracts, while records in `Domain.Models.*` implement them to keep the Clean/Hexagonal split explicit.
+- Shared primitives (`Option<T>`, `IMedia`, measurement value objects) eliminate nulls and reflection while letting infrastructure project the domain into persistence DTOs.
+
+## Metadata and Text Pipelines
+Form metadata satisfies EVL-R-001 by enforcing required name and code, optional description, and keyword hygiene. Textual fields follow a decorator pipeline (`FormName` → `TrimmedFormName` → `ValidFormName`, the same pattern is reused for description, code, tags, group titles, criterion texts, and rating labels) so that sanitising and validation remain composable and fail fast.
 
 ```mermaid
 classDiagram
-    class Form {
-        <<Aggregate Root>>
-        +void Validate()
-    }
-
-    class FormId {
-        <<Value Object>>
-        +Guid Value
-    }
-
     class FormMetadata {
         <<Value Object>>
-        +FormName Name()
-        +FormDescription Description()
-        +FormCode Code()
-        +ITags Tags()
+        +Print(IMedia)
     }
+    FormMetadata ..|> IFormMetadata
+    FormMetadata --> IFormName
+    FormMetadata --> IFormDescription
+    FormMetadata --> IFormCode
+    FormMetadata --> ITags
 
-    class FormName {
+    class Tags {
         <<Value Object>>
-        +string Value
+        +With(ITag)
+        +Print(IMedia,string)
     }
-
-    class FormDescription {
-        <<Value Object>>
-        +string Value
-    }
-
-    class FormCode {
-        <<Value Object>>
-        +string Token
-    }
-
-    class ITags {
-        <<Interface>>
-        +ITags With(Tag tag)
-    }
+    Tags ..|> ITags
+    Tags --> ITag
 
     class Tag {
         <<Value Object>>
-        +string Text
+        +Text()
     }
-
-    class IFormRootGroup {
-        <<Interface>>
-        +IRatingContribution Contribution()
-        +void Validate()
-    }
-
-    Form *-- FormId
-    Form *-- FormMetadata
-    Form *-- IFormRootGroup
-    FormMetadata o-- ITags
-    ITags o-- Tag
+    Tag ..|> ITag
 ```
 
-The form now keeps a single structural root (`IFormRootGroup`). All other criteria and groups hang off this node, which simplifies validation and isolates distinct scoring strategies.
+`Tags.With` prevents case-insensitive duplicates in line with EVL-R-001, while `TrimmedTag` and `ValidTag` ensure canonical keyword text.
 
-## Interfaces
+## Form Catalog Views
+`FormId` wraps the aggregate identifier and is composed into `FormSummary`. The summary captures metadata, the selected `CalculationType`, and structural counters guarded by `ArgumentOutOfRangeException.ThrowIfNegative`. `FormSummaries` prints the collection through `IMedia.WithArray`, supporting projection endpoints and list queries.
 
 ```mermaid
 classDiagram
-    class ICriterion {
-        <<Interface>>
-        +void Validate()
+    class FormSummary {
+        <<Entity>>
+        +Print(IMedia)
     }
+    FormSummary ..|> IFormSummary
+    FormSummary --> FormId
+    FormSummary --> FormMetadata
+    FormSummary --> CalculationType
 
-    class IGroup {
-        <<Interface>>
-        +void Validate()
+    class FormSummaries {
+        <<Collection>>
+        +Print(IMedia)
+        +Values()
     }
-
-    class ICriteria {
-        <<Interface>>
-        +void Validate()
-    }
-
-    class IGroups {
-        <<Interface>>
-        +void Validate()
-    }
+    FormSummaries ..|> IFormSummaries
+    FormSummaries --> IFormSummary
 ```
 
-These interfaces provide foundational contracts for validation across both Average and Weighted branches.
+`FormStatus` enumerates lifecycle states (Draft → Published → Archived) used by application services when applying EVL-R-002, EVL-R-005, and EVL-R-006.
 
-## Average Policy
+## Structural Building Blocks
+Group information is expressed through `GroupProfile`, which aggregates `GroupId`, `GroupTitle`, and `GroupDescription`. Criterion data uses `CriterionId`, `CriterionTitle`, `CriterionText`, and `CriterionScore`, each with trimming and validation decorators mirroring EVL-R-013. `OrderIndex` (EVL-R-014) preserves stable ordering for groups and criteria without relying on database defaults.
 
 ```mermaid
 classDiagram
-    class IAverageCriterion {
-        <<Interface>>
-    }
-
-    class IAverageCriteria {
-        <<Interface>>
-    }
-
-    class IAverageGroup {
-        <<Interface>>
-    }
-
-    class IAverageGroups {
-        <<Interface>>
-    }
-
-    class AverageRootGroup {
-        <<Entity>>
-        +void Validate()
-    }
-
-    class AverageCriterionGroup {
-        <<Entity>>
-        +void Validate()
-    }
-
-    class AverageCriteria {
-        <<Entity>>
-        +Task~IAverageCriterion~ Add(FormId, ...)
-        +Task~IAverageCriterion~ Add(GroupId, ...)
-        +void Validate()
-    }
-
-    class AverageGroups {
-        <<Entity>>
-        +void Validate()
-    }
-
-    class Criterion {
-        <<Entity>>
-        +void Validate()
-    }
-
-    class IRatingOptions {
-        <<Interface>>
-    }
-
     class GroupProfile {
         <<Value Object>>
-        +GroupId Id
-        +GroupTitle Title
-        +GroupDescription Description
+        +Id
+        +Title
+        +Description
     }
+    GroupProfile --> GroupId
+    GroupProfile --> GroupTitle
+    GroupProfile --> GroupDescription
 
-    class GroupId {
+    class CriterionScore {
         <<Value Object>>
-        +Guid Value
+        +Value
     }
 
-    class GroupTitle {
+    class OrderIndex {
         <<Value Object>>
-        +string Text
+        +Value()
     }
-
-    class GroupDescription {
-        <<Value Object>>
-        +string Text
-    }
-
-    class CriterionId {
-        <<Value Object>>
-        +Guid Value
-    }
-
-    class CriterionTitle {
-        <<Value Object>>
-        +string Text
-    }
-
-    class CriterionText {
-        <<Value Object>>
-        +string Text
-    }
-
-    IAverageCriterion ..|> ICriterion
-    IAverageCriteria ..|> ICriteria
-    IAverageGroup ..|> IGroup
-    IAverageGroups ..|> IGroups
-    AverageRootGroup ..|> IFormRootGroup
-    AverageRootGroup ..|> IAverageGroup
-    AverageCriterionGroup ..|> IAverageGroup
-    AverageCriteria ..|> IAverageCriteria
-    AverageGroups ..|> IAverageGroups
-    Criterion ..|> IAverageCriterion
-
-    AverageRootGroup o-- IAverageCriteria
-    AverageRootGroup o-- IAverageGroups
-    AverageGroups o-- IAverageGroup
-    AverageCriterionGroup o-- GroupProfile
-    AverageCriterionGroup o-- IAverageCriteria
-    AverageCriterionGroup o-- IAverageGroups
-    AverageCriteria o-- IAverageCriterion
-    Criterion *-- CriterionId
-    Criterion *-- CriterionTitle
-    Criterion *-- CriterionText
-    Criterion *-- IRatingOptions
-    GroupProfile *-- GroupId
-    GroupProfile *-- GroupTitle
-    GroupProfile *-- GroupDescription
 ```
 
-The Average branch treats `GroupProfile` as the single bundle of identity and descriptive data. The root (`AverageRootGroup`) accepts only `IAverageCriteria` and `IAverageGroups`, preventing weighted elements from being injected.
+Interfaces `ICriterion`, `ICriteria`, `IGroup`, and `IGroups` describe the behaviour expected from future aggregates that will enforce EVL-R-008 and EVL-R-009; current models stay minimal until the structural tree is introduced.
 
-## Weighted Average Policy
+## Rating Scales
+Rating rules (EVL-R-015) are codified through `RatingOption`, `RatingOptions`, and their supporting value objects. The numeric domain is captured in `RatingScore` (positive `ushort`), while `RatingLabel` and `RatingAnnotation` reuse the trimming/validation pipeline. `RatingOptions.Print` emits deterministic keys, and `ScoreNotFoundException` is prepared for lookups in application services.
 
 ```mermaid
 classDiagram
-    class IWeightedCriterion {
-        <<Interface>>
-        +IWeight Weight()
+    class RatingOptions {
+        <<Collection>>
+        +Print(IMedia)
     }
+    RatingOptions ..|> IRatingOptions
+    RatingOptions --> IRatingOption
 
-    class IWeightedCriteria {
-        <<Interface>>
-        +IBasisPoints Weight()
+    class RatingOption {
+        <<Value Object>>
+        +Matches(RatingScore)
+        +Print(IMedia)
     }
+    RatingOption ..|> IRatingOption
+    RatingOption --> RatingScore
+    RatingOption --> RatingLabel
+    RatingOption --> RatingAnnotation
+```
 
-    class IWeightedGroup {
-        <<Interface>>
-        +IWeight Weight()
-    }
+## Shared Measurement
+Weights are expressed with interchangeable basis-points and percent views. `BasisPoints` guards the inclusive range 0..10000 and can apply itself to decimal values; `Percent` clamps 0..100 and converts back to basis points. `IWeight` stands as the contract for higher-level weight objects that will combine both views.
 
-    class IWeightedGroups {
-        <<Interface>>
-        +IBasisPoints Weight()
-    }
-
-    class WeightedRootGroup {
-        <<Entity>>
-        +void Validate()
-    }
-
-    class WeightedCriterionGroup {
-        <<Entity>>
-        +void Validate()
-        +IWeight Weight()
-    }
-
-    class WeightedCriteria {
-        <<Entity>>
-        +Task~IWeightedCriterion~ Add(FormId, IWeight, ...)
-        +Task~IWeightedCriterion~ Add(GroupId, IWeight, ...)
-        +IBasisPoints Weight()
-        +void Validate()
-    }
-
-    class WeightedGroups {
-        <<Entity>>
-        +IBasisPoints Weight()
-        +void Validate()
-    }
-
-    class WeightedCriterion {
-        <<Entity>>
-        +IWeight Weight()
-        +void Validate()
-    }
-
-    class IBasisPoints {
-        <<Interface>>
-        +IPercent Percent()
-        +decimal Apply(decimal value)
-    }
-
-    class IPercent {
-        <<Interface>>
-        +IBasisPoints Basis()
-    }
-
-    class IWeight {
-        <<Interface>>
-        +IPercent Percent()
-    }
-
+```mermaid
+classDiagram
     class BasisPoints {
         <<Value Object>>
-        +IPercent Percent()
-        +decimal Apply(decimal value)
+        +Percent()
+        +Apply(decimal)
     }
+    BasisPoints ..|> IBasisPoints
 
     class Percent {
         <<Value Object>>
-        +IBasisPoints Basis()
+        +Basis()
     }
-
-    class Weight {
-        <<Value Object>>
-        +IPercent Percent()
-    }
-
-    IWeightedCriterion ..|> ICriterion
-    IWeightedCriteria ..|> ICriteria
-    IWeightedGroup ..|> IGroup
-    IWeightedGroups ..|> IGroups
-    WeightedRootGroup ..|> IFormRootGroup
-    WeightedCriterionGroup ..|> IWeightedGroup
-    WeightedCriteria ..|> IWeightedCriteria
-    WeightedGroups ..|> IWeightedGroups
-    WeightedCriterion ..|> IWeightedCriterion
-    Weight ..|> IWeight
-    Weight *-- IBasisPoints
-    Weight --> IPercent
-    BasisPoints ..|> IBasisPoints
     Percent ..|> IPercent
+
     BasisPoints --> Percent
     Percent --> BasisPoints
-    WeightedCriterionGroup o-- GroupProfile
-    WeightedCriterionGroup o-- IWeightedCriteria
-    WeightedCriterionGroup o-- IWeightedGroups
-    WeightedCriterionGroup *-- IWeight
-    WeightedCriteria o-- IWeightedCriterion
-    WeightedGroups o-- IWeightedGroup
-    WeightedRootGroup o-- IWeightedCriteria
-    WeightedRootGroup o-- IWeightedGroups
 ```
 
-`WeightedRootGroup` works exclusively with weighted collections and enforces the root-level weight totals. Weight calculation and validation are shared between the collections (`IWeightedCriteria`, `IWeightedGroups`) and the concrete groups (`IWeightedGroup`).
-
-## Invariants
-
-- EVL-R-008: every criterion and subgroup resides inside the synthetic root group, enabling explicit structural validation before publication.
-- EVL-R-010: for Weighted Average, sibling weights must add up to 100 % at every level, including the root, otherwise validation fails fast.
-- Root objects prevent mixing implementations: `AverageRootGroup` accepts only `IAverage*`, while `WeightedRootGroup` accepts only `IWeighted*`.
-
-These changes encode the scoring strategies in the type system and make it straightforward to wire up forms with the appropriate root object for the selected rule.
-
-## Identity and Authorization
-
-The module includes identity value objects and interfaces to support user context and role-based authorization:
+## Validity Window
+Validity constraints from EVL-R-012 are modelled by `ValidityStart`, optional `ValidityEnd`, and `ValidityPeriod`. The period returns new instances via `Until` and validates chronology, throwing `ValidityPeriodRangeException` if the end precedes the start. `Active(DateTime)` answers availability checks without relying on system clocks.
 
 ```mermaid
 classDiagram
-    class UserId {
+    class ValidityPeriod {
         <<Value Object>>
-        +string Value
+        +Until(ValidityEnd)
+        +Active(DateTime)
     }
+    ValidityPeriod ..|> IValidityPeriod
+    ValidityPeriod --> ValidityStart
+    ValidityPeriod --> ValidityEnd
+```
+
+## Identity and Authorization
+User context aligns with EVL-R-011 by ensuring audit-ready identifiers. `UserId` forbids blank strings, while `UserInfo` stores optional metadata via `Option<string>` and prints through `IMedia`. `IModuleUser` exposes role checks against the `ModuleRole` enum and delegates printing to the underlying `UserInfo`.
+
+```mermaid
+classDiagram
+    class IModuleUser {
+        <<Interface>>
+        +IsInRole(ModuleRole)
+        +UserInfo()
+        +Print(IMedia)
+    }
+    IModuleUser --> IUserInfo
+    IModuleUser --> ModuleRole
 
     class UserInfo {
         <<Value Object>>
-        +UserId UserId
-        +Option~String~ Username
-        +Option~String~ Name
-        +Option~String~ Email
-        +void Print(IMedia media)
+        +Print(IMedia)
     }
-
-    class IUserInfo {
-        <<Interface>>
-        +void Print(IMedia media)
-    }
-
-    class IModuleUser {
-        <<Interface>>
-        +bool IsInRole(ModuleRole role)
-        +IUserInfo UserInfo()
-        +void Print(IMedia media)
-    }
-
-    class ModuleRole {
-        <<Enumeration>>
-        FormDesigner
-        Supervisor
-        Operator
-    }
-
     UserInfo ..|> IUserInfo
-    UserInfo *-- UserId
-    IModuleUser ..> ModuleRole : uses
-    IModuleUser ..> IUserInfo : returns
+    UserInfo --> UserId
 ```
 
-### Value Objects
+## Serialization Contract
+`IMedia` and `IMedia<TOutput>` define the printing contract used across aggregates, enabling infrastructure adapters (JSON, database commands) without leaking serialization libraries into the domain. `Option<T>` and `EnumerableExtensions.FirstOrNone` provide null-free optional handling, which is visible in identity and rating flows.
 
-- **UserId**: String-based user identifier extracted from JWT token `sub` claim. Uses string to support various identity provider formats (GUIDs, numeric IDs, custom identifiers).
+## Rule Coverage Summary
+- **EVL-R-001** — `FormMetadata`, `FormName`, `FormCode`, `Tags`, and their decorators implement required metadata structure and keyword hygiene.
+- **EVL-R-007** — `FormStatus` encodes lifecycle semantics for Draft, Published, and Archived states.
+- **EVL-R-012** — `ValidityPeriod` and `ValidityPeriodRangeException` guarantee chronological validity windows.
+- **EVL-R-013** — Criterion text/title decorators prevent blank content and cap lengths.
+- **EVL-R-014** — `OrderIndex` provides explicit ordering primitives.
+- **EVL-R-015** — `RatingOption` and `RatingOptions` encapsulate rating scales and prepare lookup failures via `ScoreNotFoundException`.
 
-- **UserInfo**: Immutable record containing user identification and optional metadata:
-  - Required: `UserId` - unique user identifier
-  - Optional: `username` - login/username from `preferred_username` or `username` JWT claim
-  - Optional: `name` - display name from `name` JWT claim or composed from `given_name` + `family_name`
-  - Optional: `email` - email address from `email` JWT claim
-
-  Uses `Option<string>` monad for optional fields to explicitly model absence of data. Follows Printer Pattern with `Print(IMedia)` method for serialization.
-
-### Interfaces
-
-- **IUserInfo**: Behavioral contract for user information value objects. Provides `Print(IMedia)` method for serialization.
-
-- **IModuleUser**: Behavioral contract for accessing authenticated user information and checking role membership:
-  - `IsInRole(ModuleRole)` - checks if user has specific module role
-  - `GetUserInfo()` - returns user information as `IUserInfo`
-  - `Print(IMedia)` - delegates to underlying `UserInfo.Print()`
-
-  Implemented by infrastructure layer through `HttpContextModuleUser` which extracts claims from JWT tokens.
-
-### Roles
-
-Three distinct roles aligned with business domain:
-
-- **FormDesigner**: Creates, edits, and manages evaluation forms
-- **Supervisor**: Evaluates operator performance using forms
-- **Operator**: Contact center agent being evaluated
-
-### Media Abstraction
-
-The `IMedia` interface provides methods for serializing domain objects:
-
-- `WriteString(key, value)` - writes required string field
-- `WriteOptionalString(key, Option<string>)` - writes optional string field only if present
-- `WriteGuid(key, value)` - writes GUID field
-- `WriteInt32(key, value)` - writes integer field
-- `WriteStringArray(key, values)` - writes string array
-
-This abstraction enables clean serialization without coupling domain objects to specific formats (JSON, XML, etc.).
-
-See [ADR: JWT-Based Authorization](adr/20251014-jwt-based-authorization-with-module-roles.md) for authorization architecture details.
+Structural aggregates that enforce EVL-R-008…EVL-R-010 (hierarchical groups and weight totals) are not yet implemented in the current codebase; the existing interfaces and weight primitives will host them in upcoming iterations.

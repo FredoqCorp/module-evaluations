@@ -1,10 +1,14 @@
+using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Groups;
+
 namespace CascVel.Modules.Evaluations.Management.Domain.Models.Groups;
 
 /// <summary>
 /// Optional detailed description for a criterion group, limited to 1000 characters.
 /// </summary>
-public readonly record struct GroupDescription
+public sealed record GroupDescription : IGroupDescription
 {
+    private readonly string _value;
+
     /// <summary>
     /// Creates group description ensuring it does not exceed the 1000 character limit.
     /// </summary>
@@ -13,13 +17,13 @@ public readonly record struct GroupDescription
     public GroupDescription(string text)
     {
         ArgumentNullException.ThrowIfNull(text);
-        ArgumentOutOfRangeException.ThrowIfGreaterThan(text.Length, 1000);
 
-        Text = text;
+        _value = text;
     }
 
     /// <summary>
-    /// Underlying string value representing the group description.
+    /// Reads the group description string.
     /// </summary>
-    public string Text { get; init; }
+    /// <returns>Group description string.</returns>
+    public string Text() => _value;
 }

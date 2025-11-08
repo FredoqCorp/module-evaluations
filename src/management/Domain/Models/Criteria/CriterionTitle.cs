@@ -1,10 +1,14 @@
+using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Criteria;
+
 namespace CascVel.Modules.Evaluations.Management.Domain.Models.Criteria;
 
 /// <summary>
 /// Short human-readable title for a criterion, limited to 100 characters.
 /// </summary>
-public readonly record struct CriterionTitle
+public sealed record CriterionTitle : ICriterionTitle
 {
+    private readonly string _value;
+
     /// <summary>
     /// Creates criterion title ensuring it is non-empty and within the 100 character limit.
     /// </summary>
@@ -13,13 +17,13 @@ public readonly record struct CriterionTitle
     public CriterionTitle(string text)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(text);
-        ArgumentOutOfRangeException.ThrowIfGreaterThan(text.Length, 100);
 
-        Text = text;
+        _value = text;
     }
 
     /// <summary>
-    /// The title text of the criterion.
+    /// Reads the title text of the criterion.
     /// </summary>
-    public string Text { get; init; }
+    /// <returns>Criterion title string.</returns>
+    public string Text() => _value;
 }
