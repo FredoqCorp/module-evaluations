@@ -1,4 +1,3 @@
-using CascVel.Modules.Evaluations.Management.Application;
 using CascVel.Modules.Evaluations.Management.Domain.Enums;
 using CascVel.Modules.Evaluations.Management.Host.Endpoints;
 using CascVel.Modules.Evaluations.Management.Host.Infrastructure;
@@ -13,7 +12,6 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
     ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found");
 
 builder.Services.AddInfrastructure(connectionString);
-builder.Services.AddApplication();
 builder.Services.AddHealthChecks();
 builder.Services.AddHttpContextAccessor();
 

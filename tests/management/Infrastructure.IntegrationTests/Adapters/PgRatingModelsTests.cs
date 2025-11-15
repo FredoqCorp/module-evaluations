@@ -1,7 +1,7 @@
 using System.Security.Cryptography;
 using System.Text.Json;
-using CascVel.Modules.Evaluations.Management.Infrastructure.Adapters.Forms.Models;
 using CascVel.Modules.Evaluations.Management.Infrastructure.IntegrationTests.TestDoubles;
+using CascVel.Modules.Evaluations.Management.Infrastructure.Models;
 
 namespace CascVel.Modules.Evaluations.Management.Infrastructure.IntegrationTests.Adapters;
 

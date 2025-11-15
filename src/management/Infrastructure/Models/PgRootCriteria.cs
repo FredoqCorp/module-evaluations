@@ -5,7 +5,7 @@ using CascVel.Modules.Evaluations.Management.Domain.Models.Forms;
 using CascVel.Modules.Evaluations.Management.Infrastructure.Queries;
 using Dapper;
 
-namespace CascVel.Modules.Evaluations.Management.Infrastructure.Adapters.Forms.Models;
+namespace CascVel.Modules.Evaluations.Management.Infrastructure.Models;
 
 /// <summary>
 /// Printable criteria collection for root-level criteria.

@@ -2,7 +2,7 @@ using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Criteria;
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Media;
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Ratings;
 
-namespace CascVel.Modules.Evaluations.Management.Infrastructure.Adapters.Forms.Models;
+namespace CascVel.Modules.Evaluations.Management.Infrastructure.Models;
 
 /// <summary>
 /// Printable criterion composed from PostgreSQL rows.

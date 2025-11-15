@@ -4,7 +4,7 @@ using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Media;
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Shared;
 using CascVel.Modules.Evaluations.Management.Domain.Models.Shared;
 
-namespace CascVel.Modules.Evaluations.Management.Infrastructure.Adapters.Forms.Models;
+namespace CascVel.Modules.Evaluations.Management.Infrastructure.Models;
 
 /// <summary>
 /// JSONB-backed tags collection loaded from PostgreSQL payloads.

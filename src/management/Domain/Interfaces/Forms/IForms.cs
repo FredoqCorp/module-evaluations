@@ -1,7 +1,6 @@
-using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Forms;
 using CascVel.Modules.Evaluations.Management.Domain.Models.Forms;
 
-namespace CascVel.Modules.Evaluations.Management.Application.Ports;
+namespace CascVel.Modules.Evaluations.Management.Domain.Interfaces.Forms;
 
 /// <summary>
 /// Port for managing evaluation forms.

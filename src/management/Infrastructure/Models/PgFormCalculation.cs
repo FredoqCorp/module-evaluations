@@ -1,7 +1,7 @@
 using CascVel.Modules.Evaluations.Management.Domain.Enums;
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Forms;
 
-namespace CascVel.Modules.Evaluations.Management.Infrastructure.Adapters.Forms.Models;
+namespace CascVel.Modules.Evaluations.Management.Infrastructure.Models;
 
 /// <summary>
 /// PostgreSQL-backed calculation descriptor that maps database values to domain types.

@@ -1,9 +1,9 @@
-using CascVel.Modules.Evaluations.Management.Application.Ports;
+using CascVel.Modules.Evaluations.Management.Domain.Interfaces;
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Forms;
 using CascVel.Modules.Evaluations.Management.Domain.Models.Forms;
 using CascVel.Modules.Evaluations.Management.Infrastructure.Database;
 using CascVel.Modules.Evaluations.Management.Infrastructure.Media;
-using CascVel.Modules.Evaluations.Management.Infrastructure.Adapters.Forms.Models;
+using CascVel.Modules.Evaluations.Management.Infrastructure.Models;
 using CascVel.Modules.Evaluations.Management.Infrastructure.Queries;
 using Dapper;
 using Npgsql;

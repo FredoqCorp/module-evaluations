@@ -2,7 +2,7 @@ using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Criteria;
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Groups;
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Media;
 
-namespace CascVel.Modules.Evaluations.Management.Infrastructure.Adapters.Forms.Models;
+namespace CascVel.Modules.Evaluations.Management.Infrastructure.Models;
 
 /// <summary>
 /// Printable group built from PostgreSQL rows with nested criteria and groups.
