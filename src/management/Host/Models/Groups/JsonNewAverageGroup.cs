@@ -35,8 +35,8 @@ internal sealed record JsonNewAverageGroup : IGroup
         media.With("title", new ValidGroupTitle(new TrimmedGroupTitle(new JsonGroupTitle(_node))).Text());
         media.With("description", new ValidGroupDescription(new TrimmedGroupDescription(new JsonGroupDescription(_node))).Text());
         media.With("orderIndex", new ValidOrderIndex(new JsonOrderIndex(_node)).Value());
-        new JsonCriteria(_node, CalculationType.Average).Print(media);
-        new JsonGroups(_node, CalculationType.Average).Print(media);
+        new JsonCriteria(_node, CalculationType.Average).Print(media).GetAwaiter().GetResult();
+        new JsonGroups(_node, CalculationType.Average).Print(media).GetAwaiter().GetResult();
         return media;
     }
 }

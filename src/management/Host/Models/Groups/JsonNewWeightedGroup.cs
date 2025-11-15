@@ -36,8 +36,8 @@ internal sealed record JsonNewWeightedGroup : IGroup
         media.With("description", new ValidGroupDescription(new TrimmedGroupDescription(new JsonGroupDescription(_node))).Text());
         media.With("orderIndex", new ValidOrderIndex(new JsonOrderIndex(_node)).Value());
         media.With("weightBasisPoints", new JsonWeight(_node).BasisPoints());
-        new JsonCriteria(_node, CalculationType.WeightedAverage).Print(media);
-        new JsonGroups(_node, CalculationType.WeightedAverage).Print(media);
+        new JsonCriteria(_node, CalculationType.WeightedAverage).Print(media).GetAwaiter().GetResult();
+        new JsonGroups(_node, CalculationType.WeightedAverage).Print(media).GetAwaiter().GetResult();
         return media;
     }
 }

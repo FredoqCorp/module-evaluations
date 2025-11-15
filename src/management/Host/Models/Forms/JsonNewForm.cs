@@ -1,4 +1,5 @@
 using System.Text.Json;
+using System.Threading.Tasks;
 using CascVel.Modules.Evaluations.Management.Domain.Enums;
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Forms;
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Media;
@@ -28,7 +29,7 @@ internal sealed record JsonNewForm : IForm
     }
 
     /// <inheritdoc />
-    public IMedia<TOutput> Print<TOutput>(IMedia<TOutput> media)
+    public async Task<IMedia<TOutput>> Print<TOutput>(IMedia<TOutput> media)
     {
         ArgumentNullException.ThrowIfNull(media);
         var calculation = new JsonFormCalculation(_document.RootElement);
@@ -43,8 +44,8 @@ internal sealed record JsonNewForm : IForm
             CalculationType.WeightedAverage => "weighted",
             _ => throw new InvalidOperationException("Unsupported calculation type")
         });
-        groups.Print(media);
-        criteria.Print(media);
+        await groups.Print(media);
+        await criteria.Print(media);
         return media;
     }
 }

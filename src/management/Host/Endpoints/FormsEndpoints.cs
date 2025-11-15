@@ -108,7 +108,7 @@ public static class FormsEndpoints
             var form = new JsonNewForm(document);
             var created = await forms.Add(form, ct);
             using var media = new FormCreatedResponseMedia(request.HttpContext.Response);
-            created.Print(media);
+            await created.Print(media);
             return media.Output();
         }
         catch (JsonException ex)

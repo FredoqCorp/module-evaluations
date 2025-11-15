@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Media;
 
 namespace CascVel.Modules.Evaluations.Management.Domain.Interfaces.Forms;
@@ -13,5 +14,5 @@ public interface IForm
     /// <typeparam name="TOutput">The type of output produced by the media.</typeparam>
     /// <param name="media">Media that receives the structured representation.</param>
     /// <returns>The media instance that received the printed representation.</returns>
-    IMedia<TOutput> Print<TOutput>(IMedia<TOutput> media);
+    Task<IMedia<TOutput>> Print<TOutput>(IMedia<TOutput> media);
 }

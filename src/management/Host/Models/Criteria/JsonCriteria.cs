@@ -1,4 +1,5 @@
 using System.Text.Json;
+using System.Threading.Tasks;
 using CascVel.Modules.Evaluations.Management.Domain.Enums;
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Criteria;
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Media;
@@ -25,7 +26,7 @@ internal sealed class JsonCriteria : ICriteria
     }
 
     /// <inheritdoc />
-    public IMedia<TOutput> Print<TOutput>(IMedia<TOutput> media)
+    public Task<IMedia<TOutput>> Print<TOutput>(IMedia<TOutput> media)
     {
         ArgumentNullException.ThrowIfNull(media);
         var array = Array.Empty<JsonElement>();
@@ -48,7 +49,7 @@ internal sealed class JsonCriteria : ICriteria
             }
         }
         media.WithArray("criteria", Items(criteria, media));
-        return media;
+        return Task.FromResult(media);
     }
 
     private static IEnumerable<Action<IMedia>> Items<TOutput>(IEnumerable<ICriterion> options, IMedia<TOutput> media)
