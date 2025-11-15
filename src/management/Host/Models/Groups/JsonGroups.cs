@@ -1,4 +1,5 @@
 using System.Text.Json;
+using System.Threading.Tasks;
 using CascVel.Modules.Evaluations.Management.Domain.Enums;
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Groups;
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Media;
@@ -25,7 +26,7 @@ internal sealed record JsonGroups : IGroups
     }
 
     /// <inheritdoc />
-    public Task<IMedia<TOutput>> Print<TOutput>(IMedia<TOutput> media)
+    public async Task<IMedia<TOutput>> Print<TOutput>(IMedia<TOutput> media)
     {
         ArgumentNullException.ThrowIfNull(media);
         var array = Array.Empty<JsonElement>();
@@ -47,11 +48,11 @@ internal sealed record JsonGroups : IGroups
                 groups.Add(group);
             }
         }
-        media.WithArray("groups", Items(groups, media));
-        return Task.FromResult(media);
+        await media.WithArrayAsync("groups", Items(groups, media));
+        return media;
     }
 
-    private static IEnumerable<Action<IMedia>> Items<TOutput>(IEnumerable<IGroup> options, IMedia<TOutput> media)
+    private static IEnumerable<Func<IMedia, Task>> Items<TOutput>(IEnumerable<IGroup> options, IMedia<TOutput> media)
     {
         foreach (var option in options)
         {

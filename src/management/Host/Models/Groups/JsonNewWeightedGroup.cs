@@ -1,4 +1,5 @@
 using System.Text.Json;
+using System.Threading.Tasks;
 using CascVel.Modules.Evaluations.Management.Domain.Enums;
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Groups;
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Media;
@@ -28,7 +29,7 @@ internal sealed record JsonNewWeightedGroup : IGroup
     }
 
     /// <inheritdoc />
-    public IMedia<TOutput> Print<TOutput>(IMedia<TOutput> media)
+    public async Task<IMedia<TOutput>> Print<TOutput>(IMedia<TOutput> media)
     {
         ArgumentNullException.ThrowIfNull(media);
         media.With("id", _identifier.Value);
@@ -36,8 +37,8 @@ internal sealed record JsonNewWeightedGroup : IGroup
         media.With("description", new ValidGroupDescription(new TrimmedGroupDescription(new JsonGroupDescription(_node))).Text());
         media.With("orderIndex", new ValidOrderIndex(new JsonOrderIndex(_node)).Value());
         media.With("weightBasisPoints", new JsonWeight(_node).BasisPoints());
-        new JsonCriteria(_node, CalculationType.WeightedAverage).Print(media).GetAwaiter().GetResult();
-        new JsonGroups(_node, CalculationType.WeightedAverage).Print(media).GetAwaiter().GetResult();
+        await new JsonCriteria(_node, CalculationType.WeightedAverage).Print(media);
+        await new JsonGroups(_node, CalculationType.WeightedAverage).Print(media);
         return media;
     }
 }

@@ -1,3 +1,5 @@
+using System;
+using System.Threading.Tasks;
 using CascVel.Modules.Evaluations.Management.Domain.Common;
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Media;
 using CascVel.Modules.Evaluations.Management.Infrastructure.Media;
@@ -86,6 +88,15 @@ internal sealed class FormCreatedResponseMedia : IMedia<IResult>
     public IMedia WithArray(string key, IEnumerable<Action<IMedia>> items)
     {
         _inner.WithArray(key, items);
+        return this;
+    }
+
+    /// <summary>
+    /// Writes an array of nested objects asynchronously to the underlying JSON media.
+    /// </summary>
+    public async Task<IMedia> WithArrayAsync(string key, IEnumerable<Func<IMedia, Task>> items)
+    {
+        await _inner.WithArrayAsync(key, items);
         return this;
     }
 

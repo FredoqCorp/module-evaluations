@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using CascVel.Modules.Evaluations.Management.Domain.Common;
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Media;
 
@@ -72,6 +73,23 @@ internal sealed class FakeMedia : IMedia<object>
             configure(itemMedia);
             arrayItems.Add(itemMedia.Output());
         }
+        Writes.Add((key, arrayItems));
+        return this;
+    }
+
+    /// <summary>
+    /// Writes an array of nested objects asynchronously using the fake media.
+    /// </summary>
+    public async Task<IMedia> WithArrayAsync(string key, IEnumerable<Func<IMedia, Task>> items)
+    {
+        var arrayItems = new List<object>();
+        foreach (var configure in items)
+        {
+            using var itemMedia = new FakeMedia();
+            await configure(itemMedia);
+            arrayItems.Add(itemMedia.Output());
+        }
+
         Writes.Add((key, arrayItems));
         return this;
     }

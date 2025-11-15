@@ -1,4 +1,5 @@
 using System.Text.Json;
+using System.Threading.Tasks;
 using CascVel.Modules.Evaluations.Management.Domain.Common;
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Media;
 
@@ -146,6 +147,30 @@ public sealed class JsonMediaWriter : IMedia<string>
             ArgumentNullException.ThrowIfNull(item);
             _writer.WriteStartObject();
             item(this);
+            _writer.WriteEndObject();
+        }
+
+        _writer.WriteEndArray();
+        return this;
+    }
+
+    /// <summary>
+    /// Writes an array of objects asynchronously associated with the specified key.
+    /// </summary>
+    /// <param name="key">Property name or key.</param>
+    /// <param name="items">Collection of asynchronous object writers that populate each array element.</param>
+    /// <returns>Task providing this media instance for fluent chaining.</returns>
+    public async Task<IMedia> WithArrayAsync(string key, IEnumerable<Func<IMedia, Task>> items)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(key);
+        ArgumentNullException.ThrowIfNull(items);
+
+        _writer.WriteStartArray(key);
+        foreach (var item in items)
+        {
+            ArgumentNullException.ThrowIfNull(item);
+            _writer.WriteStartObject();
+            await item(this);
             _writer.WriteEndObject();
         }
 

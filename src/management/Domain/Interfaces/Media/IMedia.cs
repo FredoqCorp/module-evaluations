@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using CascVel.Modules.Evaluations.Management.Domain.Common;
 
 namespace CascVel.Modules.Evaluations.Management.Domain.Interfaces.Media;
@@ -55,6 +56,14 @@ public interface IMedia : IDisposable
     /// <param name="items">Collection of object writers that populate each array element.</param>
     /// <returns>This media instance for fluent chaining.</returns>
     IMedia WithArray(string key, IEnumerable<Action<IMedia>> items);
+
+    /// <summary>
+    /// Writes an array of objects asynchronously associated with the specified key.
+    /// </summary>
+    /// <param name="key">Property name or key.</param>
+    /// <param name="items">Collection of asynchronous object writers that populate each array element.</param>
+    /// <returns>Task providing this media instance for fluent chaining.</returns>
+    Task<IMedia> WithArrayAsync(string key, IEnumerable<Func<IMedia, Task>> items);
 
     /// <summary>
     /// Writing a nested object with the specified key.

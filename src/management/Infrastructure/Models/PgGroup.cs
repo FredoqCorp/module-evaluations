@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Criteria;
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Groups;
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Media;
@@ -50,7 +51,7 @@ internal sealed class PgGroup : IGroup
     }
 
     /// <inheritdoc />
-    public IMedia<TOutput> Print<TOutput>(IMedia<TOutput> media)
+    public async Task<IMedia<TOutput>> Print<TOutput>(IMedia<TOutput> media)
     {
         ArgumentNullException.ThrowIfNull(media);
         media.With("id", _id);
@@ -63,7 +64,7 @@ internal sealed class PgGroup : IGroup
         }
 
         media.WithArray("criteria", CriterionItems(media));
-        media.WithArray("groups", GroupItems(media));
+        await media.WithArrayAsync("groups", GroupItems(media));
         return media;
     }
 
@@ -75,7 +76,7 @@ internal sealed class PgGroup : IGroup
         }
     }
 
-    private IEnumerable<Action<IMedia>> GroupItems<TOutput>(IMedia<TOutput> media)
+    private IEnumerable<Func<IMedia, Task>> GroupItems<TOutput>(IMedia<TOutput> media)
     {
         foreach (var child in _children)
         {

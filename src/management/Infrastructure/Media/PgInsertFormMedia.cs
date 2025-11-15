@@ -1,6 +1,7 @@
 using System.Globalization;
 using System.Text;
 using System.Text.Json;
+using System.Threading.Tasks;
 using CascVel.Modules.Evaluations.Management.Domain.Common;
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Media;
 
@@ -108,6 +109,50 @@ internal sealed class PgInsertFormMedia : IMedia<string>
         }
 
         var genericSnapshots = CaptureArray("object", items, null);
+        Context()[key] = JsonSerializer.Serialize(genericSnapshots);
+        return this;
+    }
+
+    /// <summary>
+    /// Writes an array of objects asynchronously associated with the specified key.
+    /// </summary>
+    /// <param name="key">Property name or key.</param>
+    /// <param name="items">Collection of asynchronous object writers that populate each array element.</param>
+    /// <returns>Task providing this media instance for fluent chaining.</returns>
+    public async Task<IMedia> WithArrayAsync(string key, IEnumerable<Func<IMedia, Task>> items)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(key);
+        ArgumentNullException.ThrowIfNull(items);
+
+        if (string.Equals(key, "groups", StringComparison.OrdinalIgnoreCase))
+        {
+            var snapshots = await CaptureArrayAsync("group", items, StoreGroup);
+            Context()[key] = JsonSerializer.Serialize(snapshots);
+            return this;
+        }
+
+        if (string.Equals(key, "criteria", StringComparison.OrdinalIgnoreCase))
+        {
+            var snapshots = await CaptureArrayAsync("criterion", items, StoreCriterion);
+            Context()[key] = JsonSerializer.Serialize(snapshots);
+            return this;
+        }
+
+        if (string.Equals(key, "ratingOptions", StringComparison.OrdinalIgnoreCase))
+        {
+            var snapshots = await CaptureArrayAsync("ratingOption", items, null);
+            var mapped = new Dictionary<string, Dictionary<string, object>>();
+            for (var index = 0; index < snapshots.Count; index++)
+            {
+                var name = index.ToString(CultureInfo.InvariantCulture);
+                mapped[name] = snapshots[index];
+            }
+
+            Context()[key] = JsonSerializer.Serialize(mapped);
+            return this;
+        }
+
+        var genericSnapshots = await CaptureArrayAsync("object", items, null);
         Context()[key] = JsonSerializer.Serialize(genericSnapshots);
         return this;
     }
@@ -267,6 +312,43 @@ internal sealed class PgInsertFormMedia : IMedia<string>
             try
             {
                 item(this);
+            }
+            finally
+            {
+                _scopes.Pop();
+            }
+
+            snapshots.Add(new Dictionary<string, object>(values));
+
+            if (store is not null)
+            {
+                var record = new Dictionary<string, object>(values);
+                store(record, parent);
+            }
+        }
+
+        return snapshots;
+    }
+
+    /// <summary>
+    /// Captures array items asynchronously into snapshots and optionally stores relational representations.
+    /// </summary>
+    /// <param name="kind">Logical kind of items being captured.</param>
+    /// <param name="items">Enumeration of asynchronous item printers.</param>
+    /// <param name="store">Optional storage callback that enriches and stores relational data.</param>
+    /// <returns>Snapshots captured from the printers.</returns>
+    private async Task<List<Dictionary<string, object>>> CaptureArrayAsync(string kind, IEnumerable<Func<IMedia, Task>> items, Action<Dictionary<string, object>, Scope>? store)
+    {
+        var parent = _scopes.Peek();
+        var snapshots = new List<Dictionary<string, object>>();
+        foreach (var item in items)
+        {
+            ArgumentNullException.ThrowIfNull(item);
+            var values = new Dictionary<string, object>();
+            _scopes.Push(new Scope(kind, values));
+            try
+            {
+                await item(this);
             }
             finally
             {
@@ -503,6 +585,25 @@ internal sealed class PgInsertFormMedia : IMedia<string>
                 ArgumentNullException.ThrowIfNull(item);
                 using var recorder = new ObjectMedia();
                 item(recorder);
+                snapshots.Add(recorder.Snapshot());
+            }
+
+            _values[key] = JsonSerializer.Serialize(snapshots);
+            return this;
+        }
+
+        /// <inheritdoc />
+        public async Task<IMedia> WithArrayAsync(string key, IEnumerable<Func<IMedia, Task>> items)
+        {
+            ArgumentException.ThrowIfNullOrWhiteSpace(key);
+            ArgumentNullException.ThrowIfNull(items);
+
+            var snapshots = new List<Dictionary<string, object>>();
+            foreach (var item in items)
+            {
+                ArgumentNullException.ThrowIfNull(item);
+                using var recorder = new ObjectMedia();
+                await item(recorder);
                 snapshots.Add(recorder.Snapshot());
             }
 

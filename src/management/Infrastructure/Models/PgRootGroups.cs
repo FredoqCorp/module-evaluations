@@ -32,7 +32,7 @@ internal sealed class PgRootGroups : IGroups
         var groups = await LoadGroups();
         var criteria = await LoadCriteria();
         var tree = Build(groups, criteria);
-        media.WithArray("groups", Items(tree, media));
+        await media.WithArrayAsync("groups", Items(tree, media));
         return media;
     }
 
@@ -59,11 +59,6 @@ internal sealed class PgRootGroups : IGroups
                 Description ?? string.Empty,
                 OrderIndex,
                 WeightBasisPoints));
-        }
-
-        foreach (var pair in map.Values)
-        {
-            pair.Sort(static (left, right) => left.OrderIndex.CompareTo(right.OrderIndex));
         }
 
         return map;
@@ -103,7 +98,6 @@ internal sealed class PgRootGroups : IGroups
         var snapshot = new Dictionary<Guid, IReadOnlyList<ICriterion>>(map.Count);
         foreach (var pair in map)
         {
-            pair.Value.Sort(static (left, right) => ((PgCriterion)left).Order.CompareTo(((PgCriterion)right).Order));
             snapshot[pair.Key] = pair.Value.AsReadOnly();
         }
 
@@ -147,7 +141,7 @@ internal sealed class PgRootGroups : IGroups
         return result;
     }
 
-    private static IEnumerable<Action<IMedia>> Items<TOutput>(IEnumerable<IGroup> groups, IMedia<TOutput> media)
+    private static IEnumerable<Func<IMedia, Task>> Items<TOutput>(IEnumerable<IGroup> groups, IMedia<TOutput> media)
     {
         foreach (var group in groups)
         {

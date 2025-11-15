@@ -41,7 +41,6 @@ internal sealed class PgRootCriteria : ICriteria
                 row.OrderIndex,
                 row.WeightBasisPoints,
                 new PgJsonRatingOptions(row.RatingOptions)))
-            .OrderBy(criterion => criterion.Order)
             .ToList();
 
         media.WithArray("criteria", Items(criteria, media));

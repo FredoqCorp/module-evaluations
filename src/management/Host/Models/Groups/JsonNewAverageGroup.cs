@@ -1,4 +1,5 @@
 using System.Text.Json;
+using System.Threading.Tasks;
 using CascVel.Modules.Evaluations.Management.Domain.Enums;
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Groups;
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Media;
@@ -28,15 +29,15 @@ internal sealed record JsonNewAverageGroup : IGroup
     }
 
     /// <inheritdoc />
-    public IMedia<TOutput> Print<TOutput>(IMedia<TOutput> media)
+    public async Task<IMedia<TOutput>> Print<TOutput>(IMedia<TOutput> media)
     {
         ArgumentNullException.ThrowIfNull(media);
         media.With("id", _identifier.Value);
         media.With("title", new ValidGroupTitle(new TrimmedGroupTitle(new JsonGroupTitle(_node))).Text());
         media.With("description", new ValidGroupDescription(new TrimmedGroupDescription(new JsonGroupDescription(_node))).Text());
         media.With("orderIndex", new ValidOrderIndex(new JsonOrderIndex(_node)).Value());
-        new JsonCriteria(_node, CalculationType.Average).Print(media).GetAwaiter().GetResult();
-        new JsonGroups(_node, CalculationType.Average).Print(media).GetAwaiter().GetResult();
+        await new JsonCriteria(_node, CalculationType.Average).Print(media);
+        await new JsonGroups(_node, CalculationType.Average).Print(media);
         return media;
     }
 }

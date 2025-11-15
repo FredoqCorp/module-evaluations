@@ -14,6 +14,7 @@ internal sealed class PgCriterion : ICriterion
     private readonly string _text;
     private readonly int? _weight;
     private readonly IRatingOptions _ratings;
+    private readonly int _order;
 
     /// <summary>
     /// Initializes the printable criterion using raw values.
@@ -32,15 +33,10 @@ internal sealed class PgCriterion : ICriterion
         _id = id;
         _title = title;
         _text = text ?? string.Empty;
-        Order = order;
+        _order = order;
         _weight = weight;
         _ratings = ratings;
     }
-
-    /// <summary>
-    /// Display order preserved from persistence.
-    /// </summary>
-    public int Order { get; }
 
     /// <inheritdoc />
     public IMedia<TOutput> Print<TOutput>(IMedia<TOutput> media)
@@ -49,7 +45,7 @@ internal sealed class PgCriterion : ICriterion
         media.With("id", _id);
         media.With("title", _title);
         media.With("text", _text);
-        media.With("orderIndex", Order);
+        media.With("orderIndex", _order);
         if (_weight.HasValue)
         {
             media.With("weightBasisPoints", _weight.Value);
