@@ -3,6 +3,9 @@ using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Media;
 
 namespace CascVel.Modules.Evaluations.Management.Infrastructure.IntegrationTests.TestDoubles;
 
+/// <summary>
+/// In-memory media double that captures writes for verification.
+/// </summary>
 internal sealed class FakeMedia : IMedia<object>
 {
     public List<(string Key, object Value)> Writes { get; } = [];
@@ -70,7 +73,8 @@ internal sealed class FakeMedia : IMedia<object>
         {
             using var itemMedia = new FakeMedia();
             configure(itemMedia);
-            arrayItems.Add(itemMedia.Output());
+            var snapshot = (List<(string Key, object Value)>)itemMedia.Output();
+            arrayItems.Add(snapshot.ToList());
         }
         Writes.Add((key, arrayItems));
         return this;

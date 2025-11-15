@@ -28,17 +28,17 @@ internal sealed class PgJsonRatingOptions : IRatingOptions
     {
         ArgumentNullException.ThrowIfNull(media);
         var options = Parse(_payload);
-        media.WithArray("ratingOptions", Enumerate(options, media));
+        media.WithArray("ratingOptions", Enumerate<TOutput>(options));
     }
 
     /// <summary>
     /// Provides serialization actions for rating options.
     /// </summary>
-    private static IEnumerable<Action<IMedia>> Enumerate<TOutput>(IRatingOption[] options, IMedia<TOutput> media)
+    private static IEnumerable<Action<IMedia>> Enumerate<TOutput>(IRatingOption[] options)
     {
         foreach (var option in options)
         {
-            yield return _ => option.Print(media);
+            yield return current => option.Print((IMedia<TOutput>)current);
         }
     }
 
