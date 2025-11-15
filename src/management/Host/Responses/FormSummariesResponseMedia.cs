@@ -1,5 +1,4 @@
 using System.Text;
-using System.Threading.Tasks;
 using CascVel.Modules.Evaluations.Management.Domain.Common;
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Media;
 using CascVel.Modules.Evaluations.Management.Infrastructure.Media;
