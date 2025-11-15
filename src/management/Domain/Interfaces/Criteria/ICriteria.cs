@@ -1,4 +1,3 @@
-using System.Threading.Tasks;
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Media;
 
 namespace CascVel.Modules.Evaluations.Management.Domain.Interfaces.Criteria;
