@@ -16,7 +16,6 @@
     </PackageReference>
     <PackageReference Include="Shouldly" />
     <PackageReference Include="Testcontainers.PostgreSql" />
-    <PackageReference Include="Respawn" />
     <PackageReference Include="Dapper" />
     <PackageReference Include="Npgsql" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" />

@@ -1,7 +1,8 @@
+using System.Text.Json.Nodes;
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Forms;
 using CascVel.Modules.Evaluations.Management.Host.Models.Forms;
 using Microsoft.AspNetCore.OpenApi;
-using Microsoft.OpenApi.Models;
+using Microsoft.OpenApi;
 
 namespace CascVel.Modules.Evaluations.Management.Host.Infrastructure;
 
@@ -31,96 +32,95 @@ internal sealed class FormSchemaTransformer : IOpenApiSchemaTransformer
             return Task.CompletedTask;
         }
 
-        schema.Type = "object";
+        schema.Type = JsonSchemaType.String;
         schema.Description = "Representation of a created evaluation form aggregate";
-        schema.Properties = new Dictionary<string, OpenApiSchema>
+        schema.Properties = new Dictionary<string, IOpenApiSchema>
         {
-            ["formId"] = new()
+            ["formId"] = new OpenApiSchema
             {
-                Type = "string",
+                Type = JsonSchemaType.String,
                 Format = "uuid",
                 Description = "Unique identifier of the evaluation form"
             },
-            ["name"] = new()
+            ["name"] = new OpenApiSchema
             {
-                Type = "string",
+                Type = JsonSchemaType.String,
                 Description = "Display name of the evaluation form"
             },
-            ["description"] = new()
+            ["description"] = new OpenApiSchema
             {
-                Type = "string",
+                Type = JsonSchemaType.String,
                 Description = "Detailed description of the form's purpose"
             },
-            ["code"] = new()
+            ["code"] = new OpenApiSchema
             {
-                Type = "string",
+                Type = JsonSchemaType.String,
                 Description = "Unique code assigned to the form"
             },
-            ["calculation"] = new()
+            ["calculation"] = new OpenApiSchema
             {
-                Type = "string",
+                Type = JsonSchemaType.String,
                 Description = "Calculation mode that determines weighting strategy",
-                Enum = new List<Microsoft.OpenApi.Any.IOpenApiAny>
-                {
-                    new Microsoft.OpenApi.Any.OpenApiString("average"),
-                    new Microsoft.OpenApi.Any.OpenApiString("weighted")
-                }
+                Enum =
+                [
+                    "average",
+                    "weighted"
+                ]
             },
-            ["tags"] = new()
+            ["tags"] = new OpenApiSchema
             {
-                Type = "array",
+                Type = JsonSchemaType.Array,
                 Description = "Tags applied to categorize the form",
-                Items = new OpenApiSchema { Type = "string" }
+                Items = new OpenApiSchema { Type = JsonSchemaType.String }
             },
-            ["groups"] = new()
+            ["groups"] = new OpenApiSchema
             {
-                Type = "array",
+                Type = JsonSchemaType.Array,
                 Description = "Collection of hierarchical groups defined in the form",
                 Items = new OpenApiSchema
                 {
-                    Type = "object",
-                    Properties = new Dictionary<string, OpenApiSchema>
+                    Type = JsonSchemaType.Object,
+                    Properties = new Dictionary<string, IOpenApiSchema>
                     {
-                        ["id"] = new()
+                        ["id"] = new OpenApiSchema
                         {
-                            Type = "string",
+                            Type = JsonSchemaType.String,
                             Format = "uuid",
                             Description = "Unique identifier of the group"
                         },
-                        ["formId"] = new()
+                        ["formId"] = new OpenApiSchema
                         {
-                            Type = "string",
+                            Type = JsonSchemaType.String,
                             Format = "uuid",
                             Description = "Identifier of the form that owns the group"
                         },
-                        ["parentId"] = new()
+                        ["parentId"] = new OpenApiSchema
                         {
-                            Type = "string",
+                            Type = JsonSchemaType.String,
                             Format = "uuid",
-                            Nullable = true,
+                            //Nullable = true,
                             Description = "Identifier of the parent group when nested"
                         },
-                        ["title"] = new()
+                        ["title"] = new OpenApiSchema
                         {
-                            Type = "string",
+                            Type = JsonSchemaType.String,
                             Description = "Display title of the group"
                         },
-                        ["description"] = new()
+                        ["description"] = new OpenApiSchema
                         {
-                            Type = "string",
+                            Type = JsonSchemaType.String,
                             Description = "Optional group description"
                         },
-                        ["orderIndex"] = new()
+                        ["orderIndex"] = new OpenApiSchema
                         {
-                            Type = "integer",
+                            Type = JsonSchemaType.Integer,
                             Format = "int32",
                             Description = "Display order of the group"
                         },
-                        ["weightBasisPoints"] = new()
+                        ["weightBasisPoints"] = new OpenApiSchema
                         {
-                            Type = "integer",
+                            Type = JsonSchemaType.Integer | JsonSchemaType.Null,
                             Format = "int32",
-                            Nullable = true,
                             Description = "Weight of the group expressed in basis points when weighted"
                         }
                     },
@@ -130,61 +130,59 @@ internal sealed class FormSchemaTransformer : IOpenApiSchemaTransformer
                     }
                 }
             },
-            ["criteria"] = new()
+            ["criteria"] = new OpenApiSchema
             {
-                Type = "array",
+                Type = JsonSchemaType.Array,
                 Description = "Collection of evaluation criteria defined in the form",
                 Items = new OpenApiSchema
                 {
-                    Type = "object",
-                    Properties = new Dictionary<string, OpenApiSchema>
+                    Type = JsonSchemaType.Object,
+                    Properties = new Dictionary<string, IOpenApiSchema>
                     {
-                        ["id"] = new()
+                        ["id"] = new OpenApiSchema
                         {
-                            Type = "string",
+                            Type = JsonSchemaType.String,
                             Format = "uuid",
                             Description = "Unique identifier of the criterion"
                         },
-                        ["formId"] = new()
+                        ["formId"] = new OpenApiSchema
                         {
-                            Type = "string",
+                            Type = JsonSchemaType.String | JsonSchemaType.Null,
                             Format = "uuid",
-                            Nullable = true,
                             Description = "Identifier of the form when the criterion is at root level"
                         },
-                        ["groupId"] = new()
+                        ["groupId"] = new OpenApiSchema
                         {
-                            Type = "string",
+                            Type = JsonSchemaType.String,
                             Format = "uuid",
-                            Nullable = true,
+                            //Nullable = true,
                             Description = "Identifier of the parent group when nested"
                         },
-                        ["title"] = new()
+                        ["title"] = new OpenApiSchema
                         {
-                            Type = "string",
+                            Type = JsonSchemaType.String,
                             Description = "Display title of the criterion"
                         },
-                        ["text"] = new()
+                        ["text"] = new OpenApiSchema
                         {
-                            Type = "string",
+                            Type = JsonSchemaType.String,
                             Description = "Detailed text shown to the evaluator"
                         },
-                        ["orderIndex"] = new()
+                        ["orderIndex"] = new OpenApiSchema
                         {
-                            Type = "integer",
+                            Type = JsonSchemaType.Integer,
                             Format = "int32",
                             Description = "Display order of the criterion inside its parent"
                         },
-                        ["ratingOptions"] = new()
+                        ["ratingOptions"] = new OpenApiSchema
                         {
-                            Type = "string",
+                            Type = JsonSchemaType.String,
                             Description = "Serialized JSON describing rating options for the criterion"
                         },
-                        ["weightBasisPoints"] = new()
+                        ["weightBasisPoints"] = new OpenApiSchema
                         {
-                            Type = "integer",
+                            Type = JsonSchemaType.Integer | JsonSchemaType.Null,
                             Format = "int32",
-                            Nullable = true,
                             Description = "Weight of the criterion expressed in basis points when weighted"
                         }
                     },

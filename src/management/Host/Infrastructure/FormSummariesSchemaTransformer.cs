@@ -1,6 +1,6 @@
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Forms;
 using Microsoft.AspNetCore.OpenApi;
-using Microsoft.OpenApi.Models;
+using Microsoft.OpenApi;
 
 namespace CascVel.Modules.Evaluations.Management.Host.Infrastructure;
 
@@ -32,69 +32,69 @@ internal sealed class FormSummariesSchemaTransformer : IOpenApiSchemaTransformer
         }
 
         // Define the response schema
-        schema.Type = "object";
+        schema.Type = JsonSchemaType.Object;
         schema.Description = "Response containing a collection of evaluation form summaries";
 
-        schema.Properties = new Dictionary<string, OpenApiSchema>
+        schema.Properties = new Dictionary<string, IOpenApiSchema>
         {
-            ["forms"] = new()
+            ["forms"] = new OpenApiSchema
             {
-                Type = "array",
+                Type = JsonSchemaType.Array,
                 Description = "Collection of evaluation form summaries",
                 Items = new OpenApiSchema
                 {
-                    Type = "object",
+                    Type = JsonSchemaType.Object,
                     Description = "Summary information about an evaluation form",
-                    Properties = new Dictionary<string, OpenApiSchema>
+                    Properties = new Dictionary<string, IOpenApiSchema>
                     {
-                        ["id"] = new()
+                        ["id"] = new OpenApiSchema
                         {
-                            Type = "string",
+                            Type = JsonSchemaType.String,
                             Format = "uuid",
                             Description = "Unique identifier of the evaluation form"
                         },
-                        ["name"] = new()
+                        ["name"] = new OpenApiSchema
                         {
-                            Type = "string",
+                            Type = JsonSchemaType.String,
                             Description = "Display name of the evaluation form"
                         },
-                        ["description"] = new()
+                        ["description"] = new OpenApiSchema
                         {
-                            Type = "string",
+                            Type = JsonSchemaType.String,
                             Description = "Detailed description of the form's purpose and usage"
                         },
-                        ["code"] = new()
+                        ["code"] = new OpenApiSchema
                         {
-                            Type = "string",
+                            Type = JsonSchemaType.String,
                             Description = "Unique code identifier for the form"
                         },
-                        ["tags"] = new()
+                        ["tags"] = new OpenApiSchema
                         {
-                            Type = "array",
+                            Type = JsonSchemaType.Array,
                             Description = "Collection of tags for categorization and filtering",
-                            Items = new OpenApiSchema { Type = "string" }
+                            Items = new OpenApiSchema { Type = JsonSchemaType.String }
                         },
-                        ["groupsCount"] = new()
+                        ["groupsCount"] = new OpenApiSchema
                         {
-                            Type = "integer",
+                            Type = JsonSchemaType.Integer,
                             Format = "int32",
                             Description = "Number of groups in the form structure"
                         },
-                        ["criteriaCount"] = new()
+                        ["criteriaCount"] = new OpenApiSchema
                         {
-                            Type = "integer",
+                            Type = JsonSchemaType.Integer,
                             Format = "int32",
                             Description = "Number of evaluation criteria in the form"
                         },
-                        ["calculation"] = new()
+                        ["calculation"] = new OpenApiSchema
                         {
-                            Type = "string",
+                            Type = JsonSchemaType.String,
                             Description = "Calculation method for aggregating scores",
-                            Enum = new List<Microsoft.OpenApi.Any.IOpenApiAny>
-                            {
-                                new Microsoft.OpenApi.Any.OpenApiString("Average"),
-                                new Microsoft.OpenApi.Any.OpenApiString("WeightedAverage")
-                            }
+                            Enum = 
+                            [
+                                "average",
+                                "weighted"
+                            ]
                         }
                     },
                     Required = new HashSet<string>

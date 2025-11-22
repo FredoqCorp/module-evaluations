@@ -22,7 +22,6 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageVersion>
     <PackageVersion Include="Testcontainers.PostgreSql" Version="4.7.0" />
-    <PackageVersion Include="Respawn" Version="6.2.1" />
     <PackageVersion Include="Npgsql" Version="9.0.4" />
     <!-- Code Analysis Packages -->
     <PackageVersion Include="Roslynator.Analyzers" Version="4.14.0" />

@@ -3,8 +3,6 @@ using Microsoft.AspNetCore.Authorization.Policy;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;
 using Npgsql;
-using Respawn;
-using Respawn.Graph;
 using Testcontainers.PostgreSql;
 using Xunit;
 
@@ -15,9 +13,6 @@ namespace CascVel.Modules.Evaluations.Management.Host.Tests.Infrastructure;
 /// </summary>
 public sealed class TestWebApplicationFactory : WebApplicationFactory<Program>, IAsyncLifetime
 {
-    private static readonly string[] Schemas = ["public"];
-    private static readonly Table[] IgnoredTables = [new("schemaversions")];
-
     private readonly PostgreSqlContainer _postgres = new PostgreSqlBuilder()
         .WithImage("postgres:18-alpine")
         .WithDatabase("evaluations_test")
@@ -26,10 +21,16 @@ public sealed class TestWebApplicationFactory : WebApplicationFactory<Program>, 
         .Build();
 
     private NpgsqlDataSource? _source;
-    private Respawner? _respawner;
 
+    /// <summary>
+    /// Gets the PostgreSQL connection string for the test host.
+    /// </summary>
     public string ConnectionString => _postgres.GetConnectionString();
 
+    /// <summary>
+    /// Configures the web host for integration testing.
+    /// </summary>
+    /// <param name="builder">Host builder instance.</param>
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
         ArgumentNullException.ThrowIfNull(builder);
@@ -44,6 +45,9 @@ public sealed class TestWebApplicationFactory : WebApplicationFactory<Program>, 
         });
     }
 
+    /// <summary>
+    /// Starts the PostgreSQL container and applies migrations.
+    /// </summary>
     public async Task InitializeAsync()
     {
         await _postgres.StartAsync();
@@ -58,43 +62,26 @@ public sealed class TestWebApplicationFactory : WebApplicationFactory<Program>, 
         }
 
         _source = NpgsqlDataSource.Create(ConnectionString);
-        await Prepare();
     }
 
     /// <summary>
-    /// Resets the database state using Respawn to guarantee test isolation.
+    /// Resets the database state to guarantee test isolation.
     /// </summary>
     /// <returns>Asynchronous operation.</returns>
     public async Task Reset()
     {
-        if (_source is null || _respawner is null)
+        if (_source is null)
         {
             throw new InvalidOperationException("Web application factory is not initialized");
         }
 
         await using var connection = await _source.OpenConnectionAsync();
-        await _respawner.ResetAsync(connection);
+        await Truncate(connection);
     }
 
-    private async Task Prepare()
-    {
-        if (_source is null)
-        {
-            throw new InvalidOperationException("Database source is not initialized");
-        }
-
-        await using var connection = await _source.OpenConnectionAsync();
-        _respawner = await Respawner.CreateAsync(
-            connection,
-            new RespawnerOptions
-            {
-                DbAdapter = DbAdapter.Postgres,
-                SchemasToInclude = Schemas,
-                WithReseed = true,
-                TablesToIgnore = IgnoredTables
-            });
-    }
-
+    /// <summary>
+    /// Disposes managed resources used by the test host.
+    /// </summary>
     public new async Task DisposeAsync()
     {
         if (_source is not null)
@@ -104,5 +91,35 @@ public sealed class TestWebApplicationFactory : WebApplicationFactory<Program>, 
 
         await _postgres.DisposeAsync();
         await base.DisposeAsync();
+    }
+
+    /// <summary>
+    /// Truncates all public tables while preserving schema history.
+    /// </summary>
+    /// <param name="connection">Active PostgreSQL connection.</param>
+    /// <returns>Asynchronous operation.</returns>
+    private static async Task Truncate(NpgsqlConnection connection)
+    {
+        ArgumentNullException.ThrowIfNull(connection);
+
+        const string sql = """
+            DO $$
+            DECLARE
+                stmt text;
+            BEGIN
+                SELECT 'TRUNCATE TABLE ' || string_agg(format('%I.%I', table_schema, table_name), ', ') || ' RESTART IDENTITY CASCADE;'
+                INTO stmt
+                FROM information_schema.tables
+                WHERE table_schema NOT IN ('pg_catalog', 'information_schema')
+                  AND table_type = 'BASE TABLE'
+                  AND table_name <> 'schemaversions';
+                IF stmt IS NOT NULL THEN
+                    EXECUTE stmt;
+                END IF;
+            END $$;
+            """;
+
+        await using var command = new NpgsqlCommand(sql, connection);
+        await command.ExecuteNonQueryAsync();
     }
 }

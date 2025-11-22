@@ -1,7 +1,5 @@
 using CascVel.Modules.Evaluations.Management.Infrastructure.Database;
 using Npgsql;
-using Respawn;
-using Respawn.Graph;
 using Testcontainers.PostgreSql;
 
 namespace CascVel.Modules.Evaluations.Management.Infrastructure.IntegrationTests;
@@ -11,12 +9,8 @@ namespace CascVel.Modules.Evaluations.Management.Infrastructure.IntegrationTests
 /// </summary>
 public sealed class DatabaseFixture : IAsyncLifetime
 {
-    private static readonly string[] Schemas = ["public"];
-    private static readonly Table[] IgnoredTables = [new("schemaversions")];
-
     private PostgreSqlContainer? _container;
     private NpgsqlDataSource? _source;
-    private Respawner? _respawner;
 
     /// <summary>
     /// Gets the PostgreSQL connection string.
@@ -49,8 +43,6 @@ public sealed class DatabaseFixture : IAsyncLifetime
                 $"Database migration failed: {result.Error}",
                 result.Error);
         }
-
-        await PrepareRespawner();
     }
 
     /// <summary>
@@ -59,36 +51,13 @@ public sealed class DatabaseFixture : IAsyncLifetime
     /// <returns>Asynchronous operation.</returns>
     public async Task Reset()
     {
-        if (_source is null || _respawner is null)
+        if (_source is null)
         {
             throw new InvalidOperationException("Database fixture is not initialized");
         }
 
         await using var connection = await _source.OpenConnectionAsync();
-        await _respawner.ResetAsync(connection);
-    }
-
-    /// <summary>
-    /// Configures Respawn to truncate tables while preserving schema history.
-    /// </summary>
-    /// <returns>Asynchronous operation.</returns>
-    private async Task PrepareRespawner()
-    {
-        if (_source is null)
-        {
-            throw new InvalidOperationException("Database source is not initialized");
-        }
-
-        await using var connection = await _source.OpenConnectionAsync();
-        _respawner = await Respawner.CreateAsync(
-            connection,
-            new RespawnerOptions
-            {
-                DbAdapter = DbAdapter.Postgres,
-                SchemasToInclude = Schemas,
-                WithReseed = true,
-                TablesToIgnore = IgnoredTables
-            });
+        await Truncate(connection);
     }
 
     /// <summary>
@@ -105,5 +74,35 @@ public sealed class DatabaseFixture : IAsyncLifetime
         {
             await _container.DisposeAsync();
         }
+    }
+
+    /// <summary>
+    /// Truncates all public tables while preserving schema history.
+    /// </summary>
+    /// <param name="connection">Active PostgreSQL connection.</param>
+    /// <returns>Asynchronous operation.</returns>
+    private static async Task Truncate(NpgsqlConnection connection)
+    {
+        ArgumentNullException.ThrowIfNull(connection);
+
+        const string sql = """
+            DO $$
+            DECLARE
+                stmt text;
+            BEGIN
+                SELECT 'TRUNCATE TABLE ' || string_agg(format('%I.%I', table_schema, table_name), ', ') || ' RESTART IDENTITY CASCADE;'
+                INTO stmt
+                FROM information_schema.tables
+                WHERE table_schema NOT IN ('pg_catalog', 'information_schema')
+                  AND table_type = 'BASE TABLE'
+                  AND table_name <> 'schemaversions';
+                IF stmt IS NOT NULL THEN
+                    EXECUTE stmt;
+                END IF;
+            END $$;
+            """;
+
+        await using var command = new NpgsqlCommand(sql, connection);
+        await command.ExecuteNonQueryAsync();
     }
 }
