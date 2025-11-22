@@ -77,7 +77,7 @@ internal sealed class PgJsonTags : ITags
 
             if (unique.Add(text))
             {
-                builder.Add(new Tag(text));
+                builder.Add(new SimpleTag(text));
             }
         }
 

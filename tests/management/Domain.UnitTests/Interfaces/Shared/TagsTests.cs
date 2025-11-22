@@ -12,7 +12,7 @@ public sealed class TagsTests
     public void Returns_new_collection_with_added_tag()
     {
         var tags = SharedTypesTestData.EmptyTags();
-        var tag = new Tag($"новый-тег-{Random.Shared.Next()}");
+        var tag = new SimpleTag($"новый-тег-{Random.Shared.Next()}");
 
         var updated = tags.With(tag);
 
@@ -23,7 +23,7 @@ public sealed class TagsTests
     public void Preserves_immutability_when_adding_tag()
     {
         var original = SharedTypesTestData.EmptyTags();
-        var tag = new Tag($"тэг-{Random.Shared.Next()}");
+        var tag = new SimpleTag($"тэг-{Random.Shared.Next()}");
 
         var updated = original.With(tag);
 
@@ -33,7 +33,7 @@ public sealed class TagsTests
     [Fact]
     public void Enforces_uniqueness_when_adding_duplicate()
     {
-        var tag = new Tag($"дубликат-{Random.Shared.Next()}");
+        var tag = new SimpleTag($"дубликат-{Random.Shared.Next()}");
         var tags = SharedTypesTestData.EmptyTags().With(tag);
 
         var updated = tags.With(tag);
@@ -45,7 +45,7 @@ public sealed class TagsTests
     public void Supports_non_ascii_tag_text()
     {
         var tags = SharedTypesTestData.EmptyTags();
-        var cyrillicTag = new Tag("тег-на-кириллице");
+        var cyrillicTag = new SimpleTag("тег-на-кириллице");
 
         var updated = tags.With(cyrillicTag);
 
@@ -56,8 +56,8 @@ public sealed class TagsTests
     public void Handles_multiple_sequential_additions()
     {
         var tags = SharedTypesTestData.EmptyTags();
-        var first = new Tag($"первый-{Random.Shared.Next()}");
-        var second = new Tag($"второй-{Random.Shared.Next()}");
+        var first = new SimpleTag($"первый-{Random.Shared.Next()}");
+        var second = new SimpleTag($"второй-{Random.Shared.Next()}");
 
         var updated = tags.With(first).With(second);
 

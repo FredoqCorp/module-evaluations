@@ -62,12 +62,12 @@ internal sealed class PgGroup : IGroup
             media.With("weightBasisPoints", _weight.Value);
         }
 
-        media.WithArray("criteria", CriterionItems(media));
+        await media.WithArrayAsync("criteria", CriterionItems(media));
         await media.WithArrayAsync("groups", GroupItems(media));
         return media;
     }
 
-    private IEnumerable<Action<IMedia>> CriterionItems<TOutput>(IMedia<TOutput> media)
+    private IEnumerable<Func<IMedia, Task>> CriterionItems<TOutput>(IMedia<TOutput> media)
     {
         foreach (var criterion in _criteria)
         {

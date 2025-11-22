@@ -23,11 +23,12 @@ internal sealed class PgJsonRatingOptions : IRatingOptions
     }
 
     /// <inheritdoc />
-    public void Print<TOutput>(IMedia<TOutput> media)
+    public Task<IMedia<TOutput>> Print<TOutput>(IMedia<TOutput> media)
     {
         ArgumentNullException.ThrowIfNull(media);
         var options = Parse(_payload);
         media.WithArray("ratingOptions", Enumerate<TOutput>(options));
+        return Task.FromResult(media);
     }
 
     /// <summary>

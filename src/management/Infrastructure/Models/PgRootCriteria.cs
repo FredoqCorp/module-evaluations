@@ -43,11 +43,11 @@ internal sealed class PgRootCriteria : ICriteria
                 new PgJsonRatingOptions(row.RatingOptions)))
             .ToList();
 
-        media.WithArray("criteria", Items(criteria, media));
+        await media.WithArrayAsync("criteria", Items(criteria, media));
         return media;
     }
 
-    private static IEnumerable<Action<IMedia>> Items<TOutput>(IEnumerable<PgCriterion> criteria, IMedia<TOutput> media)
+    private static IEnumerable<Func<IMedia, Task>> Items<TOutput>(IEnumerable<PgCriterion> criteria, IMedia<TOutput> media)
     {
         foreach (var criterion in criteria)
         {

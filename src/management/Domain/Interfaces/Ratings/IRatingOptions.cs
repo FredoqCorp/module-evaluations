@@ -12,6 +12,6 @@ public interface IRatingOptions
     /// </summary>
     /// <typeparam name="TOutput">The type of output the media produces.</typeparam>
     /// <param name="media">The media to print to.</param>
-    /// <returns>A task representing the asynchronous operation.</returns>
-    void Print<TOutput>(IMedia<TOutput> media);
+    /// <returns>The media after printing the rating options.</returns>
+    Task<IMedia<TOutput>> Print<TOutput>(IMedia<TOutput> media);
 }

@@ -1,5 +1,8 @@
+using System.Collections.Immutable;
 using System.Text.Json;
+using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Ratings;
 using CascVel.Modules.Evaluations.Management.Domain.Models.Ratings;
+using CascVel.Modules.Evaluations.Management.Host.Models.Ratings;
 using CascVel.Modules.Evaluations.Management.Infrastructure.Media;
 
 namespace CascVel.Modules.Evaluations.Management.Infrastructure.IntegrationTests.ValueObjects.Ratings;
@@ -10,25 +13,25 @@ namespace CascVel.Modules.Evaluations.Management.Infrastructure.IntegrationTests
 public sealed class RatingOptionsToJsonTests
 {
     [Fact]
-    public void ToJson_ReturnsValidJsonObject()
+    public async Task ToJson_ReturnsValidJsonObject()
     {
         // Arrange
-        var options = new[]
-        {
-            new RatingOption(
-                new RatingScore(5),
-                new RatingLabel("Excellent"),
-                new RatingAnnotation("Outstanding")),
-            new RatingOption(
-                new RatingScore(3),
-                new RatingLabel("Good"),
-                new RatingAnnotation("Satisfactory"))
-        };
-        var ratingOptions = new RatingOptions(options);
+        IRatingOption[] options =
+        [
+            new SimpleRatingOption(
+                new SimpleRatingScore(5),
+                new SimpleRatingLabel("Excellent"),
+                new SimpleRatingAnnotation("Outstanding")),
+            new SimpleRatingOption(
+                new SimpleRatingScore(3),
+                new SimpleRatingLabel("Good"),
+                new SimpleRatingAnnotation("Satisfactory"))
+        ];
+        var ratingOptions = new SimpleRatingOptions(options.ToImmutableList());
 
         // Act
         using var media = new JsonMediaWriter();
-        ratingOptions.Print(media);
+        await ratingOptions.Print(media);
         var json = media.Output();
 
         // Assert
@@ -43,21 +46,21 @@ public sealed class RatingOptionsToJsonTests
     }
 
     [Fact]
-    public void ToJson_ContainsExpectedFields()
+    public async Task ToJson_ContainsExpectedFields()
     {
         // Arrange
-        var options = new[]
-        {
-            new RatingOption(
-                new RatingScore(5),
-                new RatingLabel("Excellent"),
-                new RatingAnnotation("Outstanding performance"))
-        };
-        var ratingOptions = new RatingOptions(options);
+        IRatingOption[] options =
+        [
+            new SimpleRatingOption(
+                new SimpleRatingScore(5),
+                new SimpleRatingLabel("Excellent"),
+                new SimpleRatingAnnotation("Outstanding performance"))
+        ];
+        var ratingOptions = new SimpleRatingOptions(options.ToImmutableList());
 
         // Act
         using var media = new JsonMediaWriter();
-        ratingOptions.Print(media);
+        await ratingOptions.Print(media);
         var json = media.Output();
         var parsed = JsonDocument.Parse(json);
         var firstElement = parsed.RootElement.GetProperty("0");
@@ -74,21 +77,21 @@ public sealed class RatingOptionsToJsonTests
     }
 
     [Fact]
-    public void ToJson_HandlesEmptyAnnotation()
+    public async Task ToJson_HandlesEmptyAnnotation()
     {
         // Arrange
-        var options = new[]
-        {
-            new RatingOption(
-                new RatingScore(3),
-                new RatingLabel("Average"),
-                new RatingAnnotation(""))
-        };
-        var ratingOptions = new RatingOptions(options);
+        IRatingOption[] options =
+        [
+            new SimpleRatingOption(
+                new SimpleRatingScore(3),
+                new SimpleRatingLabel("Average"),
+                new SimpleRatingAnnotation(""))
+        ];
+        var ratingOptions = new SimpleRatingOptions(options.ToImmutableList());
 
         // Act
         using var media = new JsonMediaWriter();
-        ratingOptions.Print(media);
+        await ratingOptions.Print(media);
         var json = media.Output();
         var parsed = JsonDocument.Parse(json);
         var firstElement = parsed.RootElement.GetProperty("0");
@@ -99,22 +102,22 @@ public sealed class RatingOptionsToJsonTests
     }
 
     [Fact]
-    public void ToJson_PreservesOrder()
+    public async Task ToJson_PreservesOrder()
     {
         // Arrange
-        var options = new[]
-        {
-            new RatingOption(new RatingScore(5), new RatingLabel("Five"), new RatingAnnotation("")),
-            new RatingOption(new RatingScore(4), new RatingLabel("Four"), new RatingAnnotation("")),
-            new RatingOption(new RatingScore(3), new RatingLabel("Three"), new RatingAnnotation("")),
-            new RatingOption(new RatingScore(2), new RatingLabel("Two"), new RatingAnnotation("")),
-            new RatingOption(new RatingScore(1), new RatingLabel("One"), new RatingAnnotation(""))
-        };
-        var ratingOptions = new RatingOptions(options);
+        IRatingOption[] options =
+        [
+            new SimpleRatingOption(new SimpleRatingScore(5), new SimpleRatingLabel("Five"), new SimpleRatingAnnotation("")),
+            new SimpleRatingOption(new SimpleRatingScore(4), new SimpleRatingLabel("Four"), new SimpleRatingAnnotation("")),
+            new SimpleRatingOption(new SimpleRatingScore(3), new SimpleRatingLabel("Three"), new SimpleRatingAnnotation("")),
+            new SimpleRatingOption(new SimpleRatingScore(2), new SimpleRatingLabel("Two"), new SimpleRatingAnnotation("")),
+            new SimpleRatingOption(new SimpleRatingScore(1), new SimpleRatingLabel("One"), new SimpleRatingAnnotation(""))
+        ];
+        var ratingOptions = new SimpleRatingOptions(options.ToImmutableList());
 
         // Act
         using var media = new JsonMediaWriter();
-        ratingOptions.Print(media);
+        await ratingOptions.Print(media);
         var json = media.Output();
         var parsed = JsonDocument.Parse(json);
         var properties = parsed.RootElement.EnumerateObject().ToArray();

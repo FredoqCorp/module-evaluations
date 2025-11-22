@@ -84,7 +84,7 @@ public sealed class FormMetadataPrintTests
             new FormName("Test Form"),
             new FormDescription("Description"),
             new FormCode("CODE-001"),
-            new Tags([new Tag("important"), new Tag("urgent")]));
+            new Tags([new SimpleTag("important"), new SimpleTag("urgent")]));
 
         using var media = new FakeMedia();
         metadata.Print(media);
@@ -103,7 +103,7 @@ public sealed class FormMetadataPrintTests
             new FormName("Complete Form"),
             new FormDescription("Full description"),
             new FormCode("FULL-001"),
-            new Tags([new Tag("tag1")]));
+            new Tags([new SimpleTag("tag1")]));
 
         using var media = new FakeMedia();
         metadata.Print(media);

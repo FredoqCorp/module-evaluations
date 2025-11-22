@@ -18,3 +18,8 @@ dotnet_diagnostic.CA1716.severity = none
 
 # S4487: Unread "private" fields should be removed
 dotnet_diagnostic.S4487.severity = none
+
+dotnet_diagnostic.S2325.severity = none
+
+# IDE0290: Use primary constructor
+dotnet_diagnostic.IDE0290.severity = none

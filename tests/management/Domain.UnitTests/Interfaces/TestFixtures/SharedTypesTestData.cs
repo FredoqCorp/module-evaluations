@@ -18,7 +18,7 @@ internal static class SharedTypesTestData
         new TestTags([]);
 
     internal static ITags TagsWithSingle() =>
-        new TestTags([new Tag($"tag-{Random.Shared.Next()}")]);
+        new TestTags([new SimpleTag($"tag-{Random.Shared.Next()}")]);
 }
 
 /// <summary>

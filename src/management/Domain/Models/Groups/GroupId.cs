@@ -1,3 +1,6 @@
+using System.Text.Json;
+using CascVel.Modules.Evaluations.Management.Domain.Extensions;
+
 namespace CascVel.Modules.Evaluations.Management.Domain.Models.Groups;
 
 /// <summary>
@@ -5,6 +8,16 @@ namespace CascVel.Modules.Evaluations.Management.Domain.Models.Groups;
 /// </summary>
 public readonly record struct GroupId
 {
+    private readonly Guid _value;
+
+    /// <summary>
+    /// Creates a group identifier from a JSON element.
+    /// </summary>
+    /// <param name="node">JSON node containing the identifier field.</param>
+    public GroupId(JsonElement node) : this(node.OptionalGuid("id").Reduce(Guid.CreateVersion7))
+    {
+    }
+
     /// <summary>
     /// Creates group identifier ensuring it is not empty.
     /// </summary>
@@ -13,7 +26,7 @@ public readonly record struct GroupId
     public GroupId(Guid value)
     {
         ArgumentOutOfRangeException.ThrowIfEqual(value, Guid.Empty);
-        Value = value;
+        _value = value;
     }
 
     /// <summary>
@@ -26,5 +39,5 @@ public readonly record struct GroupId
     /// <summary>
     /// Underlying GUID value representing the group identifier.
     /// </summary>
-    public Guid Value { get; init; }
+    public Guid Value() => _value;
 }

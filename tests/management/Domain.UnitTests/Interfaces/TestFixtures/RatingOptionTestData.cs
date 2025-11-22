@@ -1,6 +1,7 @@
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Media;
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Ratings;
 using CascVel.Modules.Evaluations.Management.Domain.Models.Ratings;
+using CascVel.Modules.Evaluations.Management.Host.Models.Ratings;
 
 namespace CascVel.Modules.Evaluations.Management.Domain.UnitTests.Interfaces.TestFixtures;
 
@@ -10,24 +11,24 @@ namespace CascVel.Modules.Evaluations.Management.Domain.UnitTests.Interfaces.Tes
 internal static class RatingOptionTestData
 {
     internal static IRatingOption OptionWithScore(ushort score) =>
-        new TestRatingOption(new RatingScore(score));
+        new TestRatingOption(new SimpleRatingScore(score));
 
     internal static IRatingOption RandomOption() =>
         new TestRatingOption(
-            new RatingScore((ushort)Random.Shared.Next(1, 10)));
+            new SimpleRatingScore((ushort)Random.Shared.Next(1, 10)));
 }
 
 /// <summary>
 /// Test double for rating option interface.
 /// </summary>
-internal sealed record TestRatingOption(RatingScore ScoreValue) : IRatingOption
+internal sealed record TestRatingOption(SimpleRatingScore ScoreValue) : IRatingOption
 {
-    public RatingLabel Label { get; init; } = new RatingLabel("Test Label");
-    public RatingAnnotation Annotation { get; init; } = new RatingAnnotation("Test Annotation");
+    public SimpleRatingLabel Label { get; init; } = new SimpleRatingLabel("Test Label");
+    public SimpleRatingAnnotation Annotation { get; init; } = new SimpleRatingAnnotation("Test Annotation");
 
     public int Score => ScoreValue.Value();
 
-    public bool Matches(RatingScore score) =>
+    public bool Matches(SimpleRatingScore score) =>
         ScoreValue.Value() == score.Value();
 
     public IMedia<TOutput> Print<TOutput>(IMedia<TOutput> media)

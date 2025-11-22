@@ -39,7 +39,7 @@ internal sealed class PgCriterion : ICriterion
     }
 
     /// <inheritdoc />
-    public IMedia<TOutput> Print<TOutput>(IMedia<TOutput> media)
+    public async Task<IMedia<TOutput>> Print<TOutput>(IMedia<TOutput> media)
     {
         ArgumentNullException.ThrowIfNull(media);
         media.With("id", _id);
@@ -50,8 +50,7 @@ internal sealed class PgCriterion : ICriterion
         {
             media.With("weightBasisPoints", _weight.Value);
         }
-
-        _ratings.Print(media);
+        await _ratings.Print(media);
         return media;
     }
 }

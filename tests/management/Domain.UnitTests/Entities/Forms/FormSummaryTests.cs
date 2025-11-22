@@ -161,7 +161,7 @@ public sealed class FormSummaryTests
             new FormName("Test Form"),
             new FormDescription("Test Description"),
             new FormCode("TEST-001"),
-            new Tags([new Tag("test")]));
+            new Tags([new SimpleTag("test")]));
     }
 
     private static FormSummary CreateValidSummary()

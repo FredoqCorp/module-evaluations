@@ -3,7 +3,6 @@ using System.Text.Json;
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Media;
 using CascVel.Modules.Evaluations.Management.Domain.Interfaces.Shared;
 using CascVel.Modules.Evaluations.Management.Domain.Models.Shared;
-using CascVel.Modules.Evaluations.Management.Host.Models.Shared;
 
 namespace CascVel.Modules.Evaluations.Management.Host.Models.Forms;
 
@@ -63,7 +62,7 @@ internal sealed record JsonFormTags : ITags
         var builder = ImmutableList.CreateBuilder<ITag>();
         foreach (var item in array.EnumerateArray())
         {
-            var tag = new ValidTag(new TrimmedTag(new JsonTag(item)));
+            var tag = new ValidTag(new TrimmedTag(new SimpleTag(item)));
             if (unique.Add(tag.Text()))
             {
                 builder.Add(tag);

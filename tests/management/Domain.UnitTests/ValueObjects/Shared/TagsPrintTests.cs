@@ -8,7 +8,7 @@ public sealed class TagsPrintTests
     [Fact]
     public void Print_throws_when_media_is_null()
     {
-        var tags = new Tags([new Tag("test")]);
+        var tags = new Tags([new SimpleTag("test")]);
 
         var exception = Assert.Throws<ArgumentNullException>(() =>
             tags.Print<object>(null!, "tags"));
@@ -19,7 +19,7 @@ public sealed class TagsPrintTests
     [Fact]
     public void Print_throws_when_key_is_null()
     {
-        var tags = new Tags([new Tag("test")]);
+        var tags = new Tags([new SimpleTag("test")]);
         using var media = new FakeMedia();
 
         var exception = Assert.Throws<ArgumentNullException>(() =>
@@ -31,7 +31,7 @@ public sealed class TagsPrintTests
     [Fact]
     public void Print_throws_when_key_is_empty()
     {
-        var tags = new Tags([new Tag("test")]);
+        var tags = new Tags([new SimpleTag("test")]);
         using var media = new FakeMedia();
 
         var exception = Assert.Throws<ArgumentException>(() =>
@@ -43,7 +43,7 @@ public sealed class TagsPrintTests
     [Fact]
     public void Print_throws_when_key_is_whitespace()
     {
-        var tags = new Tags([new Tag("test")]);
+        var tags = new Tags([new SimpleTag("test")]);
         using var media = new FakeMedia();
 
         var exception = Assert.Throws<ArgumentException>(() =>
@@ -68,7 +68,7 @@ public sealed class TagsPrintTests
     [Fact]
     public void Print_writes_single_tag_to_array()
     {
-        var tags = new Tags([new Tag("important")]);
+        var tags = new Tags([new SimpleTag("important")]);
         using var media = new FakeMedia();
 
         tags.Print(media, "tags");
@@ -82,9 +82,9 @@ public sealed class TagsPrintTests
     public void Print_writes_multiple_tags_to_array()
     {
         var tags = new Tags([
-            new Tag("urgent"),
-            new Tag("reviewed"),
-            new Tag("approved")
+            new SimpleTag("urgent"),
+            new SimpleTag("reviewed"),
+            new SimpleTag("approved")
         ]);
         using var media = new FakeMedia();
 
@@ -102,9 +102,9 @@ public sealed class TagsPrintTests
     public void Print_preserves_tag_order()
     {
         var tags = new Tags([
-            new Tag("first"),
-            new Tag("second"),
-            new Tag("third")
+            new SimpleTag("first"),
+            new SimpleTag("second"),
+            new SimpleTag("third")
         ]);
         using var media = new FakeMedia();
 
@@ -119,9 +119,9 @@ public sealed class TagsPrintTests
     public void Print_handles_special_characters_in_tags()
     {
         var tags = new Tags([
-            new Tag("tag-with-dash"),
-            new Tag("tag_with_underscore"),
-            new Tag("tag.with.dots")
+            new SimpleTag("tag-with-dash"),
+            new SimpleTag("tag_with_underscore"),
+            new SimpleTag("tag.with.dots")
         ]);
         using var media = new FakeMedia();
 
