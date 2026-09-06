@@ -1,6 +1,0 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
-  <ItemGroup>
-    <InternalsVisibleTo Include="CascVel.Modules.Evaluations.Management.Infrastructure" />
-    <InternalsVisibleTo Include="CascVel.Modules.Evaluations.Management.Domain.UnitTests" />
-  </ItemGroup>
-</Project>
